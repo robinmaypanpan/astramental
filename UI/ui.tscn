@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3 uid="uid://d17sc8rgcqfa4"]
+
+[ext_resource type="PackedScene" uid="uid://cqo03y46lsise" path="res://UI/main.tscn" id="1_2fwl4"]
+[ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://UI/ui.gd" id="1_dajm1"]
+[ext_resource type="PackedScene" uid="uid://dqxjnempjj6dd" path="res://UI/lobby.tscn" id="3_e6gg6"]
+
+[sub_resource type="Animation" id="Animation_e6gg6"]
+resource_name = "fade_to_black"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_hat8c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hat8c"]
+_data = {
+&"RESET": SubResource("Animation_hat8c"),
+&"fade_to_black": SubResource("Animation_e6gg6")
+}
+
+[node name="Ui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dajm1")
+
+[node name="MainMenu" parent="." instance=ExtResource("1_2fwl4")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="Lobby" parent="." instance=ExtResource("3_e6gg6")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="SceneTransitionShroud" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SceneTransitionShroud"]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_hat8c")
+}

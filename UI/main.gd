@@ -6,6 +6,9 @@ extends Control
 @onready var IPText : LineEdit = $%IPInput
 @onready var JoinButton : Button = %JoinButton
 
+## Fires when a connection is established
+signal connection_estabilished()
+
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
@@ -47,6 +50,7 @@ func start_server() -> void:
 	multiplayer.set_multiplayer_peer(peer)
 	connection_state = States.CONNECTED
 	post_to_log("Server Started...")
+	connection_estabilished.emit()
 	
 	
 func shutdown_server() -> void:
@@ -112,7 +116,7 @@ func _on_visibility_changed() -> void:
 
 func _on_ip_input_focus_entered() -> void:
 	IPText.edit()
-	pass
+
 
 func _on_ip_input_text_submitted(new_text: String) -> void:
 	# Do the same thing as clicking the join button
