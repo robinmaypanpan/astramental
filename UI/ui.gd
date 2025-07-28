@@ -1,27 +1,50 @@
-extends Control
+class_name Ui extends Control
 
-# We should have a link to all of our possible UIs
-# We will probably want to refactor this to use packed scenes int he future.
-@onready var MainMenu : Node = %MainMenu
-@onready var Lobby : Node = %Lobby
+## A list of named menus that can be transitioned to/from
+@export var Menus : Dictionary[String, PackedScene]
+
 @onready var shroud_animation : AnimationPlayer = %AnimationPlayer
 
-var current_scene : Node
+var current_node : Node
 
 func _ready() -> void:
-	transition_to_scene(MainMenu)
-	MainMenu.connection_estabilished.connect(on_connection_established)
+	transition_to("MainMenu")
 	
-func transition_to_scene(new_scene: Node):
-	if current_scene != null:
+	
+func transition_to(menu_name: String) -> Node:
+	# Identify the scene we're transitioning to
+	var new_node : Node
+	if Menus.has(menu_name):
+		new_node = Menus[menu_name].instantiate()
+	elif ResourceLoader.exists(menu_name):
+		new_node = ResourceLoader.load(menu_name).instance()
+	else:
+		assert(false, "Menu " + menu_name + " not found")
+		return null
+	
+	# Transition out of the current menu
+	if current_node != null:
+		var current_menu = current_node as Menu
+		if current_menu != null:
+			current_menu.starting_fade_out()
 		shroud_animation.play("fade_to_black")
 		await(shroud_animation.animation_finished)
-		current_scene.hide()
-		current_scene = null
+		current_node.hide()
+		current_node.queue_free()
+		remove_child(current_node)
+		current_node = null
 	
-	current_scene = new_scene
-	new_scene.show()
-	shroud_animation.play_backwards("fade_to_black")
-	
-func on_connection_established():
-	transition_to_scene(Lobby)
+	# Transition to the new menu
+	if new_node != null:
+		current_node = new_node
+		add_child(new_node)
+		new_node.show()
+		shroud_animation.play_backwards("fade_to_black")
+		await(shroud_animation.animation_finished)
+		
+		var new_menu = new_node as Menu
+		if new_menu != null:
+			new_menu.fade_in_complete()
+		return new_node
+		
+	return null

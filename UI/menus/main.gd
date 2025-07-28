@@ -1,13 +1,10 @@
 # This is the control script for the server scene, which handles loading the
 # server and coordinating 
-extends Control
+class_name MainMenu extends Menu
 
 @onready var LogBox : RichTextLabel = $%EventLog
 @onready var IPText : LineEdit = $%IPInput
 @onready var JoinButton : Button = %JoinButton
-
-## Fires when a connection is established
-signal connection_estabilished()
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
@@ -50,7 +47,9 @@ func start_server() -> void:
 	multiplayer.set_multiplayer_peer(peer)
 	connection_state = States.CONNECTED
 	post_to_log("Server Started...")
-	connection_estabilished.emit()
+	var ui_node : Ui = get_tree().get_root().get_node("Ui") as Ui
+	assert(ui_node != null, "Could not find UI node")
+	ui_node.transition_to("Lobby")
 	
 	
 func shutdown_server() -> void:
