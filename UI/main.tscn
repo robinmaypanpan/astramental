@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqo03y46lsise"]
+[gd_scene load_steps=4 format=3 uid="uid://cqo03y46lsise"]
 
 [ext_resource type="Script" uid="uid://cerxhqhc88ke7" path="res://UI/main.gd" id="1_vnck2"]
+[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_emhnf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_whbce"]
 font_size = 62
@@ -53,19 +54,45 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="HostButton" type="Button" parent="Panel/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+focus_neighbor_bottom = NodePath("../../MarginContainer2/HBoxContainer/IPInput")
+focus_next = NodePath("../../MarginContainer2/HBoxContainer/JoinButton")
 text = "Host Game"
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="JoinButton" type="Button" parent="Panel/VBoxContainer/MarginContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/MarginContainer2"]
 layout_mode = 2
+
+[node name="JoinButton" type="Button" parent="Panel/VBoxContainer/MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_top = NodePath("../../../MarginContainer/HostButton")
+focus_neighbor_right = NodePath("../IPInput")
+focus_neighbor_bottom = NodePath("../../../MarginContainer3/OptionsButton")
+focus_next = NodePath("../IPInput")
 text = "Join Game"
+
+[node name="IPInput" type="TextEdit" parent="Panel/VBoxContainer/MarginContainer2/HBoxContainer"]
+custom_minimum_size = Vector2(300, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+focus_neighbor_left = NodePath("../JoinButton")
+focus_neighbor_top = NodePath("../../../MarginContainer/HostButton")
+focus_neighbor_bottom = NodePath("../../../MarginContainer3/OptionsButton")
+focus_next = NodePath("../../../MarginContainer3/OptionsButton")
+focus_previous = NodePath("../JoinButton")
+placeholder_text = "127.0.0.1"
+deselect_on_focus_loss_enabled = false
 
 [node name="MarginContainer3" type="MarginContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -75,7 +102,12 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="OptionsButton" type="Button" parent="Panel/VBoxContainer/MarginContainer3"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../../MarginContainer2/HBoxContainer/IPInput")
+focus_neighbor_bottom = NodePath("../../MarginContainer4/ExitButton")
+focus_next = NodePath("../../MarginContainer4/ExitButton")
+focus_previous = NodePath("../../MarginContainer2/HBoxContainer/IPInput")
 text = "Options"
 
 [node name="MarginContainer4" type="MarginContainer" parent="Panel/VBoxContainer"]
@@ -86,5 +118,19 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="ExitButton" type="Button" parent="Panel/VBoxContainer/MarginContainer4"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+focus_neighbor_top = NodePath("../../MarginContainer3/OptionsButton")
+focus_previous = NodePath("../../MarginContainer3/OptionsButton")
 text = "Exit Game"
+
+[node name="EventLog" type="RichTextLabel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_emhnf")
+scroll_following = true
+
+[connection signal="pressed" from="Panel/VBoxContainer/MarginContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/MarginContainer2/HBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/MarginContainer3/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/MarginContainer4/ExitButton" to="." method="_on_exit_button_pressed"]

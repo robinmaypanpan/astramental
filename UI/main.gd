@@ -2,8 +2,8 @@
 # server and coordinating 
 extends Control
 
-#@onready var _log_box: RichTextLabel = $Panel/VBoxContainer/Panel/LogResults
-#@onready var _connect_btn: CheckButton = $Panel/VBoxContainer/HBoxContainer/Connect
+@onready var LogBox: RichTextLabel = $Panel/VBoxContainer/EventLog
+@onready var IPText: TextEdit = $Panel/VBoxContainer/MarginContainer2/HBoxContainer/IPInput
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
@@ -21,24 +21,12 @@ var connection_state: States = States.IDLE
 
 func post_to_log(msg: String) -> void:
 	print(msg)
-	#_log_box.add_text(str(msg) + "\n")
+	LogBox.add_text(str(msg) + "\n")
 	
 func _ready() -> void:
 	multiplayer.connection_failed.connect(_connection_failure)
 	multiplayer.peer_connected.connect(_player_connected)
 	multiplayer.peer_disconnected.connect(_player_disconnected)
-	
-func _on_connect_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		if connection_state == States.IDLE:
-			start_server()
-		#else: 
-			#_connect_btn.set_pressed_no_signal(false)
-	else:
-		if connection_state == States.CONNECTED:
-			shutdown_server()
-		#else:
-			#_connect_btn.set_pressed_no_signal(true)
 	
 func _connection_failure() -> void:
 	post_to_log("[color=red]Connection Failed[/color]")
@@ -51,7 +39,7 @@ func start_server() -> void:
 	peer.create_server(DEFAULT_PORT, MAX_PEERS)
 	multiplayer.set_multiplayer_peer(peer)
 	connection_state = States.CONNECTED
-	#_connect_btn.set_pressed_no_signal(true)
+	post_to_log("Server Started...")
 	
 func shutdown_server() -> void:
 	connection_state = States.DISCONNECTING
@@ -69,3 +57,26 @@ func _player_connected(id: int) -> void:
 func _player_disconnected(id:int) -> void:
 	post_to_log(str("Player ", id,  " disconnected"))
 	pass
+
+
+func _on_host_button_pressed() -> void:
+	start_server()
+	
+
+
+func _on_join_button_pressed() -> void:
+	post_to_log("Not yet implemented")
+
+
+func _on_options_button_pressed() -> void:
+	post_to_log("Not yet implemented")
+
+
+func _on_exit_button_pressed() -> void:
+	shutdown_server()
+	get_tree().quit()
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		shutdown_server()
+		get_tree().quit() # default behavior
