@@ -2,8 +2,9 @@
 # server and coordinating 
 extends Control
 
-@onready var LogBox: RichTextLabel = $Panel/VBoxContainer/EventLog
-@onready var IPText: TextEdit = $Panel/VBoxContainer/MarginContainer2/HBoxContainer/IPInput
+@onready var LogBox : RichTextLabel = $%EventLog
+@onready var IPText : LineEdit = $%IPInput
+@onready var JoinButton : Button = %JoinButton
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
@@ -19,18 +20,24 @@ enum States {IDLE, CONNECTING, CONNECTED, DISCONNECTING}
 # This variable keeps track of the character's current state.
 var connection_state: States = States.IDLE
 
+
 func post_to_log(msg: String) -> void:
 	print(msg)
 	LogBox.add_text(str(msg) + "\n")
+	
 	
 func _ready() -> void:
 	multiplayer.connection_failed.connect(_connection_failure)
 	multiplayer.peer_connected.connect(_player_connected)
 	multiplayer.peer_disconnected.connect(_player_disconnected)
+	if visible: 
+		initialize_focus()
+	
 	
 func _connection_failure() -> void:
 	post_to_log("[color=red]Connection Failed[/color]")
 	shutdown_server()
+	
 	
 func start_server() -> void:
 	connection_state = States.CONNECTING
@@ -41,6 +48,7 @@ func start_server() -> void:
 	connection_state = States.CONNECTED
 	post_to_log("Server Started...")
 	
+	
 func shutdown_server() -> void:
 	connection_state = States.DISCONNECTING
 	post_to_log("Shutting down...")
@@ -50,9 +58,11 @@ func shutdown_server() -> void:
 	#_connect_btn.set_pressed_no_signal(false)
 	connection_state = States.IDLE
 	
+	
 func _player_connected(id: int) -> void:
 	post_to_log(str("Player ", id,  " connected"))
 	pass
+	
 	
 func _player_disconnected(id:int) -> void:
 	post_to_log(str("Player ", id,  " disconnected"))
@@ -61,7 +71,6 @@ func _player_disconnected(id:int) -> void:
 
 func _on_host_button_pressed() -> void:
 	start_server()
-	
 
 
 func _on_join_button_pressed() -> void:
@@ -76,7 +85,18 @@ func _on_exit_button_pressed() -> void:
 	shutdown_server()
 	get_tree().quit()
 
+
+func initialize_focus() -> void:
+	if is_node_ready():
+		JoinButton.grab_focus()
+	
+
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		shutdown_server()
 		get_tree().quit() # default behavior
+
+
+func _on_visibility_changed() -> void:
+	if visible:
+		initialize_focus()
