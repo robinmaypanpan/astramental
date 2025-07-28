@@ -1,12 +1,22 @@
 extends Node2D
 
-@export var MineAndFactoryMap : TileMapLayer
+@export var MineMap : TileMapLayer
+@export var FactoryMap : TileMapLayer
+
+@export var NumCols : int = 30
+@export var LayerThickness : int = 10
+@export var NumMineLayers : int = 1
+@export var SkyHeight : int = 100
 
 func _ready() -> void:
+	MineMap.transform = Transform2D(0,Vector2(0,SkyHeight+LayerThickness*16))
+	FactoryMap.transform = Transform2D(0,Vector2(0,SkyHeight))
+	
 	randomize()
-	for i in range(60):
-		for j in range(60):
-			var tileCoords := Vector2i(i, j)
+	for x in range(NumCols):
+		for y in range(LayerThickness):
+			var tileCoords := Vector2i(x, y)
 			var randomOreId=randi_range(1,5)
 			
-			MineAndFactoryMap.set_cell(tileCoords, 0, Vector2i(randomOreId,0))
+			MineMap.set_cell(tileCoords, 0, Vector2i(randomOreId,0))
+			FactoryMap.set_cell(tileCoords, 0, Vector2i(0,0))
