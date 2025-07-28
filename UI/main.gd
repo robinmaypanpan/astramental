@@ -70,11 +70,18 @@ func _player_disconnected(id:int) -> void:
 
 
 func _on_host_button_pressed() -> void:
+	if connection_state != States.IDLE:
+		post_to_log("Unable to join, connection already active")
+		return
 	start_server()
 
 
 func _on_join_button_pressed() -> void:
-	post_to_log("Connecting to " + IPText.text + ":" + str(DEFAULT_PORT))
+	if connection_state != States.IDLE:
+		post_to_log("Unable to join, connection already active")
+		return
+	var hostIP = "127.0.0.1" if IPText.text.length() == 0 else IPText.text
+	post_to_log("Connecting to " + hostIP + ":" + str(DEFAULT_PORT))
 	post_to_log("Not yet implemented")
 
 
