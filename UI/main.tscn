@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqo03y46lsise"]
+[gd_scene load_steps=5 format=3 uid="uid://cqo03y46lsise"]
 
 [ext_resource type="Script" uid="uid://cerxhqhc88ke7" path="res://UI/main.gd" id="1_vnck2"]
 [ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_emhnf"]
+[ext_resource type="FontFile" uid="uid://25tkauvypjvj" path="res://Assets/Early GameBoy.ttf" id="3_uw6j2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_whbce"]
 font_size = 62
@@ -108,7 +109,10 @@ focus_neighbor_bottom = NodePath("../../../MarginContainer3/OptionsButton")
 focus_next = NodePath("../../../MarginContainer3/OptionsButton")
 focus_previous = NodePath("../JoinButton")
 theme = ExtResource("2_emhnf")
+theme_override_fonts/font = ExtResource("3_uw6j2")
+theme_override_font_sizes/font_size = 21
 placeholder_text = "127.0.0.1"
+keep_editing_on_text_submit = true
 deselect_on_focus_loss_enabled = false
 
 [node name="MarginContainer3" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
@@ -147,5 +151,7 @@ scroll_following = true
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="focus_entered" from="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/IPInput" to="." method="_on_ip_input_focus_entered"]
+[connection signal="text_submitted" from="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/IPInput" to="." method="_on_ip_input_text_submitted"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer3/OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer4/ExitButton" to="." method="_on_exit_button_pressed"]

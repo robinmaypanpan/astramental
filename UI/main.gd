@@ -41,7 +41,7 @@ func _connection_failure() -> void:
 	
 func start_server() -> void:
 	connection_state = States.CONNECTING
-	post_to_log("Starting Server...")
+	post_to_log("Starting Server on port " + str(DEFAULT_PORT) + "...")
 	peer = ENetMultiplayerPeer.new()
 	peer.create_server(DEFAULT_PORT, MAX_PEERS)
 	multiplayer.set_multiplayer_peer(peer)
@@ -74,6 +74,7 @@ func _on_host_button_pressed() -> void:
 
 
 func _on_join_button_pressed() -> void:
+	post_to_log("Connecting to " + IPText.text + ":" + str(DEFAULT_PORT))
 	post_to_log("Not yet implemented")
 
 
@@ -100,3 +101,12 @@ func _notification(what):
 func _on_visibility_changed() -> void:
 	if visible:
 		initialize_focus()
+
+
+func _on_ip_input_focus_entered() -> void:
+	IPText.edit()
+	pass
+
+func _on_ip_input_text_submitted(new_text: String) -> void:
+	# Do the same thing as clicking the join button
+	_on_join_button_pressed()
