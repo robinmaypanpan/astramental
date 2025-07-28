@@ -1,14 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cqo03y46lsise"]
+[gd_scene load_steps=3 format=3 uid="uid://cqo03y46lsise"]
 
 [ext_resource type="Script" uid="uid://cerxhqhc88ke7" path="res://UI/main.gd" id="1_vnck2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_whbce"]
 font_size = 62
-
-[sub_resource type="Theme" id="Theme_qgpvk"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_riq5v"]
-font_size = 17
 
 [node name="Server" type="Control"]
 layout_mode = 3
@@ -29,12 +24,13 @@ grow_vertical = 2
 
 [node name="Title" type="Label" parent="Panel"]
 layout_mode = 1
-offset_left = 14.0
-offset_top = -5.0
-offset_right = 592.0
-offset_bottom = 81.0
-text = "Astramental Server"
+offset_left = 13.0
+offset_top = 56.0
+offset_right = 1143.0
+offset_bottom = 142.0
+text = "Astramental"
 label_settings = SubResource("LabelSettings_whbce")
+horizontal_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
@@ -42,43 +38,53 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 38.0
-offset_top = -558.0
-offset_right = -37.0
+offset_left = 259.0
+offset_top = -441.0
+offset_right = -243.0
+offset_bottom = -63.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="Connect" type="CheckButton" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="HostButton" type="Button" parent="Panel/VBoxContainer/MarginContainer"]
 layout_mode = 2
-theme = SubResource("Theme_qgpvk")
-text = "Enable Server"
+text = "Host Game"
 
-[node name="Instructions" type="Label" parent="Panel/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
-text = "Click to start the game server."
-label_settings = SubResource("LabelSettings_riq5v")
-vertical_alignment = 1
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="StatusLabel" type="Label" parent="Panel/VBoxContainer"]
+[node name="JoinButton" type="Button" parent="Panel/VBoxContainer/MarginContainer2"]
 layout_mode = 2
-text = "Game Status
-"
-vertical_alignment = 1
+text = "Join Game"
 
-[node name="Panel" type="Panel" parent="Panel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 450)
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="LogResults" type="RichTextLabel" parent="Panel/VBoxContainer/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-fit_content = true
+[node name="OptionsButton" type="Button" parent="Panel/VBoxContainer/MarginContainer3"]
+layout_mode = 2
+text = "Options"
 
-[connection signal="toggled" from="Panel/VBoxContainer/HBoxContainer/Connect" to="." method="_on_connect_toggled"]
+[node name="MarginContainer4" type="MarginContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ExitButton" type="Button" parent="Panel/VBoxContainer/MarginContainer4"]
+layout_mode = 2
+text = "Exit Game"

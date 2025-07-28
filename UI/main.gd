@@ -2,8 +2,8 @@
 # server and coordinating 
 extends Control
 
-@onready var _log_box: RichTextLabel = $Panel/VBoxContainer/Panel/LogResults
-@onready var _connect_btn: CheckButton = $Panel/VBoxContainer/HBoxContainer/Connect
+#@onready var _log_box: RichTextLabel = $Panel/VBoxContainer/Panel/LogResults
+#@onready var _connect_btn: CheckButton = $Panel/VBoxContainer/HBoxContainer/Connect
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
@@ -21,7 +21,7 @@ var connection_state: States = States.IDLE
 
 func post_to_log(msg: String) -> void:
 	print(msg)
-	_log_box.add_text(str(msg) + "\n")
+	#_log_box.add_text(str(msg) + "\n")
 	
 func _ready() -> void:
 	multiplayer.connection_failed.connect(_connection_failure)
@@ -32,13 +32,13 @@ func _on_connect_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		if connection_state == States.IDLE:
 			start_server()
-		else: 
-			_connect_btn.set_pressed_no_signal(false)
+		#else: 
+			#_connect_btn.set_pressed_no_signal(false)
 	else:
 		if connection_state == States.CONNECTED:
 			shutdown_server()
-		else:
-			_connect_btn.set_pressed_no_signal(true)
+		#else:
+			#_connect_btn.set_pressed_no_signal(true)
 	
 func _connection_failure() -> void:
 	post_to_log("[color=red]Connection Failed[/color]")
@@ -51,7 +51,7 @@ func start_server() -> void:
 	peer.create_server(DEFAULT_PORT, MAX_PEERS)
 	multiplayer.set_multiplayer_peer(peer)
 	connection_state = States.CONNECTED
-	_connect_btn.set_pressed_no_signal(true)
+	#_connect_btn.set_pressed_no_signal(true)
 	
 func shutdown_server() -> void:
 	connection_state = States.DISCONNECTING
@@ -59,7 +59,7 @@ func shutdown_server() -> void:
 	# TODO: What else do I need to do to shut down the server?
 	multiplayer.set_multiplayer_peer(null) # Remove peer
 	peer = null
-	_connect_btn.set_pressed_no_signal(false)
+	#_connect_btn.set_pressed_no_signal(false)
 	connection_state = States.IDLE
 	
 func _player_connected(id: int) -> void:
