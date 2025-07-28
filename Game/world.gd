@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 @export var MineMap : TileMapLayer
 @export var FactoryMap : TileMapLayer
@@ -9,9 +9,6 @@ extends Node2D
 @export var SkyHeight : int = 100
 
 func _ready() -> void:
-	MineMap.transform = Transform2D(0,Vector2(0,SkyHeight+LayerThickness*16))
-	FactoryMap.transform = Transform2D(0,Vector2(0,SkyHeight))
-	
 	randomize()
 	for x in range(NumCols):
 		for y in range(LayerThickness):
