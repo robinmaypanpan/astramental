@@ -54,6 +54,15 @@ Menus = Dictionary[String, PackedScene]({
 "MainMenu": ExtResource("2_dajm1")
 })
 
+[node name="MenusContainer" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="SceneTransitionShroud" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1

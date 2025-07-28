@@ -28,8 +28,6 @@ func post_to_log(msg: String) -> void:
 	
 func _ready() -> void:
 	multiplayer.connection_failed.connect(_connection_failure)
-	multiplayer.peer_connected.connect(_player_connected)
-	multiplayer.peer_disconnected.connect(_player_disconnected)
 	if visible: 
 		initialize_focus()
 	
@@ -47,9 +45,7 @@ func start_server() -> void:
 	multiplayer.set_multiplayer_peer(peer)
 	connection_state = States.CONNECTED
 	post_to_log("Server Started...")
-	var ui_node : Ui = get_tree().get_root().get_node("Ui") as Ui
-	assert(ui_node != null, "Could not find UI node")
-	ui_node.transition_to("Lobby")
+	UiUtils.transition_to("Lobby")
 	
 	
 func shutdown_server() -> void:
@@ -60,16 +56,6 @@ func shutdown_server() -> void:
 	peer = null
 	#_connect_btn.set_pressed_no_signal(false)
 	connection_state = States.IDLE
-	
-	
-func _player_connected(id: int) -> void:
-	post_to_log(str("Player ", id,  " connected"))
-	pass
-	
-	
-func _player_disconnected(id:int) -> void:
-	post_to_log(str("Player ", id,  " disconnected"))
-	pass
 
 
 func _on_host_button_pressed() -> void:

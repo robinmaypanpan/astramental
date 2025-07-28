@@ -4,6 +4,7 @@ class_name Ui extends Control
 @export var Menus : Dictionary[String, PackedScene]
 
 @onready var shroud_animation : AnimationPlayer = %AnimationPlayer
+@onready var MenusContainer : Node = %MenusContainer
 
 var current_node : Node
 
@@ -31,13 +32,13 @@ func transition_to(menu_name: String) -> Node:
 		await(shroud_animation.animation_finished)
 		current_node.hide()
 		current_node.queue_free()
-		remove_child(current_node)
+		MenusContainer.remove_child(current_node)
 		current_node = null
 	
 	# Transition to the new menu
 	if new_node != null:
 		current_node = new_node
-		add_child(new_node)
+		MenusContainer.add_child(new_node)
 		new_node.show()
 		shroud_animation.play_backwards("fade_to_black")
 		await(shroud_animation.animation_finished)
