@@ -31,7 +31,7 @@ func start_game() -> void:
 	assert(multiplayer.is_server())
 	start_all_games.rpc()
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func start_all_games() -> void:
 	game_started.emit()
 
