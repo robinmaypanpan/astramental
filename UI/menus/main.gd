@@ -7,84 +7,52 @@ class_name MainMenu extends Menu
 @onready var JoinButton : Button = %JoinButton
 @onready var PlayerName : LineEdit = %PlayerName
 
-# Default game server port. Can be any number between 1024 and 49151.
-# Not on the list of registered or common ports as of May 2024:
-# https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-const DEFAULT_PORT = 23458
-const MAX_PEERS = 4
-
-var peer : ENetMultiplayerPeer
-
-# This enum lists all the possible states the character can be in.
-enum States {IDLE, CONNECTING, CONNECTED, DISCONNECTING}
-
-# This variable keeps track of the character's current state.
-var connection_state: States = States.IDLE
-
-
 func post_to_log(msg: String) -> void:
 	print(msg)
 	LogBox.add_text(str(msg) + "\n")
 	
 	
 func _ready() -> void:
-	randomize()
-	multiplayer.connection_failed.connect(_connection_failure)
+	ConnectionSystem.connection_message.connect(post_to_log)
+	ConnectionSystem.connection_failed.connect(_on_connection_failed)
+	ConnectionSystem.connection_succeeded.connect(_on_connection_succeeded)
+	
 	if visible: 
 		initialize_focus()
-	PlayerName.placeholder_text = "Player" + str(randi_range(1,999))
+		
+	PlayerName.placeholder_text = Globals.player_name
 	
 	
-func _connection_failure() -> void:
+func _on_connection_failed() -> void:
 	post_to_log("[color=red]Connection Failed[/color]")
-	shutdown_server()
+	UiUtils.transition_to("MainMenu")
 	
 	
-func start_server() -> void:
-	connection_state = States.CONNECTING
-	post_to_log("Starting Server on port " + str(DEFAULT_PORT) + "...")
-	peer = ENetMultiplayerPeer.new()
-	peer.create_server(DEFAULT_PORT, MAX_PEERS)
-	multiplayer.set_multiplayer_peer(peer)
-	connection_state = States.CONNECTED
-	post_to_log("Server Started...")
-	UiUtils.transition_to("Lobby")
-	
-	
-func shutdown_server() -> void:
-	connection_state = States.DISCONNECTING
-	post_to_log("Shutting down...")
-	# TODO: What else do I need to do to shut down the server?
-	multiplayer.set_multiplayer_peer(null) # Remove peer
-	peer = null
-	#_connect_btn.set_pressed_no_signal(false)
-	connection_state = States.IDLE
-
-func join_server(ip_address : String) -> void:
-	post_to_log("Connecting to " + ip_address + ":" + str(DEFAULT_PORT))
-	pass
-
 func _on_host_button_pressed() -> void:
-	if connection_state != States.IDLE:
-		post_to_log("Unable to join, connection already active")
-		return
-	start_server()
+	get_window().title = ProjectSettings.get_setting("application/config/name") + ": Server"
+	if PlayerName.text.length() > 0:
+		Globals.player_name = PlayerName.text
+	ConnectionSystem.host_server()
 
 
 func _on_join_button_pressed() -> void:
-	if connection_state != States.IDLE:
-		post_to_log("Unable to join, connection already active")
-		return
-	var host_ip = "127.0.0.1" if IPText.text.length() == 0 else IPText.text
-	join_server(host_ip)
+	if PlayerName.text.length() > 0:
+		Globals.player_name = PlayerName.text
+	get_window().title = ProjectSettings.get_setting("application/config/name") + ": Client"
+	var host_ip: String = "127.0.0.1" if IPText.text.length() == 0 else IPText.text
+	ConnectionSystem.join_server(host_ip)
 
+
+func _on_connection_succeeded() -> void:
+	UiUtils.transition_to("Lobby")
+	
 
 func _on_options_button_pressed() -> void:
 	post_to_log("Not yet implemented")
 
 
 func _on_exit_button_pressed() -> void:
-	shutdown_server()
+	ConnectionSystem.shutdown_server()
 	get_tree().quit()
 
 
@@ -95,7 +63,7 @@ func initialize_focus() -> void:
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		shutdown_server()
+		ConnectionSystem.shutdown_server()
 		get_tree().quit() # default behavior
 
 

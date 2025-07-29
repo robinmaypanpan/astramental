@@ -58,6 +58,7 @@ size_flags_vertical = 3
 theme = ExtResource("2_j2i35")
 
 [node name="StartButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_j2i35")
 text = "Start Game"

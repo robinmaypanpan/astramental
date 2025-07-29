@@ -59,7 +59,6 @@ label_settings = SubResource("LabelSettings_whbce")
 horizontal_alignment = 1
 
 [node name="PlayerNameContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_emhnf")
