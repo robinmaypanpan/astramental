@@ -3,8 +3,9 @@
 class_name MainMenu extends Menu
 
 @onready var LogBox : RichTextLabel = $%EventLog
-@onready var IPText : LineEdit = $%IPInput
+@onready var IPText : LineEdit = %IPInput
 @onready var JoinButton : Button = %JoinButton
+@onready var PlayerName : LineEdit = %PlayerName
 
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
@@ -27,9 +28,11 @@ func post_to_log(msg: String) -> void:
 	
 	
 func _ready() -> void:
+	randomize()
 	multiplayer.connection_failed.connect(_connection_failure)
 	if visible: 
 		initialize_focus()
+	PlayerName.placeholder_text = "Player" + str(randi_range(1,999))
 	
 	
 func _connection_failure() -> void:
@@ -108,3 +111,7 @@ func _on_ip_input_focus_entered() -> void:
 func _on_ip_input_text_submitted(new_text: String) -> void:
 	# Do the same thing as clicking the join button
 	_on_join_button_pressed()
+
+
+func _on_player_name_focus_entered() -> void:
+	PlayerName.edit()

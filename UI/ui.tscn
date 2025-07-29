@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://d17sc8rgcqfa4"]
+[gd_scene load_steps=8 format=3 uid="uid://d17sc8rgcqfa4"]
 
 [ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://UI/ui.gd" id="1_dajm1"]
 [ext_resource type="PackedScene" uid="uid://cqo03y46lsise" path="res://UI/menus/main.tscn" id="2_dajm1"]
 [ext_resource type="PackedScene" uid="uid://dqxjnempjj6dd" path="res://UI/menus/lobby.tscn" id="3_e6gg6"]
+[ext_resource type="PackedScene" uid="uid://dji12mak03hku" path="res://Game/world.tscn" id="4_hat8c"]
 
 [sub_resource type="Animation" id="Animation_hat8c"]
 length = 0.001
@@ -51,7 +52,8 @@ grow_vertical = 2
 script = ExtResource("1_dajm1")
 Menus = Dictionary[String, PackedScene]({
 "Lobby": ExtResource("3_e6gg6"),
-"MainMenu": ExtResource("2_dajm1")
+"MainMenu": ExtResource("2_dajm1"),
+"world": ExtResource("4_hat8c")
 })
 
 [node name="MenusContainer" type="Control" parent="."]
