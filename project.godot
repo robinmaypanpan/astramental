@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 UiUtils="*res://UI/utils.gd"
+Globals="*res://globals.gd"
+ConnectionSystem="*res://Systems/connection.gd"
 
 [display]
 

@@ -43,7 +43,7 @@ theme_override_constants/margin_bottom = 50
 layout_mode = 2
 theme = ExtResource("2_emhnf")
 
-[node name="MarginContainer5" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="TitleContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_emhnf")
 theme_override_constants/margin_left = 0
@@ -51,62 +51,84 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 50
 
-[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer/MarginContainer5"]
+[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer/TitleContainer"]
 layout_mode = 2
 theme = ExtResource("2_emhnf")
 text = "Astramental"
 label_settings = SubResource("LabelSettings_whbce")
 horizontal_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_emhnf")
-
-[node name="HostButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-focus_neighbor_bottom = NodePath("../../MarginContainer2/HBoxContainer/IPInput")
-focus_next = NodePath("../../MarginContainer2/HBoxContainer/JoinButton")
-theme = ExtResource("2_emhnf")
-text = "Host Game"
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer/HostButton"]
-layout_mode = 0
-offset_right = 20.0
-offset_bottom = 20.0
-theme = ExtResource("2_emhnf")
-
-[node name="MarginContainer2" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="PlayerNameContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_emhnf")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PlayerNameContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/PlayerNameContainer/HBoxContainer"]
+layout_mode = 2
+text = "Player Name"
+vertical_alignment = 1
+
+[node name="PlayerName" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/PlayerNameContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+focus_neighbor_bottom = NodePath("../../../HostButtonContainer/HostButton")
+focus_next = NodePath("../../../HostButtonContainer/HostButton")
+theme = ExtResource("2_emhnf")
+placeholder_text = "Player name"
+keep_editing_on_text_submit = true
+deselect_on_focus_loss_enabled = false
+
+[node name="HostButtonContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_emhnf")
 
-[node name="JoinButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer"]
+[node name="HostButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HostButtonContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+focus_neighbor_top = NodePath("../../PlayerNameContainer/HBoxContainer/PlayerName")
+focus_neighbor_bottom = NodePath("../../JoinGameContainer/HBoxContainer/IPInput")
+focus_next = NodePath("../../JoinGameContainer/HBoxContainer/JoinButton")
+focus_previous = NodePath("../../PlayerNameContainer/HBoxContainer/PlayerName")
+theme = ExtResource("2_emhnf")
+text = "Host Game"
+
+[node name="JoinGameContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_emhnf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/JoinGameContainer"]
+layout_mode = 2
+theme = ExtResource("2_emhnf")
+
+[node name="JoinButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 3
-focus_neighbor_top = NodePath("../../../MarginContainer/HostButton")
+focus_neighbor_top = NodePath("../../../HostButtonContainer/HostButton")
 focus_neighbor_right = NodePath("../IPInput")
-focus_neighbor_bottom = NodePath("../../../MarginContainer3/OptionsButton")
+focus_neighbor_bottom = NodePath("../../../OptionsButtonContainer/OptionsButton")
 focus_next = NodePath("../IPInput")
 theme = ExtResource("2_emhnf")
 text = "Join Game"
 
-[node name="IPInput" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer"]
+[node name="IPInput" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 40)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_neighbor_left = NodePath("../JoinButton")
-focus_neighbor_top = NodePath("../../../MarginContainer/HostButton")
-focus_neighbor_bottom = NodePath("../../../MarginContainer3/OptionsButton")
-focus_next = NodePath("../../../MarginContainer3/OptionsButton")
+focus_neighbor_top = NodePath("../../../HostButtonContainer/HostButton")
+focus_neighbor_bottom = NodePath("../../../OptionsButtonContainer/OptionsButton")
+focus_next = NodePath("../../../OptionsButtonContainer/OptionsButton")
 focus_previous = NodePath("../JoinButton")
 theme = ExtResource("2_emhnf")
 theme_override_fonts/font = ExtResource("3_uw6j2")
@@ -115,29 +137,29 @@ placeholder_text = "127.0.0.1"
 keep_editing_on_text_submit = true
 deselect_on_focus_loss_enabled = false
 
-[node name="MarginContainer3" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="OptionsButtonContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_emhnf")
 
-[node name="OptionsButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer3"]
+[node name="OptionsButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/OptionsButtonContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-focus_neighbor_top = NodePath("../../MarginContainer2/HBoxContainer/IPInput")
-focus_neighbor_bottom = NodePath("../../MarginContainer4/ExitButton")
-focus_next = NodePath("../../MarginContainer4/ExitButton")
-focus_previous = NodePath("../../MarginContainer2/HBoxContainer/IPInput")
+focus_neighbor_top = NodePath("../../JoinGameContainer/HBoxContainer/IPInput")
+focus_neighbor_bottom = NodePath("../../ExitContainer/ExitButton")
+focus_next = NodePath("../../ExitContainer/ExitButton")
+focus_previous = NodePath("../../JoinGameContainer/HBoxContainer/IPInput")
 theme = ExtResource("2_emhnf")
 text = "Options"
 
-[node name="MarginContainer4" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="ExitContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("2_emhnf")
 
-[node name="ExitButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/MarginContainer4"]
+[node name="ExitButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/ExitContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-focus_neighbor_top = NodePath("../../MarginContainer3/OptionsButton")
-focus_previous = NodePath("../../MarginContainer3/OptionsButton")
+focus_neighbor_top = NodePath("../../OptionsButtonContainer/OptionsButton")
+focus_previous = NodePath("../../OptionsButtonContainer/OptionsButton")
 theme = ExtResource("2_emhnf")
 text = "Exit Game"
 
@@ -149,9 +171,10 @@ theme = ExtResource("2_emhnf")
 scroll_following = true
 
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="focus_entered" from="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/IPInput" to="." method="_on_ip_input_focus_entered"]
-[connection signal="text_submitted" from="Panel/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/IPInput" to="." method="_on_ip_input_text_submitted"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer3/OptionsButton" to="." method="_on_options_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/MarginContainer4/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="focus_entered" from="Panel/MarginContainer/VBoxContainer/PlayerNameContainer/HBoxContainer/PlayerName" to="." method="_on_player_name_focus_entered"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HostButtonContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="focus_entered" from="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer/IPInput" to="." method="_on_ip_input_focus_entered"]
+[connection signal="text_submitted" from="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer/IPInput" to="." method="_on_ip_input_text_submitted"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/OptionsButtonContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/ExitContainer/ExitButton" to="." method="_on_exit_button_pressed"]
