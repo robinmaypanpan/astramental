@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dqxjnempjj6dd"]
+[gd_scene load_steps=4 format=3 uid="uid://dqxjnempjj6dd"]
 
 [ext_resource type="Script" uid="uid://ccru847d8xjsy" path="res://UI/menus/lobby.gd" id="1_sbyvm"]
+[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_j2i35"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hpfnl"]
 font_size = 62
@@ -22,33 +23,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="Panel"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 1
-offset_left = 13.0
-offset_top = 56.0
-offset_right = 1143.0
-offset_bottom = 142.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 300
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 300
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
 text = "Astramental"
 label_settings = SubResource("LabelSettings_hpfnl")
 horizontal_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="Panel"]
-layout_mode = 0
-offset_left = 401.0
-offset_top = 152.0
-offset_right = 547.0
-offset_bottom = 175.0
+[node name="StatusLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
 text = "Waiting for players"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 259.0
-offset_top = -441.0
-offset_right = -243.0
-offset_bottom = -63.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="ItemList" type="ItemList" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_j2i35")
+text = "Start Game"

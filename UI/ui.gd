@@ -11,7 +11,9 @@ var current_node : Node
 func _ready() -> void:
 	transition_to("MainMenu")
 	
-	
+## Transitions to the provided scene...
+## Can either be a string provided in the Menus dictionary
+## or a resource path
 func transition_to(menu_name: String) -> Node:
 	# Identify the scene we're transitioning to
 	var new_node : Node
@@ -28,6 +30,7 @@ func transition_to(menu_name: String) -> Node:
 		var current_menu = current_node as Menu
 		if current_menu != null:
 			current_menu.starting_fade_out()
+			
 		shroud_animation.play("fade_to_black")
 		await(shroud_animation.animation_finished)
 		current_node.hide()
