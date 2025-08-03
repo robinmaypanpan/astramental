@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://ccru847d8xjsy" path="res://UI/menus/lobby.gd" id="1_sbyvm"]
 [ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_j2i35"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_hpfnl"]
-font_size = 62
+[sub_resource type="LabelSettings" id="LabelSettings_j2i35"]
+font_size = 96
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
@@ -42,7 +42,7 @@ layout_mode = 2
 layout_mode = 2
 theme = ExtResource("2_j2i35")
 text = "Astramental"
-label_settings = SubResource("LabelSettings_hpfnl")
+label_settings = SubResource("LabelSettings_j2i35")
 horizontal_alignment = 1
 
 [node name="StatusLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
