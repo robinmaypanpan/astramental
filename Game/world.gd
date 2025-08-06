@@ -1,19 +1,18 @@
 extends Control
 
-@export var MineMap : TileMapLayer
-@export var FactoryMap : TileMapLayer
-
-@export var NumCols : int = 30
-@export var LayerThickness : int = 10
-@export var NumMineLayers : int = 1
-@export var SkyHeight : int = 100
+@export var BoardHolder : Node
+@export var PlayerBoard : PackedScene
 
 func _ready() -> void:
-	randomize()
-	for x in range(NumCols):
-		for y in range(LayerThickness):
-			var tileCoords := Vector2i(x, y)
-			var randomOreId=randi_range(1,5)
-			
-			MineMap.set_cell(tileCoords, 0, Vector2i(randomOreId,0))
-			FactoryMap.set_cell(tileCoords, 0, Vector2i(0,0))
+	print(
+		"%s (%s) says the players are %s" % [
+			multiplayer.get_unique_id(),
+			Globals.player_name,
+			ConnectionSystem.players,
+	])
+	var your_board := PlayerBoard.instantiate()
+	print("instantiated your_board")
+	your_board.OwnerId = multiplayer.get_unique_id()
+	your_board.OwnerName = Globals.player_name
+	BoardHolder.add_child(your_board)
+	print("added board to tree")
