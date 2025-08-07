@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
-[ext_resource type="Script" path="res://Game/game_state.gd" id="3_jwkme"]
+[ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/game_state.gd" id="3_jwkme"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 

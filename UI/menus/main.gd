@@ -20,7 +20,7 @@ func _ready() -> void:
 	if visible: 
 		initialize_focus()
 		
-	PlayerName.placeholder_text = Globals.player_name
+	PlayerName.placeholder_text = ConnectionSystem.get_predicted_local_player_name()
 	
 	
 func _on_connection_failed() -> void:
@@ -30,17 +30,13 @@ func _on_connection_failed() -> void:
 	
 func _on_host_button_pressed() -> void:
 	get_window().title = ProjectSettings.get_setting("application/config/name") + ": Server"
-	if PlayerName.text.length() > 0:
-		Globals.player_name = PlayerName.text
-	ConnectionSystem.host_server()
+	ConnectionSystem.host_server(PlayerName.text)
 
 
 func _on_join_button_pressed() -> void:
-	if PlayerName.text.length() > 0:
-		Globals.player_name = PlayerName.text
 	get_window().title = ProjectSettings.get_setting("application/config/name") + ": Client"
 	var host_ip: String = "127.0.0.1" if IPText.text.length() == 0 else IPText.text
-	ConnectionSystem.join_server(host_ip)
+	ConnectionSystem.join_server(PlayerName.text, host_ip)
 
 
 func _on_connection_succeeded() -> void:
