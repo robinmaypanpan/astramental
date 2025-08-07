@@ -23,6 +23,12 @@ func set_up_game(world_seed: int) -> void:
 		var player = ConnectionSystem.get_player(player_id)
 		add_player_board(player.index, player.name)
 
+## Actually starts the game on the server
+func start_game():
+	assert(multiplayer.is_server())
+	_GameState.example_int = 42
+	set_up_game.rpc(randi())
+
 @rpc("any_peer", "call_local", "reliable")
 func register_ready() -> void:
 	assert(multiplayer.is_server())
@@ -30,11 +36,12 @@ func register_ready() -> void:
 	var total_num_players = ConnectionSystem.get_num_players()
 	
 	if num_players_ready >= total_num_players:
-		set_up_game.rpc(randi())
+		start_game()
 
 func _ready() -> void:
-	if multiplayer.is_server():
-		_GameState.example_int = 42
+	if ConnectionSystem.is_not_running_network():
+		ConnectionSystem.host_server()
+		start_game()
 
 	register_ready.rpc_id(1)
 

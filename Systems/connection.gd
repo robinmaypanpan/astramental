@@ -49,6 +49,10 @@ func _ready() -> void:
 func get_predicted_local_player_name() -> String:
 	return _predicted_local_player_name
 
+## Returns true if we are not connected
+func is_not_running_network() -> bool:
+	return connection_state == States.IDLE
+
 func start_game() -> void:
 	print("Starting all games")
 	assert(multiplayer.is_server())
@@ -58,7 +62,7 @@ func start_game() -> void:
 func start_all_games() -> void:
 	game_started.emit()
 
-func host_server(local_player_name:String) -> void:
+func host_server(local_player_name:String = "") -> void:
 	if connection_state != States.IDLE:
 		connection_message.emit("Unable to join, connection already active")
 		return
@@ -69,7 +73,7 @@ func host_server(local_player_name:String) -> void:
 	peer.create_server(DEFAULT_PORT, MAX_PEERS)
 	multiplayer.set_multiplayer_peer(peer)
 	
-	if local_player_name == null or local_player_name.length() == 0:
+	if local_player_name.length() == 0:
 		local_player_name = _predicted_local_player_name
 	
 	register_player(1, local_player_name, 1)
