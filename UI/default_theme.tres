@@ -1,14 +1,32 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://durn6bdwy26ag"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://durn6bdwy26ag"]
 
-[ext_resource type="FontFile" uid="uid://qxse4aer8g8d" path="res://Assets/fs-pixel-sans-unicode-regular/fs-pixel-sans-unicode-regular.ttf" id="1_drjrk"]
+[ext_resource type="FontFile" uid="uid://cpo7hb5cjiuce" path="res://Assets/fs-pixel-sans-unicode-regular/fs_pixel_sans_edited.ttf" id="1_drjrk"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xj1xw"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drjrk"]
+content_margin_left = 12.0
+bg_color = Color(0.133333, 0.133333, 0.133333, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xj1xw"]
+content_margin_left = 12.0
+bg_color = Color(0.133333, 0.133333, 0.133333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2iung"]
+content_margin_left = 12.0
+bg_color = Color(0.156863, 0.156863, 0.156863, 1)
+
 [resource]
 default_font = ExtResource("1_drjrk")
-default_font_size = 35
-Button/font_sizes/font_size = 35
-Button/fonts/font = ExtResource("1_drjrk")
+default_font_size = 72
 Label/colors/font_color = Color(1, 1, 1, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0)
@@ -17,9 +35,10 @@ Label/constants/outline_size = 0
 Label/constants/shadow_offset_x = 1
 Label/constants/shadow_offset_y = 1
 Label/constants/shadow_outline_size = 1
-Label/font_sizes/font_size = 35
-Label/fonts/font = ExtResource("1_drjrk")
 Label/styles/normal = SubResource("StyleBoxEmpty_xj1xw")
+LineEdit/styles/focus = SubResource("StyleBoxFlat_drjrk")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_xj1xw")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_2iung")
 MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_left = 10
 MarginContainer/constants/margin_right = 10

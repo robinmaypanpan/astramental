@@ -1,11 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cqo03y46lsise"]
+[gd_scene load_steps=4 format=3 uid="uid://cqo03y46lsise"]
 
 [ext_resource type="Script" uid="uid://cerxhqhc88ke7" path="res://UI/menus/main.gd" id="1_vnck2"]
 [ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_emhnf"]
-[ext_resource type="FontFile" uid="uid://25tkauvypjvj" path="res://Assets/Early GameBoy.ttf" id="3_uw6j2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_whbce"]
-font_size = 62
+font_size = 96
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -53,7 +52,6 @@ theme_override_constants/margin_bottom = 50
 
 [node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer/TitleContainer"]
 layout_mode = 2
-theme = ExtResource("2_emhnf")
 text = "Astramental"
 label_settings = SubResource("LabelSettings_whbce")
 horizontal_alignment = 1
@@ -65,6 +63,7 @@ theme = ExtResource("2_emhnf")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/PlayerNameContainer"]
 layout_mode = 2
+theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/PlayerNameContainer/HBoxContainer"]
 layout_mode = 2
@@ -106,12 +105,13 @@ theme = ExtResource("2_emhnf")
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/JoinGameContainer"]
 layout_mode = 2
 theme = ExtResource("2_emhnf")
+theme_override_constants/separation = 20
 
 [node name="JoinButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
 focus_neighbor_top = NodePath("../../../HostButtonContainer/HostButton")
 focus_neighbor_right = NodePath("../IPInput")
 focus_neighbor_bottom = NodePath("../../../OptionsButtonContainer/OptionsButton")
@@ -121,18 +121,14 @@ text = "Join Game"
 
 [node name="IPInput" type="LineEdit" parent="Panel/MarginContainer/VBoxContainer/JoinGameContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 40)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 3
 size_flags_vertical = 4
 focus_neighbor_left = NodePath("../JoinButton")
 focus_neighbor_top = NodePath("../../../HostButtonContainer/HostButton")
 focus_neighbor_bottom = NodePath("../../../OptionsButtonContainer/OptionsButton")
 focus_next = NodePath("../../../OptionsButtonContainer/OptionsButton")
 focus_previous = NodePath("../JoinButton")
-theme = ExtResource("2_emhnf")
-theme_override_fonts/font = ExtResource("3_uw6j2")
-theme_override_font_sizes/font_size = 21
 placeholder_text = "127.0.0.1"
 keep_editing_on_text_submit = true
 deselect_on_focus_loss_enabled = false
