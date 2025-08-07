@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://d17sc8rgcqfa4"]
 
-[ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://UI/ui.gd" id="1_dajm1"]
-[ext_resource type="PackedScene" uid="uid://cqo03y46lsise" path="res://UI/menus/main.tscn" id="2_dajm1"]
-[ext_resource type="PackedScene" uid="uid://dqxjnempjj6dd" path="res://UI/menus/lobby.tscn" id="3_e6gg6"]
-[ext_resource type="PackedScene" uid="uid://dji12mak03hku" path="res://Game/world.tscn" id="4_hat8c"]
+[ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://UI/ui_root.gd" id="1_abnfh"]
+[ext_resource type="PackedScene" uid="uid://dqxjnempjj6dd" path="res://UI/menus/lobby.tscn" id="2_dq6r7"]
+[ext_resource type="PackedScene" uid="uid://cqo03y46lsise" path="res://UI/menus/main.tscn" id="3_f2xo2"]
+[ext_resource type="PackedScene" uid="uid://dji12mak03hku" path="res://Game/world.tscn" id="4_o66iu"]
 
 [sub_resource type="Animation" id="Animation_hat8c"]
 length = 0.001
@@ -42,18 +42,18 @@ _data = {
 &"fade_to_black": SubResource("Animation_e6gg6")
 }
 
-[node name="Ui" type="Control"]
+[node name="UiRoot" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_dajm1")
+script = ExtResource("1_abnfh")
 Menus = Dictionary[String, PackedScene]({
-"Lobby": ExtResource("3_e6gg6"),
-"MainMenu": ExtResource("2_dajm1"),
-"world": ExtResource("4_hat8c")
+"Lobby": ExtResource("2_dq6r7"),
+"MainMenu": ExtResource("3_f2xo2"),
+"world": ExtResource("4_o66iu")
 })
 
 [node name="MenusContainer" type="Control" parent="."]

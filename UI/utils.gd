@@ -1,7 +1,7 @@
 extends Node
 
-func get_ui_node() -> Ui:
-	var ui_node : Ui = get_tree().get_root().get_node("Ui") as Ui
+func get_ui_node() -> UiRoot:
+	var ui_node : UiRoot = get_tree().get_root().get_node("UiRoot") as UiRoot
 	if ui_node == null:
 		# We may be running an individual scene that is trying to access this
 		# Therefore, let's create it.
