@@ -87,7 +87,7 @@ func _player_connected(id: int) -> void:
 	
 	
 ## Registers a player to the server
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func register_player(new_player_name: String) -> void:
 	print("Received remote register_player")
 	var id : int = multiplayer.get_remote_sender_id()
