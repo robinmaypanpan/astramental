@@ -26,25 +26,30 @@ sources/0 = SubResource("TileSetAtlasSource_3kekb")
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ps1nv"]
 bg_color = Color(0.497493, 0.654419, 0.410997, 1)
 
-[node name="PlayerBoard" type="VBoxContainer" node_paths=PackedStringArray("MineMap", "FactoryMap")]
-custom_minimum_size = Vector2(224, 0)
-offset_bottom = 548.0
+[node name="PlayerBoard" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 224.0
+offset_bottom = 556.0
 size_flags_vertical = 0
-theme_override_constants/separation = 0
 script = ExtResource("1_sf1vr")
-MineMap = NodePath("Mine/MineTiles")
-FactoryMap = NodePath("FactoryFloor/FactoryTiles")
 NumCols = 10
 LayerThickness = 7
 SkyHeight = 300
 
-[node name="Sky" type="Panel" parent="."]
-custom_minimum_size = Vector2(0, 100)
+[node name="VerticalListContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+offset_right = 224.0
+offset_bottom = 556.0
+
+[node name="Sky" type="Panel" parent="VerticalListContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 
-[node name="PlayerNameLabel" type="Label" parent="Sky"]
+[node name="PlayerNameLabel" type="Label" parent="VerticalListContainer/Sky"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -62,22 +67,26 @@ theme = ExtResource("2_a0k76")
 text = "name label"
 horizontal_alignment = 1
 
-[node name="FactoryFloor" type="Panel" parent="."]
+[node name="FactoryFloor" type="Panel" parent="VerticalListContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwkme")
 
-[node name="FactoryTiles" type="TileMapLayer" parent="FactoryFloor"]
+[node name="FactoryTiles" type="TileMapLayer" parent="VerticalListContainer/FactoryFloor"]
+unique_name_in_owner = true
 scale = Vector2(2, 2)
 tile_set = SubResource("TileSet_jwkme")
 
-[node name="Mine" type="Panel" parent="."]
+[node name="Mine" type="Panel" parent="VerticalListContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_ps1nv")
 
-[node name="MineTiles" type="TileMapLayer" parent="Mine"]
+[node name="MineTiles" type="TileMapLayer" parent="VerticalListContainer/Mine"]
+unique_name_in_owner = true
 scale = Vector2(2, 2)
 tile_set = SubResource("TileSet_jwkme")
