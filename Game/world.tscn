@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=8 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
+[ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/game_state.gd" id="3_jwkme"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 
@@ -9,6 +10,11 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jwkme"]
+properties/0/path = NodePath("GameState:example_int")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="World" type="Control" node_paths=PackedStringArray("BoardHolder")]
 layout_mode = 3
@@ -48,3 +54,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 
 [node name="Board Holder" type="HBoxContainer" parent="SplitContainer/PanelContainer2/ScrollContainer"]
 layout_mode = 2
+
+[node name="GameState" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_jwkme")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_jwkme")
