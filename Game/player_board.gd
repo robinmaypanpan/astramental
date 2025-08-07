@@ -6,6 +6,7 @@ extends VBoxContainer
 # multiplayer properties
 @export var OwnerId : int
 @export var OwnerName : String
+@export var WorldSeed : int
 
 # game board properties
 @export var NumCols : int = 30
@@ -15,17 +16,17 @@ extends VBoxContainer
 @export var TileMapScale : int = 2
 
 func _ready() -> void:
-	print("doing ready for %s (%s)" % [OwnerName, OwnerId])
-
 	var tile_size := 16 * TileMapScale
 	var board_width_px := tile_size * NumCols
 	var layer_height_px := tile_size * LayerThickness
 
 	custom_minimum_size = Vector2i(board_width_px, 0)
 	$Sky.custom_minimum_size = Vector2i(0, SkyHeight)
+	$Sky/PlayerNameLabel.text = ("%s\n(%s)" % [OwnerName, OwnerId])
 	$FactoryFloor.custom_minimum_size = Vector2i(0, layer_height_px)
 	$Mine.custom_minimum_size = Vector2i(0, layer_height_px)
 
+	seed(WorldSeed)
 	for x in range(NumCols):
 		for y in range(LayerThickness):
 			var tileCoords := Vector2i(x, y)
