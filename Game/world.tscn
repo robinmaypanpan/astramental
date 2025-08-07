@@ -1,35 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=6 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
-[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/ores.png" id="1_ebafo"]
+[ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 
 [sub_resource type="Theme" id="Theme_jwkme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
-bg_color = Color(0.906971, 0.43494, 0.418012, 1)
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwkme"]
-bg_color = Color(0.357445, 0.631236, 0.823697, 1)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3kekb"]
-texture = ExtResource("1_ebafo")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_jwkme"]
-sources/0 = SubResource("TileSetAtlasSource_3kekb")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ps1nv"]
-bg_color = Color(0.497493, 0.654419, 0.410997, 1)
-
-[node name="World" type="Control" node_paths=PackedStringArray("MineMap", "FactoryMap")]
+[node name="World" type="Control" node_paths=PackedStringArray("BoardHolder")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,9 +18,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3kekb")
-MineMap = NodePath("SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer/Mine/MineTiles")
-FactoryMap = NodePath("SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer/Factory Floor/FactoryTiles")
-LayerThickness = 7
+BoardHolder = NodePath("SplitContainer/PanelContainer2/ScrollContainer/Board Holder")
+PlayerBoard = ExtResource("2_3kekb")
 
 [node name="SplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -64,31 +44,7 @@ theme = SubResource("Theme_jwkme")
 custom_minimum_size = Vector2(960, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/PanelContainer2/ScrollContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="Sky" type="Panel" parent="SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(960, 300)
-layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 
-[node name="Factory Floor" type="Panel" parent="SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(960, 224)
+[node name="Board Holder" type="HBoxContainer" parent="SplitContainer/PanelContainer2/ScrollContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jwkme")
-
-[node name="FactoryTiles" type="TileMapLayer" parent="SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer/Factory Floor"]
-scale = Vector2(2, 2)
-tile_set = SubResource("TileSet_jwkme")
-
-[node name="Mine" type="Panel" parent="SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(960, 224)
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_ps1nv")
-
-[node name="MineTiles" type="TileMapLayer" parent="SplitContainer/PanelContainer2/ScrollContainer/VBoxContainer/Mine"]
-scale = Vector2(2, 2)
-tile_set = SubResource("TileSet_jwkme")

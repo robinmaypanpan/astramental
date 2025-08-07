@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3 uid="uid://c5auwrdgqvt1a"]
+
+[ext_resource type="Script" uid="uid://bhx68tgn2jboc" path="res://Game/player_board.gd" id="1_sf1vr"]
+[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/ores.png" id="2_7uxwk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
+bg_color = Color(0.906971, 0.43494, 0.418012, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwkme"]
+bg_color = Color(0.357445, 0.631236, 0.823697, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3kekb"]
+texture = ExtResource("2_7uxwk")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_jwkme"]
+sources/0 = SubResource("TileSetAtlasSource_3kekb")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ps1nv"]
+bg_color = Color(0.497493, 0.654419, 0.410997, 1)
+
+[node name="PlayerBoard" type="VBoxContainer" node_paths=PackedStringArray("MineMap", "FactoryMap")]
+custom_minimum_size = Vector2(224, 0)
+offset_bottom = 548.0
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+script = ExtResource("1_sf1vr")
+MineMap = NodePath("Mine/MineTiles")
+FactoryMap = NodePath("FactoryFloor/FactoryTiles")
+NumCols = 10
+LayerThickness = 7
+
+[node name="Sky" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
+
+[node name="FactoryFloor" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 224)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_jwkme")
+
+[node name="FactoryTiles" type="TileMapLayer" parent="FactoryFloor"]
+scale = Vector2(2, 2)
+tile_set = SubResource("TileSet_jwkme")
+
+[node name="Mine" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 224)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ps1nv")
+
+[node name="MineTiles" type="TileMapLayer" parent="Mine"]
+scale = Vector2(2, 2)
+tile_set = SubResource("TileSet_jwkme")
