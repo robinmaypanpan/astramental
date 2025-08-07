@@ -25,6 +25,7 @@ func _ready() -> void:
 	$Sky.custom_minimum_size = Vector2i(0, SkyHeight)
 	$FactoryFloor.custom_minimum_size = Vector2i(0, layer_height_px)
 	$Mine.custom_minimum_size = Vector2i(0, layer_height_px)
+	%PlayerNameLabel.text = "%s\n(%s)" % [OwnerName, OwnerId]
 
 	for x in range(NumCols):
 		for y in range(LayerThickness):
