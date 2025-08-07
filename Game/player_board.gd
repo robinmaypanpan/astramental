@@ -8,10 +8,9 @@ extends Control
 @onready var _MineTiles := %MineTiles
 @onready var _FactoryTiles := %FactoryTiles
 
-
 # multiplayer properties
-@export var OwnerId : int
-@export var OwnerName : String
+var owner_id : int
+var player: ConnectionSystem.NetworkPlayer
 
 # game board properties
 @export var NumCols : int = 30
@@ -20,8 +19,14 @@ extends Control
 @export var SkyHeight : int = 100
 @export var TileMapScale : int = 2
 
-func _ready() -> void:
-	print("doing ready for %s (%s)" % [OwnerName, OwnerId])
+func _ready() -> void:	
+	if ConnectionSystem.is_not_running_network():
+		owner_id = 1
+		ConnectionSystem.host_server()
+		
+	var player = ConnectionSystem.get_player(owner_id)
+		
+	print("doing ready for %s (%s)" % [player.name, owner_id])
 
 	var tile_size := 16 * TileMapScale
 	var board_width_px := tile_size * NumCols
@@ -32,7 +37,7 @@ func _ready() -> void:
 	_Sky.custom_minimum_size = Vector2i(0, SkyHeight)
 	_FactoryFloor.custom_minimum_size = Vector2i(0, layer_height_px)
 	_Mine.custom_minimum_size = Vector2i(0, layer_height_px)
-	_PlayerNameLabel.text = "%s\n(%s)" % [OwnerName, OwnerId]
+	_PlayerNameLabel.text = "%s\n(%s)" % [player.name, player.index]
 
 	for x in range(NumCols):
 		for y in range(LayerThickness):

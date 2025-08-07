@@ -32,10 +32,9 @@ func spawn_player_state(player_id:int) -> Node:
 	
 	return player_state
 	
-func add_player_board(player_id: int, player_name: String) -> void:
+func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
-	board.OwnerId = player_id
-	board.OwnerName = player_name
+	board.owner_id = player_id
 	BoardHolder.add_child(board)
 
 @rpc("call_local", "reliable")
@@ -46,7 +45,7 @@ func set_up_game(world_seed: int) -> void:
 
 	for player_id in player_ids:
 		var player = ConnectionSystem.get_player(player_id)
-		add_player_board(player.index, player.name)
+		add_player_board(player_id)
 
 ## Actually starts the game on the server
 func start_game():
