@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://drwvyi77nkdy6"]
+[gd_scene load_steps=4 format=3 uid="uid://drwvyi77nkdy6"]
 
 [ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="1_l1hgy"]
 [ext_resource type="Script" uid="uid://dg3a1r6rl6bda" path="res://Game/data/tools/building_manager.gd" id="1_q378l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l1hgy"]
+bg_color = Color(0.0980985, 0.0980985, 0.0980985, 1)
 
 [node name="BuildingManager" type="Control"]
 layout_mode = 3
@@ -22,13 +25,24 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_l1hgy")
 
-[node name="BuildingList" type="ItemList" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="BuildingList" type="ItemList" parent="HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
-modulate = Color(0.273873, 0.273873, 0.273873, 1)
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
+size_flags_vertical = 3
 theme = ExtResource("1_l1hgy")
-item_count = 1
+theme_override_constants/line_separation = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_l1hgy")
+item_count = 2
+item_0/text = "Test"
+item_1/text = "test 2"
+
+[node name="NewButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Create New"
 
 [node name="BuildingData" type="PanelContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -136,4 +150,4 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme = ExtResource("1_l1hgy")
 
-[connection signal="item_selected" from="HBoxContainer/BuildingList" to="." method="_on_building_list_item_selected"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer/BuildingList" to="." method="_on_building_list_item_selected"]

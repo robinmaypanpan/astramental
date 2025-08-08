@@ -20,6 +20,7 @@ func _ready() -> void:
 
 
 func load_building_resources() -> void:
+	_BuildingList.clear()
 	var building_paths := ResourceLoader.list_directory(building_resource_path)
 	for path in building_paths:
 		var building_index = _BuildingList.add_item(path.substr(0, path.length() - 5))
