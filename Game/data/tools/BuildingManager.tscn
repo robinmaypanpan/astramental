@@ -1,0 +1,139 @@
+[gd_scene load_steps=3 format=3 uid="uid://drwvyi77nkdy6"]
+
+[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="1_l1hgy"]
+[ext_resource type="Script" uid="uid://dg3a1r6rl6bda" path="res://Game/data/tools/building_manager.gd" id="1_q378l"]
+
+[node name="BuildingManager" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_l1hgy")
+script = ExtResource("1_q378l")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_l1hgy")
+
+[node name="BuildingList" type="ItemList" parent="HBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0.273873, 0.273873, 0.273873, 1)
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+item_count = 1
+
+[node name="BuildingData" type="PanelContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_l1hgy")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BuildingData"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+theme_override_constants/separation = 30
+
+[node name="Id" type="HBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Id"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+text = "Unique Id"
+
+[node name="UniqueId" type="LineEdit" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Id"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_l1hgy")
+
+[node name="Name" type="HBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Name"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+text = "Building Name"
+
+[node name="BuildingName" type="LineEdit" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Name"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_l1hgy")
+
+[node name="Store Icon" type="HBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Store Icon"]
+layout_mode = 2
+text = "Store Icon"
+
+[node name="StoreIcon" type="TextureRect" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Store Icon"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+
+[node name="Factory Tile" type="HBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Factory Tile"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+text = "Factory Tile"
+
+[node name="FactoryTile" type="TextureRect" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Factory Tile"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 2
+
+[node name="Drain" type="HBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Drain"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+text = "Energy Drain"
+
+[node name="EnergyDrain" type="LineEdit" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Drain"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+
+[node name="Cost" type="HBoxContainer" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Cost"]
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+text = "Money Cost"
+
+[node name="MoneyCost" type="LineEdit" parent="HBoxContainer/BuildingData/MarginContainer/VBoxContainer/Cost"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme = ExtResource("1_l1hgy")
+
+[connection signal="item_selected" from="HBoxContainer/BuildingList" to="." method="_on_building_list_item_selected"]
