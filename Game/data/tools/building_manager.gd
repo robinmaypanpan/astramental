@@ -16,6 +16,7 @@ var _building_paths = {}
 @onready var _MoneyCost := %MoneyCost
 @onready var _FilenamePopup := %FilenamePopup
 @onready var _NewBuildingName := %NewBuildingName
+@onready var _DirtyIndicator := %DirtyIndicator
 
 var _currently_selected_building: BuildingResource
 var _current_building_path:String
@@ -64,6 +65,7 @@ func show_building(building:BuildingResource):
 		
 func save_edits() -> void:	
 	_dirty = false
+	_DirtyIndicator.hide()
 	var current_index:int = _BuildingList.get_selected_items()[0]
 	var path = _current_building_path
 	print("Saving resource file to %s" % [path])
@@ -112,12 +114,14 @@ func _on_unique_id_text_changed(new_text: String) -> void:
 		_currently_selected_building.unique_id = new_text.to_int()
 		_dirty_time = Time.get_ticks_msec()
 		_dirty = true
+		_DirtyIndicator.show()
 
 
 func _on_building_name_text_changed(new_text: String) -> void:
 	_currently_selected_building.name = new_text
 	_dirty_time = Time.get_ticks_msec()
 	_dirty = true
+	_DirtyIndicator.show()
 
 
 func _on_energy_drain_text_changed(new_text: String) -> void:
@@ -125,6 +129,7 @@ func _on_energy_drain_text_changed(new_text: String) -> void:
 		_currently_selected_building.energy_drain = new_text.to_float()
 		_dirty_time = Time.get_ticks_msec()
 		_dirty = true
+		_DirtyIndicator.show()
 
 
 func _on_money_cost_text_changed(new_text: String) -> void:
@@ -132,6 +137,7 @@ func _on_money_cost_text_changed(new_text: String) -> void:
 		_currently_selected_building.energy_drain = new_text.to_int()
 		_dirty_time = Time.get_ticks_msec()
 		_dirty = true
+		_DirtyIndicator.show()
 
 
 func _on_dataedit_submitted(new_text: String) -> void:

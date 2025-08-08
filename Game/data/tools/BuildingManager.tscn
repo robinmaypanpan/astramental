@@ -154,6 +154,14 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme = ExtResource("1_l1hgy")
 
+[node name="DirtyIndicator" type="ColorRect" parent="HBoxContainer/BuildingData"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+color = Color(0.94, 0.2162, 0.2162, 1)
+
 [node name="FilenamePopup" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 transparent_bg = false
