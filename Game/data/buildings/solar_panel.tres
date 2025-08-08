@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuildingResource" load_steps=3 format=3 uid="uid://conoul0yx5kf1"]
+
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="1_b2ktb"]
+[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/item_cost.gd" id="1_r87ev"]
+
+[resource]
+script = ExtResource("1_b2ktb")
+unique_id = 1
+name = "Solar Panel"
+money_cost = 15
+energy_drain = -5.0
+item_costs = Array[ExtResource("1_r87ev")]([])
+metadata/_custom_type_script = "uid://dmnwciefckrau"
