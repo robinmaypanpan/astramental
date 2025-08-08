@@ -1,10 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://drwvyi77nkdy6"]
+[gd_scene load_steps=6 format=3 uid="uid://drwvyi77nkdy6"]
 
 [ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="1_l1hgy"]
 [ext_resource type="Script" uid="uid://dg3a1r6rl6bda" path="res://Game/data/tools/building_manager.gd" id="1_q378l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l1hgy"]
 bg_color = Color(0.0980985, 0.0980985, 0.0980985, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xav2q"]
+bg_color = Color(0.470076, 0.470076, 0.470076, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0562916, 0.0562916, 0.0562915, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l1hgy"]
 
 [node name="BuildingManager" type="MarginContainer"]
 anchors_preset = 15
@@ -144,4 +154,58 @@ custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 theme = ExtResource("1_l1hgy")
 
+[node name="FilenamePopup" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+transparent_bg = false
+title = "Enter Name"
+initial_position = 1
+size = Vector2i(625, 365)
+always_on_top = true
+transparent = false
+sharp_corners = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_xav2q")
+
+[node name="MarginContainer" type="MarginContainer" parent="FilenamePopup"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 620.0
+offset_bottom = 360.0
+
+[node name="PanelContainer" type="PanelContainer" parent="FilenamePopup/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_l1hgy")
+
+[node name="Label" type="Label" parent="FilenamePopup/MarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Enter building filename"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="FilenamePopup/MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="NewBuildingName" type="LineEdit" parent="FilenamePopup/MarginContainer/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FilenamePopup/MarginContainer/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("1_l1hgy")
+
+[node name="OKButton" type="Button" parent="FilenamePopup/MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "OK"
+
+[node name="CancelFilename" type="Button" parent="FilenamePopup/MarginContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
 [connection signal="item_selected" from="HBoxContainer/VBoxContainer/BuildingList" to="." method="_on_building_list_item_selected"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/NewButton" to="." method="_on_new_button_pressed"]
+[connection signal="text_submitted" from="FilenamePopup/MarginContainer/PanelContainer/MarginContainer/NewBuildingName" to="." method="_on_new_building_name_text_submitted"]
+[connection signal="pressed" from="FilenamePopup/MarginContainer/PanelContainer/HBoxContainer/OKButton" to="." method="_on_ok_button_pressed"]
+[connection signal="pressed" from="FilenamePopup/MarginContainer/PanelContainer/HBoxContainer/CancelFilename" to="." method="_on_cancel_filename_pressed"]
