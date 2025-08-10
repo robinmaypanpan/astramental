@@ -4,4 +4,7 @@ class_name ResourceListDatum extends Resource
 @export var type : String
 
 ## The script for this type of resource
-@export var resource_script : Script
+@export var base_resource_script : Script
+
+## Path to the directory containing these resources
+@export var resource_dir_path: String

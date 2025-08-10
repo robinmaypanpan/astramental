@@ -1,1 +1,0 @@
-class_name ResourceListData extends Resource

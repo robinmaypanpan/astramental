@@ -23,9 +23,6 @@ grow_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Load Resource"
-item_count = 1
-popup/item_0/text = "buildings"
-popup/item_0/id = 0
 
 [node name="ResourceList" type="ItemList" parent="VBoxContainer"]
 unique_name_in_owner = true
