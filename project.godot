@@ -33,10 +33,6 @@ window/dpi/allow_hidpi=false
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/resource_list/plugin.cfg")
-
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
