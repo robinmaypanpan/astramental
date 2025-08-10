@@ -27,7 +27,6 @@ func load_data(data:ResourceListData) -> void:
 	
 ## Loadds the resource list at the indicated index
 func load_resource_list(resource_list_index:int) -> void:
-	print("Loading resource list %d" % [resource_list_index])
 	_current_index = resource_list_index
 	var resource_list_data:ResourceListDatum = _resource_lists[resource_list_index]
 	
@@ -60,6 +59,7 @@ func _on_new_button_pressed() -> void:
 
 func _on_load_buton_about_to_popup() -> void:
 	var popup:PopupMenu = _LoadButton.get_popup()
+	popup.clear()
 	
 	# Connect so we know what is clicked
 	popup.index_pressed.connect(_on_load_button_popup_pressed)
@@ -71,7 +71,9 @@ func _on_load_buton_about_to_popup() -> void:
 	
 func _on_load_button_popup_pressed(index:int) -> void:	
 	var popup:PopupMenu = _LoadButton.get_popup()
-	popup.id_pressed.disconnect(_on_load_button_popup_pressed)
+	
+	popup.index_pressed.disconnect(_on_load_button_popup_pressed)
+	
 	load_resource_list(index)
 
 
