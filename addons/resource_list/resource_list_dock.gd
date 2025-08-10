@@ -54,6 +54,7 @@ func _on_new_button_pressed() -> void:
 			_on_new_file_text_submitted(_NewFile.text)
 		_NewFilePanel.hide()
 	else:
+		_NewFile.text = ""
 		_NewFilePanel.show()
 
 
@@ -75,15 +76,21 @@ func _on_load_button_popup_pressed(index:int) -> void:
 
 
 func _on_new_file_text_submitted(new_resource_name: String) -> void:
-	#var resource_list_data:ResourceListDatum = _resource_lists[resource_list_index]
-	#var first_resource_id = _resource_paths.keys()[0]
-	#var first_resource = load(_resource_paths[first_resource_id])
-	#var new_resource = first_resource.duplicate()
-	#
-	#var new_resource_path = "%s/%s/%s.tres" % [resource_path, resource_type, new_resource_name]
-	#ResourceSaver.save(new_resource, new_resource_path)
-	#var index = _ResourceList.add_item(new_resource_path.substr(0, new_resource_path.length() - 5))
-	#_resource_paths[index] = new_resource_path	
-	#EditorInterface.edit_resource(new_resource)
+	var resource_list_data:ResourceListDatum = _resource_lists[_current_index]
+	var resource_script: Script = resource_list_data.base_resource_script	
+	
+	# Create a new resource of this type
+	var new_resource = resource_script.new()
+	
+	# Save the resource
+	var new_resource_path = "%s/%s.tres" % [resource_list_data.resource_dir_path, new_resource_name]
+	ResourceSaver.save(new_resource, new_resource_path)
+	
+	# Load the resource into the list
+	var index = _ResourceList.add_item(new_resource_name)
+	_resource_paths[index] = new_resource_path	
+	
+	# Start editing the list
+	EditorInterface.edit_resource(new_resource)
 	
 	_NewFilePanel.hide()
