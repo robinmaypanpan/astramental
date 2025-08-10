@@ -24,5 +24,3 @@ func _exit_tree() -> void:
 	remove_control_from_docks(dock)
 	# Erase the control from the memory.
 	dock.free()
-	# Also erase the data from memory
-	data.free()
