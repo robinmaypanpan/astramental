@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=9 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
+[ext_resource type="Script" path="res://UI/system/switcher_node.gd" id="3_ho6sb"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 [ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="3_ps1nv"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/item_display_row.tscn" id="4_ho6sb"]
@@ -10,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
 [ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="6_r7jf0"]
 
-[sub_resource type="Theme" id="Theme_3kekb"]
+[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="3_ps1nv"]
 
 [sub_resource type="Theme" id="Theme_jwkme"]
 
@@ -43,11 +44,21 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
-split_offset = 100
+split_offset = 500
 
-[node name="HudContainer" type="PanelContainer" parent="SplitContainer"]
+[node name="HudContainer" type="PanelContainer" parent="SplitContainer" node_paths=PackedStringArray("initial_child")]
 layout_mode = 2
-theme = SubResource("Theme_3kekb")
+theme = ExtResource("3_ps1nv")
+script = ExtResource("3_ho6sb")
+initial_child = NodePath("MainHud")
+
+[node name="MainHud" type="HFlowContainer" parent="SplitContainer/HudContainer"]
+layout_mode = 2
+
+[node name="BuildButton" type="Button" parent="SplitContainer/HudContainer/MainHud"]
+layout_mode = 2
+theme = ExtResource("3_ps1nv")
+text = "Build"
 
 [node name="Asteroid" type="PanelContainer" parent="SplitContainer"]
 layout_mode = 2
