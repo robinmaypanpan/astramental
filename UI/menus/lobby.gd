@@ -11,16 +11,18 @@ func _ready() -> void:
 	ConnectionSystem.player_list_changed.connect(refresh_lobby)
 	ConnectionSystem.game_started.connect(_on_game_started)
 
-
 func refresh_lobby() -> void:
 	print("Refresh Lobby")
-	var players = ConnectionSystem.players
-	players.sort()
 	PlayerList.clear()
-	PlayerList.add_item(Globals.player_name + " (you)")
-	for p: String in players.values():
-		PlayerList.add_item(p)
-		
+	
+	var player_list = ConnectionSystem.get_player_id_list()
+	
+	for player_id in player_list:
+		var player = ConnectionSystem.get_player(player_id)
+		var player_name = player.name
+		if player_id == multiplayer.get_unique_id():
+			player_name += " (you)"
+		PlayerList.add_item("%d: %s" % [player.index, player_name])
 
 func _connection_failure() -> void:
 	multiplayer.set_multiplayer_peer(null)

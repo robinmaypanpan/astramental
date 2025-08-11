@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
-[ext_resource type="Script" path="res://Game/game_state.gd" id="3_jwkme"]
+[ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 
@@ -24,7 +24,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3kekb")
-BoardHolder = NodePath("SplitContainer/PanelContainer2/ScrollContainer/Board Holder")
+BoardHolder = NodePath("SplitContainer/Asteroid/ScrollContainer/Board Holder")
 PlayerBoard = ExtResource("2_3kekb")
 
 [node name="SplitContainer" type="HSplitContainer" parent="."]
@@ -38,21 +38,21 @@ size_flags_horizontal = 6
 size_flags_vertical = 6
 split_offset = 100
 
-[node name="PanelContainer" type="PanelContainer" parent="SplitContainer"]
+[node name="HudContainer" type="PanelContainer" parent="SplitContainer"]
 layout_mode = 2
 theme = SubResource("Theme_3kekb")
 
-[node name="PanelContainer2" type="PanelContainer" parent="SplitContainer"]
+[node name="Asteroid" type="PanelContainer" parent="SplitContainer"]
 layout_mode = 2
 theme = SubResource("Theme_jwkme")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/PanelContainer2"]
+[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid"]
 custom_minimum_size = Vector2(960, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 
-[node name="Board Holder" type="HBoxContainer" parent="SplitContainer/PanelContainer2/ScrollContainer"]
+[node name="Board Holder" type="HBoxContainer" parent="SplitContainer/Asteroid/ScrollContainer"]
 layout_mode = 2
 
 [node name="GameState" type="Node" parent="."]
@@ -61,3 +61,12 @@ script = ExtResource("3_jwkme")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_jwkme")
+
+[node name="PlayerStates" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+_spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
+spawn_path = NodePath("../PlayerStates")
+spawn_limit = 3

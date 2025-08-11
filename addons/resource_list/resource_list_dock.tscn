@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuiigflrscm4s"]
+
+[ext_resource type="Script" uid="uid://cq0yb8cqgx0co" path="res://addons/resource_list/resource_list_dock.gd" id="1_mtgc3"]
+
+[node name="Resource List" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mtgc3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadButton" type="MenuButton" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load Resource"
+
+[node name="ResourceList" type="ItemList" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NewFilePanel" type="VBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/NewFilePanel"]
+layout_mode = 2
+text = "Filename"
+
+[node name="NewFile" type="LineEdit" parent="VBoxContainer/NewFilePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NewButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "New Resource"
+
+[connection signal="about_to_popup" from="VBoxContainer/LoadButton" to="." method="_on_load_buton_about_to_popup"]
+[connection signal="item_selected" from="VBoxContainer/ResourceList" to="." method="_on_building_list_item_selected"]
+[connection signal="text_submitted" from="VBoxContainer/NewFilePanel/NewFile" to="." method="_on_new_file_text_submitted"]
+[connection signal="pressed" from="VBoxContainer/NewButton" to="." method="_on_new_button_pressed"]

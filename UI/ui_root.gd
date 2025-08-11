@@ -1,4 +1,4 @@
-class_name Ui extends Control
+class_name UiRoot extends Control
 
 ## A list of named menus that can be transitioned to/from
 @export var Menus : Dictionary[String, PackedScene]
