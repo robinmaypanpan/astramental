@@ -1,11 +1,11 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://cbkephyoptpxc"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://cbkephyoptpxc"]
 
 [ext_resource type="Texture2D" path="res://Assets/sprites/items/energy.tres" id="1_6axuv"]
 [ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_e2ncw"]
 
 [resource]
 script = ExtResource("1_e2ncw")
-unique_id = 1
-name = "Energy"
+type = 1
 icon = ExtResource("1_6axuv")
-can_sell = false
+can_trade = false
+sell_value = 0

@@ -1,11 +1,11 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bmia3k80cbxw3"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://bmia3k80cbxw3"]
 
 [ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_g858q"]
 [ext_resource type="Texture2D" uid="uid://bkb7jgghj4t37" path="res://Assets/sprites/items/ice.tres" id="1_wond6"]
 
 [resource]
 script = ExtResource("1_g858q")
-unique_id = 4
-name = "Ice"
+type = 5
 icon = ExtResource("1_wond6")
-can_sell = true
+can_trade = true
+sell_value = 1

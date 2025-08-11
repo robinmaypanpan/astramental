@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://xf0d7ivek40k"]
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://xf0d7ivek40k"]
 
 [ext_resource type="Texture2D" path="res://Assets/sprites/items/money.tres" id="1_u7pc4"]
 [ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_xp5rh"]
@@ -8,4 +8,5 @@ script = ExtResource("1_xp5rh")
 unique_id = 0
 name = "Money"
 icon = ExtResource("1_u7pc4")
-can_sell = false
+can_trade = false
+sell_value = 0
