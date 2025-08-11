@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://fcbjc5acubwe"]
+
+[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/ores.png" id="1_6jci1"]
+[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_82p7q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
+atlas = ExtResource("1_6jci1")
+region = Rect2(32, 0, 16, 16)
+
+[node name="ResourceDisplayRow" type="MarginContainer"]
+offset_right = 228.0
+offset_bottom = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 8
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+texture = SubResource("AtlasTexture_4ncwh")
+stretch_mode = 5
+
+[node name="CountText" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_82p7q")
+theme_override_font_sizes/font_size = 48
+text = "123 (+11/s)"
+vertical_alignment = 1

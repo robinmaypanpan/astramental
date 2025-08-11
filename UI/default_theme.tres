@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://durn6bdwy26ag"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://durn6bdwy26ag"]
 
 [ext_resource type="FontFile" uid="uid://cpo7hb5cjiuce" path="res://Assets/fs-pixel-sans-unicode-regular/fs_pixel_sans_edited.ttf" id="1_drjrk"]
 
@@ -24,8 +24,13 @@ bg_color = Color(0.133333, 0.133333, 0.133333, 1)
 content_margin_left = 12.0
 bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
+[sub_resource type="FontVariation" id="FontVariation_drjrk"]
+base_font = ExtResource("1_drjrk")
+spacing_top = -12
+spacing_bottom = -4
+
 [resource]
-default_font = ExtResource("1_drjrk")
+default_font = SubResource("FontVariation_drjrk")
 default_font_size = 72
 Label/colors/font_color = Color(1, 1, 1, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
