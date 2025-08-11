@@ -31,6 +31,7 @@ size_flags_vertical = 3
 
 [node name="NewFilePanel" type="VBoxContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/NewFilePanel"]
