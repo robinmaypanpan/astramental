@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ResourceListData" load_steps=5 format=3 uid="uid://dylcpxpn33g71"]
+
+[ext_resource type="Script" uid="uid://b2v70ie1xv58a" path="res://addons/resource_list/resource_list_datum.gd" id="1_k568v"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_dka42"]
+[ext_resource type="Script" uid="uid://cudy3ci3kelwu" path="res://addons/resource_list/resource_list_data.gd" id="3_62ssh"]
+
+[sub_resource type="Resource" id="Resource_nlw5f"]
+script = ExtResource("1_k568v")
+type = "building"
+base_resource_script = ExtResource("2_dka42")
+resource_dir_path = "res://Game/data/buildings"
+metadata/_custom_type_script = "uid://b2v70ie1xv58a"
+
+[resource]
+script = ExtResource("3_62ssh")
+resources_data = Array[ExtResource("1_k568v")]([SubResource("Resource_nlw5f")])
