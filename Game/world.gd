@@ -8,6 +8,7 @@ var num_players_ready := 0
 @onready var _GameState := %GameState
 @onready var _PlayerStates := %GameState
 @onready var _PlayerSpawner := %PlayerSpawner
+@onready var _ItemDisplay := %ItemDisplay
 
 func _ready() -> void:
 	if ConnectionSystem.is_not_running_network():
@@ -27,8 +28,8 @@ func spawn_player_state(player_id:int) -> Node:
 	player_state.name = str(player_id)
 	player_state.id = player_id
 	player_state.index = player.index
-	player_state.money = 0
-	player_state.energy = 0
+	for type in Item.Type.values():
+		player_state.items[type] = float(player.index)
 	
 	return player_state
 	
@@ -46,6 +47,8 @@ func set_up_game(world_seed: int) -> void:
 	for player_id in player_ids:
 		var player = ConnectionSystem.get_player(player_id)
 		add_player_board(player_id)
+	
+	_ItemDisplay.update_counts()
 
 ## Actually starts the game on the server
 func start_game():

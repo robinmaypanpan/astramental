@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=10 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
-[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/resource_display_row.tscn" id="3_ps1nv"]
+[ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="3_ps1nv"]
+[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/item_display_row.tscn" id="4_ho6sb"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 
@@ -56,19 +57,20 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 [node name="Board Holder" type="HBoxContainer" parent="SplitContainer/Asteroid/ScrollContainer"]
 layout_mode = 2
 
-[node name="ResourceDisplay" type="ScrollContainer" parent="SplitContainer/Asteroid"]
+[node name="ItemDisplay" type="MarginContainer" parent="SplitContainer/Asteroid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
+script = ExtResource("3_ps1nv")
+item_display_row = ExtResource("4_ho6sb")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Asteroid/ResourceDisplay"]
+[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid/ItemDisplay"]
 layout_mode = 2
 
-[node name="ResourceDisplayRow" parent="SplitContainer/Asteroid/ResourceDisplay/VBoxContainer" instance=ExtResource("3_ps1nv")]
-layout_mode = 2
-
-[node name="ResourceDisplayRow2" parent="SplitContainer/Asteroid/ResourceDisplay/VBoxContainer" instance=ExtResource("3_ps1nv")]
+[node name="ItemDisplayList" type="VBoxContainer" parent="SplitContainer/Asteroid/ItemDisplay/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="GameState" type="Node" parent="."]
