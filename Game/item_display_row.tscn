@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/ores.png" id="1_6jci1"]
 [ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/item_display_row.gd" id="1_82p7q"]
-[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/default_theme.tres" id="2_82p7q"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="3_aqlvk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
 atlas = ExtResource("1_6jci1")
@@ -34,7 +34,6 @@ stretch_mode = 5
 [node name="CountText" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("2_82p7q")
-theme_override_font_sizes/font_size = 48
+theme = ExtResource("3_aqlvk")
 text = "123 (+11/s)"
 vertical_alignment = 1

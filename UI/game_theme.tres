@@ -1,8 +1,6 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://durn6bdwy26ag"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://k1wwefkpb70t"]
 
-[ext_resource type="FontFile" uid="uid://cpo7hb5cjiuce" path="res://Assets/fs-pixel-sans-unicode-regular/fs_pixel_sans_edited.ttf" id="1_drjrk"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xj1xw"]
+[ext_resource type="FontFile" uid="uid://cpo7hb5cjiuce" path="res://Assets/fs-pixel-sans-unicode-regular/fs_pixel_sans_edited.ttf" id="1_t6uax"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drjrk"]
 content_margin_left = 12.0
@@ -25,27 +23,14 @@ content_margin_left = 12.0
 bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_drjrk"]
-base_font = ExtResource("1_drjrk")
+base_font = ExtResource("1_t6uax")
 spacing_top = -12
 spacing_bottom = -4
 
 [resource]
 default_font = SubResource("FontVariation_drjrk")
-default_font_size = 72
-HBoxContainer/constants/separation = 10
-Label/colors/font_color = Color(1, 1, 1, 1)
-Label/colors/font_outline_color = Color(0, 0, 0, 1)
-Label/colors/font_shadow_color = Color(0, 0, 0, 0)
-Label/constants/line_spacing = 3
-Label/constants/outline_size = 0
-Label/constants/shadow_offset_x = 1
-Label/constants/shadow_offset_y = 1
+default_font_size = 48
 Label/constants/shadow_outline_size = 1
-Label/styles/normal = SubResource("StyleBoxEmpty_xj1xw")
 LineEdit/styles/focus = SubResource("StyleBoxFlat_drjrk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_xj1xw")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_2iung")
-MarginContainer/constants/margin_bottom = 10
-MarginContainer/constants/margin_left = 10
-MarginContainer/constants/margin_right = 10
-MarginContainer/constants/margin_top = 10

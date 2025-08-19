@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=12 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 [ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="3_ps1nv"]
@@ -26,6 +27,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_pecy7")
 script = ExtResource("1_3kekb")
 BoardHolder = NodePath("SplitContainer/Asteroid/ScrollContainer/Board Holder")
 PlayerBoard = ExtResource("2_3kekb")
@@ -58,7 +60,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 [node name="Board Holder" type="HBoxContainer" parent="SplitContainer/Asteroid/ScrollContainer"]
 layout_mode = 2
 
-[node name="ItemDisplay" type="MarginContainer" parent="SplitContainer/Asteroid"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Asteroid"]
+layout_mode = 2
+
+[node name="ItemDisplay" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
@@ -67,10 +72,10 @@ size_flags_vertical = 0
 script = ExtResource("3_ps1nv")
 item_display_row = ExtResource("4_ho6sb")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid/ItemDisplay"]
+[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid/VBoxContainer/ItemDisplay"]
 layout_mode = 2
 
-[node name="ItemDisplayList" type="VBoxContainer" parent="SplitContainer/Asteroid/ItemDisplay/ScrollContainer"]
+[node name="ItemDisplayList" type="VBoxContainer" parent="SplitContainer/Asteroid/VBoxContainer/ItemDisplay/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
