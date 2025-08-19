@@ -27,7 +27,7 @@ func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
 func add_item(type: Item.Type, amount: float) -> void:
 	add_item_to.rpc(type, amount, multiplayer.get_unique_id())
 
-@rpc("call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func add_item_to(type: Item.Type, amount: float, player_id: int) -> void:
 	var player_state := get_state(player_id)
 	player_state.items[type] += amount
