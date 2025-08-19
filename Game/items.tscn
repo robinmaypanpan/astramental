@@ -12,4 +12,12 @@
 
 [node name="Items" type="Node"]
 script = ExtResource("1_67yea")
-items_list = Array[ExtResource("2_wgod3")]([ExtResource("3_et4x6"), ExtResource("4_x1ot4"), ExtResource("5_0ludx"), ExtResource("6_sl1kg"), ExtResource("7_mypgt"), ExtResource("8_33ytt"), ExtResource("9_ujcgn")])
+items_dict = Dictionary[int, ExtResource("2_wgod3")]({
+0: ExtResource("3_et4x6"),
+1: ExtResource("4_x1ot4"),
+2: ExtResource("5_0ludx"),
+3: ExtResource("6_sl1kg"),
+4: ExtResource("7_mypgt"),
+5: ExtResource("8_33ytt"),
+6: ExtResource("9_ujcgn")
+})
