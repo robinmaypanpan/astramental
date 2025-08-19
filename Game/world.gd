@@ -60,5 +60,4 @@ func register_ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
-		_PlayerStates.add_item(Item.Type.COPPER, 10)
-		_ItemDisplay.update_counts()
+		pass

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=14 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="3_ps1nv"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/item_display_row.tscn" id="4_ho6sb"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
+[ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
+[ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="6_r7jf0"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 
@@ -79,6 +81,17 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="DebugMenu" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("6_r7jf0")
+
+[node name="CheatItems" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu" instance=ExtResource("6_hvno2")]
+layout_mode = 2
+
 [node name="GameState" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("3_jwkme")
@@ -95,3 +108,5 @@ unique_name_in_owner = true
 _spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
 spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
+
+[connection signal="add_items" from="SplitContainer/Asteroid/VBoxContainer/DebugMenu/CheatItems" to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_cheat_items_add_items"]
