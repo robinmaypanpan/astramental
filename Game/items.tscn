@@ -1,0 +1,23 @@
+[gd_scene load_steps=10 format=3 uid="uid://bwocpff3efyfc"]
+
+[ext_resource type="Script" uid="uid://bh8hrlvxy5lmp" path="res://Game/items.gd" id="1_67yea"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="2_wgod3"]
+[ext_resource type="Resource" uid="uid://xf0d7ivek40k" path="res://Game/data/items/money.tres" id="3_et4x6"]
+[ext_resource type="Resource" uid="uid://cbkephyoptpxc" path="res://Game/data/items/energy.tres" id="4_x1ot4"]
+[ext_resource type="Resource" uid="uid://cedmjyoxqnt4s" path="res://Game/data/items/rock.tres" id="5_0ludx"]
+[ext_resource type="Resource" uid="uid://ba24e6tq1h2cp" path="res://Game/data/items/iron.tres" id="6_sl1kg"]
+[ext_resource type="Resource" uid="uid://cechj8itdjo8e" path="res://Game/data/items/copper.tres" id="7_mypgt"]
+[ext_resource type="Resource" uid="uid://bmia3k80cbxw3" path="res://Game/data/items/ice.tres" id="8_33ytt"]
+[ext_resource type="Resource" uid="uid://b5mj1hfrg7d63" path="res://Game/data/items/silicon.tres" id="9_ujcgn"]
+
+[node name="Items" type="Node"]
+script = ExtResource("1_67yea")
+items_dict = Dictionary[int, ExtResource("2_wgod3")]({
+0: ExtResource("3_et4x6"),
+1: ExtResource("4_x1ot4"),
+2: ExtResource("5_0ludx"),
+3: ExtResource("6_sl1kg"),
+4: ExtResource("7_mypgt"),
+5: ExtResource("8_33ytt"),
+6: ExtResource("9_ujcgn")
+})

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://b5mj1hfrg7d63"]
+
+[ext_resource type="Texture2D" uid="uid://k1nmc6fq3ldp" path="res://Assets/sprites/items/silicon.tres" id="1_f8hdk"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_fiv1g"]
+
+[resource]
+script = ExtResource("1_fiv1g")
+type = 6
+icon = ExtResource("1_f8hdk")
+can_trade = true
+sell_value = 2

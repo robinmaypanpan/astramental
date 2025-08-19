@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://ba24e6tq1h2cp"]
+
+[ext_resource type="Texture2D" path="res://Assets/sprites/items/iron.tres" id="1_7e4gh"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_op4dg"]
+
+[resource]
+script = ExtResource("1_op4dg")
+type = 3
+icon = ExtResource("1_7e4gh")
+can_trade = true
+sell_value = 2

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://cedmjyoxqnt4s"]
+
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_6gdk5"]
+[ext_resource type="Texture2D" uid="uid://canoa0lpc5mne" path="res://Assets/sprites/items/rock.tres" id="1_60rip"]
+
+[resource]
+script = ExtResource("1_6gdk5")
+type = 2
+icon = ExtResource("1_60rip")
+can_trade = true
+sell_value = 1
