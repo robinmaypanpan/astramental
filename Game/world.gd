@@ -6,7 +6,7 @@ extends Control
 var num_players_ready := 0
 
 @onready var _GameState := %GameState
-@onready var _PlayerStates := %GameState
+@onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ItemDisplay := %ItemDisplay
 
@@ -15,23 +15,8 @@ func _ready() -> void:
 		ConnectionSystem.host_server()
 		start_game()
 
-	# Change the function that gets called on every system when spawning
-	# a player
-	_PlayerSpawner.spawn_function = spawn_player_state
-	
 	register_ready.rpc_id(1)
 
-func spawn_player_state(player_id:int) -> Node:
-	var player_state = PlayerState.new()
-	var player = ConnectionSystem.get_player(player_id)
-	
-	player_state.name = str(player_id)
-	player_state.id = player_id
-	player_state.index = player.index
-	for type in Item.Type.values():
-		player_state.items[type] = float(player.index)
-	
-	return player_state
 	
 func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
@@ -58,8 +43,7 @@ func start_game():
 	var player_ids = ConnectionSystem.get_player_id_list()
 
 	for player_id in player_ids:
-		var player = ConnectionSystem.get_player(player_id)
-		_PlayerSpawner.spawn(player_id)
+		_PlayerStates.add_state(player_id)
 	
 	set_up_game.rpc(randi())
 
@@ -76,6 +60,5 @@ func register_ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
-		print("My game state is " + str(_GameState.example_int))
-		if multiplayer.is_server():
-			_GameState.example_int += 1
+		_PlayerStates.add_item(Item.Type.COPPER, 10)
+		_ItemDisplay.update_counts()
