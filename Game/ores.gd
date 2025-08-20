@@ -12,3 +12,6 @@ func get_yield(type: Ore.Type) -> Item.Type:
 
 func get_layer_generation_data(layer_num: int) -> LayerGenerationResource:
 	return ores_generation[layer_num]
+
+func get_num_mine_layers() -> int:
+	return ores_generation.size()
