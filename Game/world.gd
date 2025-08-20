@@ -3,6 +3,12 @@ extends Control
 @export var BoardHolder : Node
 @export var PlayerBoard : PackedScene
 
+# game board properties
+@export var NumCols: int
+@export var LayerThickness: int
+@export var SkyHeight: int
+@export var TileMapScale: int
+
 var num_players_ready := 0
 
 @onready var _GameState := %GameState
@@ -20,7 +26,13 @@ func _ready() -> void:
 	
 func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
+
 	board.owner_id = player_id
+	board.NumCols = NumCols
+	board.LayerThickness = LayerThickness
+	board.SkyHeight = SkyHeight
+	board.TileMapScale = TileMapScale
+
 	BoardHolder.add_child(board)
 
 @rpc("call_local", "reliable")

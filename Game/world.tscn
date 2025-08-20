@@ -33,6 +33,11 @@ theme = ExtResource("1_pecy7")
 script = ExtResource("1_3kekb")
 BoardHolder = NodePath("SplitContainer/Asteroid/ScrollContainer/Board Holder")
 PlayerBoard = ExtResource("2_3kekb")
+NumCols = 10
+LayerThickness = 7
+NumMineLayers = 1
+SkyHeight = 300
+TileMapScale = 2
 
 [node name="SplitContainer" type="HSplitContainer" parent="."]
 layout_mode = 1

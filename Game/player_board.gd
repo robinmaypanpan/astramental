@@ -15,7 +15,6 @@ var player: ConnectionSystem.NetworkPlayer
 # game board properties
 @export var NumCols : int = 30
 @export var LayerThickness : int = 10
-@export var NumMineLayers : int = 1
 @export var SkyHeight : int = 100
 @export var TileMapScale : int = 2
 
