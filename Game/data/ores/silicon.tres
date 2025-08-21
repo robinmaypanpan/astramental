@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="OreResource" load_steps=2 format=3 uid="uid://dl5753flq5hht"]
+
+[ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/ore_resource.gd" id="1_mmxq8"]
+
+[resource]
+script = ExtResource("1_mmxq8")
+atlas_coordinates = Vector2i(4, 0)
+item_yield = 6
