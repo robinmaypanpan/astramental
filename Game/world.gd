@@ -1,6 +1,5 @@
 extends Control
 
-@export var BoardHolder : Node
 @export var PlayerBoard : PackedScene
 @export var MineLayer : PackedScene
 
@@ -15,10 +14,13 @@ var world_seed: int
 var _player_boards: Dictionary[int, Node]
 var _player_ids: Array[int]
 
+@onready var _BoardHolder := %BoardHolder
 @onready var _GameState := %GameState
 @onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ItemDisplay := %ItemDisplay
+
+signal game_ready()
 
 func _ready() -> void:
 	if ConnectionSystem.is_not_running_network():
@@ -37,7 +39,7 @@ func add_player_board(player_id: int) -> void:
 	board.SkyHeight = SkyHeight
 	board.TileMapScale = TileMapScale
 
-	BoardHolder.add_child(board)
+	_BoardHolder.add_child(board)
 	_player_boards[player_id] = board
 
 func init_ores_for_each_player() -> Dictionary[int, Array]:
@@ -93,6 +95,8 @@ func set_up_game(server_world_seed: int) -> void:
 		add_player_board(player_id)
 
 	generate_all_ores()
+
+	game_ready.emit()
 	
 	_ItemDisplay.update_counts()
 
