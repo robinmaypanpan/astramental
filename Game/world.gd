@@ -11,7 +11,9 @@ extends Control
 @export var TileMapScale: int
 
 var num_players_ready := 0
+var world_seed: int
 var _player_boards: Dictionary[int, Node]
+var _player_ids: Array[int]
 
 @onready var _GameState := %GameState
 @onready var _PlayerStates := %PlayerStates
@@ -38,26 +40,28 @@ func add_player_board(player_id: int) -> void:
 	BoardHolder.add_child(board)
 	_player_boards[player_id] = board
 
-func init_ores_for_each_player(player_ids: Array[int]) -> Dictionary[int, Array]:
+func init_ores_for_each_player() -> Dictionary[int, Array]:
 	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
 	var ores_for_each_player: Dictionary[int, Array]
-	for player_id in player_ids:
+	for player_id in _player_ids:
 		ores_for_each_player[player_id] = []
 	return ores_for_each_player
 
 
-func generate_all_ores(player_ids: Array[int]) -> void:
+func generate_all_ores() -> void:
+	seed(world_seed)
+
 	for layer_num in range(Ores.get_num_mine_layers()):
 		var layer_gen_data := Ores.get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
-		var ores_for_each_player := init_ores_for_each_player(player_ids)
-		var players_not_chosen_yet := player_ids.duplicate()
+		var ores_for_each_player := init_ores_for_each_player()
+		var players_not_chosen_yet := _player_ids.duplicate()
 
 		# for each ore generation data in this layer
 		for ore_gen_data in layer_gen_data.ores:
 			if ore_gen_data.generate_for_all_players:
 				# if it's for all players, add it for all players
-				for player_id in player_ids:
+				for player_id in _player_ids:
 					ores_for_each_player[player_id].append(ore_gen_data)
 			else:
 				# otherwise, assign it to a player that hasn't gotten a random ore yet
@@ -66,10 +70,10 @@ func generate_all_ores(player_ids: Array[int]) -> void:
 				ores_for_each_player[random_player].append(ore_gen_data)
 				# if we've assigned a random ore to each player at least once, do it again
 				if players_not_chosen_yet.size() == 0:
-					players_not_chosen_yet = player_ids.duplicate()
+					players_not_chosen_yet = _player_ids.duplicate()
 		
 		# actually generate and add the ore boards to each player
-		for player_id in player_ids:
+		for player_id in _player_ids:
 			var mine_layer = MineLayer.instantiate()
 			mine_layer.num_rows = LayerThickness
 			mine_layer.num_cols = NumCols
@@ -81,23 +85,20 @@ func generate_all_ores(player_ids: Array[int]) -> void:
 
 
 @rpc("call_local", "reliable")
-func set_up_game(world_seed: int) -> void:
-	seed(world_seed)
-	
-	var player_ids = ConnectionSystem.get_player_id_list()
+func set_up_game(server_world_seed: int) -> void:
+	world_seed = server_world_seed
+	_player_ids = ConnectionSystem.get_player_id_list()
 
-	for player_id in player_ids:
-		var player = ConnectionSystem.get_player(player_id)
+	for player_id in _player_ids:
 		add_player_board(player_id)
 
-	generate_all_ores(player_ids)	
+	generate_all_ores()
 	
 	_ItemDisplay.update_counts()
 
 ## Actually starts the game on the server
 func start_game():
 	assert(multiplayer.is_server())
-	_GameState.example_int = 42
 	
 	var player_ids = ConnectionSystem.get_player_id_list()
 
