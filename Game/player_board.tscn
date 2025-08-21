@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c5auwrdgqvt1a"]
+[gd_scene load_steps=6 format=3 uid="uid://c5auwrdgqvt1a"]
 
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_7uxwk"]
 [ext_resource type="Script" uid="uid://bhx68tgn2jboc" path="res://Game/player_board.gd" id="1_sf1vr"]
@@ -9,9 +9,6 @@ bg_color = Color(0.906971, 0.43494, 0.418012, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jwkme"]
 bg_color = Color(0.357445, 0.631236, 0.823697, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ps1nv"]
-bg_color = Color(0.497493, 0.654419, 0.410997, 1)
 
 [node name="PlayerBoard" type="Control"]
 layout_mode = 3
@@ -62,18 +59,6 @@ size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jwkme")
 
 [node name="FactoryTiles" type="TileMapLayer" parent="VerticalListContainer/FactoryFloor"]
-unique_name_in_owner = true
-scale = Vector2(2, 2)
-tile_set = ExtResource("3_7uxwk")
-
-[node name="Mine" type="Panel" parent="VerticalListContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 224)
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_ps1nv")
-
-[node name="MineTiles" type="TileMapLayer" parent="VerticalListContainer/Mine"]
 unique_name_in_owner = true
 scale = Vector2(2, 2)
 tile_set = ExtResource("3_7uxwk")

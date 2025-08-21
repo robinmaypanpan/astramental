@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=15 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 [ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="3_ps1nv"]
+[ext_resource type="PackedScene" uid="uid://drw5syeijuvky" path="res://Game/mine_layer.tscn" id="4_16ps5"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/item_display_row.tscn" id="4_ho6sb"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
 [ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
@@ -33,9 +34,9 @@ theme = ExtResource("1_pecy7")
 script = ExtResource("1_3kekb")
 BoardHolder = NodePath("SplitContainer/Asteroid/ScrollContainer/Board Holder")
 PlayerBoard = ExtResource("2_3kekb")
+MineLayer = ExtResource("4_16ps5")
 NumCols = 10
 LayerThickness = 7
-NumMineLayers = 1
 SkyHeight = 300
 TileMapScale = 2
 
