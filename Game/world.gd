@@ -125,3 +125,31 @@ func register_ready() -> void:
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		pass
+
+## Set the UI to the building mode and show the building cursor
+func _enter_build_mode(building: BuildingResource) ->void:
+	# Spawn a ghost version of the building
+	
+	# show it in the correct position on the factory
+	
+	# listen for a mouse down so that we can finish placing it
+	pass
+	
+
+## Returns true if we have the resources necessary to build this building
+func _can_build(building: BuildingResource) -> bool:
+	# We aren't handling this right now, so we can build anything
+	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
+	return true
+	
+
+func _on_build_miner_button_pressed() -> void:
+	var miner_building: BuildingResource = preload("res://Game/data/buildings/miner.tres")
+	if _can_build(miner_building):
+		_enter_build_mode(miner_building)
+
+
+func _on_build_solar_button_pressed() -> void:
+	var solar_building: BuildingResource = preload("res://Game/data/buildings/solar_panel.tres")
+	if _can_build(solar_building):
+		_enter_build_mode(solar_building)

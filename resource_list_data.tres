@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_dka42"]
 [ext_resource type="Script" uid="uid://cudy3ci3kelwu" path="res://addons/resource_list/resource_list_data.gd" id="3_62ssh"]
 [ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="3_dka42"]
-[ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/ore_resource.gd" id="4_62ssh"]
+[ext_resource type="Script" path="res://Game/data/ore_resource.gd" id="4_62ssh"]
 
 [sub_resource type="Resource" id="Resource_nlw5f"]
 script = ExtResource("1_k568v")
