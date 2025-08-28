@@ -20,6 +20,7 @@ var _player_ids: Array[int]
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ItemDisplay := %ItemDisplay
 
+## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
 
 func _ready() -> void:
@@ -29,7 +30,7 @@ func _ready() -> void:
 
 	register_ready.rpc_id(1)
 
-	
+## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
 
@@ -42,21 +43,22 @@ func add_player_board(player_id: int) -> void:
 	_BoardHolder.add_child(board)
 	_player_boards[player_id] = board
 
-func init_ores_for_each_player() -> Dictionary[int, Array]:
+## Set up the dictionary to associate an empty array to each player id in the game.
+func _init_ores_for_each_player() -> Dictionary[int, Array]:
 	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
 	var ores_for_each_player: Dictionary[int, Array]
 	for player_id in _player_ids:
 		ores_for_each_player[player_id] = []
 	return ores_for_each_player
 
-
+## Generate the mine layers for all players by instantiating and adding individual mine layer scenes to each player board.
 func generate_all_ores() -> void:
 	seed(world_seed)
 
 	for layer_num in range(Ores.get_num_mine_layers()):
 		var layer_gen_data := Ores.get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
-		var ores_for_each_player := init_ores_for_each_player()
+		var ores_for_each_player := _init_ores_for_each_player()
 		var players_not_chosen_yet := _player_ids.duplicate()
 
 		# for each ore generation data in this layer
@@ -86,6 +88,7 @@ func generate_all_ores() -> void:
 			mine_layer.generate_ores(background_rock, player_ore_gen_data)
 
 
+## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
 func set_up_game(server_world_seed: int) -> void:
 	world_seed = server_world_seed
