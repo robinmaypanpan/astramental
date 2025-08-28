@@ -7,6 +7,7 @@ extends MarginContainer
 
 var _item_count: float = 0.0
 
+## Given the new count, update the current item count to the new one.
 func update_count(new_count: float) -> void:
 	var change = new_count - _item_count
 	_item_count = new_count
