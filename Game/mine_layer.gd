@@ -6,6 +6,7 @@ var tile_map_scale: int
 
 @onready var _mine_tiles: TileMapLayer = %MineTiles
 
+## Defines a circle filled with the specified ore.
 class OreCircle:
 	var ore: Ore.Type
 	var center: Vector2
@@ -22,11 +23,13 @@ func _ready() -> void:
 	var tile_size_px = 16 * tile_map_scale
 	custom_minimum_size = Vector2i(0, tile_size_px * num_rows)
 
+## Set a tile in the tilemap to the specified ore.
 func _set_tile(x: int, y: int, ore: Ore.Type) -> void:
 	var tile_pos = Vector2i(x, y)
 	var atlas_coordinates = Ores.get_atlas_coordinates(ore)
 	_mine_tiles.set_cell(tile_pos, 0, atlas_coordinates)
 
+## Given ore generation data, generate the ores by filling out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Ore.Type, generation_data: Array) -> void:
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
@@ -44,12 +47,12 @@ func generate_ores(background_rock: Ore.Type, generation_data: Array) -> void:
 	# then, for each tile in the tilemap
 	for x in range(num_cols):
 		for y in range(num_rows):
-			# find the ore circle that is closest to the tile: this will be the ore we write to the tilemap
 			var center_of_tile := Vector2(x + 0.5, y + 0.5)
 			# if no ore is found, write the background rock
 			var closest_ore := background_rock
 			var closest_distance := 9999.0
 
+			# find the ore circle that is closest to the tile that is within the radius of the ore circle
 			for ore_circle in ore_circles:
 				var dist_to_center := center_of_tile.distance_to(ore_circle.center)
 				if dist_to_center < ore_circle.radius and dist_to_center < closest_distance:
