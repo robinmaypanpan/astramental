@@ -13,12 +13,14 @@ var num_players_ready := 0
 var world_seed: int
 var _player_boards: Dictionary[int, Node]
 var _player_ids: Array[int]
+var _building_on_cursor: BuildingResource
 
 @onready var _BoardHolder := %BoardHolder
 @onready var _GameState := %GameState
 @onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ItemDisplay := %ItemDisplay
+@onready var _CursorBuildingDisplay := %CursorBuildingDisplay
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
@@ -126,8 +128,8 @@ func register_ready() -> void:
 		start_game()
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("ui_accept"):
-		pass
+	if Input.is_action_just_pressed("ui_cancel"):
+		_enter_build_mode(null) # exit build mode
 
 ## Set the UI to the building mode and show the building cursor
 func _enter_build_mode(building: BuildingResource) ->void:
@@ -136,7 +138,8 @@ func _enter_build_mode(building: BuildingResource) ->void:
 	# show it in the correct position on the factory
 	
 	# listen for a mouse down so that we can finish placing it
-	pass
+	_building_on_cursor = building
+	_CursorBuildingDisplay.set_cursor_building(building)
 	
 
 ## Returns true if we have the resources necessary to build this building
