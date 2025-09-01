@@ -4,7 +4,7 @@ extends Control
 @onready var _Sky := %Sky
 @onready var _FactoryFloor := %FactoryFloor
 @onready var _PlayerNameLabel := %PlayerNameLabel
-@onready var _FactoryTiles := %FactoryTiles
+@onready var _FactoryTiles: BuildingTileMap = %FactoryTiles
 
 # multiplayer properties
 var owner_id : int
@@ -16,7 +16,7 @@ var player: ConnectionSystem.NetworkPlayer
 @export var SkyHeight : int = 100
 @export var TileMapScale : int = 2
 
-func _ready() -> void:	
+func _ready() -> void:
 	if ConnectionSystem.is_not_running_network():
 		owner_id = 1
 		ConnectionSystem.host_server()
@@ -31,15 +31,16 @@ func _ready() -> void:
 
 	custom_minimum_size = Vector2i(board_width_px, 0)
 	_VerticalListContainer.custom_minimum_size = Vector2i(board_width_px, 0)
+
 	_Sky.custom_minimum_size = Vector2i(0, SkyHeight)
-	_FactoryFloor.custom_minimum_size = Vector2i(0, layer_height_px)
 	_PlayerNameLabel.text = "%s\n(%s)" % [player.name, player.index]
+
+	_FactoryFloor.custom_minimum_size = Vector2i(0, layer_height_px)
 
 	# Set up factory tiles to be all white tiles
 	for x in range(NumCols):
 		for y in range(LayerThickness):
-			var tileCoords := Vector2i(x, y)
-			_FactoryTiles.set_cell(tileCoords, 0, Vector2i(0,0))
+			_FactoryTiles.set_background_tile(x, y, Vector2i(0, 0))
 
 ## Given an instantiated mine layer, add it as a child to this board.
 func add_mine_layer(mine_layer: Node) -> void:

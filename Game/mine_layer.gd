@@ -4,7 +4,7 @@ var num_cols: int
 var num_rows: int
 var tile_map_scale: int
 
-@onready var _mine_tiles: TileMapLayer = %MineTiles
+@onready var _MineTiles: BuildingTileMap = %MineTiles
 
 ## Defines a circle filled with the specified ore.
 class OreCircle:
@@ -18,16 +18,14 @@ class OreCircle:
 		radius = r
 
 func _ready() -> void:
-	_mine_tiles.scale = Vector2i(tile_map_scale, tile_map_scale)
 
 	var tile_size_px = 16 * tile_map_scale
 	custom_minimum_size = Vector2i(0, tile_size_px * num_rows)
 
 ## Set a tile in the tilemap to the specified ore.
 func _set_tile(x: int, y: int, ore: Ore.Type) -> void:
-	var tile_pos = Vector2i(x, y)
 	var atlas_coordinates = Ores.get_atlas_coordinates(ore)
-	_mine_tiles.set_cell(tile_pos, 0, atlas_coordinates)
+	_MineTiles.set_background_tile(x, y, atlas_coordinates)
 
 ## Given ore generation data, generate the ores by filling out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Ore.Type, generation_data: Array) -> void:
