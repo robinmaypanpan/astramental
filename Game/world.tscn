@@ -144,6 +144,7 @@ _spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
 spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
 
+[connection signal="game_ready" from="." to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_world_game_ready"]
 [connection signal="pressed" from="SplitContainer/HudContainer/HFlowContainer/Button" to="." method="_on_build_miner_button_pressed"]
 [connection signal="pressed" from="SplitContainer/HudContainer/HFlowContainer/Button2" to="." method="_on_build_solar_button_pressed"]
 [connection signal="add_items" from="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/CheatItems" to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_cheat_items_add_items"]
