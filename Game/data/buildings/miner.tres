@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=4 format=3 uid="uid://xxt6y1h10g6h"]
 
-[ext_resource type="Texture2D" path="res://Assets/sprites/drill.tres" id="1_ihwv0"]
+[ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/drill.tres" id="1_ihwv0"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/item_cost.gd" id="1_rb5k8"]
 [ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_ihwv0"]
 
@@ -10,6 +10,7 @@ unique_id = 2
 name = "Miner"
 shop_icon = ExtResource("1_ihwv0")
 factory_tile = ExtResource("1_ihwv0")
+atlas_coordinates = Vector2i(1, 0)
 energy_drain = 1.0
 money_cost = 40
 item_costs = Array[ExtResource("1_rb5k8")]([])

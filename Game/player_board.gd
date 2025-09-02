@@ -10,6 +10,8 @@ extends Control
 var owner_id : int
 var player: ConnectionSystem.NetworkPlayer
 
+var building_tile_maps: Array[BuildingTileMap]
+
 # game board properties
 @export var NumCols : int = 30
 @export var LayerThickness : int = 10
@@ -22,6 +24,7 @@ func _ready() -> void:
 		ConnectionSystem.host_server()
 		
 	player = ConnectionSystem.get_player(owner_id)
+	building_tile_maps = [_FactoryTiles]
 		
 	print("doing ready for %s (%s)" % [player.name, owner_id])
 
@@ -45,3 +48,4 @@ func _ready() -> void:
 ## Given an instantiated mine layer, add it as a child to this board.
 func add_mine_layer(mine_layer: Node) -> void:
 	_VerticalListContainer.add_child(mine_layer)
+	building_tile_maps.append(mine_layer.MineTiles)

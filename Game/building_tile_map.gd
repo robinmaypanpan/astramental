@@ -13,8 +13,10 @@ class_name BuildingTileMap
 
 signal tile_pressed(tile_map: BuildingTileMap, tile_map_position: Vector2i, mouse_button: MouseButton)
 signal tile_hovered(tile_map: BuildingTileMap, tile_map_position: Vector2i)
+
 var _last_tile_position: Vector2i = Vector2i(-1, -1)
 var _mouse_button_used: MouseButton
+var _ghost_building_position: Vector2i = Vector2i(-1, -1)
 
 func _ready() -> void:
 	var tile_scale = Vector2i(tile_map_scale, tile_map_scale) 
@@ -27,6 +29,21 @@ func _ready() -> void:
 
 func set_background_tile(x: int, y: int, atlas_coordinates: Vector2i) -> void:
 	_BackgroundTiles.set_cell(Vector2i(x, y), 0, atlas_coordinates)
+
+func clear_ghost_building():
+	if _ghost_building_position != Vector2i(-1, -1):
+		_GhostBuildingTiles.erase_cell(_ghost_building_position)
+
+func move_ghost_building(pos: Vector2i, building: BuildingResource):
+	clear_ghost_building()
+	_ghost_building_position = pos
+	_GhostBuildingTiles.set_cell(pos, 0, building.atlas_coordinates)
+
+func place_building(pos: Vector2i, building: BuildingResource):
+	_BuildingTiles.set_cell(pos, 0, building.atlas_coordinates)
+
+func delete_building(pos: Vector2i):
+	_BuildingTiles.erase_cell(pos)
 
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("either_mouse_button"):
@@ -53,10 +70,11 @@ func _input(event: InputEvent) -> void:
 			# following events are mousemotion events, which don't tell us what button is being clicked
 
 			tile_hovered.emit(self, tile_pos)
-			print("emitting tile_hovered(%s)" % [tile_pos])
 			if _mouse_button_used != MOUSE_BUTTON_NONE: 
 				tile_pressed.emit(self, tile_pos, _mouse_button_used)
-				print("emitting tile_pressed(%s, %s)" % [tile_pos, _mouse_button_used])
 	else:
 		# mouse left the area, so reset where we last saw mouse
 		_last_tile_position = Vector2i(-1, -1)
+		# also clear the ghost, since the mouse clearly isn't here anymore
+		clear_ghost_building()
+		

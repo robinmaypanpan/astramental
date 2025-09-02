@@ -14,6 +14,10 @@ var world_seed: int
 var _player_boards: Dictionary[int, Node]
 var _player_ids: Array[int]
 var _building_on_cursor: BuildingResource
+var _in_build_mode: bool:
+	get:
+		return _building_on_cursor != null
+# var _building_tile_maps: Array[BuildingTileMap]
 
 @onready var _BoardHolder := %BoardHolder
 @onready var _GameState := %GameState
@@ -89,6 +93,12 @@ func generate_all_ores() -> void:
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			mine_layer.generate_ores(background_rock, player_ore_gen_data)
 
+func _hook_building_tile_map_signals():
+	for player_board in _player_boards.values():
+		for building_tile_map: BuildingTileMap in player_board.building_tile_maps:
+			building_tile_map.tile_hovered.connect(_on_tile_hovered)
+			building_tile_map.tile_pressed.connect(_on_tile_pressed)
+
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -100,6 +110,7 @@ func set_up_game(server_world_seed: int) -> void:
 		add_player_board(player_id)
 
 	generate_all_ores()
+	_hook_building_tile_map_signals()
 
 	game_ready.emit()
 	
@@ -159,3 +170,20 @@ func _on_build_solar_button_pressed() -> void:
 	var solar_building: BuildingResource = preload("res://Game/data/buildings/solar_panel.tres")
 	if _can_build(solar_building):
 		_enter_build_mode(solar_building)
+
+## signal emitted by BuildingTileMap
+func _on_tile_hovered(tile_map: BuildingTileMap, tile_map_position: Vector2i):
+	print("received tile_hovered(%s)" % [tile_map_position])
+	if _in_build_mode:
+		tile_map.move_ghost_building(tile_map_position, _building_on_cursor)
+
+## signal emitted by BuildingTileMap
+func _on_tile_pressed(tile_map: BuildingTileMap, tile_map_position: Vector2i, mouse_button: MouseButton):
+	print("received tile_pressed(%s, %s)" % [tile_map_position, mouse_button])
+	if _in_build_mode:
+		if mouse_button == MOUSE_BUTTON_LEFT and _can_build(_building_on_cursor):
+			tile_map.place_building(tile_map_position, _building_on_cursor)
+		elif mouse_button == MOUSE_BUTTON_RIGHT:
+			tile_map.delete_building(tile_map_position)
+
+
