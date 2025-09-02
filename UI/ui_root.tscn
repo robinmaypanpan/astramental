@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://d17sc8rgcqfa4"]
+[gd_scene load_steps=9 format=3 uid="uid://d17sc8rgcqfa4"]
 
 [ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://UI/ui_root.gd" id="1_abnfh"]
 [ext_resource type="PackedScene" uid="uid://dqxjnempjj6dd" path="res://UI/menus/lobby.tscn" id="2_dq6r7"]
 [ext_resource type="PackedScene" uid="uid://cqo03y46lsise" path="res://UI/menus/main.tscn" id="3_f2xo2"]
 [ext_resource type="PackedScene" uid="uid://dji12mak03hku" path="res://Game/world.tscn" id="4_o66iu"]
+[ext_resource type="PackedScene" uid="uid://1iooq75h3sqg" path="res://UI/cursor.tscn" id="5_dq6r7"]
 
 [sub_resource type="Animation" id="Animation_hat8c"]
 length = 0.001
@@ -81,3 +82,6 @@ unique_name_in_owner = true
 libraries = {
 &"": SubResource("AnimationLibrary_hat8c")
 }
+
+[node name="Cursor" parent="." instance=ExtResource("5_dq6r7")]
+unique_name_in_owner = true

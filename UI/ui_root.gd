@@ -5,6 +5,7 @@ class_name UiRoot extends Control
 
 @onready var shroud_animation : AnimationPlayer = %AnimationPlayer
 @onready var MenusContainer : Node = %MenusContainer
+@onready var Cursor := %Cursor
 
 var current_node : Node
 

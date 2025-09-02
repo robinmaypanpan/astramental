@@ -24,7 +24,6 @@ var _in_build_mode: bool:
 @onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ItemDisplay := %ItemDisplay
-@onready var _CursorBuildingDisplay := %CursorBuildingDisplay
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
@@ -144,13 +143,12 @@ func _physics_process(delta: float) -> void:
 
 ## Set the UI to the building mode and show the building cursor
 func _enter_build_mode(building: BuildingResource) ->void:
-	# Spawn a ghost version of the building
-	
-	# show it in the correct position on the factory
-	
-	# listen for a mouse down so that we can finish placing it
 	_building_on_cursor = building
-	_CursorBuildingDisplay.set_cursor_building(building)
+	var cursor = UiUtils.get_cursor()
+	if building != null:
+		cursor.set_building_icon(building.factory_tile)
+	else:
+		cursor.set_building_icon(null)
 	
 
 ## Returns true if we have the resources necessary to build this building
@@ -185,5 +183,3 @@ func _on_tile_pressed(tile_map: BuildingTileMap, tile_map_position: Vector2i, mo
 			tile_map.place_building(tile_map_position, _building_on_cursor)
 		elif mouse_button == MOUSE_BUTTON_RIGHT:
 			tile_map.delete_building(tile_map_position)
-
-

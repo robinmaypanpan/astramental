@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=15 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
@@ -10,7 +10,6 @@
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
 [ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
 [ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="6_r7jf0"]
-[ext_resource type="Script" uid="uid://c8du6r0y047os" path="res://Game/cursor_building_display.gd" id="9_71s8c"]
 
 [sub_resource type="Theme" id="Theme_3kekb"]
 
@@ -127,21 +126,6 @@ text = "Seed: 12344567"
 [node name="RegenWorldButton" type="Button" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/WorldGen/VBoxContainer"]
 layout_mode = 2
 text = "Regenerate World"
-
-[node name="CursorBuildingDisplay" type="MarginContainer" parent="."]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 50.0
-script = ExtResource("9_71s8c")
-offset = Vector2(10, 10)
-building_scale = 1.0
-
-[node name="BuildingDisplay" type="TextureRect" parent="CursorBuildingDisplay"]
-unique_name_in_owner = true
-layout_mode = 2
 
 [node name="GameState" type="Node" parent="."]
 unique_name_in_owner = true
