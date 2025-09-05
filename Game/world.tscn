@@ -91,13 +91,14 @@ script = ExtResource("6_r7jf0")
 [node name="CheatItems" parent="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" instance=ExtResource("6_hvno2")]
 layout_mode = 2
 
-[node name="Build Menu" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
+[node name="BuildMenu" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("8_16ps5")
 path_to_building_assets = "res://Game/data/buildings/"
 
-[node name="BuildingList" type="ItemList" parent="HBoxContainer/LeftPanel/VBoxContainer/Build Menu"]
+[node name="BuildingList" type="ItemList" parent="HBoxContainer/LeftPanel/VBoxContainer/BuildMenu"]
 unique_name_in_owner = true
 layout_mode = 2
 auto_height = true
@@ -143,4 +144,4 @@ spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
 
 [connection signal="add_items" from="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu/CheatItems" to="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" method="_on_cheat_items_add_items"]
-[connection signal="item_clicked" from="HBoxContainer/LeftPanel/VBoxContainer/Build Menu/BuildingList" to="HBoxContainer/LeftPanel/VBoxContainer/Build Menu" method="_on_building_list_item_clicked"]
+[connection signal="item_clicked" from="HBoxContainer/LeftPanel/VBoxContainer/BuildMenu/BuildingList" to="HBoxContainer/LeftPanel/VBoxContainer/BuildMenu" method="_on_building_list_item_clicked"]

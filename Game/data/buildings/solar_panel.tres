@@ -10,6 +10,7 @@ unique_id = 1
 name = "Solar Panel"
 shop_icon = ExtResource("1_atdat")
 factory_tile = ExtResource("1_atdat")
+atlas_coordinates = Vector2i(0, 0)
 energy_drain = 15.0
 money_cost = 15
 item_costs = Array[ExtResource("1_r87ev")]([])

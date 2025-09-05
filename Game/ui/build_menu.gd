@@ -6,6 +6,8 @@ extends PanelContainer
 
 var _buildings:Array[BuildingResource]
 
+signal on_building_clicked(building: BuildingResource)
+
 func _ready() -> void:
 	# Clear list
 	_BuildingList.clear()
@@ -24,4 +26,4 @@ func _ready() -> void:
 
 func _on_building_list_item_clicked(index: int, at_position: Vector2, mouse_button_index: int) -> void:
 	var building:BuildingResource = _buildings[index]
-	
+	on_building_clicked.emit(building)
