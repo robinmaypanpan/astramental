@@ -155,20 +155,6 @@ func _on_build_solar_button_pressed() -> void:
 	if _can_build(solar_building):
 		_enter_build_mode(solar_building)
 
-## Store which tile on the many tilemaps is the cursor on
-class TileMapPosition:
-	## Which player's board are we on
-	var player_id: int
-	## Which index in the player board's building_tile_maps corresponds to the BuildingTileMap the cursor is on
-	var tile_map: BuildingTileMap
-	## Which tile are we on in that BuildingTileMap
-	var tile_position: Vector2i
-
-	func _init(pi, tm, tp):
-		player_id = pi
-		tile_map = tm
-		tile_position = tp
-
 enum MouseState {
 	HOVERING,
 	BUILDING,
@@ -177,7 +163,7 @@ enum MouseState {
 
 func in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 	if pos1 and pos2:
-		return pos1.player_id == pos2.player_id and pos1.tile_map == pos2.tile_map
+		return pos1.tile_map == pos2.tile_map
 	else:
 		return false
 
@@ -191,7 +177,7 @@ func _get_tile_map_pos() -> TileMapPosition:
 		for building_tile_map in building_tile_maps:
 			if building_tile_map.mouse_inside_tile_map():
 				var tile_position = building_tile_map.get_mouse_tile_map_coords()
-				return TileMapPosition.new(player_id, building_tile_map, tile_position)
+				return TileMapPosition.new(building_tile_map, tile_position)
 	return null
 
 func _input(_event: InputEvent) -> void:
