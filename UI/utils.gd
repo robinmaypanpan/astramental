@@ -5,7 +5,7 @@ func get_ui_node() -> UiRoot:
 	if ui_node == null:
 		# We may be running an individual scene that is trying to access this
 		# Therefore, let's create it.
-		ui_node = ResourceLoader.load("res://UI/utils.gd").instance()
+		ui_node = ResourceLoader.load("res://UI/ui_root.tscn").instantiate()
 	return ui_node
 
 func get_cursor() -> Cursor:

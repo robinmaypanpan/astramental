@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://1iooq75h3sqg"]
+[gd_scene load_steps=3 format=3 uid="uid://dtruqm5nh1h12"]
 
 [ext_resource type="Texture2D" uid="uid://6r3ad5fov3bo" path="res://Assets/cursor_base.png" id="1_5l68f"]
-[ext_resource type="Script" uid="uid://doqg8h4e1g8jk" path="res://UI/cursor.gd" id="1_gu6ow"]
+[ext_resource type="Script" path="res://UI/cursor.gd" id="1_gu6ow"]
 
 [node name="Cursor" type="SubViewport"]
 disable_3d = true

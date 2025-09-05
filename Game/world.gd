@@ -23,16 +23,21 @@ var _in_build_mode: bool:
 @onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ItemDisplay := %ItemDisplay
+@onready var _BuildMenu := %BuildMenu
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
 
-func _ready() -> void:
+func _ready() -> void:	
 	if ConnectionSystem.is_not_running_network():
+		# This is for when we are running the scene standalone
+		UiUtils.get_ui_node()
 		ConnectionSystem.host_server()
 		start_game()
 
 	register_ready.rpc_id(1)
+	
+	_BuildMenu.on_building_clicked.connect(_on_build_menu_building_clicked)
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
@@ -143,17 +148,10 @@ func _can_build(building: BuildingResource) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
-
-func _on_build_miner_button_pressed() -> void:
-	var miner_building: BuildingResource = preload("res://Game/data/buildings/miner.tres")
-	if _can_build(miner_building):
-		_enter_build_mode(miner_building)
-
-
-func _on_build_solar_button_pressed() -> void:
-	var solar_building: BuildingResource = preload("res://Game/data/buildings/solar_panel.tres")
-	if _can_build(solar_building):
-		_enter_build_mode(solar_building)
+	
+func _on_build_menu_building_clicked(building: BuildingResource) -> void:
+	if _can_build(building):
+		_enter_build_mode(building)
 
 enum MouseState {
 	HOVERING,
