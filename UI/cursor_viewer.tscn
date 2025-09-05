@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://brogvnnr56f0p"]
+
+[ext_resource type="PackedScene" uid="uid://1iooq75h3sqg" path="res://UI/cursor.tscn" id="1_whbl8"]
+
+[node name="CursorContainer" type="SubViewportContainer"]
+
+[node name="Cursor" parent="." instance=ExtResource("1_whbl8")]

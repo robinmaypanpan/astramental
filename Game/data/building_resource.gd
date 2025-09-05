@@ -12,6 +12,9 @@ class_name BuildingResource extends Resource
 ## The tile that represents this building
 @export var factory_tile: Texture2D = null
 
+## The coordinates in the building tileset that correspond to the correct building image.
+@export var atlas_coordinates: Vector2i
+
 ## The unit per second energy drain caused by this building
 @export var energy_drain: float = 0
 

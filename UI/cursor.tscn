@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://1iooq75h3sqg"]
+
+[ext_resource type="Texture2D" uid="uid://6r3ad5fov3bo" path="res://Assets/cursor_base.png" id="1_5l68f"]
+[ext_resource type="Script" uid="uid://doqg8h4e1g8jk" path="res://UI/cursor.gd" id="1_gu6ow"]
+
+[node name="Cursor" type="SubViewport"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(44, 44)
+render_target_update_mode = 4
+script = ExtResource("1_gu6ow")
+
+[node name="CursorIcon" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_5l68f")
+centered = false
+
+[node name="BuildingIcon" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(12, 12)
+scale = Vector2(2, 2)
+centered = false
