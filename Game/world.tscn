@@ -4,16 +4,14 @@
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
-[ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="3_ps1nv"]
 [ext_resource type="PackedScene" uid="uid://drw5syeijuvky" path="res://Game/mine_layer.tscn" id="4_16ps5"]
-[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/item_display_row.tscn" id="4_ho6sb"]
+[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="4_ho6sb"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
+[ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/ui/item_display.gd" id="6_16ps5"]
 [ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
 [ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="6_r7jf0"]
-
-[sub_resource type="Theme" id="Theme_3kekb"]
-
-[sub_resource type="Theme" id="Theme_jwkme"]
+[ext_resource type="Script" uid="uid://033nlxebmukt" path="res://Game/ui/build_menu.gd" id="8_16ps5"]
+[ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="9_g2b07"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
 bg_color = Color(0, 0, 0, 1)
@@ -39,66 +37,50 @@ LayerThickness = 7
 SkyHeight = 300
 TileMapScale = 2
 
-[node name="SplitContainer" type="HSplitContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 6
-size_flags_vertical = 6
-split_offset = 100
 
-[node name="HudContainer" type="PanelContainer" parent="SplitContainer"]
+[node name="LeftPanel" type="Panel" parent="HBoxContainer"]
 layout_mode = 2
-theme = SubResource("Theme_3kekb")
+size_flags_horizontal = 3
 
-[node name="HFlowContainer" type="HFlowContainer" parent="SplitContainer/HudContainer"]
-layout_mode = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_pecy7")
 
-[node name="Button" type="Button" parent="SplitContainer/HudContainer/HFlowContainer"]
-layout_mode = 2
-text = "Build Miner"
-
-[node name="Button2" type="Button" parent="SplitContainer/HudContainer/HFlowContainer"]
-layout_mode = 2
-text = "Build Solar"
-
-[node name="Asteroid" type="PanelContainer" parent="SplitContainer"]
-layout_mode = 2
-theme = SubResource("Theme_jwkme")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid"]
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
-
-[node name="BoardHolder" type="HBoxContainer" parent="SplitContainer/Asteroid/ScrollContainer"]
-unique_name_in_owner = true
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Asteroid"]
+[node name="Resource Display" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="ItemDisplay" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer"]
+[node name="ItemDisplay" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer/Resource Display"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-script = ExtResource("3_ps1nv")
+script = ExtResource("6_16ps5")
 item_display_row = ExtResource("4_ho6sb")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid/VBoxContainer/ItemDisplay"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer/Resource Display/ItemDisplay"]
 layout_mode = 2
 
-[node name="ItemDisplayList" type="VBoxContainer" parent="SplitContainer/Asteroid/VBoxContainer/ItemDisplay/ScrollContainer"]
+[node name="ItemDisplayList" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer/Resource Display/ItemDisplay/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="DebugMenu" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer"]
+[node name="DebugMenuPanel" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="DebugMenu" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -106,26 +88,42 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("6_r7jf0")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu"]
+[node name="CheatItems" parent="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" instance=ExtResource("6_hvno2")]
 layout_mode = 2
 
-[node name="CheatItems" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer" instance=ExtResource("6_hvno2")]
+[node name="Build Menu" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("8_16ps5")
+path_to_building_assets = "res://Game/data/buildings/"
 
-[node name="WorldGen" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/WorldGen"]
-layout_mode = 2
-
-[node name="SeedText" type="Label" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/WorldGen/VBoxContainer"]
+[node name="BuildingList" type="ItemList" parent="HBoxContainer/LeftPanel/VBoxContainer/Build Menu"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Seed: 12344567"
+auto_height = true
+item_count = 1
+fixed_icon_size = Vector2i(64, 64)
+item_0/text = "$15"
+item_0/icon = ExtResource("9_g2b07")
 
-[node name="RegenWorldButton" type="Button" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/WorldGen/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-text = "Regenerate World"
+
+[node name="TopPanel" type="Panel" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Asteroid" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(1100, 900)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
+
+[node name="BoardHolder" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Asteroid"]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="GameState" type="Node" parent="."]
 unique_name_in_owner = true
@@ -144,8 +142,5 @@ _spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
 spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
 
-[connection signal="game_ready" from="." to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_world_game_ready"]
-[connection signal="pressed" from="SplitContainer/HudContainer/HFlowContainer/Button" to="." method="_on_build_miner_button_pressed"]
-[connection signal="pressed" from="SplitContainer/HudContainer/HFlowContainer/Button2" to="." method="_on_build_solar_button_pressed"]
-[connection signal="add_items" from="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/CheatItems" to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_cheat_items_add_items"]
-[connection signal="pressed" from="SplitContainer/Asteroid/VBoxContainer/DebugMenu/VBoxContainer/WorldGen/VBoxContainer/RegenWorldButton" to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_regen_world_button_pressed"]
+[connection signal="add_items" from="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu/CheatItems" to="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" method="_on_cheat_items_add_items"]
+[connection signal="item_clicked" from="HBoxContainer/LeftPanel/VBoxContainer/Build Menu/BuildingList" to="HBoxContainer/LeftPanel/VBoxContainer/Build Menu" method="_on_building_list_item_clicked"]

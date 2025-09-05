@@ -1,7 +1,0 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://c35t5rka5ekb2"]
-
-[ext_resource type="Texture2D" uid="uid://cg1myy10yqdcr" path="res://Assets/sprites/astramental_ore_tiles.png" id="1_alii1"]
-
-[resource]
-atlas = ExtResource("1_alii1")
-region = Rect2(48, 0, 16, 16)
