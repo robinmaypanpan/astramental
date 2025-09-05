@@ -19,7 +19,7 @@ func _ready() -> void:
 		var resource_path:String = "%s/%s" % [resource_list_path, path]
 		var building:BuildingResource = ResourceLoader.load(resource_path)
 		if building != null:
-			var index = _BuildingList.add_icon_item(building.shop_icon)
+			var index = _BuildingList.add_icon_item(building.icon)
 			_BuildingList.set_item_text(index, building.name)
 			_buildings.push_back(building)
 
