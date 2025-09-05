@@ -22,7 +22,7 @@ var _in_build_mode: bool:
 @onready var _GameState := %GameState
 @onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
-@onready var _ItemDisplay := %ItemDisplay
+@onready var _ResourceDisplay := %ResourceDisplay
 @onready var _BuildMenu := %BuildMenu
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
@@ -109,7 +109,7 @@ func set_up_game(server_world_seed: int) -> void:
 
 	game_ready.emit()
 	
-	_ItemDisplay.update_counts()
+	_ResourceDisplay.setup_game()
 
 ## Actually starts the game on the server
 func start_game():

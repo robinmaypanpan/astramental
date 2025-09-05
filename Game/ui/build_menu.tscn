@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgq3xg7wrmxn5"]
+
+[ext_resource type="Script" uid="uid://033nlxebmukt" path="res://Game/ui/build_menu.gd" id="1_jyifq"]
+[ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="2_whtk6"]
+
+[node name="BuildMenu" type="PanelContainer"]
+size_flags_vertical = 3
+script = ExtResource("1_jyifq")
+path_to_building_assets = "res://Game/data/buildings/"
+
+[node name="BuildingList" type="ItemList" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+auto_height = true
+item_count = 1
+fixed_icon_size = Vector2i(64, 64)
+item_0/text = "$15"
+item_0/icon = ExtResource("2_whtk6")
+
+[connection signal="item_clicked" from="BuildingList" to="." method="_on_building_list_item_clicked"]

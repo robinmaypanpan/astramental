@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0l0gw6yjjatc"]
+
+[ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="1_i3840"]
+[ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="2_ojaca"]
+
+[node name="DebugMenuPanel" type="PanelContainer"]
+
+[node name="DebugMenu" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("1_i3840")
+
+[node name="CheatItems" parent="DebugMenu" instance=ExtResource("2_ojaca")]
+layout_mode = 2
+
+[connection signal="add_items" from="DebugMenu/CheatItems" to="DebugMenu" method="_on_cheat_items_add_items"]
