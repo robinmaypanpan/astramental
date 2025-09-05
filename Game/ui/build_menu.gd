@@ -4,6 +4,8 @@ extends PanelContainer
 
 @onready var _BuildingList:ItemList = %BuildingList
 
+var _buildings:Array[BuildingResource]
+
 func _ready() -> void:
 	# Clear list
 	_BuildingList.clear()
@@ -17,3 +19,9 @@ func _ready() -> void:
 		if building != null:
 			var index = _BuildingList.add_icon_item(building.shop_icon)
 			_BuildingList.set_item_text(index, building.name)
+			_buildings.push_back(building)
+
+
+func _on_building_list_item_clicked(index: int, at_position: Vector2, mouse_button_index: int) -> void:
+	var building:BuildingResource = _buildings[index]
+	

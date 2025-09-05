@@ -138,3 +138,4 @@ spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
 
 [connection signal="add_items" from="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu/CheatItems" to="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" method="_on_cheat_items_add_items"]
+[connection signal="item_clicked" from="HBoxContainer/LeftPanel/VBoxContainer/Build Menu/BuildingList" to="HBoxContainer/LeftPanel/VBoxContainer/Build Menu" method="_on_building_list_item_clicked"]
