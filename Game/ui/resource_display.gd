@@ -1,4 +1,4 @@
-extends Control
+class_name ResourceDisplay extends Control
 
 ## Setup the game
 func setup_game() -> void:

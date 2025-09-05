@@ -59,8 +59,10 @@ layout_mode = 2
 item_display_row = ExtResource("4_ho6sb")
 _PlayerStateContainer = NodePath("../../../../PlayerStates")
 
-[node name="DebugMenuPanel" parent="HBoxContainer/LeftPanel/VBoxContainer" instance=ExtResource("6_16ps5")]
+[node name="DebugMenuPanel" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_PlayerStates", "_World") instance=ExtResource("6_16ps5")]
 layout_mode = 2
+_PlayerStates = NodePath("../../../../PlayerStates")
+_World = NodePath("../../../..")
 
 [node name="BuildMenu" parent="HBoxContainer/LeftPanel/VBoxContainer" instance=ExtResource("9_g2b07")]
 unique_name_in_owner = true
