@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=13 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
@@ -6,15 +6,11 @@
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 [ext_resource type="PackedScene" uid="uid://drw5syeijuvky" path="res://Game/mine_layer.tscn" id="4_16ps5"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="4_ho6sb"]
+[ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
-[ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/ui/item_display.gd" id="6_16ps5"]
-[ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
-[ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="6_r7jf0"]
-[ext_resource type="Script" uid="uid://033nlxebmukt" path="res://Game/ui/build_menu.gd" id="8_16ps5"]
-[ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="9_g2b07"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
-bg_color = Color(0, 0, 0, 1)
+[ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
+[ext_resource type="PackedScene" uid="uid://c45g1mdwk11yt" path="res://Game/asteroid.tscn" id="9_71s8c"]
+[ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/build_menu.tscn" id="9_g2b07"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jwkme"]
 properties/0/path = NodePath("GameState:example_int")
@@ -55,57 +51,22 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_pecy7")
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
-layout_mode = 2
-
-[node name="Resource Display" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="ItemDisplay" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer/Resource Display"]
+[node name="ResourceDisplay" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_PlayerStateContainer") instance=ExtResource("5_r7jf0")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-script = ExtResource("6_16ps5")
 item_display_row = ExtResource("4_ho6sb")
+_PlayerStateContainer = NodePath("../../../../PlayerStates")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer/Resource Display/ItemDisplay"]
+[node name="DebugMenuPanel" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_PlayerStates", "_World", "_ResourceDisplay", "_Asteroid") instance=ExtResource("6_16ps5")]
 layout_mode = 2
+_PlayerStates = NodePath("../../../../PlayerStates")
+_World = NodePath("../../../..")
+_ResourceDisplay = NodePath("../ResourceDisplay")
+_Asteroid = NodePath("../../../VBoxContainer/Asteroid")
 
-[node name="ItemDisplayList" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/PanelContainer/Resource Display/ItemDisplay/ScrollContainer"]
+[node name="BuildMenu" parent="HBoxContainer/LeftPanel/VBoxContainer" instance=ExtResource("9_g2b07")]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="DebugMenuPanel" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
-layout_mode = 2
-
-[node name="DebugMenu" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-script = ExtResource("6_r7jf0")
-
-[node name="CheatItems" parent="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" instance=ExtResource("6_hvno2")]
-layout_mode = 2
-
-[node name="BuildMenu" type="PanelContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-script = ExtResource("8_16ps5")
-path_to_building_assets = "res://Game/data/buildings/"
-
-[node name="BuildingList" type="ItemList" parent="HBoxContainer/LeftPanel/VBoxContainer/BuildMenu"]
-unique_name_in_owner = true
-layout_mode = 2
-auto_height = true
-item_count = 1
-fixed_icon_size = Vector2i(64, 64)
-item_0/text = "$15"
-item_0/icon = ExtResource("9_g2b07")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -115,14 +76,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Asteroid" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(1100, 900)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
-
-[node name="BoardHolder" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Asteroid"]
+[node name="Asteroid" parent="HBoxContainer/VBoxContainer" instance=ExtResource("9_71s8c")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -142,6 +96,3 @@ unique_name_in_owner = true
 _spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
 spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
-
-[connection signal="add_items" from="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu/CheatItems" to="HBoxContainer/LeftPanel/VBoxContainer/DebugMenuPanel/DebugMenu" method="_on_cheat_items_add_items"]
-[connection signal="item_clicked" from="HBoxContainer/LeftPanel/VBoxContainer/BuildMenu/BuildingList" to="HBoxContainer/LeftPanel/VBoxContainer/BuildMenu" method="_on_building_list_item_clicked"]
