@@ -30,7 +30,9 @@ spacing_bottom = -4
 [resource]
 default_font = SubResource("FontVariation_drjrk")
 default_font_size = 48
+HBoxContainer/constants/separation = 5
 Label/constants/shadow_outline_size = 1
 LineEdit/styles/focus = SubResource("StyleBoxFlat_drjrk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_xj1xw")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_2iung")
+VBoxContainer/constants/separation = 5
