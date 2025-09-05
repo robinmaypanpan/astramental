@@ -16,4 +16,4 @@ size_flags_vertical = 0
 [node name="CheatItems" parent="DebugMenu" instance=ExtResource("2_ojaca")]
 layout_mode = 2
 
-[connection signal="add_items" from="DebugMenu/CheatItems" to="DebugMenu" method="_on_cheat_items_add_items"]
+[connection signal="add_items" from="DebugMenu/CheatItems" to="." method="_on_cheat_items_add_items"]

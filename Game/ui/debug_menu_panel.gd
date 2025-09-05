@@ -5,7 +5,6 @@ extends Control
 @export var _ResourceDisplay : ResourceDisplay
 
 @onready var _BoardHolder := %BoardHolder
-
 @onready var _SeedText := %SeedText
 
 ## Actually add items to the given player
