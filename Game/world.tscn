@@ -6,11 +6,11 @@
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 [ext_resource type="PackedScene" uid="uid://drw5syeijuvky" path="res://Game/mine_layer.tscn" id="4_16ps5"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="4_ho6sb"]
-[ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
+[ext_resource type="PackedScene" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
-[ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
-[ext_resource type="PackedScene" uid="uid://c45g1mdwk11yt" path="res://Game/asteroid.tscn" id="9_71s8c"]
-[ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/build_menu.tscn" id="9_g2b07"]
+[ext_resource type="PackedScene" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
+[ext_resource type="PackedScene" path="res://Game/asteroid.tscn" id="9_71s8c"]
+[ext_resource type="PackedScene" path="res://Game/ui/build_menu.tscn" id="9_g2b07"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jwkme"]
 properties/0/path = NodePath("GameState:example_int")

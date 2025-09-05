@@ -138,7 +138,7 @@ func _enter_build_mode(building: BuildingResource) ->void:
 	_building_on_cursor = building
 	var cursor = UiUtils.get_cursor()
 	if building != null:
-		cursor.set_building_icon(building.factory_tile)
+		cursor.set_building_icon(building.icon)
 	else:
 		cursor.set_building_icon(null)
 	
