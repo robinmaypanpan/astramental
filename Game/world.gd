@@ -18,11 +18,11 @@ var _in_build_mode: bool:
 	get:
 		return _building_on_cursor != null
 
-@onready var _BoardHolder := %BoardHolder
 @onready var _GameState := %GameState
 @onready var _PlayerStates := %PlayerStates
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _ResourceDisplay := %ResourceDisplay
+@onready var _Asteroid := %Asteroid
 @onready var _BuildMenu := %BuildMenu
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
@@ -49,7 +49,7 @@ func add_player_board(player_id: int) -> void:
 	board.SkyHeight = SkyHeight
 	board.TileMapScale = TileMapScale
 
-	_BoardHolder.add_child(board)
+	_Asteroid.add_player_board(board)
 	_player_boards[player_id] = board
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
