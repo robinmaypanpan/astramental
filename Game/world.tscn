@@ -1,18 +1,14 @@
-[gd_scene load_steps=15 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=12 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
-[ext_resource type="Script" uid="uid://2btdgj10osqu" path="res://UI/system/switcher_node.gd" id="3_ho6sb"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
-[ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://UI/main_menu_theme.tres" id="3_ps1nv"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/item_display_row.tscn" id="4_ho6sb"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
 [ext_resource type="Script" uid="uid://dxkqib41uryfs" path="res://Game/item_display.gd" id="6_16ps5"]
 [ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="6_hvno2"]
 [ext_resource type="Script" uid="uid://6gwui0npktnq" path="res://Game/debug_menu.gd" id="6_r7jf0"]
-
-[sub_resource type="Theme" id="Theme_jwkme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
 bg_color = Color(0, 0, 0, 1)
@@ -31,51 +27,30 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_pecy7")
 script = ExtResource("1_3kekb")
-BoardHolder = NodePath("SplitContainer/Asteroid/ScrollContainer/Board Holder")
+BoardHolder = NodePath("HBoxContainer/VBoxContainer/Asteroid/Board Holder")
 PlayerBoard = ExtResource("2_3kekb")
 
-[node name="SplitContainer" type="HSplitContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 6
-size_flags_vertical = 6
-split_offset = 500
 
-[node name="HudContainer" type="PanelContainer" parent="SplitContainer" node_paths=PackedStringArray("initial_child")]
+[node name="LeftPanel" type="Panel" parent="HBoxContainer"]
 layout_mode = 2
-theme = ExtResource("3_ps1nv")
-script = ExtResource("3_ho6sb")
-initial_child = NodePath("MainHud")
+size_flags_horizontal = 3
 
-[node name="MainHud" type="HFlowContainer" parent="SplitContainer/HudContainer"]
-layout_mode = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="BuildButton" type="Button" parent="SplitContainer/HudContainer/MainHud"]
-layout_mode = 2
-theme = ExtResource("3_ps1nv")
-text = "Build"
-
-[node name="Asteroid" type="PanelContainer" parent="SplitContainer"]
-layout_mode = 2
-theme = SubResource("Theme_jwkme")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid"]
-custom_minimum_size = Vector2(960, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
-
-[node name="Board Holder" type="HBoxContainer" parent="SplitContainer/Asteroid/ScrollContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SplitContainer/Asteroid"]
-layout_mode = 2
-
-[node name="ItemDisplay" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer"]
+[node name="ItemDisplay" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
@@ -84,14 +59,14 @@ size_flags_vertical = 0
 script = ExtResource("6_16ps5")
 item_display_row = ExtResource("4_ho6sb")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SplitContainer/Asteroid/VBoxContainer/ItemDisplay"]
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/VBoxContainer2/ItemDisplay"]
 layout_mode = 2
 
-[node name="ItemDisplayList" type="VBoxContainer" parent="SplitContainer/Asteroid/VBoxContainer/ItemDisplay/ScrollContainer"]
+[node name="ItemDisplayList" type="VBoxContainer" parent="HBoxContainer/LeftPanel/VBoxContainer/VBoxContainer2/ItemDisplay/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="DebugMenu" type="MarginContainer" parent="SplitContainer/Asteroid/VBoxContainer"]
+[node name="DebugMenu" type="MarginContainer" parent="HBoxContainer/LeftPanel/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
@@ -99,7 +74,25 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("6_r7jf0")
 
-[node name="CheatItems" parent="SplitContainer/Asteroid/VBoxContainer/DebugMenu" instance=ExtResource("6_hvno2")]
+[node name="CheatItems" parent="HBoxContainer/LeftPanel/VBoxContainer/DebugMenu" instance=ExtResource("6_hvno2")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="TopPanel" type="Panel" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Asteroid" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(1100, 900)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
+
+[node name="Board Holder" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/Asteroid"]
 layout_mode = 2
 
 [node name="GameState" type="Node" parent="."]
@@ -119,4 +112,4 @@ _spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
 spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
 
-[connection signal="add_items" from="SplitContainer/Asteroid/VBoxContainer/DebugMenu/CheatItems" to="SplitContainer/Asteroid/VBoxContainer/DebugMenu" method="_on_cheat_items_add_items"]
+[connection signal="add_items" from="HBoxContainer/LeftPanel/VBoxContainer/DebugMenu/CheatItems" to="HBoxContainer/LeftPanel/VBoxContainer/DebugMenu" method="_on_cheat_items_add_items"]
