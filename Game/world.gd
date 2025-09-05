@@ -17,7 +17,6 @@ var _building_on_cursor: BuildingResource
 var _in_build_mode: bool:
 	get:
 		return _building_on_cursor != null
-# var _building_tile_maps: Array[BuildingTileMap]
 
 @onready var _BoardHolder := %BoardHolder
 @onready var _GameState := %GameState
@@ -92,13 +91,6 @@ func generate_all_ores() -> void:
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			mine_layer.generate_ores(background_rock, player_ore_gen_data)
 
-func _hook_building_tile_map_signals():
-	for player_board in _player_boards.values():
-		for building_tile_map: BuildingTileMap in player_board.building_tile_maps:
-			building_tile_map.tile_hovered.connect(_on_tile_hovered)
-			building_tile_map.tile_pressed.connect(_on_tile_pressed)
-
-
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
 func set_up_game(server_world_seed: int) -> void:
@@ -109,7 +101,6 @@ func set_up_game(server_world_seed: int) -> void:
 		add_player_board(player_id)
 
 	generate_all_ores()
-	_hook_building_tile_map_signals()
 
 	game_ready.emit()
 	
@@ -137,10 +128,6 @@ func register_ready() -> void:
 	if num_players_ready >= total_num_players:
 		start_game()
 
-func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("ui_cancel"):
-		_enter_build_mode(null) # exit build mode
-
 ## Set the UI to the building mode and show the building cursor
 func _enter_build_mode(building: BuildingResource) ->void:
 	_building_on_cursor = building
@@ -156,7 +143,6 @@ func _can_build(building: BuildingResource) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
-	
 
 func _on_build_miner_button_pressed() -> void:
 	var miner_building: BuildingResource = preload("res://Game/data/buildings/miner.tres")
@@ -169,17 +155,78 @@ func _on_build_solar_button_pressed() -> void:
 	if _can_build(solar_building):
 		_enter_build_mode(solar_building)
 
-## signal emitted by BuildingTileMap
-func _on_tile_hovered(tile_map: BuildingTileMap, tile_map_position: Vector2i):
-	print("received tile_hovered(%s)" % [tile_map_position])
-	if _in_build_mode:
-		tile_map.move_ghost_building(tile_map_position, _building_on_cursor)
+## Store which tile on the many tilemaps is the cursor on
+class TileMapPosition:
+	## Which player's board are we on
+	var player_id: int
+	## Which index in the player board's building_tile_maps corresponds to the BuildingTileMap the cursor is on
+	var tile_map: BuildingTileMap
+	## Which tile are we on in that BuildingTileMap
+	var tile_position: Vector2i
 
-## signal emitted by BuildingTileMap
-func _on_tile_pressed(tile_map: BuildingTileMap, tile_map_position: Vector2i, mouse_button: MouseButton):
-	print("received tile_pressed(%s, %s)" % [tile_map_position, mouse_button])
+	func _init(pi, tm, tp):
+		player_id = pi
+		tile_map = tm
+		tile_position = tp
+
+enum MouseState {
+	HOVERING,
+	BUILDING,
+	DELETING,
+}
+
+func in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
+	if pos1 and pos2:
+		return pos1.player_id == pos2.player_id and pos1.tile_map == pos2.tile_map
+	else:
+		return false
+
+# default value is null
+var _mouse_tile_map_pos: TileMapPosition
+var _mouse_state := MouseState.HOVERING
+
+func _get_tile_map_pos() -> TileMapPosition:
+	for player_id in _player_ids:
+		var building_tile_maps = _player_boards[player_id].building_tile_maps
+		for building_tile_map in building_tile_maps:
+			if building_tile_map.mouse_inside_tile_map():
+				var tile_position = building_tile_map.get_mouse_tile_map_coords()
+				return TileMapPosition.new(player_id, building_tile_map, tile_position)
+	return null
+
+func _input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("ui_cancel"):
+		_enter_build_mode(null)
+		if _mouse_tile_map_pos:
+			_mouse_tile_map_pos.tile_map.clear_ghost_building()
+	elif Input.is_action_just_pressed("left_mouse_button"):
+		_mouse_state = MouseState.BUILDING
+	elif Input.is_action_just_pressed("right_mouse_button"):
+		_mouse_state = MouseState.DELETING
+	elif Input.is_action_just_released("either_mouse_button"):
+		_mouse_state = MouseState.HOVERING
+	
+	var new_mouse_tile_map_pos = _get_tile_map_pos()
+	var new_tile_map
+	var new_tile_pos
+	if new_mouse_tile_map_pos:
+		new_tile_map = new_mouse_tile_map_pos.tile_map
+		new_tile_pos = new_mouse_tile_map_pos.tile_position
+
+	# update ghost
 	if _in_build_mode:
-		if mouse_button == MOUSE_BUTTON_LEFT and _can_build(_building_on_cursor):
-			tile_map.place_building(tile_map_position, _building_on_cursor)
-		elif mouse_button == MOUSE_BUTTON_RIGHT:
-			tile_map.delete_building(tile_map_position)
+		if _mouse_tile_map_pos and not in_same_board(_mouse_tile_map_pos, new_mouse_tile_map_pos):
+			var old_tile_map = _mouse_tile_map_pos.tile_map
+			old_tile_map.clear_ghost_building()
+		if new_mouse_tile_map_pos:
+			new_tile_map.move_ghost_building(new_tile_pos, _building_on_cursor)
+
+	# place buildings
+	if new_mouse_tile_map_pos and _mouse_state != MouseState.HOVERING:
+		if _in_build_mode and _mouse_state == MouseState.BUILDING and _can_build(_building_on_cursor):
+			new_tile_map.place_building(new_tile_pos, _building_on_cursor)
+		if _mouse_state == MouseState.DELETING: # don't need to be in build mode to remove buildings
+			new_tile_map.delete_building(new_tile_pos)
+
+	# update position
+	_mouse_tile_map_pos = new_mouse_tile_map_pos

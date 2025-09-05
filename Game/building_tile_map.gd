@@ -11,11 +11,6 @@ class_name BuildingTileMap
 @onready var _BuildingTiles: TileMapLayer = %BuildingTiles
 @onready var _GhostBuildingTiles: TileMapLayer = %GhostBuildingTiles
 
-signal tile_pressed(tile_map: BuildingTileMap, tile_map_position: Vector2i, mouse_button: MouseButton)
-signal tile_hovered(tile_map: BuildingTileMap, tile_map_position: Vector2i)
-
-var _last_tile_position: Vector2i = Vector2i(-1, -1)
-var _mouse_button_used: MouseButton
 var _ghost_building_position: Vector2i = Vector2i(-1, -1)
 
 func _ready() -> void:
@@ -45,36 +40,11 @@ func place_building(pos: Vector2i, building: BuildingResource):
 func delete_building(pos: Vector2i):
 	_BuildingTiles.erase_cell(pos)
 
-func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("either_mouse_button"):
-		_last_tile_position = Vector2i(-1, -1)
-		if event is InputEventMouseButton:
-			_mouse_button_used = event.button_index
-
-	elif Input.is_action_just_released("either_mouse_button"):
-		# reset last tile position in case they stop dragging and start dragging on the same position
-		_last_tile_position = Vector2i(-1, -1)
-		_mouse_button_used = MOUSE_BUTTON_NONE
-
-	# check if the input is inside our bounding box, as this actually fires for every instance of this tilemap whether it is inside the bounding box or not
-	# the reason we don't use mouse_entered and mouse_exited signals is due to these signals not firing if the control moves and the mouse doesn't
+func mouse_inside_tile_map() -> bool:
 	var global_mouse_position = _BuildingTiles.get_global_mouse_position()
-	if get_global_rect().has_point(global_mouse_position):
-		# convert the mouse position to the coordinates inside the tilemap
-		var local_mouse_position = _BuildingTiles.to_local(global_mouse_position)
-		var tile_pos :=_BuildingTiles.local_to_map(local_mouse_position)
-		# only send input events when the tile position under the cursor changes
-		if _last_tile_position != tile_pos:
-			_last_tile_position = tile_pos
-			# the first event is a mousebutton event, telling us what button was clicked
-			# following events are mousemotion events, which don't tell us what button is being clicked
+	return get_global_rect().has_point(global_mouse_position)
 
-			tile_hovered.emit(self, tile_pos)
-			if _mouse_button_used != MOUSE_BUTTON_NONE: 
-				tile_pressed.emit(self, tile_pos, _mouse_button_used)
-	else:
-		# mouse left the area, so reset where we last saw mouse
-		_last_tile_position = Vector2i(-1, -1)
-		# also clear the ghost, since the mouse clearly isn't here anymore
-		clear_ghost_building()
-		
+func get_mouse_tile_map_coords() -> Vector2i:
+	var global_mouse_position = _BuildingTiles.get_global_mouse_position()
+	var local_mouse_position = _BuildingTiles.to_local(global_mouse_position)
+	return _BuildingTiles.local_to_map(local_mouse_position)
