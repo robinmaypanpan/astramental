@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb85240ld5ija"]
 
 [ext_resource type="Script" uid="uid://bukeo1unf55qx" path="res://Game/building_tile_map.gd" id="1_2nrj3"]
-[ext_resource type="TileSet" uid="uid://b6a6bt6p5wqq6" path="res://Assets/ores_tileset.tres" id="1_h8p65"]
+[ext_resource type="TileSet" uid="uid://dqmifr1my7c4r" path="res://Assets/ores_tileset.tres" id="1_h8p65"]
 [ext_resource type="TileSet" uid="uid://itpjjjn8lqd7" path="res://Assets/buildings_tileset.tres" id="2_2nrj3"]
 
 [node name="BuildingTileMap" type="MarginContainer"]
