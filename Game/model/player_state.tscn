@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b47vu2y258g5v"]
 
-[ext_resource type="Script" uid="uid://bynttyeyjf7i5" path="res://Game/data/player_state.gd" id="1_hlkx3"]
+[ext_resource type="Script" uid="uid://bynttyeyjf7i5" path="res://Game/model/player_state.gd" id="1_hlkx3"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_iq7yb"]
 properties/0/path = NodePath(".:money")

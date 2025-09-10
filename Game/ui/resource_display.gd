@@ -2,11 +2,11 @@ class_name ResourceDisplay extends Control
 
 ## Setup the game
 func setup_game() -> void:
-	update_counts()
+	update_all_item_counts()
 
 ## An instance of a single display row for a single item.
 @export var item_display_row: PackedScene
-@export var _PlayerStateContainer: Node 
+@export var _Model: GameModel
 
 @onready var _item_display_list := %ItemDisplayList
 
@@ -21,11 +21,17 @@ func _ready() -> void:
 		_item_display_list.add_child(new_row)
 		# add new item display row to the dictionary
 		_item_type_to_row_dict[type] = new_row
+		
+	_Model.item_count_changed.connect(_update_item_count)
+
+## Updates the nubmer of items located currently 
+func _update_item_count(player_id: int, type: Item.Type, new_count: int ) -> void:
+	_item_type_to_row_dict[type].update_count(new_count)
 
 ## Update the counts of all items to their current resource amounts. Must be called manually for the resource numbers to update.
-func update_counts() -> void:
-	var my_player_number := ConnectionSystem.get_player(multiplayer.get_unique_id()).index
-	var my_player_state: PlayerState = _PlayerStateContainer.get_child(my_player_number - 1)
+func update_all_item_counts() -> void:
 	for type in Item.Type.values():
-		var my_item_count := my_player_state.items[type]
-		_item_type_to_row_dict[type].update_count(my_item_count)
+		var player_id: int = multiplayer.get_unique_id()
+		var item_count: int = _Model.get_item_count(player_id, type)
+		
+		_item_type_to_row_dict[type].update_count(item_count)

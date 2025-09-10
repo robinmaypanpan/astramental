@@ -9,6 +9,12 @@ extends Control
 @export var SkyHeight: int
 @export var TileMapScale: int
 
+@onready var _GameState := %GameStates
+@onready var _ResourceDisplay := %ResourceDisplay
+@onready var _Asteroid := %Asteroid
+@onready var _BuildMenu := %BuildMenu
+@onready var _Model := %Model
+
 var num_players_ready := 0
 var world_seed: int
 var _player_boards: Dictionary[int, Node]
@@ -18,12 +24,6 @@ var _in_build_mode: bool:
 	get:
 		return _building_on_cursor != null
 
-@onready var _GameState := %GameState
-@onready var _PlayerStates := %PlayerStates
-@onready var _PlayerSpawner := %PlayerSpawner
-@onready var _ResourceDisplay := %ResourceDisplay
-@onready var _Asteroid := %Asteroid
-@onready var _BuildMenu := %BuildMenu
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
@@ -115,10 +115,7 @@ func set_up_game(server_world_seed: int) -> void:
 func start_game():
 	assert(multiplayer.is_server())
 	
-	var player_ids = ConnectionSystem.get_player_id_list()
-
-	for player_id in player_ids:
-		_PlayerStates.add_state(player_id)
+	_Model.start_game()
 	
 	set_up_game.rpc(randi())
 

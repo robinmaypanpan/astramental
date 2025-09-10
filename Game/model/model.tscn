@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://doi2igdy4h0gh"]
+
+[ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
+[ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/model/game_state.gd" id="2_ahubk"]
+[ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/model/player_states.gd" id="3_6exh1"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_e5nin"]
+properties/0/path = NodePath("GameState:example_int")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Model" type="Node"]
+script = ExtResource("1_xc5wf")
+
+[node name="GameState" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_ahubk")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_e5nin")
+
+[node name="PlayerStates" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_6exh1")
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+unique_name_in_owner = true
+spawn_path = NodePath("../PlayerStates")
+spawn_limit = 3

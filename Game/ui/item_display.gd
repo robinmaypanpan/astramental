@@ -4,7 +4,7 @@ extends MarginContainer
 @export var item_display_row: PackedScene
 
 @onready var _item_display_list := %ItemDisplayList
-@onready var _player_states := %PlayerStates
+@onready var _Model := %Model
 
 ## Mapping from item type -> instantiated item display row.
 var _item_type_to_row_dict: Dictionary[Item.Type, Node]
@@ -20,8 +20,7 @@ func _ready() -> void:
 
 ## Update the counts of all items to their current resource amounts. Must be called manually for the resource numbers to update.
 func update_counts() -> void:
-	var my_player_number := ConnectionSystem.get_player(multiplayer.get_unique_id()).index
-	var my_player_state: PlayerState = _player_states.get_child(my_player_number - 1)
+	var player_id: int = multiplayer.get_unique_id()
 	for type in Item.Type.values():
-		var my_item_count := my_player_state.items[type]
+		var my_item_count: int = _Model.get_item_count(player_id, type)
 		_item_type_to_row_dict[type].update_count(my_item_count)
