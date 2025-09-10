@@ -1,21 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=11 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
-[ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/data/game_state.gd" id="3_jwkme"]
 [ext_resource type="PackedScene" uid="uid://drw5syeijuvky" path="res://Game/mine_layer.tscn" id="4_16ps5"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="4_ho6sb"]
-[ext_resource type="PackedScene" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
-[ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/player_states.gd" id="6_4ncwh"]
-[ext_resource type="PackedScene" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
-[ext_resource type="PackedScene" path="res://Game/asteroid.tscn" id="9_71s8c"]
-[ext_resource type="PackedScene" path="res://Game/ui/build_menu.tscn" id="9_g2b07"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jwkme"]
-properties/0/path = NodePath("GameState:example_int")
-properties/0/spawn = true
-properties/0/replication_mode = 1
+[ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
+[ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
+[ext_resource type="PackedScene" uid="uid://c45g1mdwk11yt" path="res://Game/asteroid.tscn" id="9_71s8c"]
+[ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/build_menu.tscn" id="9_g2b07"]
+[ext_resource type="PackedScene" uid="uid://doi2igdy4h0gh" path="res://Game/model/model.tscn" id="10_16ps5"]
 
 [node name="World" type="Control"]
 layout_mode = 3
@@ -51,15 +45,15 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_pecy7")
 
-[node name="ResourceDisplay" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_PlayerStateContainer") instance=ExtResource("5_r7jf0")]
+[node name="ResourceDisplay" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_Model") instance=ExtResource("5_r7jf0")]
 unique_name_in_owner = true
 layout_mode = 2
 item_display_row = ExtResource("4_ho6sb")
-_PlayerStateContainer = NodePath("../../../../PlayerStates")
+_Model = NodePath("../../../../Model")
 
-[node name="DebugMenuPanel" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_PlayerStates", "_World", "_ResourceDisplay", "_Asteroid") instance=ExtResource("6_16ps5")]
+[node name="DebugMenuPanel" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_Model", "_World", "_ResourceDisplay", "_Asteroid") instance=ExtResource("6_16ps5")]
 layout_mode = 2
-_PlayerStates = NodePath("../../../../PlayerStates")
+_Model = NodePath("../../../../Model")
 _World = NodePath("../../../..")
 _ResourceDisplay = NodePath("../ResourceDisplay")
 _Asteroid = NodePath("../../../VBoxContainer/Asteroid")
@@ -80,19 +74,5 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="GameState" type="Node" parent="."]
+[node name="Model" parent="." instance=ExtResource("10_16ps5")]
 unique_name_in_owner = true
-script = ExtResource("3_jwkme")
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_jwkme")
-
-[node name="PlayerStates" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("6_4ncwh")
-
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-unique_name_in_owner = true
-_spawnable_scenes = PackedStringArray("uid://b47vu2y258g5v")
-spawn_path = NodePath("../PlayerStates")
-spawn_limit = 3

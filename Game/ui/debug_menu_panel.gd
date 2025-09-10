@@ -1,6 +1,6 @@
 extends Control
 
-@export var _PlayerStates : Node
+@export var _Model: GameModel
 @export var _World : Node
 @export var _ResourceDisplay : ResourceDisplay
 @export var _Asteroid : Asteroid
@@ -10,8 +10,8 @@ extends Control
 ## Actually add items to the given player
 func _on_cheat_items_add_items(item_type: Item.Type, amount: int) -> void:
 	print("received signal add_items(%s, %s)" % [item_type, amount])
-	_PlayerStates.add_item(item_type, amount)
-	_ResourceDisplay.update_counts()
+	var player_id: int = multiplayer.get_unique_id()
+	_Model.increase_item_count(player_id, item_type, amount)
 
 ## Reset and regenerate the player boards with a new random seed
 @rpc("any_peer", "call_local", "reliable")
