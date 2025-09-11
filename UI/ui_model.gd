@@ -13,3 +13,7 @@ var in_build_mode: bool:
 
 # subscribed to by Cursor
 signal building_on_cursor_changed()
+
+var mouse_state := MouseState.HOVERING
+# default value is null
+var mouse_tile_map_pos: TileMapPosition
