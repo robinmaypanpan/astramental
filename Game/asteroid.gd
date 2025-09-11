@@ -5,12 +5,6 @@ class_name Asteroid extends Control
 @export var Model: GameModel
 @export var PlayerBoard : PackedScene
 
-# game board properties
-@export var num_cols: int = 10
-@export var layer_thickness: int = 7
-@export var sky_height: int = 300
-@export var tile_map_scale: int = 2
-
 var _player_boards: Dictionary[int, Node]
 
 func _register_player_board(player_id: int, player_board: Node) -> void:
@@ -27,10 +21,6 @@ func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
 
 	board.owner_id = player_id
-	board.NumCols = num_cols
-	board.LayerThickness = layer_thickness
-	board.SkyHeight = sky_height
-	board.TileMapScale = tile_map_scale
 
 	_BoardHolder.add_child(board)
 	_register_player_board(player_id, board)
