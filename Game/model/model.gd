@@ -9,8 +9,7 @@ class_name GameModel extends Node
 
 var world_seed: int
 var player_ids: Array[int]
-var player_boards: Dictionary[int, Node]
-
+var _player_boards: Dictionary[int, Node]
 
 func start_game() -> void:
 	_PlayerStates.start_game()
@@ -49,3 +48,9 @@ func can_build(building: BuildingResource) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
+
+func register_player_board(player_id: int, player_board: Node) -> void:
+	_player_boards[player_id] = player_board
+
+func get_player_board(player_id: int) -> Node:
+	return _player_boards[player_id]
