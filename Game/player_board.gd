@@ -50,11 +50,6 @@ func _ready() -> void:
 		for y in range(LayerThickness):
 			_FactoryAndMineTiles.set_background_tile(x, y, white_tile_atlas_coordinates)
 
-## Given an instantiated mine layer, add it as a child to this board.
-func add_mine_layer(mine_layer: Node) -> void:
-	_VerticalListContainer.add_child(mine_layer)
-	building_tile_maps.append(mine_layer.MineTiles)
-
 ## Defines a circle filled with the specified ore.
 class OreCircle:
 	var ore: Types.Ore

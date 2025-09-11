@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=10 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
-[ext_resource type="PackedScene" uid="uid://drw5syeijuvky" path="res://Game/mine_layer.tscn" id="4_16ps5"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="4_ho6sb"]
 [ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
 [ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
@@ -69,7 +68,6 @@ unique_name_in_owner = true
 layout_mode = 2
 Model = NodePath("../../../Model")
 PlayerBoard = ExtResource("2_3kekb")
-MineLayer = ExtResource("4_16ps5")
 
 [node name="Model" parent="." instance=ExtResource("10_16ps5")]
 unique_name_in_owner = true

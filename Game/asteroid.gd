@@ -4,7 +4,6 @@ class_name Asteroid extends Control
 
 @export var Model: GameModel
 @export var PlayerBoard : PackedScene
-@export var MineLayer : PackedScene
 
 # game board properties
 @export var num_cols: int = 10
@@ -64,12 +63,6 @@ func generate_all_ores() -> void:
 		
 		# actually fill in the ore for each player
 		for player_id in Model.player_ids:
-			# var mine_layer = MineLayer.instantiate()
-			# mine_layer.num_rows = layer_thickness
-			# mine_layer.num_cols = num_cols
-			# mine_layer.tile_map_scale = tile_map_scale
-			# Model.player_boards[player_id].add_mine_layer(mine_layer)
-			
 			var player_board = Model.player_boards[player_id]
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
