@@ -11,6 +11,14 @@ class_name Asteroid extends Control
 @export var sky_height: int = 300
 @export var tile_map_scale: int = 2
 
+var _player_boards: Dictionary[int, Node]
+
+func register_player_board(player_id: int, player_board: Node) -> void:
+	_player_boards[player_id] = player_board
+
+func get_player_board(player_id: int) -> Node:
+	return _player_boards[player_id]
+
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
@@ -22,7 +30,7 @@ func add_player_board(player_id: int) -> void:
 	board.TileMapScale = tile_map_scale
 
 	_BoardHolder.add_child(board)
-	Model.register_player_board(player_id, board)
+	register_player_board(player_id, board)
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
 func _init_ores_for_each_player() -> Dictionary[int, Array]:
@@ -60,7 +68,7 @@ func generate_all_ores() -> void:
 		
 		# actually fill in the ore for each player
 		for player_id in Model.player_ids:
-			var player_board = Model.get_player_board(player_id)
+			var player_board = get_player_board(player_id)
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
@@ -79,7 +87,7 @@ func in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 
 func _get_tile_map_pos() -> TileMapPosition:
 	for player_id in Model.player_ids:
-		var building_tile_maps = Model.get_player_board(player_id).building_tile_maps
+		var building_tile_maps = get_player_board(player_id).building_tile_maps
 		for building_tile_map in building_tile_maps:
 			if building_tile_map.mouse_inside_tile_map():
 				var tile_position = building_tile_map.get_mouse_tile_map_coords()
