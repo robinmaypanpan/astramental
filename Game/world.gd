@@ -6,11 +6,6 @@ extends Control
 @onready var _Model := %Model
 
 var num_players_ready := 0
-var _building_on_cursor: BuildingResource
-var _in_build_mode: bool:
-	get:
-		return _building_on_cursor != null
-
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
@@ -60,12 +55,8 @@ func register_ready() -> void:
 
 ## Set the UI to the building mode and show the building cursor
 func _enter_build_mode(building: BuildingResource) ->void:
-	_building_on_cursor = building
-	var cursor = UiUtils.get_cursor()
-	if building != null:
-		cursor.set_building_icon(building.icon)
-	else:
-		cursor.set_building_icon(null)
+	# cursor will automatically update when building_on_cursor is modified
+	UiModel.building_on_cursor = building
 	
 
 ## Returns true if we have the resources necessary to build this building
@@ -123,17 +114,17 @@ func _input(_event: InputEvent) -> void:
 		new_tile_pos = new_mouse_tile_map_pos.tile_position
 
 	# update ghost
-	if _in_build_mode:
+	if UiModel.in_build_mode:
 		if _mouse_tile_map_pos and not in_same_board(_mouse_tile_map_pos, new_mouse_tile_map_pos):
 			var old_tile_map = _mouse_tile_map_pos.tile_map
 			old_tile_map.clear_ghost_building()
 		if new_mouse_tile_map_pos:
-			new_tile_map.move_ghost_building(new_tile_pos, _building_on_cursor)
+			new_tile_map.move_ghost_building(new_tile_pos, UiModel.building_on_cursor)
 
 	# place buildings
 	if new_mouse_tile_map_pos and _mouse_state != MouseState.HOVERING:
-		if _in_build_mode and _mouse_state == MouseState.BUILDING and _can_build(_building_on_cursor):
-			new_tile_map.place_building(new_tile_pos, _building_on_cursor)
+		if UiModel.in_build_mode and _mouse_state == MouseState.BUILDING and _can_build(UiModel.building_on_cursor):
+			new_tile_map.place_building(new_tile_pos, UiModel.building_on_cursor)
 		if _mouse_state == MouseState.DELETING: # don't need to be in build mode to remove buildings
 			new_tile_map.delete_building(new_tile_pos)
 

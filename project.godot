@@ -22,6 +22,7 @@ Globals="*res://globals.gd"
 ConnectionSystem="*res://Systems/connection.gd"
 Items="*res://Game/items.tscn"
 Ores="*res://Game/ores.tscn"
+UiModel="*res://UI/ui_model.gd"
 
 [display]
 
