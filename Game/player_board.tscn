@@ -48,12 +48,12 @@ grow_vertical = 2
 text = "name label"
 horizontal_alignment = 1
 
-[node name="FactoryFloor" type="MarginContainer" parent="VerticalListContainer"]
+[node name="FactoryAndMine" type="MarginContainer" parent="VerticalListContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="FactoryTiles" parent="VerticalListContainer/FactoryFloor" instance=ExtResource("3_7uxwk")]
+[node name="FactoryAndMineTiles" parent="VerticalListContainer/FactoryAndMine" instance=ExtResource("3_7uxwk")]
 unique_name_in_owner = true
 layout_mode = 2
