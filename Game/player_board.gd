@@ -2,15 +2,13 @@ extends Control
 
 @onready var _VerticalListContainer := %VerticalListContainer
 @onready var _Sky := %Sky
-@onready var _FactoryAndMine := %FactoryAndMine
 @onready var _PlayerNameLabel := %PlayerNameLabel
-@onready var _FactoryAndMineTiles: BuildingTileMap = %FactoryAndMineTiles
+@onready var _FactoryAndMine := %FactoryAndMine
+@onready var PlayerTileMap: BuildingTileMap = %PlayerTileMap
 
 # multiplayer properties
 var owner_id : int
 var player: ConnectionSystem.NetworkPlayer
-
-var building_tile_maps: Array[BuildingTileMap]
 
 # game board properties
 @export var NumCols : int = 30
@@ -24,7 +22,6 @@ func _ready() -> void:
 		ConnectionSystem.host_server()
 		
 	player = ConnectionSystem.get_player(owner_id)
-	building_tile_maps = [_FactoryAndMineTiles]
 		
 	print("doing ready for %s (%s)" % [player.name, owner_id])
 
@@ -41,14 +38,14 @@ func _ready() -> void:
 	_PlayerNameLabel.text = "%s\n(%s)" % [player.name, player.index]
 
 	_FactoryAndMine.custom_minimum_size = Vector2i(0, layer_height_px * num_layers)
-	_FactoryAndMineTiles.tile_map_scale = TileMapScale
-	_FactoryAndMineTiles.layer_thickness = LayerThickness
+	PlayerTileMap.tile_map_scale = TileMapScale
+	PlayerTileMap.layer_thickness = LayerThickness
 
 	# Set up factory tiles to be all white tiles
 	var white_tile_atlas_coordinates = Vector2i(0, 0)
 	for x in range(NumCols):
 		for y in range(LayerThickness):
-			_FactoryAndMineTiles.set_background_tile(x, y, white_tile_atlas_coordinates)
+			PlayerTileMap.set_background_tile(x, y, white_tile_atlas_coordinates)
 
 ## Defines a circle filled with the specified ore.
 class OreCircle:
@@ -64,7 +61,7 @@ class OreCircle:
 ## Set a tile in the tilemap to the specified ore.
 func _set_ore_tile(x: int, y: int, ore: Types.Ore) -> void:
 	var atlas_coordinates := Ores.get_atlas_coordinates(ore)
-	_FactoryAndMineTiles.set_background_tile(x, y, atlas_coordinates)
+	PlayerTileMap.set_background_tile(x, y, atlas_coordinates)
 
 ## Given ore generation data, generate the ores for the given layer number by filling out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num: int) -> void:

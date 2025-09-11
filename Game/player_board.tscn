@@ -54,6 +54,6 @@ custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="FactoryAndMineTiles" parent="VerticalListContainer/FactoryAndMine" instance=ExtResource("3_7uxwk")]
+[node name="PlayerTileMap" parent="VerticalListContainer/FactoryAndMine" instance=ExtResource("3_7uxwk")]
 unique_name_in_owner = true
 layout_mode = 2

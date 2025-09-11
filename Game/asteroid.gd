@@ -13,11 +13,14 @@ class_name Asteroid extends Control
 
 var _player_boards: Dictionary[int, Node]
 
-func register_player_board(player_id: int, player_board: Node) -> void:
+func _register_player_board(player_id: int, player_board: Node) -> void:
 	_player_boards[player_id] = player_board
 
-func get_player_board(player_id: int) -> Node:
+func _get_player_board(player_id: int) -> Node:
 	return _player_boards[player_id]
+
+func _get_tile_map(player_id: int) -> BuildingTileMap:
+	return _get_player_board(player_id).PlayerTileMap
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
@@ -30,7 +33,7 @@ func add_player_board(player_id: int) -> void:
 	board.TileMapScale = tile_map_scale
 
 	_BoardHolder.add_child(board)
-	register_player_board(player_id, board)
+	_register_player_board(player_id, board)
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
 func _init_ores_for_each_player() -> Dictionary[int, Array]:
@@ -68,7 +71,7 @@ func generate_all_ores() -> void:
 		
 		# actually fill in the ore for each player
 		for player_id in Model.player_ids:
-			var player_board = get_player_board(player_id)
+			var player_board = _get_player_board(player_id)
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
@@ -80,22 +83,28 @@ func generate_player_boards() -> void:
 
 func in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 	if pos1 and pos2:
-		return pos1.tile_map == pos2.tile_map
+		return pos1.player_id == pos2.player_id
 	else:
 		return false
 
-
 func _get_tile_map_pos() -> TileMapPosition:
 	for player_id in Model.player_ids:
-		var building_tile_maps = get_player_board(player_id).building_tile_maps
-		for building_tile_map in building_tile_maps:
-			if building_tile_map.mouse_inside_tile_map():
-				var tile_position = building_tile_map.get_mouse_tile_map_coords()
-				return TileMapPosition.new(building_tile_map, tile_position)
+		var tile_map = _get_tile_map(player_id)
+		if tile_map.mouse_inside_tile_map():
+			var tile_position = tile_map.get_mouse_tile_map_coords()
+			return TileMapPosition.new(player_id, tile_position)
 	return null
 
+func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
+	var player_id = pos.player_id
+	return _get_tile_map(player_id)
+
 func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("left_mouse_button"):
+	if Input.is_action_just_pressed("ui_cancel"):
+		UiModel.building_on_cursor = null # exit build mode
+		if UiModel.mouse_tile_map_pos:
+			_get_tile_map_from_pos(UiModel.mouse_tile_map_pos).clear_ghost_building()
+	elif Input.is_action_just_pressed("left_mouse_button"):
 		UiModel.mouse_state = MouseState.BUILDING
 	elif Input.is_action_just_pressed("right_mouse_button"):
 		UiModel.mouse_state = MouseState.DELETING
@@ -106,13 +115,13 @@ func _input(_event: InputEvent) -> void:
 	var new_tile_map
 	var new_tile_pos
 	if new_mouse_tile_map_pos:
-		new_tile_map = new_mouse_tile_map_pos.tile_map
+		new_tile_map = _get_tile_map_from_pos(new_mouse_tile_map_pos)
 		new_tile_pos = new_mouse_tile_map_pos.tile_position
 
 	# update ghost
 	if UiModel.in_build_mode:
 		if UiModel.mouse_tile_map_pos and not in_same_board(UiModel.mouse_tile_map_pos, new_mouse_tile_map_pos):
-			var old_tile_map = UiModel.mouse_tile_map_pos.tile_map
+			var old_tile_map = _get_tile_map_from_pos(UiModel.mouse_tile_map_pos)
 			old_tile_map.clear_ghost_building()
 		if new_mouse_tile_map_pos:
 			new_tile_map.move_ghost_building(new_tile_pos, UiModel.building_on_cursor)
