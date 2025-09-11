@@ -29,7 +29,7 @@ func _ready() -> void:
 	var board_width_px := tile_size * NumCols
 	var layer_height_px := tile_size * LayerThickness
 	# 1 factory layer + x mine layers
-	var num_layers := Ores.get_num_mine_layers() + 1
+	var num_layers := WorldGenModel.get_num_mine_layers() + 1
 
 	custom_minimum_size = Vector2i(board_width_px, 0)
 	_VerticalListContainer.custom_minimum_size = Vector2i(board_width_px, 0)

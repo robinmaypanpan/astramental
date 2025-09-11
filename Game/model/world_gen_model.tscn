@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://l3w0q8i0r8yn"]
+[gd_scene load_steps=9 format=3 uid="uid://l3w0q8i0r8yn"]
 
 [ext_resource type="Script" uid="uid://d13o6g1uuh65x" path="res://Game/model/world_gen_model.gd" id="1_xgqpi"]
 [ext_resource type="Script" uid="uid://bm22xfid7upsy" path="res://Game/data/layer_generation_resource.gd" id="9_2wguw"]
