@@ -26,7 +26,7 @@ func _ready() -> void:
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
 func set_up_game(server_world_seed: int) -> void:
-	_Model.world_seed = server_world_seed
+	_Model.initialize_both_player_variables(server_world_seed)
 
 	_Asteroid.generate_player_boards()
 

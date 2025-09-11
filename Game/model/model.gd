@@ -13,9 +13,13 @@ var player_boards: Dictionary[int, Node]
 
 
 func start_game() -> void:
-	player_ids = ConnectionSystem.get_player_id_list()
 	_PlayerStates.start_game()
-	
+
+## Initialize world_seed and player_ids for both players, when it is called in set_up_game rpc in World
+func initialize_both_player_variables(server_world_seed: int) -> void:
+	world_seed = server_world_seed
+	player_ids = ConnectionSystem.get_player_id_list()
+
 ## When an item quantity is changed, this signal fires
 signal item_count_changed(player_id: int, type: Item.Type, new_count: int )
 
