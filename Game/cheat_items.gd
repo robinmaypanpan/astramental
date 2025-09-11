@@ -5,7 +5,7 @@ extends MarginContainer
 @onready var _AmountText: LineEdit = %AmountText
 
 ## Emitted when the cheat items GUI tries to add items to the player
-signal add_items(item_type: Item.Type, amount: int)
+signal add_items(item_type: Types.Item, amount: int)
 
 ## The amount of items to add to the player, corresponds to the text in AmountText
 var amount: int:
@@ -14,7 +14,7 @@ var amount: int:
 		_update_amount_text()
 
 func _ready() -> void:
-	for item_type in Item.Type.values():
+	for item_type in Types.Item.values():
 		var item_icon := Items.get_info(item_type).icon
 		_ItemTypeSelect.add_icon_item(item_icon, "")
 	amount = 1
@@ -46,6 +46,6 @@ func _on_amount_text_text_changed(new_text: String) -> void:
 
 
 func _on_add_items_button_pressed() -> void:
-	var item_type := _ItemTypeSelect.selected as Item.Type
+	var item_type := _ItemTypeSelect.selected as Types.Item
 	print("emitting add_items(%s, %s)" % [item_type, amount])
 	add_items.emit(item_type, amount)

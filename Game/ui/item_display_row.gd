@@ -3,7 +3,7 @@ extends MarginContainer
 @onready var _icon := %Icon
 @onready var _count_text := %CountText
 
-@export var item_type: Item.Type
+@export var item_type: Types.Item
 
 var _item_count: float = 0.0
 

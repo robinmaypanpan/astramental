@@ -8,7 +8,7 @@ extends Control
 @onready var _SeedText := %SeedText
 
 ## Actually add items to the given player
-func _on_cheat_items_add_items(item_type: Item.Type, amount: int) -> void:
+func _on_cheat_items_add_items(item_type: Types.Item, amount: int) -> void:
 	print("received signal add_items(%s, %s)" % [item_type, amount])
 	var player_id: int = multiplayer.get_unique_id()
 	_Model.increase_item_count(player_id, item_type, amount)
