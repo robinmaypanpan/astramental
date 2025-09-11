@@ -13,4 +13,3 @@ script = ExtResource("1_17twj")
 [node name="MineTiles" parent="." instance=ExtResource("2_17twj")]
 unique_name_in_owner = true
 layout_mode = 2
-layer_type = 1

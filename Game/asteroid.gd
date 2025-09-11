@@ -40,7 +40,8 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 func generate_all_ores() -> void:
 	seed(Model.world_seed)
 
-	for layer_num in range(Ores.get_num_mine_layers()):
+	# layer 0 is factory layer. layer 1 is 1st mine layer
+	for layer_num in range(1, Ores.get_num_mine_layers() + 1):
 		var layer_gen_data := Ores.get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
 		var ores_for_each_player := _init_ores_for_each_player()
@@ -61,16 +62,17 @@ func generate_all_ores() -> void:
 				if players_not_chosen_yet.size() == 0:
 					players_not_chosen_yet = Model.player_ids.duplicate()
 		
-		# actually generate and add the ore boards to each player
+		# actually fill in the ore for each player
 		for player_id in Model.player_ids:
-			var mine_layer = MineLayer.instantiate()
-			mine_layer.num_rows = layer_thickness
-			mine_layer.num_cols = num_cols
-			mine_layer.tile_map_scale = tile_map_scale
-			Model.player_boards[player_id].add_mine_layer(mine_layer)
-
+			# var mine_layer = MineLayer.instantiate()
+			# mine_layer.num_rows = layer_thickness
+			# mine_layer.num_cols = num_cols
+			# mine_layer.tile_map_scale = tile_map_scale
+			# Model.player_boards[player_id].add_mine_layer(mine_layer)
+			
+			var player_board = Model.player_boards[player_id]
 			var player_ore_gen_data := ores_for_each_player[player_id]
-			mine_layer.generate_ores(background_rock, player_ore_gen_data)
+			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
 func generate_player_boards() -> void:
 	for player_id in Model.player_ids:
