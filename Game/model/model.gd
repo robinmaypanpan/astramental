@@ -7,7 +7,13 @@ class_name GameModel extends Node
 @onready var _PlayerSpawner := %PlayerSpawner
 @onready var _GameState := %GameState
 
+var world_seed: int
+var player_ids: Array[int]
+var player_boards: Dictionary[int, Node]
+
+
 func start_game() -> void:
+	player_ids = ConnectionSystem.get_player_id_list()
 	_PlayerStates.start_game()
 	
 ## When an item quantity is changed, this signal fires
