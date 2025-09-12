@@ -32,14 +32,14 @@ func get_mine_layer_start_y() -> int:
 func get_all_layers_end_y() -> int:
 	return layer_thickness * get_total_num_layers()
 
-## Get the layer number associated with the position. Index 0 is top/factory layer, index 1 is 1st mine layer, etc.
-func get_layer_num(pos: Vector2i) -> int:
+## Get the layer number associated with the y-coordinate. Index 0 is top/factory layer, index 1 is 1st mine layer, etc.
+func get_layer_num(y: int) -> int:
 	@warning_ignore("integer_division")
-	return pos.y / layer_thickness
+	return y / layer_thickness
 
-## Get the layer type (mine layer or factory layer) associated with the position.
-func get_layer_type(pos: Vector2i) -> Types.Layer:
-	if get_layer_num(pos) > 0:
+## Get the layer type (mine layer or factory layer) associated with the y-coordinate.
+func get_layer_type(y: int) -> Types.Layer:
+	if get_layer_num(y) > 0:
 		return Types.Layer.MINE
 	else:
 		return Types.Layer.FACTORY
