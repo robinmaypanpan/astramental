@@ -2,16 +2,13 @@ class_name Asteroid
 extends Control
 ## Contains all player board logic.
 
-@export var PlayerBoard : PackedScene
-
 var _player_boards: Dictionary[int, Node]
 
+@export var PlayerBoard : PackedScene
 @onready var _BoardHolder := %BoardHolder
 
-func _process(_delta: float) -> void:
-	if AsteroidViewModel.ores_layout_dirty:
-		AsteroidViewModel.ores_layout_dirty = false
-		_update_ore_tilemaps()
+func _ready() -> void:
+	AsteroidViewModel.update_ore_tilemaps.connect(_on_update_ore_tilemaps)
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
@@ -134,7 +131,7 @@ func _input(_event: InputEvent) -> void:
 	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
 
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
-func _update_ore_tilemaps() -> void:
+func _on_update_ore_tilemaps() -> void:
 	for player_board in _player_boards.values():
 		var tile_map: BuildingTileMap = player_board.PlayerTileMap
 		var player_id: int = player_board.owner_id
