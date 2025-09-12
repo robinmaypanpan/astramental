@@ -1,7 +1,7 @@
 class_name Cursor
 extends SubViewport
 
-@onready var _BuildingIcon := %BuildingIcon
+@onready var build_icon := %BuildingIcon
 
 
 func _ready() -> void:
@@ -18,7 +18,7 @@ func update_building_icon():
 	var building = AsteroidViewModel.building_on_cursor
 	if building:
 		# can't access building icon if building is null
-		_BuildingIcon.texture = building.icon
+		build_icon.texture = building.icon
 	else:
-		_BuildingIcon.texture = null
+		build_icon.texture = null
 	_update_cursor_image()

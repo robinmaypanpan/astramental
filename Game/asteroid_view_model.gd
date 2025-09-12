@@ -1,6 +1,6 @@
 extends Node
 
-# subscribed to by Cursor
+# subscribed to by cursor
 signal building_on_cursor_changed()
 # subscribed to by asteroid
 signal update_ore_tilemaps()
