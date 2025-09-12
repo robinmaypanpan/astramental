@@ -6,7 +6,6 @@ func setup_game() -> void:
 
 ## An instance of a single display row for a single item.
 @export var item_display_row: PackedScene
-@export var _Model: GameModel
 
 @onready var _item_display_list := %ItemDisplayList
 
@@ -22,7 +21,7 @@ func _ready() -> void:
 		# add new item display row to the dictionary
 		_item_type_to_row_dict[type] = new_row
 		
-	_Model.item_count_changed.connect(_update_item_count)
+	Model.item_count_changed.connect(_update_item_count)
 
 ## Updates the nubmer of items located currently 
 func _update_item_count(player_id: int, type: Types.Item, new_count: int ) -> void:
@@ -32,6 +31,6 @@ func _update_item_count(player_id: int, type: Types.Item, new_count: int ) -> vo
 func update_all_item_counts() -> void:
 	for type in Types.Item.values():
 		var player_id: int = multiplayer.get_unique_id()
-		var item_count: int = _Model.get_item_count(player_id, type)
+		var item_count: int = Model.get_item_count(player_id, type)
 		
 		_item_type_to_row_dict[type].update_count(item_count)

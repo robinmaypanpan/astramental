@@ -3,7 +3,6 @@ extends Control
 @onready var _ResourceDisplay := %ResourceDisplay
 @onready var _Asteroid := %Asteroid
 @onready var _BuildMenu := %BuildMenu
-@onready var _Model := %Model
 
 var num_players_ready := 0
 
@@ -26,7 +25,7 @@ func _ready() -> void:
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
 func set_up_game(server_world_seed: int) -> void:
-	_Model.initialize_both_player_variables(server_world_seed)
+	Model.initialize_both_player_variables(server_world_seed)
 
 	_Asteroid.generate_player_boards()
 
@@ -38,7 +37,7 @@ func set_up_game(server_world_seed: int) -> void:
 func start_game():
 	assert(multiplayer.is_server())
 	
-	_Model.start_game()
+	Model.start_game()
 	
 	set_up_game.rpc(randi())
 
@@ -59,5 +58,5 @@ func _enter_build_mode(building: BuildingResource) ->void:
 	AsteroidViewModel.building_on_cursor = building
 	
 func _on_build_menu_building_clicked(building: BuildingResource) -> void:
-	if _Model.can_build(building):
+	if Model.can_build(building):
 		_enter_build_mode(building)
