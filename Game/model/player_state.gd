@@ -6,3 +6,10 @@ class_name PlayerState extends Node
 @export var index:int
 ## The amount of each item that this player currently has.
 @export var items: Dictionary[Types.Item, float]
+## 2D array of ore data.
+@export var ores_layout: Array[Types.Ore]
+
+func _ready() -> void:
+    var num_layers = WorldGenModel.get_num_mine_layers() + 1
+    var layer_size = WorldGenModel.num_cols * WorldGenModel.layer_thickness
+    ores_layout.resize(num_layers * layer_size)

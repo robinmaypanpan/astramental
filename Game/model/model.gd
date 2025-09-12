@@ -47,3 +47,13 @@ func can_build(building: BuildingResource) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
+
+func get_ore_at(pos: TileMapPosition) -> Types.Ore:
+	var player_state = _PlayerStates.get_state(pos.player_id)
+	var index = pos.tile_position.y * WorldGenModel.num_cols + pos.tile_position.x
+	return player_state.ores_layout[index]
+
+func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
+	var player_state = _PlayerStates.get_state(player_id)
+	var index = y * WorldGenModel.num_cols + x
+	player_state.ores_layout[index] = ore
