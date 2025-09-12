@@ -9,8 +9,6 @@ class_name GameModel extends Node
 
 var world_seed: int
 var player_ids: Array[int]
-var player_boards: Dictionary[int, Node]
-
 
 func start_game() -> void:
 	_PlayerStates.start_game()

@@ -61,9 +61,3 @@ func _enter_build_mode(building: BuildingResource) ->void:
 func _on_build_menu_building_clicked(building: BuildingResource) -> void:
 	if _Model.can_build(building):
 		_enter_build_mode(building)
-
-func _input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("ui_cancel"):
-		_enter_build_mode(null)
-		if UiModel.mouse_tile_map_pos:
-			UiModel.mouse_tile_map_pos.tile_map.clear_ghost_building()

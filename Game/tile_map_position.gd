@@ -1,11 +1,11 @@
 extends Object
 
 class_name TileMapPosition
-## Which index in the player board's building_tile_maps corresponds to the BuildingTileMap the cursor is on
-var tile_map: BuildingTileMap
-## Which tile are we on in that BuildingTileMap
+## which player's board are we over
+var player_id: int
+## Which tile are we on in that board
 var tile_position: Vector2i
 
-func _init(tm, tp):
-	tile_map = tm
+func _init(pi, tp):
+	player_id = pi
 	tile_position = tp
