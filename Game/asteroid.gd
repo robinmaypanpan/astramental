@@ -1,19 +1,14 @@
-class_name Asteroid extends Control
-
-@onready var _BoardHolder := %BoardHolder
-
-@export var PlayerBoard : PackedScene
+class_name Asteroid
+extends Control
+## Contains all player board logic.
 
 var _player_boards: Dictionary[int, Node]
 
-func _register_player_board(player_id: int, player_board: Node) -> void:
-	_player_boards[player_id] = player_board
+@export var PlayerBoard : PackedScene
+@onready var _BoardHolder := %BoardHolder
 
-func _get_player_board(player_id: int) -> Node:
-	return _player_boards[player_id]
-
-func _get_tile_map(player_id: int) -> BuildingTileMap:
-	return _get_player_board(player_id).PlayerTileMap
+func _ready() -> void:
+	AsteroidViewModel.update_ore_tilemaps.connect(_on_update_ore_tilemaps)
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
@@ -24,16 +19,15 @@ func add_player_board(player_id: int) -> void:
 	_BoardHolder.add_child(board)
 	_register_player_board(player_id, board)
 
-## Set up the dictionary to associate an empty array to each player id in the game.
-func _init_ores_for_each_player() -> Dictionary[int, Array]:
-	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
-	var ores_for_each_player: Dictionary[int, Array]
+## Add all player boards and generate ores for them.
+func generate_player_boards() -> void:
 	for player_id in Model.player_ids:
-		ores_for_each_player[player_id] = []
-	return ores_for_each_player
+		add_player_board(player_id)
+
+	_generate_all_ores()
 
 ## Generate the mine layers for all players by instantiating and adding individual mine layer scenes to each player board.
-func generate_all_ores() -> void:
+func _generate_all_ores() -> void:
 	seed(Model.world_seed)
 
 	# layer 0 is factory layer. layer 1 is 1st mine layer
@@ -64,13 +58,24 @@ func generate_all_ores() -> void:
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
-func generate_player_boards() -> void:
+func _register_player_board(player_id: int, player_board: Node) -> void:
+	_player_boards[player_id] = player_board
+
+func _get_player_board(player_id: int) -> Node:
+	return _player_boards[player_id]
+
+func _get_tile_map(player_id: int) -> BuildingTileMap:
+	return _get_player_board(player_id).PlayerTileMap
+
+## Set up the dictionary to associate an empty array to each player id in the game.
+func _init_ores_for_each_player() -> Dictionary[int, Array]:
+	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
+	var ores_for_each_player: Dictionary[int, Array]
 	for player_id in Model.player_ids:
-		add_player_board(player_id)
+		ores_for_each_player[player_id] = []
+	return ores_for_each_player
 
-	generate_all_ores()
-
-func in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
+func _in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 	if pos1 and pos2:
 		return pos1.player_id == pos2.player_id
 	else:
@@ -109,7 +114,7 @@ func _input(_event: InputEvent) -> void:
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if AsteroidViewModel.mouse_tile_map_pos and not in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos):
+		if AsteroidViewModel.mouse_tile_map_pos and not _in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos):
 			var old_tile_map = _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
 			old_tile_map.clear_ghost_building()
 		if new_mouse_tile_map_pos:
@@ -124,3 +129,16 @@ func _input(_event: InputEvent) -> void:
 
 	# update position
 	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
+
+## Look at the model and write the ores_layout to the player board tile maps so they are visible.
+func _on_update_ore_tilemaps() -> void:
+	for player_board in _player_boards.values():
+		var tile_map: BuildingTileMap = player_board.PlayerTileMap
+		var player_id: int = player_board.owner_id
+		var start_y = WorldGenModel.get_mine_layer_start_y()
+		var end_y = WorldGenModel.get_all_layers_end_y()
+		for x in range(WorldGenModel.num_cols):
+			for y in range(start_y, end_y):
+				var ore = Model.get_ore_at(player_id, x, y)
+				var atlas_coordinates = Ores.get_atlas_coordinates(ore)
+				tile_map.set_background_tile(x, y, atlas_coordinates)

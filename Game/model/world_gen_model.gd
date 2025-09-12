@@ -19,3 +19,27 @@ func get_layer_generation_data(layer_num: int) -> LayerGenerationResource:
 ## Return the number of layers that are being generated for the mines.
 func get_num_mine_layers() -> int:
 	return ores_generation.size()
+
+## Return the total number of layers being generated, which is 1 factory layer + all mine layers.
+func get_total_num_layers() -> int:
+	return get_num_mine_layers() + 1
+
+## Get the y-level where the mine layers start.
+func get_mine_layer_start_y() -> int:
+	return layer_thickness
+
+## Get the y-level where all layers end. For use in range(), this y-level is 1 beyond the bounds of the actual array.
+func get_all_layers_end_y() -> int:
+	return layer_thickness * get_total_num_layers()
+
+## Get the layer number associated with the y-coordinate. Index 0 is top/factory layer, index 1 is 1st mine layer, etc.
+func get_layer_num(y: int) -> int:
+	@warning_ignore("integer_division")
+	return y / layer_thickness
+
+## Get the layer type (mine layer or factory layer) associated with the y-coordinate.
+func get_layer_type(y: int) -> Types.Layer:
+	if get_layer_num(y) > 0:
+		return Types.Layer.MINE
+	else:
+		return Types.Layer.FACTORY
