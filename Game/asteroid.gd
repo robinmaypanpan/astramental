@@ -41,7 +41,7 @@ func generate_all_ores() -> void:
 		var layer_gen_data := WorldGenModel.get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
 		var ores_for_each_player := _init_ores_for_each_player()
-		var players_not_chosen_yet := Model.player_ids.duplicate()
+		var players_not_chosen_yet : Array[int] = Model.player_ids.duplicate()
 
 		# for each ore generation data in this layer
 		for ore_gen_data in layer_gen_data.ores:

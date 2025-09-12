@@ -68,7 +68,7 @@ func _register_ready() -> void:
 ## Reset and regenerate the player boards with a new random seed
 @rpc("any_peer", "call_local", "reliable")
 func _regen_player_boards() -> void:
-	for player_board in _Asteroid.c():
+	for player_board in _Asteroid._BoardHolder.get_children():
 		player_board.queue_free()
 	
 	if multiplayer.is_server():
