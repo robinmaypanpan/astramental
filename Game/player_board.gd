@@ -52,11 +52,10 @@ class OreCircle:
 		center = c
 		radius = r
 
-## Set a tile in the tilemap to the specified ore.
+## Set a tile in the model to the specified ore.
 func _set_ore_tile(x: int, y: int, ore: Types.Ore) -> void:
 	var atlas_coordinates := Ores.get_atlas_coordinates(ore)
 	Model.set_ore_at(owner_id, x, y, ore)
-	PlayerTileMap.set_background_tile(x, y, atlas_coordinates)
 
 ## Given ore generation data, generate the ores for the given layer number by filling out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num: int) -> void:

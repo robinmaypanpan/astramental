@@ -19,3 +19,12 @@ func get_layer_generation_data(layer_num: int) -> LayerGenerationResource:
 ## Return the number of layers that are being generated for the mines.
 func get_num_mine_layers() -> int:
 	return ores_generation.size()
+
+func get_total_num_layers() -> int:
+	return get_num_mine_layers() + 1
+
+func get_mine_layer_start_y() -> int:
+	return layer_thickness
+
+func get_mine_layer_end_y() -> int:
+	return layer_thickness * get_total_num_layers()

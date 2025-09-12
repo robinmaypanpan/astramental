@@ -17,3 +17,11 @@ signal building_on_cursor_changed()
 var mouse_state := MouseState.HOVERING
 # default value is null
 var mouse_tile_map_pos: TileMapPosition
+
+var ores_layout_dirty: bool = false
+
+func _ready():
+	Model.ores_layout_updated.connect(_on_ores_layout_updated)
+
+func _on_ores_layout_updated():
+	ores_layout_dirty = true

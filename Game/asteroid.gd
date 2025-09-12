@@ -124,3 +124,18 @@ func _input(_event: InputEvent) -> void:
 
 	# update position
 	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
+
+func _process(_delta: float) -> void:
+	if AsteroidViewModel.ores_layout_dirty:
+		AsteroidViewModel.ores_layout_dirty = false
+		# update ore tilemaps
+		for player_board in _player_boards.values():
+			var tile_map: BuildingTileMap = player_board.PlayerTileMap
+			var player_id: int = player_board.owner_id
+			var start_y = WorldGenModel.get_mine_layer_start_y()
+			var end_y = WorldGenModel.get_mine_layer_end_y()
+			for x in range(WorldGenModel.num_cols):
+				for y in range(start_y, end_y):
+					var ore = Model.get_ore_at(player_id, x, y)
+					var atlas_coordinates = Ores.get_atlas_coordinates(ore)
+					tile_map.set_background_tile(x, y, atlas_coordinates)
