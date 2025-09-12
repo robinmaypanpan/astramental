@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://1mq2wn7s6nc0"]
+
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_ahpvq"]
+[ext_resource type="Script" uid="uid://dk8t5y1a6qtrs" path="res://Game/ui/left_panel.gd" id="1_sfd31"]
+[ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/resource_display.tscn" id="2_sfd31"]
+[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="3_1gn3h"]
+[ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/debug_menu_panel.tscn" id="4_aa1ah"]
+[ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/build_menu.tscn" id="5_ld2tw"]
+
+[node name="LeftPanel" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_sfd31")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_ahpvq")
+
+[node name="ResourceDisplay" parent="VBoxContainer" instance=ExtResource("2_sfd31")]
+unique_name_in_owner = true
+layout_mode = 2
+item_display_row = ExtResource("3_1gn3h")
+
+[node name="DebugMenuPanel" parent="VBoxContainer" node_paths=PackedStringArray("_ResourceDisplay") instance=ExtResource("4_aa1ah")]
+unique_name_in_owner = true
+layout_mode = 2
+_ResourceDisplay = NodePath("../ResourceDisplay")
+
+[node name="BuildMenu" parent="VBoxContainer" instance=ExtResource("5_ld2tw")]
+unique_name_in_owner = true
+layout_mode = 2

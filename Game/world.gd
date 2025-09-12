@@ -1,13 +1,13 @@
-extends Control
-
-@onready var _ResourceDisplay := %ResourceDisplay
-@onready var _Asteroid := %Asteroid
-@onready var _BuildMenu := %BuildMenu
-
-var num_players_ready := 0
+class_name World extends Control
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready()
+
+var num_players_ready := 0
+
+@onready var _ResourceDisplay := %ResourceDisplay
+@onready var _Asteroid := %Asteroid
+@onready var _LeftPanel := %LeftPanel
 
 func _ready() -> void:	
 	if ConnectionSystem.is_not_running_network():
@@ -16,10 +16,9 @@ func _ready() -> void:
 		ConnectionSystem.host_server()
 		start_game()
 
-	register_ready.rpc_id(1)
+	_register_ready.rpc_id(1)
 	
-	_BuildMenu.on_building_clicked.connect(_on_build_menu_building_clicked)
-
+	_LeftPanel.get_build_menu().on_building_clicked.connect(_on_build_menu_building_clicked)
 
 
 ## Take the world seed from the server and initalize it and the world for all players.
@@ -31,7 +30,13 @@ func set_up_game(server_world_seed: int) -> void:
 
 	game_ready.emit()
 	
-	_ResourceDisplay.setup_game()
+	_LeftPanel.setup_game()
+		
+		
+## Regenerates the world, such as in a debug situation
+func regenerate():	
+	_regen_player_boards.rpc()
+
 
 ## Actually starts the game on the server
 func start_game():
@@ -40,10 +45,17 @@ func start_game():
 	Model.start_game()
 	
 	set_up_game.rpc(randi())
+	
+	
+## Set the UI to the building mode and show the building cursor
+func _enter_build_mode(building: BuildingResource) ->void:
+	# cursor will automatically update when building_on_cursor is modified
+	AsteroidViewModel.building_on_cursor = building
+	
 
 ## Register that this particular player is ready to start the game
 @rpc("any_peer", "call_local", "reliable")
-func register_ready() -> void:
+func _register_ready() -> void:
 	# TODO: Move this to connection system.
 	assert(multiplayer.is_server())
 	num_players_ready += 1
@@ -52,11 +64,19 @@ func register_ready() -> void:
 	if num_players_ready >= total_num_players:
 		start_game()
 
-## Set the UI to the building mode and show the building cursor
-func _enter_build_mode(building: BuildingResource) ->void:
-	# cursor will automatically update when building_on_cursor is modified
-	AsteroidViewModel.building_on_cursor = building
+
+## Reset and regenerate the player boards with a new random seed
+@rpc("any_peer", "call_local", "reliable")
+func _regen_player_boards() -> void:
+	for player_board in _Asteroid.c():
+		player_board.queue_free()
 	
+	if multiplayer.is_server():
+		randomize()
+		# this call will emit game_ready, which will update the seed text
+		set_up_game.rpc(randi())
+		
+
 func _on_build_menu_building_clicked(building: BuildingResource) -> void:
 	if Model.can_build(building):
 		_enter_build_mode(building)

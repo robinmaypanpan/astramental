@@ -1,13 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=7 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
 [ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
-[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="4_ho6sb"]
-[ext_resource type="PackedScene" path="res://Game/ui/resource_display.tscn" id="5_r7jf0"]
-[ext_resource type="PackedScene" path="res://Game/ui/debug_menu_panel.tscn" id="6_16ps5"]
-[ext_resource type="PackedScene" path="res://Game/asteroid.tscn" id="9_71s8c"]
-[ext_resource type="PackedScene" path="res://Game/ui/build_menu.tscn" id="9_g2b07"]
+[ext_resource type="PackedScene" uid="uid://1mq2wn7s6nc0" path="res://Game/ui/left_panel.tscn" id="3_pecy7"]
+[ext_resource type="PackedScene" uid="uid://bncje5xywcr8m" path="res://Game/ui/top_panel.tscn" id="7_16ps5"]
+[ext_resource type="PackedScene" uid="uid://c45g1mdwk11yt" path="res://Game/asteroid.tscn" id="9_71s8c"]
 
 [node name="World" type="Control"]
 layout_mode = 3
@@ -27,38 +25,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeftPanel" type="Panel" parent="HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/LeftPanel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme = ExtResource("1_pecy7")
-
-[node name="ResourceDisplay" parent="HBoxContainer/LeftPanel/VBoxContainer" instance=ExtResource("5_r7jf0")]
+[node name="LeftPanel" parent="HBoxContainer" node_paths=PackedStringArray("_World") instance=ExtResource("3_pecy7")]
 unique_name_in_owner = true
 layout_mode = 2
-item_display_row = ExtResource("4_ho6sb")
-
-[node name="DebugMenuPanel" parent="HBoxContainer/LeftPanel/VBoxContainer" node_paths=PackedStringArray("_World", "_ResourceDisplay", "_Asteroid") instance=ExtResource("6_16ps5")]
-layout_mode = 2
-_World = NodePath("../../../..")
-_ResourceDisplay = NodePath("../ResourceDisplay")
-_Asteroid = NodePath("../../../VBoxContainer/Asteroid")
-
-[node name="BuildMenu" parent="HBoxContainer/LeftPanel/VBoxContainer" instance=ExtResource("9_g2b07")]
-unique_name_in_owner = true
-layout_mode = 2
+_World = NodePath("../..")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="TopPanel" type="Panel" parent="HBoxContainer/VBoxContainer"]
+[node name="TopPanel" parent="HBoxContainer/VBoxContainer" instance=ExtResource("7_16ps5")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="Asteroid" parent="HBoxContainer/VBoxContainer" instance=ExtResource("9_71s8c")]
 unique_name_in_owner = true
