@@ -1,4 +1,5 @@
-class_name State extends Node
+class_name State
+extends Node
 
 
 signal finished(nextState:String, flags:Dictionary)
