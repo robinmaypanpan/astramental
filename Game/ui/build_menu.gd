@@ -1,12 +1,12 @@
-extends PanelContainer
+class_name BuildMenu extends PanelContainer
+
+signal on_building_clicked(building: BuildingResource)
 
 @export var path_to_building_assets:String
 
-@onready var _BuildingList:ItemList = %BuildingList
-
 var _buildings:Array[BuildingResource]
 
-signal on_building_clicked(building: BuildingResource)
+@onready var _BuildingList:ItemList = %BuildingList
 
 func _ready() -> void:
 	# Clear list
