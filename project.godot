@@ -22,8 +22,8 @@ Globals="*res://globals.gd"
 ConnectionSystem="*res://Systems/connection.gd"
 Items="*res://Game/items.tscn"
 Ores="*res://Game/ores.tscn"
-UiModel="*res://UI/ui_model.gd"
 WorldGenModel="*res://Game/model/world_gen_model.tscn"
+AsteroidViewModel="*res://Game/asteroid_view_model.gd"
 
 [display]
 
