@@ -1,8 +1,8 @@
 extends Menu
 
-@onready var status_label := %status_label
-@onready var player_list := %player_list
-@onready var start_button := %start_button
+@onready var status_label := %StatusLabel
+@onready var player_list_node := %PlayerList
+@onready var start_button := %StartButton
 
 func _ready() -> void:
 	start_button.disabled = not multiplayer.is_server()
@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func refresh_lobby() -> void:
 	print("Refresh Lobby")
-	player_list.clear()
+	player_list_node.clear()
 
 	var player_list = ConnectionSystem.get_player_id_list()
 
@@ -22,7 +22,7 @@ func refresh_lobby() -> void:
 		var player_name = player.name
 		if player_id == multiplayer.get_unique_id():
 			player_name += " (you)"
-		player_list.add_item("%d: %s" % [player.index, player_name])
+		player_list_node.add_item("%d: %s" % [player.index, player_name])
 
 func _connection_failure() -> void:
 	multiplayer.set_multiplayer_peer(null)
@@ -33,4 +33,4 @@ func _on_start_button_pressed() -> void:
 	ConnectionSystem.start_game()
 
 func _on_game_started() -> void:
-	UiUtils.transition_to("world");
+	UiUtils.transition_to("World");

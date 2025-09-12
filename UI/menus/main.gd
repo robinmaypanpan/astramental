@@ -5,8 +5,8 @@ extends Menu
 
 @onready var log_box : RichTextLabel = $%EventLog
 @onready var ip_text : LineEdit = %IPInput
-@onready var join_button : Button = %join_button
-@onready var player_name : LineEdit = %player_name
+@onready var join_button : Button = %JoinButton
+@onready var player_name : LineEdit = %PlayerName
 
 
 func _ready() -> void:

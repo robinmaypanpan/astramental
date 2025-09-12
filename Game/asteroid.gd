@@ -74,7 +74,7 @@ func _get_player_board(player_id: int) -> Node:
 
 
 func _get_tile_map(player_id: int) -> BuildingTileMap:
-	return _get_player_board(player_id).PlayerTileMap
+	return _get_player_board(player_id).player_tile_map
 
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
@@ -156,7 +156,7 @@ func _input(_event: InputEvent) -> void:
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
 func _on_update_ore_tilemaps() -> void:
 	for player_board in _player_boards.values():
-		var tile_map: BuildingTileMap = player_board.PlayerTileMap
+		var tile_map: BuildingTileMap = player_board.player_tile_map
 		var player_id: int = player_board.owner_id
 		var start_y = WorldGenModel.get_mine_layer_start_y()
 		var end_y = WorldGenModel.get_all_layers_end_y()

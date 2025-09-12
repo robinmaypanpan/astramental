@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dji12mak03hku"]
+[gd_scene load_steps=6 format=3 uid="uid://dji12mak03hku"]
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
-[ext_resource type="PackedScene" uid="uid://c5auwrdgqvt1a" path="res://Game/player_board.tscn" id="2_3kekb"]
 [ext_resource type="PackedScene" uid="uid://1mq2wn7s6nc0" path="res://Game/ui/left_panel.tscn" id="3_pecy7"]
 [ext_resource type="PackedScene" uid="uid://bncje5xywcr8m" path="res://Game/ui/top_panel.tscn" id="7_16ps5"]
-[ext_resource type="PackedScene" path="res://Game/asteroid.tscn" id="9_71s8c"]
+[ext_resource type="PackedScene" uid="uid://c45g1mdwk11yt" path="res://Game/asteroid.tscn" id="9_71s8c"]
 
 [node name="World" type="Control"]
 layout_mode = 3
@@ -25,10 +24,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeftPanel" parent="HBoxContainer" node_paths=PackedStringArray("_World") instance=ExtResource("3_pecy7")]
+[node name="LeftPanel" parent="HBoxContainer" instance=ExtResource("3_pecy7")]
 unique_name_in_owner = true
 layout_mode = 2
-_World = NodePath("../..")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -39,4 +37,3 @@ layout_mode = 2
 [node name="Asteroid" parent="HBoxContainer/VBoxContainer" instance=ExtResource("9_71s8c")]
 unique_name_in_owner = true
 layout_mode = 2
-PlayerBoard = ExtResource("2_3kekb")

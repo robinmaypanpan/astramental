@@ -8,7 +8,7 @@ var player: ConnectionSystem.NetworkPlayer
 @onready var sky := %Sky
 @onready var player_name_label := %PlayerNameLabel
 @onready var factory_and_mine := %FactoryAndMine
-@onready var player_tile_map: BuildingTileMap = %player_tile_map
+@onready var player_tile_map: BuildingTileMap = %PlayerTileMap
 
 
 func _ready() -> void:

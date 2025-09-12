@@ -6,8 +6,8 @@ class_name UiRoot extends Control
 var current_node : Node
 
 @onready var shroud_animation : AnimationPlayer = %AnimationPlayer
-@onready var menus_container : Node = %menus_container
-@onready var cursor := %cursor
+@onready var menus_container : Node = %MenusContainer
+@onready var cursor := %Cursor
 
 
 func _ready() -> void:

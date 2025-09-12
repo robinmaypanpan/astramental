@@ -40,10 +40,9 @@ layout_mode = 2
 tooltip_text = "Construct buildings"
 metadata/_tab_index = 0
 
-[node name="Debug" parent="VBoxContainer/Menus" node_paths=PackedStringArray("_ResourceDisplay") instance=ExtResource("4_aa1ah")]
+[node name="Debug" parent="VBoxContainer/Menus" instance=ExtResource("4_aa1ah")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 tooltip_text = "Provide access to cheats and such"
-_ResourceDisplay = NodePath("../../ResourceDisplay")
 metadata/_tab_index = 1
