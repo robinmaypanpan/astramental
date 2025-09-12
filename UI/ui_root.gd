@@ -3,14 +3,16 @@ class_name UiRoot extends Control
 ## A list of named menus that can be transitioned to/from
 @export var Menus : Dictionary[String, PackedScene]
 
+var current_node : Node
+
 @onready var shroud_animation : AnimationPlayer = %AnimationPlayer
 @onready var MenusContainer : Node = %MenusContainer
 @onready var Cursor := %Cursor
 
-var current_node : Node
 
 func _ready() -> void:
 	transition_to("MainMenu")
+	
 	
 ## Transitions to the provided scene...
 ## Can either be a string provided in the Menus dictionary

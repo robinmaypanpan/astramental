@@ -1,8 +1,5 @@
+class_name CheatItems
 extends MarginContainer
-
-
-@onready var _ItemTypeSelect: OptionButton = %ItemTypeSelect
-@onready var _AmountText: LineEdit = %AmountText
 
 ## Emitted when the cheat items GUI tries to add items to the player
 signal add_items(item_type: Types.Item, amount: int)
@@ -12,6 +9,10 @@ var amount: int:
 	set(value):
 		amount = value
 		_update_amount_text()
+
+
+@onready var _ItemTypeSelect: OptionButton = %ItemTypeSelect
+@onready var _AmountText: LineEdit = %AmountText
 
 func _ready() -> void:
 	for item_type in Types.Item.values():

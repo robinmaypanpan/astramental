@@ -7,10 +7,6 @@ class_name MainMenu extends Menu
 @onready var JoinButton : Button = %JoinButton
 @onready var PlayerName : LineEdit = %PlayerName
 
-func post_to_log(msg: String) -> void:
-	print(msg)
-	LogBox.add_text(str(msg) + "\n")
-	
 	
 func _ready() -> void:
 	ConnectionSystem.connection_message.connect(post_to_log)
@@ -21,6 +17,15 @@ func _ready() -> void:
 		initialize_focus()
 		
 	PlayerName.placeholder_text = ConnectionSystem.get_predicted_local_player_name()
+	
+func post_to_log(msg: String) -> void:
+	print(msg)
+	LogBox.add_text(str(msg) + "\n")
+	
+	
+func initialize_focus() -> void:
+	if is_node_ready():
+		JoinButton.grab_focus()
 	
 	
 func _on_connection_failed() -> void:
@@ -50,12 +55,6 @@ func _on_options_button_pressed() -> void:
 func _on_exit_button_pressed() -> void:
 	ConnectionSystem.shutdown_server()
 	get_tree().quit()
-
-
-func initialize_focus() -> void:
-	if is_node_ready():
-		JoinButton.grab_focus()
-	
 
 func _notification(what):
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:

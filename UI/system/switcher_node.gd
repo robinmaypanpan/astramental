@@ -1,6 +1,7 @@
+class_name SwitcherNode 
+extends Control
 ## This is a special script that can be added to a container to ensure that
 ## only a single child widget is active at any given time.
-class_name SwitcherNode extends Control
 
 ## This is the initial child to show as visible
 @export var initial_child:Control

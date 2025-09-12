@@ -1,6 +1,6 @@
+class_name TileMapPosition
 extends Object
 
-class_name TileMapPosition
 ## which player's board are we over
 var player_id: int
 ## Which tile are we on in that board

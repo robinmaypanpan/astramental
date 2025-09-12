@@ -3,10 +3,10 @@ extends MarginContainer
 ## An instance of a single display row for a single item.
 @export var item_display_row: PackedScene
 
-@onready var _item_display_list := %ItemDisplayList
-
 ## Mapping from item type -> instantiated item display row.
 var _item_type_to_row_dict: Dictionary[Types.Item, Node]
+
+@onready var _item_display_list := %ItemDisplayList
 
 func _ready() -> void:
 	# set up an item display row for every item type

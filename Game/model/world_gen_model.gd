@@ -1,4 +1,5 @@
 extends Node
+## Contains the logic for generating the world
 
 # game board properties
 @export var num_cols: int = 10
