@@ -1,4 +1,5 @@
-class_name Menu extends Control
+class_name Menu
+extends Control
 
 ## Called when the UI finishes fading into this menu
 func fade_in_complete():

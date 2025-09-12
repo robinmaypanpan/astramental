@@ -1,15 +1,23 @@
-class_name PlayerStates extends Node
+class_name PlayerStates
+extends Node
+## Primary container for all player states
 
 ## Stores mapping from player id -> instantiated player state
 var _player_states_dict: Dictionary[int, PlayerState]
 
 @onready var _PlayerSpawner = %PlayerSpawner
 
+
+func _ready() -> void:
+	_PlayerSpawner.spawn_function = spawn_player_state
+	
+	
 func start_game() -> void:
 	var player_ids = ConnectionSystem.get_player_id_list()
 
 	for player_id in player_ids:
 		add_state(player_id)
+
 
 ## Given a player id, instantiate a new PlayerState and return it.
 func spawn_player_state(player_id: int) -> Node:
@@ -33,6 +41,3 @@ func add_state(player_id: int) -> PlayerState:
 ## Given the player id, retrieve the corresponding PlayerState.
 func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
 	return _player_states_dict[player_id]
-
-func _ready() -> void:
-	_PlayerSpawner.spawn_function = spawn_player_state

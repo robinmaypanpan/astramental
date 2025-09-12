@@ -1,5 +1,14 @@
 extends Node
 
+signal connection_failed()
+signal connection_succeeded()
+signal player_list_changed()
+signal connection_message(message:String)
+signal game_started()
+
+# This enum lists all the possible states the character can be in.
+enum States {IDLE, CONNECTING, CONNECTED, DISCONNECTING}
+
 # Default game server port. Can be any number between 1024 and 49151.
 # Not on the list of registered or common ports as of May 2024:
 # https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
@@ -8,24 +17,8 @@ const MAX_PEERS = 4
 
 var peer : ENetMultiplayerPeer
 
-# This enum lists all the possible states the character can be in.
-enum States {IDLE, CONNECTING, CONNECTED, DISCONNECTING}
-
 # This variable keeps track of the connection's current state.
 var connection_state: States = States.IDLE
-
-signal connection_failed()
-signal connection_succeeded()
-signal player_list_changed()
-signal connection_message(message:String)
-signal game_started()
-
-## Stores data about a given player
-class NetworkPlayer:
-	## Player index, such as "Player 1" or "Player 2" Starts at 1
-	var index: int
-	## Stores the name of the player
-	var name: String
 
 ## Stores the list of players
 var _players := Dictionary()
@@ -45,22 +38,22 @@ func _ready() -> void:
 		
 	print("Connection System is ready")
 
+
 ## Returns the predicted local player name
 func get_predicted_local_player_name() -> String:
 	return _predicted_local_player_name
+
 
 ## Returns true if we are not connected
 func is_not_running_network() -> bool:
 	return connection_state == States.IDLE
 
+
 func start_game() -> void:
 	print("Starting all games")
 	assert(multiplayer.is_server())
-	start_all_games.rpc()
+	_start_all_games.rpc()
 
-@rpc("call_local", "reliable")
-func start_all_games() -> void:
-	game_started.emit()
 
 func host_server(local_player_name:String = "") -> void:
 	if connection_state != States.IDLE:
@@ -99,10 +92,11 @@ func join_server(local_player_name:String, ip_address: String) -> void:
 	if local_player_name == null or local_player_name.length() == 0:
 		local_player_name = _predicted_local_player_name
 	
-	request_join_game.rpc_id(1, local_player_name)
+	_request_join_game.rpc_id(1, local_player_name)
 	
 	connection_state = States.CONNECTED
 	connection_succeeded.emit()
+	
 	
 func shutdown_server() -> void:
 	connection_state = States.DISCONNECTING
@@ -113,13 +107,28 @@ func shutdown_server() -> void:
 	connection_state = States.IDLE
 	
 	
-func _connection_failure() -> void:
-	multiplayer.set_multiplayer_peer(null)
-	shutdown_server()
+## Register a player in the local list of players
+func register_player(player_id: int, player_name: String, player_index: int):	
+	var new_player := NetworkPlayer.new()
+	new_player.name = player_name
+	new_player.index = player_index
+	
+	_players[player_id] = new_player
+	
+	player_list_changed.emit()
+
+
+## remove a player from the local list of players
+func unregister_player(player_id: int):
+	if _players.has(player_id):
+		_players.erase(player_id)
+		player_list_changed.emit()
+
 	
 ## Returns the number of connected players, including the local player
 func get_num_players() -> int:
 	return _players.size()
+
 
 ## Returns an array of player ids, sorted by index
 func get_player_id_list() -> Array[int]:
@@ -138,16 +147,24 @@ func get_player_id_list() -> Array[int]:
 	
 	return player_ids
 	
+	
 ## Returns a NetworkPlayer struct for a given player id
 func get_player(player_id:int) -> NetworkPlayer:
 	return _players[player_id]
 
+	
+func _connection_failure() -> void:
+	multiplayer.set_multiplayer_peer(null)
+	shutdown_server()
+	
+	
 func _player_connected(id: int) -> void:
 	print("Player " + str(id) +  " connected. Awaiting join request")
 	
+	
 ## Handles a player joining the game after connecting
 @rpc("call_remote", "any_peer", "reliable")
-func request_join_game(player_name:String):
+func _request_join_game(player_name:String):
 	# TODO SANITIZE THAT PLAYER NAME OMG
 	assert(multiplayer.is_server())
 	# TODO: Handle reconnection case and mid-game connection
@@ -161,15 +178,16 @@ func request_join_game(player_name:String):
 	for player_id in _players.keys():
 		var player = _players[player_id]
 		old_player_string+="%d:%d:%s;" % [player_id, player.index, player.name]
-	introduce_old_players.rpc_id(new_player_id, old_player_string)
+	_introduce_old_players.rpc_id(new_player_id, old_player_string)
 	
 	# Next introduce all players to the new player, including the new player
 	register_player(new_player_id, player_name, new_player_index)
-	introduce_new_player.rpc(new_player_id, player_name, new_player_index)
+	_introduce_new_player.rpc(new_player_id, player_name, new_player_index)
+
 
 ## Introduces a newly joined players to all players that have come before
 @rpc("authority", "call_remote", "reliable")
-func introduce_old_players(old_player_string:String):
+func _introduce_old_players(old_player_string:String):
 	print("Adding existing players to player list")
 	var old_players = old_player_string.split(";")
 	for player_string in old_players:
@@ -178,29 +196,28 @@ func introduce_old_players(old_player_string:String):
 		var player_data = player_string.split(":")
 		register_player(int(player_data[0]), player_data[2], int(player_data[1]))
 
+
 ## Introduces a player to a newly joined player
 @rpc("authority", "call_remote", "reliable")
-func introduce_new_player(player_id, player_name, new_player_index):
+func _introduce_new_player(player_id, player_name, new_player_index):
 	print("Adding new player %s to player list" % [player_name])
 	register_player(player_id, player_name, new_player_index)
 
-## Register a player in the local list of players
-func register_player(player_id: int, player_name: String, player_index: int):	
-	var new_player := NetworkPlayer.new()
-	new_player.name = player_name
-	new_player.index = player_index
-	
-	_players[player_id] = new_player
-	
-	player_list_changed.emit()
-
-## remove a player from the local list of players
-func unregister_player(player_id: int):
-	if _players.has(player_id):
-		_players.erase(player_id)
-		player_list_changed.emit()
 
 ## Called when a player disconnects
 func _player_disconnected(id:int) -> void:
 	print(str("Player ", id,  " disconnected"))
 	unregister_player(id)
+	
+	
+@rpc("call_local", "reliable")
+func _start_all_games() -> void:
+	game_started.emit()
+
+	
+## Stores data about a given player
+class NetworkPlayer:
+	## Player index, such as "Player 1" or "Player 2" Starts at 1
+	var index: int
+	## Stores the name of the player
+	var name: String
