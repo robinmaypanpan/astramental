@@ -5,13 +5,13 @@ extends Node
 ## Stores mapping from player id -> instantiated player state
 var _player_states_dict: Dictionary[int, PlayerState]
 
-@onready var _PlayerSpawner = %PlayerSpawner
+@onready var player_spawner = %PlayerSpawner
 
 
 func _ready() -> void:
-	_PlayerSpawner.spawn_function = spawn_player_state
-	
-	
+	player_spawner.spawn_function = spawn_player_state
+
+
 func start_game() -> void:
 	var player_ids = ConnectionSystem.get_player_id_list()
 
@@ -23,20 +23,22 @@ func start_game() -> void:
 func spawn_player_state(player_id: int) -> Node:
 	var player_state = PlayerState.new()
 	var player = ConnectionSystem.get_player(player_id)
-	
+
 	player_state.name = str(player_id)
 	player_state.id = player_id
 	player_state.index = player.index
 	for type in Types.Item.values():
 		player_state.items[type] = float(player.index)
-	
+
 	_player_states_dict[player_id] = player_state
 
 	return player_state
 
+
 ## Spawn a new player state for the given player id.
 func add_state(player_id: int) -> PlayerState:
-	return _PlayerSpawner.spawn(player_id)
+	return player_spawner.spawn(player_id)
+
 
 ## Given the player id, retrieve the corresponding PlayerState.
 func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:

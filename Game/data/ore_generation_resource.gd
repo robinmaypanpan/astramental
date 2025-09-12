@@ -1,4 +1,5 @@
-class_name OreGenerationResource extends Resource
+class_name OreGenerationResource
+extends Resource
 
 ## The ore to generate.
 @export var ore: Types.Ore

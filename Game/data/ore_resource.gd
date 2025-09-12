@@ -1,6 +1,5 @@
-extends Resource
-
 class_name OreResource
+extends Resource
 
 ## The coordinates in the tileset that correspond to the correct tile image.
 @export var atlas_coordinates: Vector2i

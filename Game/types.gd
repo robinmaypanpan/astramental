@@ -1,11 +1,11 @@
 class_name Types
 
 enum Ore {
-    ROCK,
-    IRON,
-    COPPER,
-    ICE,
-    SILICON,
+	ROCK,
+	IRON,
+	COPPER,
+	ICE,
+	SILICON,
 }
 
 enum Item {
