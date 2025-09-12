@@ -6,7 +6,7 @@ class_name PlayerState extends Node
 @export var index:int
 ## The amount of each item that this player currently has.
 @export var items: Dictionary[Types.Item, float]
-## 2D array of ore data.
+## Contains the layout of the ores for each player. Stored as a 1D array that we index into with Model.get_ore_at and Model.set_ore_at.
 @export var ores_layout: Array[Types.Ore]
 
 func _ready() -> void:

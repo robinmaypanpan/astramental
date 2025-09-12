@@ -10,6 +10,7 @@ class_name GameModel extends Node
 var world_seed: int
 var player_ids: Array[int]
 
+## Emitted when ores_layout in PlayerStates is updated.
 signal ores_layout_updated()
 
 func start_game() -> void:
@@ -50,11 +51,13 @@ func can_build(building: BuildingResource) -> bool:
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
 
+## Get the ore at the given x/y coordinates for the given player id.
 func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
 	var player_state = _PlayerStates.get_state(player_id)
 	var index = y * WorldGenModel.num_cols + x
 	return player_state.ores_layout[index]
 
+## Set the ore at the given x/y coordinates for the given player id. Emits the ores_layout_updated signal.
 func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 	var player_state = _PlayerStates.get_state(player_id)
 	var index = y * WorldGenModel.num_cols + x

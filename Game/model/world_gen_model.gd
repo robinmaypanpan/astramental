@@ -20,11 +20,14 @@ func get_layer_generation_data(layer_num: int) -> LayerGenerationResource:
 func get_num_mine_layers() -> int:
 	return ores_generation.size()
 
+## Return the total number of layers being generated, which is 1 factory layer + all mine layers.
 func get_total_num_layers() -> int:
 	return get_num_mine_layers() + 1
 
+## Get the y-level where the mine layers start.
 func get_mine_layer_start_y() -> int:
 	return layer_thickness
 
-func get_mine_layer_end_y() -> int:
+## Get the y-level where all layers end. For use in range(), this y-level is 1 beyond the bounds of the actual array.
+func get_all_layers_end_y() -> int:
 	return layer_thickness * get_total_num_layers()

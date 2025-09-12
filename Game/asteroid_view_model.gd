@@ -18,6 +18,7 @@ var mouse_state := MouseState.HOVERING
 # default value is null
 var mouse_tile_map_pos: TileMapPosition
 
+## Whether the ores_layout in Model was updated this frame.
 var ores_layout_dirty: bool = false
 
 func _ready():
