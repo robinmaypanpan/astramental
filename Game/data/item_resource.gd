@@ -1,6 +1,5 @@
-extends Resource
-
 class_name ItemResource
+extends Resource
 
 @export var icon : Texture2D
 ## Whether the resource can be traded or not.
