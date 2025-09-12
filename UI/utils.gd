@@ -8,9 +8,6 @@ func get_ui_node() -> UiRoot:
 		ui_node = ResourceLoader.load("res://UI/ui_root.tscn").instantiate()
 	return ui_node
 
-func get_cursor() -> Cursor:
-	return get_ui_node().Cursor
-
 ## Transitions to the specified menu by calling it on the ui node.
 func transition_to(menu_name:String) -> void:
 	var ui_node := get_ui_node()

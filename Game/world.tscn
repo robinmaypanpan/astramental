@@ -20,12 +20,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_pecy7")
 script = ExtResource("1_3kekb")
-PlayerBoard = ExtResource("2_3kekb")
-MineLayer = ExtResource("4_16ps5")
-NumCols = 10
-LayerThickness = 7
-SkyHeight = 300
-TileMapScale = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -70,9 +64,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Asteroid" parent="HBoxContainer/VBoxContainer" instance=ExtResource("9_71s8c")]
+[node name="Asteroid" parent="HBoxContainer/VBoxContainer" node_paths=PackedStringArray("Model") instance=ExtResource("9_71s8c")]
 unique_name_in_owner = true
 layout_mode = 2
+Model = NodePath("../../../Model")
+PlayerBoard = ExtResource("2_3kekb")
+MineLayer = ExtResource("4_16ps5")
 
 [node name="Model" parent="." instance=ExtResource("10_16ps5")]
 unique_name_in_owner = true
