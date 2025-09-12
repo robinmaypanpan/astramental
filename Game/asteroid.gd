@@ -91,15 +91,15 @@ func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		UiModel.building_on_cursor = null # exit build mode
-		if UiModel.mouse_tile_map_pos:
-			_get_tile_map_from_pos(UiModel.mouse_tile_map_pos).clear_ghost_building()
+		AsteroidViewModel.building_on_cursor = null # exit build mode
+		if AsteroidViewModel.mouse_tile_map_pos:
+			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
-		UiModel.mouse_state = MouseState.BUILDING
+		AsteroidViewModel.mouse_state = MouseState.BUILDING
 	elif Input.is_action_just_pressed("right_mouse_button"):
-		UiModel.mouse_state = MouseState.DELETING
+		AsteroidViewModel.mouse_state = MouseState.DELETING
 	elif Input.is_action_just_released("either_mouse_button"):
-		UiModel.mouse_state = MouseState.HOVERING
+		AsteroidViewModel.mouse_state = MouseState.HOVERING
 	
 	var new_mouse_tile_map_pos = _get_tile_map_pos()
 	var new_tile_map
@@ -109,19 +109,19 @@ func _input(_event: InputEvent) -> void:
 		new_tile_pos = new_mouse_tile_map_pos.tile_position
 
 	# update ghost
-	if UiModel.in_build_mode:
-		if UiModel.mouse_tile_map_pos and not in_same_board(UiModel.mouse_tile_map_pos, new_mouse_tile_map_pos):
-			var old_tile_map = _get_tile_map_from_pos(UiModel.mouse_tile_map_pos)
+	if AsteroidViewModel.in_build_mode:
+		if AsteroidViewModel.mouse_tile_map_pos and not in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos):
+			var old_tile_map = _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
 			old_tile_map.clear_ghost_building()
 		if new_mouse_tile_map_pos:
-			new_tile_map.move_ghost_building(new_tile_pos, UiModel.building_on_cursor)
+			new_tile_map.move_ghost_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
 
 	# place buildings
-	if new_mouse_tile_map_pos and UiModel.mouse_state != MouseState.HOVERING:
-		if UiModel.in_build_mode and UiModel.mouse_state == MouseState.BUILDING and Model.can_build(UiModel.building_on_cursor):
-			new_tile_map.place_building(new_tile_pos, UiModel.building_on_cursor)
-		if UiModel.mouse_state == MouseState.DELETING: # don't need to be in build mode to remove buildings
+	if new_mouse_tile_map_pos and AsteroidViewModel.mouse_state != MouseState.HOVERING:
+		if AsteroidViewModel.in_build_mode and AsteroidViewModel.mouse_state == MouseState.BUILDING and Model.can_build(AsteroidViewModel.building_on_cursor):
+			new_tile_map.place_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
+		if AsteroidViewModel.mouse_state == MouseState.DELETING: # don't need to be in build mode to remove buildings
 			new_tile_map.delete_building(new_tile_pos)
 
 	# update position
-	UiModel.mouse_tile_map_pos = new_mouse_tile_map_pos
+	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos

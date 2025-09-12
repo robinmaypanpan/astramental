@@ -56,7 +56,7 @@ func register_ready() -> void:
 ## Set the UI to the building mode and show the building cursor
 func _enter_build_mode(building: BuildingResource) ->void:
 	# cursor will automatically update when building_on_cursor is modified
-	UiModel.building_on_cursor = building
+	AsteroidViewModel.building_on_cursor = building
 	
 func _on_build_menu_building_clicked(building: BuildingResource) -> void:
 	if _Model.can_build(building):
