@@ -1,16 +1,18 @@
 extends MarginContainer
 
-@onready var _icon := %Icon
-@onready var _count_text := %CountText
+@export var item_type: Types.Item
 
 var _item_count: float = 0.0
 
-@export var item_type: Types.Item
+@onready var _icon := %Icon
+@onready var _count_text := %CountText
+
 
 func _ready() -> void:
 	var icon_to_use = Items.get_info(item_type).icon
 	_icon.texture = icon_to_use
 	update_count(0.0)
+
 
 ## Given the new count, update the current item count to the new one.
 func update_count(new_count: float) -> void:

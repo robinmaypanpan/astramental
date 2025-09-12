@@ -1,19 +1,21 @@
 class_name LeftPanel extends Control
 
-@export var _World : Node
+@export var world: Node
 
-@onready var _ResourceDisplay := %ResourceDisplay
-@onready var _DebugMenuPanel := %Debug
-@onready var _BuildMenu := %Build
+@onready var resource_display := %ResourceDisplay
+@onready var debug_menu_panel := %Debug
+@onready var build_menu := %Build
+
 
 func _ready() -> void:
-	_DebugMenuPanel.World = _World
-	
+	debug_menu_panel.world = world
+
+
 ## Setup the left panel at the start of a game
 func setup_game() -> void:
-	_ResourceDisplay.setup_game()
+	resource_display.setup_game()
+
 
 ## Returns the build menu
 func get_build_menu() -> BuildMenu:
-	return _BuildMenu
-	
+	return build_menu

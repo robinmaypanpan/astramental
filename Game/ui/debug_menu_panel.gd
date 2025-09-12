@@ -1,10 +1,13 @@
 extends Control
 
-@export var _ResourceDisplay : ResourceDisplay
+@export var resource_display: ResourceDisplay
 
-var World : Node
+## Expected to be set by the left panel parent
+## TODO: Make a better pattern here
+var world: Node
 
-@onready var _SeedText := %SeedText
+@onready var seed_text := %SeedText
+
 
 ## Actually add items to the given player
 func _on_cheat_items_add_items(item_type: Types.Item, amount: int) -> void:
@@ -12,11 +15,12 @@ func _on_cheat_items_add_items(item_type: Types.Item, amount: int) -> void:
 	var player_id: int = multiplayer.get_unique_id()
 	Model.increase_item_count(player_id, item_type, amount)
 
+
 ## Handler for the regen world button
 func _on_regen_world_button_pressed() -> void:
-	World.regenerate()
+	world.regenerate()
 
 
 ## Update seed text when the game is ready, as we don't know the world seed until then.
 func _on_world_game_ready() -> void:
-	_SeedText.text = "Seed: %d" % Model.world_seed
+	seed_text.text = "Seed: %d" % Model.world_seed

@@ -2,22 +2,26 @@ class_name Asteroid
 extends Control
 ## Contains all player board logic.
 
+@export var player_board: PackedScene
+
 var _player_boards: Dictionary[int, Node]
 
-@export var PlayerBoard : PackedScene
-@onready var _BoardHolder := %BoardHolder
+@onready var board_holder := %BoardHolder
+
 
 func _ready() -> void:
 	AsteroidViewModel.update_ore_tilemaps.connect(_on_update_ore_tilemaps)
 
+
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
-	var board = PlayerBoard.instantiate()
+	var board = player_board.instantiate()
 
 	board.owner_id = player_id
 
-	_BoardHolder.add_child(board)
+	board_holder.add_child(board)
 	_register_player_board(player_id, board)
+
 
 ## Add all player boards and generate ores for them.
 func generate_player_boards() -> void:
@@ -26,7 +30,9 @@ func generate_player_boards() -> void:
 
 	_generate_all_ores()
 
-## Generate the mine layers for all players by instantiating and adding individual mine layer scenes to each player board.
+
+## Generate the mine layers for all players by instantiating and adding
+## individual mine layer scenes to each player board.
 func _generate_all_ores() -> void:
 	seed(Model.world_seed)
 
@@ -35,7 +41,7 @@ func _generate_all_ores() -> void:
 		var layer_gen_data := WorldGenModel.get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
 		var ores_for_each_player := _init_ores_for_each_player()
-		var players_not_chosen_yet : Array[int] = Model.player_ids.duplicate()
+		var players_not_chosen_yet: Array[int] = Model.player_ids.duplicate()
 
 		# for each ore generation data in this layer
 		for ore_gen_data in layer_gen_data.ores:
@@ -51,21 +57,25 @@ func _generate_all_ores() -> void:
 				# if we've assigned a random ore to each player at least once, do it again
 				if players_not_chosen_yet.size() == 0:
 					players_not_chosen_yet = Model.player_ids.duplicate()
-		
+
 		# actually fill in the ore for each player
 		for player_id in Model.player_ids:
 			var player_board = _get_player_board(player_id)
 			var player_ore_gen_data := ores_for_each_player[player_id]
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
+
 func _register_player_board(player_id: int, player_board: Node) -> void:
 	_player_boards[player_id] = player_board
+
 
 func _get_player_board(player_id: int) -> Node:
 	return _player_boards[player_id]
 
+
 func _get_tile_map(player_id: int) -> BuildingTileMap:
 	return _get_player_board(player_id).PlayerTileMap
+
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
 func _init_ores_for_each_player() -> Dictionary[int, Array]:
@@ -75,11 +85,13 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 		ores_for_each_player[player_id] = []
 	return ores_for_each_player
 
+
 func _in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 	if pos1 and pos2:
 		return pos1.player_id == pos2.player_id
 	else:
 		return false
+
 
 func _get_tile_map_pos() -> TileMapPosition:
 	for player_id in Model.player_ids:
@@ -89,13 +101,15 @@ func _get_tile_map_pos() -> TileMapPosition:
 			return TileMapPosition.new(player_id, tile_position)
 	return null
 
+
 func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
 	var player_id = pos.player_id
 	return _get_tile_map(player_id)
 
+
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = null # exit build mode
+		AsteroidViewModel.building_on_cursor = null  # exit build mode
 		if AsteroidViewModel.mouse_tile_map_pos:
 			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
@@ -104,7 +118,7 @@ func _input(_event: InputEvent) -> void:
 		AsteroidViewModel.mouse_state = MouseState.DELETING
 	elif Input.is_action_just_released("either_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.HOVERING
-	
+
 	var new_mouse_tile_map_pos = _get_tile_map_pos()
 	var new_tile_map
 	var new_tile_pos
@@ -114,7 +128,10 @@ func _input(_event: InputEvent) -> void:
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if AsteroidViewModel.mouse_tile_map_pos and not _in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos):
+		if (
+			AsteroidViewModel.mouse_tile_map_pos
+			and not _in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos)
+		):
 			var old_tile_map = _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
 			old_tile_map.clear_ghost_building()
 		if new_mouse_tile_map_pos:
@@ -122,13 +139,19 @@ func _input(_event: InputEvent) -> void:
 
 	# place buildings
 	if new_mouse_tile_map_pos and AsteroidViewModel.mouse_state != MouseState.HOVERING:
-		if AsteroidViewModel.in_build_mode and AsteroidViewModel.mouse_state == MouseState.BUILDING and Model.can_build(AsteroidViewModel.building_on_cursor):
+		if (
+			AsteroidViewModel.in_build_mode
+			and AsteroidViewModel.mouse_state == MouseState.BUILDING
+			and Model.can_build(AsteroidViewModel.building_on_cursor)
+		):
 			new_tile_map.place_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
-		if AsteroidViewModel.mouse_state == MouseState.DELETING: # don't need to be in build mode to remove buildings
+		if AsteroidViewModel.mouse_state == MouseState.DELETING:
+			# don't need to be in build mode to remove buildings
 			new_tile_map.delete_building(new_tile_pos)
 
 	# update position
 	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
+
 
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
 func _on_update_ore_tilemaps() -> void:

@@ -13,7 +13,7 @@ var player_ids: Array[int]
 ## Emitted when ores_layout in PlayerStates is updated.
 signal ores_layout_updated()
 
-func start_game() -> void:
+func start_game() -> void:world
 	_PlayerStates.start_game()
 
 ## Initialize world_seed and player_ids for both players, when it is called in set_up_game rpc in World
