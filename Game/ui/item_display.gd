@@ -4,7 +4,6 @@ extends MarginContainer
 @export var item_display_row: PackedScene
 
 @onready var _item_display_list := %ItemDisplayList
-@onready var _Model := %Model
 
 ## Mapping from item type -> instantiated item display row.
 var _item_type_to_row_dict: Dictionary[Types.Item, Node]
@@ -22,5 +21,5 @@ func _ready() -> void:
 func update_counts() -> void:
 	var player_id: int = multiplayer.get_unique_id()
 	for type in Types.Item.values():
-		var my_item_count: int = _Model.get_item_count(player_id, type)
+		var my_item_count: int = Model.get_item_count(player_id, type)
 		_item_type_to_row_dict[type].update_count(my_item_count)

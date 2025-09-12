@@ -2,7 +2,6 @@ class_name Asteroid extends Control
 
 @onready var _BoardHolder := %BoardHolder
 
-@export var Model: GameModel
 @export var PlayerBoard : PackedScene
 
 var _player_boards: Dictionary[int, Node]
