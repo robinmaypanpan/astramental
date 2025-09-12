@@ -5,12 +5,6 @@ class_name Asteroid extends Control
 @export var Model: GameModel
 @export var PlayerBoard : PackedScene
 
-# game board properties
-@export var num_cols: int = 10
-@export var layer_thickness: int = 7
-@export var sky_height: int = 300
-@export var tile_map_scale: int = 2
-
 var _player_boards: Dictionary[int, Node]
 
 func _register_player_board(player_id: int, player_board: Node) -> void:
@@ -27,10 +21,6 @@ func add_player_board(player_id: int) -> void:
 	var board = PlayerBoard.instantiate()
 
 	board.owner_id = player_id
-	board.NumCols = num_cols
-	board.LayerThickness = layer_thickness
-	board.SkyHeight = sky_height
-	board.TileMapScale = tile_map_scale
 
 	_BoardHolder.add_child(board)
 	_register_player_board(player_id, board)
@@ -48,8 +38,8 @@ func generate_all_ores() -> void:
 	seed(Model.world_seed)
 
 	# layer 0 is factory layer. layer 1 is 1st mine layer
-	for layer_num in range(1, Ores.get_num_mine_layers() + 1):
-		var layer_gen_data := Ores.get_layer_generation_data(layer_num)
+	for layer_num in range(1, WorldGenModel.get_num_mine_layers() + 1):
+		var layer_gen_data := WorldGenModel.get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
 		var ores_for_each_player := _init_ores_for_each_player()
 		var players_not_chosen_yet := Model.player_ids.duplicate()

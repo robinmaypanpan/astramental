@@ -10,12 +10,6 @@ extends Control
 var owner_id : int
 var player: ConnectionSystem.NetworkPlayer
 
-# game board properties
-@export var NumCols : int = 30
-@export var LayerThickness : int = 10
-@export var SkyHeight : int = 100
-@export var TileMapScale : int = 2
-
 func _ready() -> void:
 	if ConnectionSystem.is_not_running_network():
 		owner_id = 1
@@ -25,26 +19,26 @@ func _ready() -> void:
 		
 	print("doing ready for %s (%s)" % [player.name, owner_id])
 
-	var tile_size := 16 * TileMapScale
-	var board_width_px := tile_size * NumCols
-	var layer_height_px := tile_size * LayerThickness
+	var tile_size := 16 * WorldGenModel.tile_map_scale
+	var board_width_px := tile_size * WorldGenModel.num_cols
+	var layer_height_px := tile_size * WorldGenModel.layer_thickness
 	# 1 factory layer + x mine layers
-	var num_layers := Ores.get_num_mine_layers() + 1
+	var num_layers := WorldGenModel.get_num_mine_layers() + 1
 
 	custom_minimum_size = Vector2i(board_width_px, 0)
 	_VerticalListContainer.custom_minimum_size = Vector2i(board_width_px, 0)
 
-	_Sky.custom_minimum_size = Vector2i(0, SkyHeight)
+	_Sky.custom_minimum_size = Vector2i(0, WorldGenModel.sky_height)
 	_PlayerNameLabel.text = "%s\n(%s)" % [player.name, player.index]
 
 	_FactoryAndMine.custom_minimum_size = Vector2i(0, layer_height_px * num_layers)
-	PlayerTileMap.tile_map_scale = TileMapScale
-	PlayerTileMap.layer_thickness = LayerThickness
+	PlayerTileMap.tile_map_scale = WorldGenModel.tile_map_scale
+	PlayerTileMap.layer_thickness = WorldGenModel.layer_thickness
 
 	# Set up factory tiles to be all white tiles
 	var white_tile_atlas_coordinates = Vector2i(0, 0)
-	for x in range(NumCols):
-		for y in range(LayerThickness):
+	for x in range(WorldGenModel.num_cols):
+		for y in range(WorldGenModel.layer_thickness):
 			PlayerTileMap.set_background_tile(x, y, white_tile_atlas_coordinates)
 
 ## Defines a circle filled with the specified ore.
@@ -68,21 +62,21 @@ func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
 
-	var layer_start_y := layer_num * LayerThickness
-	var layer_end_y := layer_start_y + LayerThickness
+	var layer_start_y := layer_num * WorldGenModel.layer_thickness
+	var layer_end_y := layer_start_y + WorldGenModel.layer_thickness
 	for ore_gen_data: OreGenerationResource in generation_data:
 		var ore := ore_gen_data.ore
 		var radius := ore_gen_data.size
 		
 		var random_center := Vector2(
-			randf_range(0, NumCols),
+			randf_range(0, WorldGenModel.num_cols),
 			randf_range(layer_start_y, layer_end_y),
 		)
 		var random_radius := randfn(radius, 0.3)
 		ore_circles.append(OreCircle.new(ore, random_center, random_radius))
 	
 	# then, for each tile in the tilemap
-	for x in range(NumCols):
+	for x in range(WorldGenModel.num_cols):
 		for y in range(layer_start_y, layer_end_y):
 			var center_of_tile := Vector2(x + 0.5, y + 0.5)
 			# if no ore is found, write the background rock
