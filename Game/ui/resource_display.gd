@@ -11,11 +11,11 @@ func setup_game() -> void:
 @onready var _item_display_list := %ItemDisplayList
 
 ## Mapping from item type -> instantiated item display row.
-var _item_type_to_row_dict: Dictionary[Item.Type, Node]
+var _item_type_to_row_dict: Dictionary[Types.Item, Node]
 
 func _ready() -> void:
 	# set up an item display row for every item type
-	for type in Item.Type.values():
+	for type in Types.Item.values():
 		var new_row := item_display_row.instantiate()
 		new_row.item_type = type
 		_item_display_list.add_child(new_row)
@@ -25,12 +25,12 @@ func _ready() -> void:
 	_Model.item_count_changed.connect(_update_item_count)
 
 ## Updates the nubmer of items located currently 
-func _update_item_count(player_id: int, type: Item.Type, new_count: int ) -> void:
+func _update_item_count(player_id: int, type: Types.Item, new_count: int ) -> void:
 	_item_type_to_row_dict[type].update_count(new_count)
 
 ## Update the counts of all items to their current resource amounts. Must be called manually for the resource numbers to update.
 func update_all_item_counts() -> void:
-	for type in Item.Type.values():
+	for type in Types.Item.values():
 		var player_id: int = multiplayer.get_unique_id()
 		var item_count: int = _Model.get_item_count(player_id, type)
 		

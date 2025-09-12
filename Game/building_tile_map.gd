@@ -3,7 +3,7 @@ extends MarginContainer
 class_name BuildingTileMap
 
 ## Defines whether this layer is a factory layer or mine layer
-@export var layer_type: Layer.Type
+@export var layer_type: Types.Layer
 @export var tile_map_scale: int
 @export_range(0.0, 1.0) var ghost_building_opacity: float
 

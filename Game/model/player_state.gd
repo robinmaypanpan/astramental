@@ -5,4 +5,4 @@ class_name PlayerState extends Node
 ## The player index, which starts at 1 for the server and increases by 1 for each successive player.
 @export var index:int
 ## The amount of each item that this player currently has.
-@export var items: Dictionary[Item.Type, float]
+@export var items: Dictionary[Types.Item, float]

@@ -19,7 +19,7 @@ func spawn_player_state(player_id: int) -> Node:
 	player_state.name = str(player_id)
 	player_state.id = player_id
 	player_state.index = player.index
-	for type in Item.Type.values():
+	for type in Types.Item.values():
 		player_state.items[type] = float(player.index)
 	
 	_player_states_dict[player_id] = player_state
