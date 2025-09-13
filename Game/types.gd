@@ -22,3 +22,8 @@ enum Layer {
 	FACTORY,
 	MINE,
 }
+
+enum Building {
+	SOLAR_PANEL,
+	MINER,
+}
