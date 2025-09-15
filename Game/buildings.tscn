@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://eimynub1vw3j"]
+
+[ext_resource type="Script" uid="uid://c0h3mu7ix3wt4" path="res://Game/buildings.gd" id="1_gipa0"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_sk4fw"]
+[ext_resource type="Resource" uid="uid://dr2a0i2d1ilm5" path="res://Game/data/buildings/solar_panel.tres" id="3_a1q66"]
+[ext_resource type="Resource" uid="uid://xxt6y1h10g6h" path="res://Game/data/buildings/miner.tres" id="4_6qmcm"]
+
+[node name="Buildings" type="Node"]
+script = ExtResource("1_gipa0")
+_buildings_dict = Dictionary[int, ExtResource("2_sk4fw")]({
+0: null,
+1: ExtResource("3_a1q66"),
+2: ExtResource("4_6qmcm")
+})
