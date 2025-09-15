@@ -24,6 +24,7 @@ enum Layer {
 }
 
 enum Building {
+	NONE,
 	SOLAR_PANEL,
 	MINER,
 }
