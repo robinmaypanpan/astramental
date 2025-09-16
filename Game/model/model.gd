@@ -11,6 +11,7 @@ signal ores_layout_updated()
 signal buildings_updated()
 
 var world_seed: int
+var player_ids: Array[int]
 
 @onready var player_states: PlayerStates  = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
@@ -30,6 +31,7 @@ func start_game() -> void:
 ## when it is called in set_up_game rpc in World
 func initialize_both_player_variables(server_world_seed: int) -> void:
 	world_seed = server_world_seed
+	player_ids = ConnectionSystem.get_player_id_list()
 
 
 ## Returns the number of items possessed by the specified player.
