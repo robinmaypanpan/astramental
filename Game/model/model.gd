@@ -44,7 +44,6 @@ func get_item_count(player_id: int, type: Types.Item) -> float:
 ## TODO: Should we really allow clients to set things directly? Hmmm.
 func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:	
 	update_item_count.rpc(type, new_count, player_id)
-	item_count_changed.emit(player_id, type, new_count)
 
 
 ## Increases the specified item count by the amount specified
@@ -59,6 +58,9 @@ func increase_item_count(player_id: int, type: Types.Item, increase_amount: floa
 func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.items[type] = amount
+	if player_id == multiplayer.get_unique_id():
+		# If this change is for the local system, we need to update subscribers
+		item_count_changed.emit(player_id, type, amount)
 
 
 ## Returns true if we have the resources necessary to build this building
@@ -162,7 +164,7 @@ func _on_update_timer_timeout() -> void:
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
 	
 	for player_id in player_list:
-		var buildings : Array[PlacedBuilding] = get_buildings(player_id)	
+		var buildings : Array[PlacedBuilding] = get_buildings(player_id)
 		var current_energy : float = get_item_count(player_id, Types.Item.ENERGY)
 		var new_energy = current_energy
 		
