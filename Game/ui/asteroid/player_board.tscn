@@ -15,9 +15,6 @@ offset_bottom = 556.0
 size_flags_vertical = 0
 theme = ExtResource("1_7uxwk")
 script = ExtResource("1_sf1vr")
-NumCols = 10
-LayerThickness = 7
-SkyHeight = 300
 
 [node name="VerticalListContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

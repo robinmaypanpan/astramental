@@ -1,4 +1,5 @@
-class_name world extends Control
+class_name GameWorld
+extends Control
 
 ## Emitted when the game is finished generating all ores and is ready to start playing.
 signal game_ready
@@ -28,10 +29,9 @@ func set_up_game(server_world_seed: int) -> void:
 	Model.initialize_both_player_variables(server_world_seed)
 
 	asteroid.generate_player_boards()
-
+	
+	## TODO: This should be in the model.
 	game_ready.emit()
-
-	left_panel.setup_game()
 
 
 ## Regenerates the world, such as in a debug situation

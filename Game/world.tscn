@@ -24,9 +24,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeftPanel" parent="HBoxContainer" instance=ExtResource("3_pecy7")]
+[node name="LeftPanel" parent="HBoxContainer" node_paths=PackedStringArray("world") instance=ExtResource("3_pecy7")]
 unique_name_in_owner = true
 layout_mode = 2
+world = NodePath("../..")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
