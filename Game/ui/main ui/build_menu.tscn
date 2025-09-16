@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bgq3xg7wrmxn5"]
 
-[ext_resource type="Script" uid="uid://033nlxebmukt" path="res://Game/ui/build_menu.gd" id="1_jyifq"]
+[ext_resource type="Script" uid="uid://033nlxebmukt" path="res://Game/ui/main ui/build_menu.gd" id="1_jyifq"]
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="2_whtk6"]
 
 [node name="BuildMenu" type="PanelContainer"]

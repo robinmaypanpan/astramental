@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://d17sc8rgcqfa4"]
 
-[ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://Game/ui/ui_root.gd" id="1_abnfh"]
+[ext_resource type="Script" uid="uid://cafn7gi124tgq" path="res://Systems/ui/ui_root.gd" id="1_abnfh"]
 [ext_resource type="PackedScene" uid="uid://cqo03y46lsise" path="res://Game/ui/menus/main.tscn" id="2_tkxvm"]
 [ext_resource type="PackedScene" uid="uid://dqxjnempjj6dd" path="res://Game/ui/menus/lobby.tscn" id="3_abnfh"]
 [ext_resource type="PackedScene" uid="uid://dji12mak03hku" path="res://Game/world.tscn" id="4_dq6r7"]
-[ext_resource type="PackedScene" uid="uid://dtruqm5nh1h12" path="res://Game/ui/cursor.tscn" id="5_dq6r7"]
+[ext_resource type="PackedScene" uid="uid://dtruqm5nh1h12" path="res://Systems/ui/cursor.tscn" id="5_dq6r7"]
 
 [sub_resource type="Animation" id="Animation_hat8c"]
 length = 0.001

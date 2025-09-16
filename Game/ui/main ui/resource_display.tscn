@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cao8qpde85dmt"]
 
-[ext_resource type="Script" uid="uid://c2ui7w82708r3" path="res://Game/ui/resource_display.gd" id="1_3rmhb"]
+[ext_resource type="Script" uid="uid://c2ui7w82708r3" path="res://Game/ui/main ui/resource_display.gd" id="1_3rmhb"]
 
 [node name="ResourceDisplay" type="PanelContainer"]
 script = ExtResource("1_3rmhb")
