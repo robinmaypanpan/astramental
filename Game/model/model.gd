@@ -131,10 +131,10 @@ func set_building_at(player_id: int, tile_position: Vector2i, new_building_type:
 @rpc("any_peer", "call_local", "reliable")
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())
-	var player_state = player_states.get_state(player_id)
-	var index_to_remove = -1
+	var player_state : PlayerState = player_states.get_state(player_id)
+	var index_to_remove := -1
 	for i in player_state.buildings_list.size():
-		var placed_building = player_state.buildings_list[i]
+		var placed_building : PlacedBuilding = player_state.buildings_list[i]
 		if placed_building.position == tile_position:
 			index_to_remove = i
 			break
@@ -145,13 +145,14 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 
 ## Retrieves a list of buildings for the specified player
 func get_buildings(player_id: int) -> Array[PlacedBuilding]:
-	var player_state = player_states.get_state(player_id)
+	var player_state : PlayerState = player_states.get_state(player_id)
 	return player_state.buildings_list
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
+	var update_time : float = _update_timer.wait_time
 	
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
 	
@@ -161,8 +162,8 @@ func _on_update_timer_timeout() -> void:
 		var new_energy = current_energy
 		
 		for building in buildings:
-			var building_resource: BuildingResource = Buildings.get_building_resource(building)
-			new_energy -= building_resource.energy_drain
+			var building_resource: BuildingResource = Buildings.get_building_resource(building.type)
+			new_energy -= building_resource.energy_drain * update_time
 		
 		# Set the new energy in the player state 
 		if new_energy != current_energy:
