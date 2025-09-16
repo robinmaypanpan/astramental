@@ -38,7 +38,7 @@ func initialize_both_player_variables(server_world_seed: int) -> void:
 func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items[type]
-	
+
 
 ## Given the item type and amount, add that many items to this player's PlayerState.
 ## TODO: Should we really allow clients to set things directly? Hmmm.
@@ -103,7 +103,8 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 	else:
 		print("trying to write ore to factory layer: (%d, %d, %d, %s)" % [player_id, x, y, ore])
 
-## returns the building at a specified location on the map
+
+## Get the building type at the given position.
 func get_building_at(pos: TileMapPosition) -> Types.Building:
 	var player_state = player_states.get_state(pos.player_id)
 	for placed_building in player_state.buildings_list:
@@ -112,8 +113,11 @@ func get_building_at(pos: TileMapPosition) -> Types.Building:
 	return Types.Building.NONE
 
 
+## Set the building at the given position to the given building type for all players.
 @rpc("any_peer", "call_local", "reliable")
-func set_building_at(player_id: int, tile_position: Vector2i, new_building_type: Types.Building) -> void:
+func set_building_at(
+	player_id: int, tile_position: Vector2i, new_building_type: Types.Building
+) -> void:
 	print("doing set building for %d" % multiplayer.get_unique_id())
 	var player_state = player_states.get_state(player_id)
 	var building_already_there := false
@@ -128,6 +132,7 @@ func set_building_at(player_id: int, tile_position: Vector2i, new_building_type:
 	buildings_updated.emit()
 
 
+## Remove the building at the given position for all players.
 @rpc("any_peer", "call_local", "reliable")
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())

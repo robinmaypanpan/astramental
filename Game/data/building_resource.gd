@@ -4,9 +4,6 @@ extends Resource
 ## User facing name for this building
 @export var name: String = ""
 
-## The internal id for the building
-@export var id: Types.Building
-
 ## User facing icon to display in purchase shop
 @export var icon: AtlasTexture = null
 
