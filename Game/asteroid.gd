@@ -168,6 +168,7 @@ func _on_update_ore_tilemaps() -> void:
 				tile_map.set_background_tile(x, y, atlas_coordinates)
 
 
+## Request the server to let you place a building at the given position.
 func request_place_building(pos: TileMapPosition, building: Types.Building) -> void:
 	# do client side pretend placement
 	print("requesting place building from %d" % multiplayer.get_unique_id())
@@ -175,14 +176,19 @@ func request_place_building(pos: TileMapPosition, building: Types.Building) -> v
 	process_place_building.rpc_id(1, pos.player_id, pos.tile_position, building)
 
 
+## On the server, determine if a building placement request should be allowed.
+## If it should, actually place the building for both players.
 @rpc("any_peer", "call_local", "reliable")
-func process_place_building(player_id: int, tile_position: Vector2i, building: Types.Building) -> void:
+func process_place_building(
+	player_id: int, tile_position: Vector2i, building: Types.Building
+) -> void:
 	print("processing place building from %d" % multiplayer.get_unique_id())
 	var caller_id = multiplayer.get_remote_sender_id()
 	if Model.can_build(building):
 		Model.set_building_at.rpc(player_id, tile_position, building)
 
 
+## Request the server to let you remove a building at the given position.
 func request_remove_building(pos: TileMapPosition) -> void:
 	# do client side pretend placement
 	print("requesting delete building from %d" % multiplayer.get_unique_id())
@@ -190,14 +196,19 @@ func request_remove_building(pos: TileMapPosition) -> void:
 	process_remove_building.rpc_id(1, pos.player_id, pos.tile_position)
 
 
+## On the server, determine if a building removal request should be allowed.
+## If it should, actually remove the building for both players.
 @rpc("any_peer", "call_local", "reliable")
-func process_remove_building(player_id: int, tile_position: Vector2i) -> void:
+func process_remove_building(
+	player_id: int, tile_position: Vector2i
+) -> void:
 	print("processing remove building from %d" % multiplayer.get_unique_id())
 	var caller_id = multiplayer.get_remote_sender_id()
 	if Model.can_remove():
 		Model.remove_building_at.rpc(player_id, tile_position)
 
 
+## Look at the model and redraw all the buildings to the screen.
 func _on_update_buildings() -> void:
 	print("update buildings for %d" % multiplayer.get_unique_id())
 	for player_board in _player_boards.values():
