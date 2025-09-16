@@ -16,5 +16,5 @@ extends Resource
 ## The coordinates in the building tileset that correspond to the correct building image.
 var atlas_coordinates: Vector2i:
 	get:
-		var icon_region = icon.region
+		var icon_region := icon.region
 		return icon_region.position / 16

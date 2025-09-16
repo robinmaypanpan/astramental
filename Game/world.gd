@@ -49,7 +49,7 @@ func start_game():
 
 
 ## Set the UI to the building mode and show the building cursor
-func _enter_build_mode(building: BuildingResource) -> void:
+func _enter_build_mode(building: Types.Building) -> void:
 	# cursor will automatically update when building_on_cursor is modified
 	AsteroidViewModel.building_on_cursor = building
 
@@ -60,7 +60,7 @@ func _register_ready() -> void:
 	# TODO: Move this to connection system.
 	assert(multiplayer.is_server())
 	num_players_ready += 1
-	var total_num_players = ConnectionSystem.get_num_players()
+	var total_num_players := ConnectionSystem.get_num_players()
 
 	if num_players_ready >= total_num_players:
 		start_game()
@@ -78,6 +78,6 @@ func _regen_player_boards() -> void:
 		set_up_game.rpc(randi())
 
 
-func _on_build_menu_building_clicked(building: BuildingResource) -> void:
+func _on_build_menu_building_clicked(building: Types.Building) -> void:
 	if Model.can_build(building):
 		_enter_build_mode(building)

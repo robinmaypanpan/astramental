@@ -12,7 +12,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_3kekb")
 script = ExtResource("1_noxfd")
-player_board = ExtResource("2_iciq7")
+player_board_scene = ExtResource("2_iciq7")
 
 [node name="BoardHolder" type="HBoxContainer" parent="."]
 unique_name_in_owner = true

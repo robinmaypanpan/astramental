@@ -7,9 +7,9 @@ extends Control
 @onready var _NewFile:LineEdit = %NewFile
 
 ## Dictionary containing the list of resources
-var _resource_paths = {}
+var _resource_paths := {}
 ## Which resource list is loaded
-var _current_index = 0
+var _current_index := 0
 ## Stores the data for this resource list
 var _resource_lists: Array[ResourceListDatum] = []
 
@@ -37,13 +37,13 @@ func load_resource_list(resource_list_index:int) -> void:
 	var paths := ResourceLoader.list_directory(resource_list_path)
 	
 	for path in paths:
-		var index = _ResourceList.add_item(path.substr(0, path.length() - 5))
+		var index := _ResourceList.add_item(path.substr(0, path.length() - 5))
 		_resource_paths[index] = "%s/%s" % [resource_list_path, path]
 
 
 func _on_building_list_item_selected(index: int) -> void:
 	var path = _resource_paths[index]
-	var resource = load(path)
+	var resource := load(path)
 	EditorInterface.edit_resource(resource)
 	
 
@@ -85,11 +85,11 @@ func _on_new_file_text_submitted(new_resource_name: String) -> void:
 	var new_resource = resource_script.new()
 	
 	# Save the resource
-	var new_resource_path = "%s/%s.tres" % [resource_list_data.resource_dir_path, new_resource_name]
+	var new_resource_path := "%s/%s.tres" % [resource_list_data.resource_dir_path, new_resource_name]
 	ResourceSaver.save(new_resource, new_resource_path)
 	
 	# Load the resource into the list
-	var index = _ResourceList.add_item(new_resource_name)
+	var index := _ResourceList.add_item(new_resource_name)
 	_resource_paths[index] = new_resource_path	
 	
 	# Start editing the list
