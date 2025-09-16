@@ -14,6 +14,13 @@ func _ready() -> void:
 		var building_path: String = "%s/%s" % [path_to_buildings, path]
 		var building_resource: BuildingResource = load(building_path)
 		var building_id: String = building_resource.id
+		# if the key already exists, then building_id is not unique and we must crash
+		if _buildings_dict.has(building_id):
+			assert(false, "buildings '%s' and '%s' both have id '%s'" % [
+				building_resource.name,
+				_buildings_dict[building_id].name,
+				building_id
+			])
 		_buildings_dict[building_id] = building_resource
 
 
