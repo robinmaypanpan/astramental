@@ -80,10 +80,6 @@ func _get_player_board(player_id: int) -> Node:
 	return _player_boards[player_id]
 
 
-func _get_tile_map(player_id: int) -> BuildingTileMap:
-	return _get_player_board(player_id).player_tile_map
-
-
 ## Set up the dictionary to associate an empty array to each player id in the game.
 func _init_ores_for_each_player() -> Dictionary[int, Array]:
 	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
@@ -101,24 +97,27 @@ func _in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 
 
 func _get_tile_map_pos() -> TileMapPosition:
-	for player_id in ConnectionSystem.get_player_id_list():
-		var tile_map := _get_tile_map(player_id)
-		if tile_map.mouse_inside_tile_map():
-			var tile_position := tile_map.get_mouse_tile_map_coords()
-			return TileMapPosition.new(player_id, tile_position)
+	# TODO: RPG
+	#for player_id in ConnectionSystem.get_player_id_list():
+		#var player_board := _get_player_board(player_id)
+		#var tile_map := _get_tile_map(player_id)
+		#if tile_map.mouse_inside_tile_map():
+			#var tile_position := tile_map.get_mouse_tile_map_coords()
+			#return TileMapPosition.new(player_id, tile_position)
 	return null
 
-
-func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
-	var player_id := pos.player_id
-	return _get_tile_map(player_id)
+# TODO: RPG
+#func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
+	#var player_id := pos.player_id
+	#return _get_tile_map(player_id)
 
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		AsteroidViewModel.building_on_cursor = "" # exit build mode
 		if AsteroidViewModel.mouse_tile_map_pos:
-			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
+			pass
+			# TODO rpg: _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.BUILDING
 	elif Input.is_action_just_pressed("right_mouse_button"):
@@ -130,7 +129,8 @@ func _input(_event: InputEvent) -> void:
 	var new_tile_map
 	var new_tile_pos
 	if new_mouse_tile_map_pos:
-		new_tile_map = _get_tile_map_from_pos(new_mouse_tile_map_pos)
+		# TODO: RPG
+		#new_tile_map = _get_tile_map_from_pos(new_mouse_tile_map_pos)
 		new_tile_pos = new_mouse_tile_map_pos.tile_position
 
 	# update ghost
@@ -139,8 +139,10 @@ func _input(_event: InputEvent) -> void:
 			AsteroidViewModel.mouse_tile_map_pos
 			and not _in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos)
 		):
-			var old_tile_map := _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
-			old_tile_map.clear_ghost_building()
+			# TODO: RPG
+			pass
+			#var old_tile_map := _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
+			#old_tile_map.clear_ghost_building()
 		if new_mouse_tile_map_pos:
 			new_tile_map.move_ghost_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
 
@@ -163,15 +165,13 @@ func _input(_event: InputEvent) -> void:
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
 func _on_update_ore_tilemaps() -> void:
 	for player_board in _player_boards.values():
-		var tile_map: BuildingTileMap = player_board.player_tile_map
 		var player_id: int = player_board.owner_id
 		var start_y := WorldGenModel.get_mine_layer_start_y()
 		var end_y := WorldGenModel.get_all_layers_end_y()
 		for x in range(WorldGenModel.num_cols):
 			for y in range(start_y, end_y):
-				var ore := Model.get_ore_at(player_id, x, y)
-				var atlas_coordinates := Ores.get_atlas_coordinates(ore)
-				tile_map.set_background_tile(x, y, atlas_coordinates)
+				var ore: Types.Ore = Model.get_ore_at(player_id, x, y)
+				player_board.set_ore_at(x, y, ore)
 
 
 ## Request the server to let you place a building at the given position.
