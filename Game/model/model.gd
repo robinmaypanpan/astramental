@@ -163,7 +163,7 @@ func _on_update_timer_timeout() -> void:
 	
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
 	
-	for player_id in player_list:
+	for player_id:int in player_list:
 		var buildings : Array[PlacedBuilding] = get_buildings(player_id)
 		var current_energy : float = get_item_count(player_id, Types.Item.ENERGY)
 		var new_energy = current_energy
