@@ -12,10 +12,11 @@ func _ready() -> void:
 	player_spawner.spawn_function = spawn_player_state
 
 
-func start_game() -> void:
+## Generates the states for all the different players
+func generate_player_states() -> void:
 	var player_ids := ConnectionSystem.get_player_id_list()
 
-	for player_id in player_ids:
+	for player_id:int in player_ids:
 		add_state(player_id)
 
 

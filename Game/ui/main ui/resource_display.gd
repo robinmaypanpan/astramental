@@ -19,12 +19,8 @@ func _ready() -> void:
 		_item_type_to_row_dict[type] = new_row
 
 	Model.item_count_changed.connect(_update_item_count)
-
-
-## Setup the game
-func setup_game() -> void:
-	_update_all_item_counts()
-
+	Model.game_ready.connect(_update_item_count)
+	
 
 ## Updates the nubmer of items located currently
 func _update_item_count(_player_id: int, type: Types.Item, new_count: float) -> void:

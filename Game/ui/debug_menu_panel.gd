@@ -2,10 +2,6 @@ extends Control
 
 @export var resource_display: ResourceDisplay
 
-## Expected to be set by the left panel parent
-## TODO: Make a better pattern here
-var world: Node
-
 @onready var seed_text := %SeedText
 
 
@@ -18,7 +14,7 @@ func _on_cheat_items_add_items(item_type: Types.Item, amount: int) -> void:
 
 ## Handler for the regen world button
 func _on_regen_world_button_pressed() -> void:
-	world.regenerate()
+	Model.regenerate()
 
 
 ## Update seed text when the game is ready, as we don't know the world seed until then.
