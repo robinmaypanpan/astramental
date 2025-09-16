@@ -4,20 +4,13 @@ extends Node
 ## the complete current state of the game
 
 ## When an item quantity is changed, this signal fires
-signal item_count_changed(player_id: int, type: Types.Item, new_count: int)
+signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 ## Emitted when ores_layout in PlayerStates is updated.
 signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
 var world_seed: int
-var player_ids: Array[int]
-
-## Emitted when ores_layout in PlayerStates is updated.
-signal ores_layout_updated()
-
-## When an item quantity is changed, this signal fires
-signal item_count_changed(player_id: int, type: Types.Item, new_count: float )
 
 @onready var player_states: PlayerStates  = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
@@ -37,7 +30,6 @@ func start_game() -> void:
 ## when it is called in set_up_game rpc in World
 func initialize_both_player_variables(server_world_seed: int) -> void:
 	world_seed = server_world_seed
-	player_ids = ConnectionSystem.get_player_id_list()
 
 
 ## Returns the number of items possessed by the specified player.
