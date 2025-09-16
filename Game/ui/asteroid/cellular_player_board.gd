@@ -51,6 +51,18 @@ func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:
 	game_grid.get_cell(y, x).set_background(ore_resource.icon)
 
 
+## Returns true if the mouse is over the factory or mine
+func is_mouse_over_factory_or_mine() -> bool:	
+	var mouse_position := game_grid.get_local_mouse_position()
+	return game_grid.get_rect().has_point(mouse_position)
+
+
+## Returns the coordinates of the grid if the mouse is over them.
+func get_mouse_grid_position() -> Vector2i:
+	var mouse_position := game_grid.get_local_mouse_position()
+	return game_grid.get_cell_under_local_point(mouse_position)
+
+
 ## Given ore generation data, generate the ores for the given layer number by filling
 ## out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num: int) -> void:

@@ -4,10 +4,12 @@ extends Control
 @onready var heat_indicator: ProgressBar = %HeatLevel
 @onready var icon: TextureRect = %IconImage
 @onready var background: TextureRect = %BackgroundImage
+@onready var ghost: TextureRect = %GhostImage
 
 func _ready() -> void:
 	icon.texture = null
 	background.texture = null
+	ghost.texture = null
 	heat_indicator.visible = false
 	heat_indicator.value = 0.0
 
@@ -20,3 +22,6 @@ func set_background(texture:Texture):
 func set_heat(value:float):
 	heat_indicator.value = value
 	heat_indicator.visible = value > 0.0
+	
+func set_ghost(texture:Texture):
+	ghost.texture = texture

@@ -97,27 +97,19 @@ func _in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
 
 
 func _get_tile_map_pos() -> TileMapPosition:
-	# TODO: RPG
-	#for player_id in ConnectionSystem.get_player_id_list():
-		#var player_board := _get_player_board(player_id)
-		#var tile_map := _get_tile_map(player_id)
-		#if tile_map.mouse_inside_tile_map():
-			#var tile_position := tile_map.get_mouse_tile_map_coords()
-			#return TileMapPosition.new(player_id, tile_position)
+	for player_id in ConnectionSystem.get_player_id_list():
+		var player_board := _get_player_board(player_id)
+		if player_board.is_mouse_over_factory_or_mine():			
+			var tile_position: Vector2i = player_board.get_mouse_grid_position()
+			return TileMapPosition.new(player_id, tile_position)
 	return null
-
-# TODO: RPG
-#func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
-	#var player_id := pos.player_id
-	#return _get_tile_map(player_id)
 
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		AsteroidViewModel.building_on_cursor = "" # exit build mode
-		if AsteroidViewModel.mouse_tile_map_pos:
-			pass
-			# TODO rpg: _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
+		#if AsteroidViewModel.mouse_tile_map_pos:
+			#_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.BUILDING
 	elif Input.is_action_just_pressed("right_mouse_button"):
@@ -143,8 +135,8 @@ func _input(_event: InputEvent) -> void:
 			pass
 			#var old_tile_map := _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
 			#old_tile_map.clear_ghost_building()
-		if new_mouse_tile_map_pos:
-			new_tile_map.move_ghost_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
+		#if new_mouse_tile_map_pos:
+			#new_tile_map.move_ghost_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
 
 	# place buildings
 	if new_mouse_tile_map_pos and AsteroidViewModel.mouse_state != MouseState.HOVERING:
