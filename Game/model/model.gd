@@ -79,3 +79,16 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 		ores_layout_updated.emit()
 	else:
 		print("trying to write ore to factory layer: (%d, %d, %d, %s)" % [player_id, x, y, ore])
+
+
+func get_building_at(pos: TileMapPosition) -> Types.Building:
+	var player_state = player_states.get_state(pos.player_id)
+	for placed_building in player_state.buildings_list:
+		if placed_building.position == pos.tile_position:
+			return placed_building.type
+	return Types.Building.NONE
+
+
+func get_buildings(player_id: int) -> Array[PlacedBuilding]:
+	var player_state = player_states.get_state(player_id)
+	return player_state.buildings_list
