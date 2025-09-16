@@ -33,5 +33,4 @@ func generate_grid(rows:int, cols:int):
 func get_cell(row:int, col:int) -> Control:
 	var child_index = col + row * _actual_cols	
 	var child:Control = _grid_container.get_child(child_index)
-	print("Requested %d,%d and got %s" % [row, col, child.name])
 	return child

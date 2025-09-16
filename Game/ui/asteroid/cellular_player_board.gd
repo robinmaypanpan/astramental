@@ -43,18 +43,12 @@ func _ready() -> void:
 	for x in range(WorldGenModel.num_cols):
 		for y in range(WorldGenModel.layer_thickness):
 			game_grid.get_cell(y, x).set_background(factory_texture)
-			if randf() > 0.75:
-				game_grid.get_cell(y,x).set_heat(randf()*100)
-				game_grid.get_cell(y,x).set_icon(preload("res://Assets/sprites/buildings/solar_panel.tres"))
 
 
 ## Publicly sets the ore at the indicated location
 func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:	
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
 	game_grid.get_cell(y, x).set_background(ore_resource.icon)
-	if randf() > 0.75:
-		game_grid.get_cell(y,x).set_heat(randf()*100)
-		game_grid.get_cell(y,x).set_icon(preload("res://Assets/sprites/buildings/drill.tres"))
 
 
 ## Given ore generation data, generate the ores for the given layer number by filling
