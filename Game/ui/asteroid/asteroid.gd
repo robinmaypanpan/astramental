@@ -110,7 +110,7 @@ func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = Types.Building.NONE  # exit build mode
+		AsteroidViewModel.building_on_cursor = "" # exit build mode
 		if AsteroidViewModel.mouse_tile_map_pos:
 			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
@@ -169,7 +169,7 @@ func _on_update_ore_tilemaps() -> void:
 
 
 ## Request the server to let you place a building at the given position.
-func request_place_building(pos: TileMapPosition, building: Types.Building) -> void:
+func request_place_building(pos: TileMapPosition, building: String) -> void:
 	# do client side pretend placement
 	print("requesting place building from %d" % multiplayer.get_unique_id())
 	# then actually request the server to place the building
@@ -180,7 +180,7 @@ func request_place_building(pos: TileMapPosition, building: Types.Building) -> v
 ## If it should, actually place the building for both players.
 @rpc("any_peer", "call_local", "reliable")
 func process_place_building(
-	player_id: int, tile_position: Vector2i, building: Types.Building
+	player_id: int, tile_position: Vector2i, building: String
 ) -> void:
 	print("processing place building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
@@ -216,4 +216,4 @@ func _on_update_buildings() -> void:
 		var player_id: int = player_board.owner_id
 		tile_map.building_tiles.clear()
 		for placed_building in Model.get_buildings(player_id):
-			tile_map.place_building(placed_building.position, placed_building.type)
+			tile_map.place_building(placed_building.position, placed_building.id)

@@ -7,7 +7,7 @@ signal update_ore_tilemaps()
 # Emitted when the list of buildings for either player changes, subscribed to by asteroid
 signal update_buildings()
 
-var building_on_cursor: Types.Building:
+var building_on_cursor: String:
 	get:
 		return building_on_cursor
 	set(building):
@@ -16,7 +16,7 @@ var building_on_cursor: Types.Building:
 
 var in_build_mode: bool:
 	get:
-		return building_on_cursor != Types.Building.NONE
+		return building_on_cursor != ""
 
 var mouse_state := MouseState.HOVERING
 # default value is null

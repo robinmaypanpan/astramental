@@ -30,15 +30,15 @@ func clear_ghost_building():
 		ghost_building_tiles.erase_cell(_ghost_building_position)
 
 
-func move_ghost_building(pos: Vector2i, building: Types.Building):
+func move_ghost_building(pos: Vector2i, building_id: String):
 	clear_ghost_building()
 	_ghost_building_position = pos
-	var atlas_coords := Buildings.get_atlas_coords(building)
+	var atlas_coords := Buildings.get_by_id(building_id).atlas_coordinates
 	ghost_building_tiles.set_cell(pos, 0, atlas_coords)
 
 
-func place_building(pos: Vector2i, building: Types.Building):
-	var atlas_coords := Buildings.get_atlas_coords(building)
+func place_building(pos: Vector2i, building_id: String):
+	var atlas_coords := Buildings.get_by_id(building_id).atlas_coordinates
 	building_tiles.set_cell(pos, 0, atlas_coords)
 
 

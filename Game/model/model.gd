@@ -62,7 +62,7 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 
 
 ## Returns true if we have the resources necessary to build this building
-func can_build(building: Types.Building) -> bool:
+func can_build(building_id: String) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
@@ -105,18 +105,18 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 
 
 ## Get the building type at the given position.
-func get_building_at(pos: TileMapPosition) -> Types.Building:
+func get_building_at(pos: TileMapPosition) -> String:
 	var player_state := player_states.get_state(pos.player_id)
 	for placed_building in player_state.buildings_list:
 		if placed_building.position == pos.tile_position:
-			return placed_building.type
-	return Types.Building.NONE
+			return placed_building.id
+	return ""
 
 
 ## Set the building at the given position to the given building type for all players.
 @rpc("any_peer", "call_local", "reliable")
 func set_building_at(
-	player_id: int, tile_position: Vector2i, new_building_type: Types.Building
+	player_id: int, tile_position: Vector2i, building_id: String
 ) -> void:
 	print("doing set building for %d" % multiplayer.get_unique_id())
 	var player_state := player_states.get_state(player_id)
@@ -124,11 +124,11 @@ func set_building_at(
 	# if there is a building already in building list, just change its type
 	for placed_building in player_state.buildings_list:
 		if placed_building.position == tile_position:
-			placed_building.type = new_building_type
+			placed_building.id = building_id
 			building_already_there = true
 	# otherwise, add new building to building list
 	if not building_already_there:
-		player_state.buildings_list.append(PlacedBuilding.new(tile_position, new_building_type))
+		player_state.buildings_list.append(PlacedBuilding.new(tile_position, building_id))
 	buildings_updated.emit()
 
 
@@ -167,7 +167,7 @@ func _on_update_timer_timeout() -> void:
 		var new_energy := current_energy
 
 		for building in buildings:
-			var building_resource: BuildingResource = Buildings.get_building_resource(building.type)
+			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 			new_energy -= building_resource.energy_drain * update_time
 
 		# Set the new energy in the player state

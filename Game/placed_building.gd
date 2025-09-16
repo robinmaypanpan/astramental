@@ -4,9 +4,9 @@ extends Resource
 
 ## The tile position of the building.
 var position: Vector2i
-## What type of building is here.
-var type: Types.Building
+## What id of building is here.
+var id: String
 
 func _init(p, t):
 	position = p
-	type = t
+	id = t

@@ -49,7 +49,7 @@ func start_game():
 
 
 ## Set the UI to the building mode and show the building cursor
-func _enter_build_mode(building: Types.Building) -> void:
+func _enter_build_mode(building: String) -> void:
 	# cursor will automatically update when building_on_cursor is modified
 	AsteroidViewModel.building_on_cursor = building
 
@@ -78,6 +78,6 @@ func _regen_player_boards() -> void:
 		set_up_game.rpc(randi())
 
 
-func _on_build_menu_building_clicked(building: Types.Building) -> void:
+func _on_build_menu_building_clicked(building: String) -> void:
 	if Model.can_build(building):
 		_enter_build_mode(building)

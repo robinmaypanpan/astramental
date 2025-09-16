@@ -15,10 +15,11 @@ func _update_cursor_image():
 
 
 func update_building_icon():
-	var building := AsteroidViewModel.building_on_cursor
-	if building != Types.Building.NONE:
+	var building_id := AsteroidViewModel.building_on_cursor
+	var building := Buildings.get_by_id(building_id)
+	if building:
 		# can't access building icon if building is null
-		build_icon.texture = Buildings.get_icon(building)
+		build_icon.texture = building.icon
 	else:
 		build_icon.texture = null
 	_update_cursor_image()

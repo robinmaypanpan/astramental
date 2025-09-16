@@ -1,30 +1,24 @@
 extends Node
 
-@export var _buildings_dict: Dictionary[Types.Building, BuildingResource]
+@export var path_to_buildings: String
 
-func get_icon(building_type: Types.Building) -> AtlasTexture:
-	if building_type != Types.Building.NONE:
-		return _buildings_dict[building_type].icon
-	else:
-		return null
+var _buildings_dict: Dictionary[String, BuildingResource]
 
-func get_atlas_coords(building_type: Types.Building) -> Vector2i:
-	if building_type != Types.Building.NONE:
-		return _buildings_dict[building_type].atlas_coordinates
-	else:
-		return Vector2i(-1, -1)
 
-## Returns the building resource associated with this building type
-func get_building_resource(building_type: Types.Building) -> BuildingResource:
-	if building_type != Types.Building.NONE:
-		return _buildings_dict[building_type]
-	else:
-		return null
+func _ready() -> void:
+	var paths := ResourceLoader.list_directory(path_to_buildings)
+	for path in paths:
+		var building_path: String = "%s/%s" % [path_to_buildings, path]
+		var building_resource: BuildingResource = load(building_path)
+		var building_id: String = building_resource.id
+		_buildings_dict[building_id] = building_resource
 
-## Returns a string that represents the user displayable name of this building
-func get_building_name(building_type: Types.Building) -> String:
-	var building_resource: BuildingResource = get_building_resource(building_type)
-	if building_resource != null:
-		return building_resource.name
-	else:
-		return ""
+
+## Returns the building resource associated with this building id. Returns null if it doesn't exist.
+func get_by_id(building_id: String) -> BuildingResource:
+	return _buildings_dict.get(building_id)
+
+
+## Return a list of all BuildingResources.
+func get_all_buildings() -> Array[BuildingResource]:
+	return _buildings_dict.values()
