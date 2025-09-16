@@ -26,6 +26,7 @@ var _players := Dictionary()
 ## Caches the list of player ids
 var _player_ids: Array[int] = []
 
+## Stores the player name that is likely to be the player's name
 var _predicted_local_player_name: String
 
 
@@ -232,6 +233,7 @@ func _player_disconnected(id: int) -> void:
 	unregister_player(id)
 
 
+## Causes the "game started" signal to emit, used to do this on all systems
 @rpc("call_local", "reliable")
 func _start_all_games() -> void:
 	game_started.emit()
