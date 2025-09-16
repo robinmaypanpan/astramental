@@ -5,7 +5,7 @@ signal building_on_cursor_changed()
 # subscribed to by asteroid
 signal update_ore_tilemaps()
 
-var building_on_cursor: BuildingResource:
+var building_on_cursor: Types.Building:
 	get:
 		return building_on_cursor
 	set(building):
@@ -14,7 +14,7 @@ var building_on_cursor: BuildingResource:
 
 var in_build_mode: bool:
 	get:
-		return building_on_cursor != null
+		return building_on_cursor != Types.Building.NONE
 
 var mouse_state := MouseState.HOVERING
 # default value is null

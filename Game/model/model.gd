@@ -46,7 +46,7 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 	player_state.items[type] = amount
 
 ## Returns true if we have the resources necessary to build this building
-func can_build(building: BuildingResource) -> bool:
+func can_build(building: Types.Building) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true

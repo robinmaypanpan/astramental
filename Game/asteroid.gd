@@ -109,7 +109,7 @@ func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = null  # exit build mode
+		AsteroidViewModel.building_on_cursor = Types.Building.NONE  # exit build mode
 		if AsteroidViewModel.mouse_tile_map_pos:
 			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):

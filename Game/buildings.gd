@@ -13,3 +13,9 @@ func get_atlas_coords(building_type: Types.Building) -> Vector2i:
 		return _buildings_dict[building_type].atlas_coordinates
 	else:
 		return Vector2i(-1, -1)
+
+func get_building_name(building_type: Types.Building) -> String:
+	if building_type != Types.Building.NONE:
+		return _buildings_dict[building_type].name
+	else:
+		return ""
