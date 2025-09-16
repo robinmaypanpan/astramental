@@ -23,6 +23,9 @@ var connection_state: States = States.IDLE
 ## Stores the list of players
 var _players := Dictionary()
 
+## Caches the list of player ids
+var _player_ids: Array[int] = []
+
 var _predicted_local_player_name: String
 
 
@@ -37,6 +40,8 @@ func _ready() -> void:
 		var desktop_path := OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).replace("\\", "/").split("/")
 		_predicted_local_player_name = desktop_path[desktop_path.size() - 2]
 
+	_generate_player_id_list()
+
 	print("Connection System is ready")
 
 
@@ -50,12 +55,16 @@ func is_not_running_network() -> bool:
 	return connection_state == States.IDLE
 
 
+## Start the game on all clients
 func start_game() -> void:
 	print("Starting all games")
+	# Do this one last time before we get started
+	_generate_player_id_list()
 	assert(multiplayer.is_server())
 	_start_all_games.rpc()
 
 
+## Starts the server on this system
 func host_server(local_player_name: String = "") -> void:
 	if connection_state != States.IDLE:
 		connection_message.emit("Unable to join, connection already active")
@@ -77,6 +86,8 @@ func host_server(local_player_name: String = "") -> void:
 	connection_succeeded.emit()
 
 
+## Sets this instance of the game as a client and tries to connect to the
+## provided server
 func join_server(local_player_name: String, ip_address: String) -> void:
 	if connection_state != States.IDLE:
 		connection_message.emit("Unable to join, connection already active")
@@ -99,6 +110,7 @@ func join_server(local_player_name: String, ip_address: String) -> void:
 	connection_succeeded.emit()
 
 
+## Shuts down the server or the connection to the server
 func shutdown_server() -> void:
 	connection_state = States.DISCONNECTING
 	connection_message.emit("Shutting down...")
@@ -116,6 +128,7 @@ func register_player(player_id: int, player_name: String, player_index: int):
 
 	_players[player_id] = new_player
 
+	_generate_player_id_list()
 	player_list_changed.emit()
 
 
@@ -123,6 +136,7 @@ func register_player(player_id: int, player_name: String, player_index: int):
 func unregister_player(player_id: int):
 	if _players.has(player_id):
 		_players.erase(player_id)
+		_generate_player_id_list()
 		player_list_changed.emit()
 
 
@@ -133,8 +147,12 @@ func get_num_players() -> int:
 
 ## Returns an array of player ids, sorted by index
 func get_player_id_list() -> Array[int]:
+	return _player_ids
+	
+## Rebuilds the list of player ids
+func _generate_player_id_list() -> void:
 	if connection_state == States.IDLE or _players.size() == 0:
-		return []
+		_player_ids = []
 
 	var player_indices := {}
 
@@ -142,11 +160,9 @@ func get_player_id_list() -> Array[int]:
 		var player: NetworkPlayer = _players[player_id]
 		player_indices[player.index] = player_id
 
-	var player_ids: Array[int] = []
-	for idx in range(_players.size()):
-		player_ids.append(player_indices[idx + 1])
-
-	return player_ids
+	_player_ids = []
+	for idx:int in range(_players.size()):
+		_player_ids.append(player_indices[idx + 1])
 
 
 ## Returns a NetworkPlayer struct for a given player id
