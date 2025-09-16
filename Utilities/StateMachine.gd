@@ -6,10 +6,10 @@ extends Node
 var current_state : State
 
 func _ready() -> void:
-	var children = find_children("*", "State")
+	var children := find_children("*", "State")
 	for child:State in children:
 		child.finished.connect(transition_state)
-	var ready_state = get_initial_state()
+	var ready_state := get_initial_state()
 	transition_state(ready_state.name, {"firstTime":true})
 
 func get_initial_state() -> State:

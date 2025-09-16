@@ -37,7 +37,7 @@ func _ready() -> void:
 	player_tile_map.layer_thickness = WorldGenModel.layer_thickness
 
 	# Set up factory tiles to be all white tiles
-	var white_tile_atlas_coordinates = Vector2i(0, 0)
+	var white_tile_atlas_coordinates := Vector2i(0, 0)
 	for x in range(WorldGenModel.num_cols):
 		for y in range(WorldGenModel.layer_thickness):
 			player_tile_map.set_background_tile(x, y, white_tile_atlas_coordinates)

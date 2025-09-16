@@ -195,11 +195,11 @@ func _request_join_game(player_name: String):
 @rpc("authority", "call_remote", "reliable")
 func _introduce_old_players(old_player_string: String):
 	print("Adding existing players to player list")
-	var old_players = old_player_string.split(";")
+	var old_players := old_player_string.split(";")
 	for player_string in old_players:
 		if player_string.length() == 0:
 			continue
-		var player_data = player_string.split(":")
+		var player_data := player_string.split(":")
 		register_player(int(player_data[0]), player_data[2], int(player_data[1]))
 
 

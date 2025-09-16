@@ -15,11 +15,11 @@ func refresh_lobby() -> void:
 	print("Refresh Lobby")
 	player_list_node.clear()
 
-	var player_list = ConnectionSystem.get_player_id_list()
+	var player_list := ConnectionSystem.get_player_id_list()
 
 	for player_id in player_list:
-		var player = ConnectionSystem.get_player(player_id)
-		var player_name = player.name
+		var player := ConnectionSystem.get_player(player_id)
+		var player_name := player.name
 		if player_id == multiplayer.get_unique_id():
 			player_name += " (you)"
 		player_list_node.add_item("%d: %s" % [player.index, player_name])

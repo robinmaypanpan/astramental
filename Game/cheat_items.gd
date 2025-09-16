@@ -45,7 +45,7 @@ func _on_plus_button_pressed() -> void:
 ## When the amount text changes, update our internal amount count
 func _on_amount_text_text_changed(new_text: String) -> void:
 	if new_text:
-		var interpreted_amount = int(new_text)
+		var interpreted_amount := int(new_text)
 		if interpreted_amount != 0:  # int() returns 0 if string isn't int
 			amount = interpreted_amount
 

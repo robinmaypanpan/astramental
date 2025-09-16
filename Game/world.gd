@@ -60,7 +60,7 @@ func _register_ready() -> void:
 	# TODO: Move this to connection system.
 	assert(multiplayer.is_server())
 	num_players_ready += 1
-	var total_num_players = ConnectionSystem.get_num_players()
+	var total_num_players := ConnectionSystem.get_num_players()
 
 	if num_players_ready >= total_num_players:
 		start_game()

@@ -15,7 +15,7 @@ func _ready() -> void:
 
 	for building_type in Types.Building.values():
 		if building_type != Types.Building.NONE:
-			var index = building_list.add_icon_item(Buildings.get_icon(building_type))
+			var index := building_list.add_icon_item(Buildings.get_icon(building_type))
 			building_list.set_item_text(index, Buildings.get_building_name(building_type))
 			_buildings.push_back(building_type)
 

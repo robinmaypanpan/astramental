@@ -13,6 +13,6 @@ class_name PlayerState extends Node
 @export var buildings_list: Array[PlacedBuilding]
 
 func _ready() -> void:
-	var num_layers = WorldGenModel.get_num_mine_layers()
-	var layer_size = WorldGenModel.num_cols * WorldGenModel.layer_thickness
+	var num_layers := WorldGenModel.get_num_mine_layers()
+	var layer_size := WorldGenModel.num_cols * WorldGenModel.layer_thickness
 	ores_layout.resize(num_layers * layer_size)

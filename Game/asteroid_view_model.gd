@@ -2,9 +2,9 @@ extends Node
 
 # subscribed to by cursor
 signal building_on_cursor_changed()
-# subscribed to by asteroid
+# Emitted when the ore layout changes, subscribed to by asteroid
 signal update_ore_tilemaps()
-# subscribed to by asteroid
+# Emitted when the list of buildings for either player changes, subscribed to by asteroid
 signal update_buildings()
 
 var building_on_cursor: Types.Building:
@@ -33,6 +33,7 @@ func _ready():
 	Model.buildings_updated.connect(_on_buildings_updated)
 
 
+## since this is UI updating, use _process instead of _physics_process
 func _process(_delta: float) -> void:
 	if ores_layout_dirty:
 		update_ore_tilemaps.emit()

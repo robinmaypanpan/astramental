@@ -30,7 +30,7 @@ func transition_to(menu_name: String) -> Node:
 
 	# Transition out of the current menu
 	if current_node != null:
-		var current_menu = current_node as Menu
+		var current_menu := current_node as Menu
 		if current_menu != null:
 			current_menu.starting_fade_out()
 
@@ -49,7 +49,7 @@ func transition_to(menu_name: String) -> Node:
 		shroud_animation.play_backwards("fade_to_black")
 		await(shroud_animation.animation_finished)
 
-		var new_menu = new_node as Menu
+		var new_menu := new_node as Menu
 		if new_menu != null:
 			new_menu.fade_in_complete()
 		return new_node

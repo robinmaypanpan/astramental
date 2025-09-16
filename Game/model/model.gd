@@ -11,7 +11,6 @@ signal ores_layout_updated()
 signal buildings_updated()
 
 var world_seed: int
-var player_ids: Array[int]
 
 @onready var player_states: PlayerStates  = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
@@ -21,7 +20,7 @@ var player_ids: Array[int]
 
 func start_game() -> void:
 	player_states.start_game()
-	
+
 	if multiplayer.is_server():
 		# Start the timer on the server and only on the server.
 		_update_timer.start()
@@ -31,7 +30,6 @@ func start_game() -> void:
 ## when it is called in set_up_game rpc in World
 func initialize_both_player_variables(server_world_seed: int) -> void:
 	world_seed = server_world_seed
-	player_ids = ConnectionSystem.get_player_id_list()
 
 
 ## Returns the number of items possessed by the specified player.
@@ -42,14 +40,14 @@ func get_item_count(player_id: int, type: Types.Item) -> float:
 
 ## Given the item type and amount, add that many items to this player's PlayerState.
 ## TODO: Should we really allow clients to set things directly? Hmmm.
-func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:	
+func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:
 	update_item_count.rpc(type, new_count, player_id)
 
 
 ## Increases the specified item count by the amount specified
 func increase_item_count(player_id: int, type: Types.Item, increase_amount: float) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_count = player_state.items[type]
+	var item_count := player_state.items[type]
 	set_item_count(player_id, type, item_count + increase_amount)
 
 
@@ -70,7 +68,7 @@ func can_build(building: Types.Building) -> bool:
 	return true
 
 ## Returns true if this player can delete the building at the given position.
-func can_remove() -> bool:
+func can_remove_building() -> bool:
 	return true
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
@@ -85,9 +83,9 @@ func _get_index_into_ores_layout(x: int, y: int) -> int:
 
 ## Get the ore at the given x/y coordinates for the given player id.
 func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
-	var index = _get_index_into_ores_layout(x, y)
+	var index := _get_index_into_ores_layout(x, y)
 	if index != -1:
-		var player_state = player_states.get_state(player_id)
+		var player_state := player_states.get_state(player_id)
 		return player_state.ores_layout[index]
 	else:
 		print("trying to read ore to factory layer: (%d, %d, %d)" % [player_id, x, y])
@@ -97,9 +95,9 @@ func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
 ## Set the ore at the given x/y coordinates for the given player id.
 ## Emits the ores_layout_updated signal.
 func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
-	var index = _get_index_into_ores_layout(x, y)
+	var index := _get_index_into_ores_layout(x, y)
 	if index != -1:
-		var player_state = player_states.get_state(player_id)
+		var player_state := player_states.get_state(player_id)
 		player_state.ores_layout[index] = ore
 		ores_layout_updated.emit()
 	else:
@@ -108,7 +106,7 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 
 ## Get the building type at the given position.
 func get_building_at(pos: TileMapPosition) -> Types.Building:
-	var player_state = player_states.get_state(pos.player_id)
+	var player_state := player_states.get_state(pos.player_id)
 	for placed_building in player_state.buildings_list:
 		if placed_building.position == pos.tile_position:
 			return placed_building.type
@@ -121,7 +119,7 @@ func set_building_at(
 	player_id: int, tile_position: Vector2i, new_building_type: Types.Building
 ) -> void:
 	print("doing set building for %d" % multiplayer.get_unique_id())
-	var player_state = player_states.get_state(player_id)
+	var player_state := player_states.get_state(player_id)
 	var building_already_there := false
 	# if there is a building already in building list, just change its type
 	for placed_building in player_state.buildings_list:
@@ -160,18 +158,18 @@ func get_buildings(player_id: int) -> Array[PlacedBuilding]:
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	var update_time : float = _update_timer.wait_time
-	
+
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
-	
-	for player_id:int in player_list:
+
+	for player_id: int in player_list:
 		var buildings : Array[PlacedBuilding] = get_buildings(player_id)
 		var current_energy : float = get_item_count(player_id, Types.Item.ENERGY)
-		var new_energy = current_energy
-		
+		var new_energy := current_energy
+
 		for building in buildings:
 			var building_resource: BuildingResource = Buildings.get_building_resource(building.type)
 			new_energy -= building_resource.energy_drain * update_time
-		
-		# Set the new energy in the player state 
+
+		# Set the new energy in the player state
 		if new_energy != current_energy:
 			set_item_count(player_id, Types.Item.ENERGY, new_energy)
