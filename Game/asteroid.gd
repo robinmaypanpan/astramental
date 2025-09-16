@@ -2,7 +2,7 @@ class_name Asteroid
 extends Control
 ## Contains all player board logic.
 
-@export var player_board: PackedScene
+@export var player_board_scene: PackedScene
 
 var _player_boards: Dictionary[int, Node]
 
@@ -11,11 +11,12 @@ var _player_boards: Dictionary[int, Node]
 
 func _ready() -> void:
 	AsteroidViewModel.update_ore_tilemaps.connect(_on_update_ore_tilemaps)
+	AsteroidViewModel.update_buildings.connect(_on_update_buildings)
 
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
-	var board = player_board.instantiate()
+	var board = player_board_scene.instantiate()
 
 	board.owner_id = player_id
 
@@ -144,10 +145,10 @@ func _input(_event: InputEvent) -> void:
 			and AsteroidViewModel.mouse_state == MouseState.BUILDING
 			and Model.can_build(AsteroidViewModel.building_on_cursor)
 		):
-			new_tile_map.place_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
+			request_place_building(new_mouse_tile_map_pos, AsteroidViewModel.building_on_cursor)
 		if AsteroidViewModel.mouse_state == MouseState.DELETING:
 			# don't need to be in build mode to remove buildings
-			new_tile_map.delete_building(new_tile_pos)
+			request_remove_building(new_mouse_tile_map_pos)
 
 	# update position
 	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
@@ -165,3 +166,43 @@ func _on_update_ore_tilemaps() -> void:
 				var ore = Model.get_ore_at(player_id, x, y)
 				var atlas_coordinates = Ores.get_atlas_coordinates(ore)
 				tile_map.set_background_tile(x, y, atlas_coordinates)
+
+
+func request_place_building(pos: TileMapPosition, building: Types.Building) -> void:
+	# do client side pretend placement
+	print("requesting place building from %d" % multiplayer.get_unique_id())
+	# then actually request the server to place the building
+	process_place_building.rpc_id(1, pos.player_id, pos.tile_position, building)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func process_place_building(player_id: int, tile_position: Vector2i, building: Types.Building) -> void:
+	print("processing place building from %d" % multiplayer.get_unique_id())
+	var caller_id = multiplayer.get_remote_sender_id()
+	if Model.can_build(building):
+		Model.set_building_at.rpc(player_id, tile_position, building)
+
+
+func request_remove_building(pos: TileMapPosition) -> void:
+	# do client side pretend placement
+	print("requesting delete building from %d" % multiplayer.get_unique_id())
+	# then actually request the server to place the building
+	process_remove_building.rpc_id(1, pos.player_id, pos.tile_position)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func process_remove_building(player_id: int, tile_position: Vector2i) -> void:
+	print("processing remove building from %d" % multiplayer.get_unique_id())
+	var caller_id = multiplayer.get_remote_sender_id()
+	if Model.can_remove():
+		Model.remove_building_at.rpc(player_id, tile_position)
+
+
+func _on_update_buildings() -> void:
+	print("update buildings for %d" % multiplayer.get_unique_id())
+	for player_board in _player_boards.values():
+		var tile_map: BuildingTileMap = player_board.player_tile_map
+		var player_id: int = player_board.owner_id
+		tile_map.building_tiles.clear()
+		for placed_building in Model.get_buildings(player_id):
+			tile_map.place_building(placed_building.position, placed_building.type)
