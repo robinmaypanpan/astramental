@@ -21,8 +21,8 @@ func _ready() -> void:
 	Model.item_count_changed.connect(_update_item_count)
 
 
-## Setup the game
-func setup_game() -> void:
+## Initialize the display to its starting display
+func initialize_display() -> void:
 	_update_all_item_counts()
 
 

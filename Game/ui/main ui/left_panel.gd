@@ -1,15 +1,12 @@
 class_name LeftPanel extends Control
 
-@export var world: GameWorld
-
 @onready var resource_display := %ResourceDisplay
 @onready var debug_menu_panel := %Debug
 @onready var build_menu := %Build
 
 
 func _ready() -> void:
-	debug_menu_panel.world = world
-	world.game_ready.connect(_on_game_ready)
+	Model.game_ready.connect(_on_game_ready)
 
 ## Returns the build menu
 func get_build_menu() -> BuildMenu:

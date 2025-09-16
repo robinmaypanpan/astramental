@@ -26,6 +26,12 @@ func add_player_board(player_id: int) -> void:
 
 ## Add all player boards and generate ores for them.
 func generate_player_boards() -> void:
+	# Clear out the old player boards, if necessary
+	for player_board in board_holder.get_children():
+		board_holder.remove_child(player_board)
+		player_board.queue_free()
+
+	# Generate new player boards!
 	for player_id in ConnectionSystem.get_player_id_list():
 		add_player_board(player_id)
 
