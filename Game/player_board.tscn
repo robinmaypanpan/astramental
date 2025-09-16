@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c5auwrdgqvt1a"]
 
-[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_7uxwk"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_7uxwk"]
 [ext_resource type="Script" uid="uid://bhx68tgn2jboc" path="res://Game/player_board.gd" id="1_sf1vr"]
 [ext_resource type="PackedScene" uid="uid://bb85240ld5ija" path="res://Game/building_tile_map.tscn" id="3_7uxwk"]
 

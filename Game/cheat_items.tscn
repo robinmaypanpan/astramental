@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cho1mjxxemfva"]
 
-[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_80lxg"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_80lxg"]
 [ext_resource type="Script" uid="uid://bl0jdibvk1wil" path="res://Game/cheat_items.gd" id="2_kkbhl"]
 
 [node name="CheatItems" type="MarginContainer"]
