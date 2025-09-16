@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://1mq2wn7s6nc0"]
 
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_ahpvq"]
-[ext_resource type="Script" uid="uid://dk8t5y1a6qtrs" path="res://Game/ui/left_panel.gd" id="1_sfd31"]
-[ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/resource_display.tscn" id="2_sfd31"]
+[ext_resource type="Script" uid="uid://dk8t5y1a6qtrs" path="res://Game/ui/main ui/left_panel.gd" id="1_sfd31"]
+[ext_resource type="PackedScene" uid="uid://cao8qpde85dmt" path="res://Game/ui/main ui/resource_display.tscn" id="2_sfd31"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="3_1gn3h"]
 [ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/debug_menu_panel.tscn" id="4_aa1ah"]
-[ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/build_menu.tscn" id="5_ld2tw"]
+[ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/main ui/build_menu.tscn" id="5_ld2tw"]
 
 [node name="LeftPanel" type="Panel"]
 anchors_preset = 15

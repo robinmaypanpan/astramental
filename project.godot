@@ -23,7 +23,7 @@ ConnectionSystem="*res://Systems/connection.gd"
 Items="*res://Game/items.tscn"
 Ores="*res://Game/ores.tscn"
 WorldGenModel="*res://Game/model/world_gen_model.tscn"
-AsteroidViewModel="*res://Game/asteroid_view_model.gd"
+AsteroidViewModel="*res://Game/ui/asteroid/asteroid_view_model.gd"
 Model="*res://Game/model/model.tscn"
 Buildings="*res://Game/buildings.tscn"
 
