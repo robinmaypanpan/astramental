@@ -3,6 +3,8 @@ extends Node
 ## This class contains accessors to the major state containers and data for
 ## the complete current state of the game
 
+## Emitted when the game is finished setting up and is ready to start playing
+signal game_ready
 ## When an item quantity is changed, this signal fires
 signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 ## Emitted when ores_layout in PlayerStates is updated.
@@ -10,26 +12,65 @@ signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
+
 var world_seed: int
+var num_players_ready := 0
 
 @onready var player_states: PlayerStates  = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
 
-
-func start_game() -> void:
-	player_states.start_game()
-
-	if multiplayer.is_server():
-		# Start the timer on the server and only on the server.
-		_update_timer.start()
-
-
-## Initialize world_seed and player_ids for both players
-## when it is called in set_up_game rpc in World
-func initialize_both_player_variables(server_world_seed: int) -> void:
+## Take the world seed from the server and initalize it and the world for all players.
+@rpc("call_local", "reliable")
+func initialize_clients(server_world_seed: int) -> void:
 	world_seed = server_world_seed
+
+	player_states.generate_player_states()
+
+
+## Launches the game on all clients
+@rpc("call_local", "reliable")
+func launch_game() -> void:
+	game_ready.emit()
+
+
+## Does any work that needs to be done now that the UI has loaded
+func ui_loaded() -> void:	
+	if ConnectionSystem.is_not_running_network():
+		_start_game()
+	else:
+		register_player_ready.rpc_id(1)
+
+
+## Regenerates the world, such as in a debug situation
+func regenerate():
+	request_regenerate_world.rpc(1)
+
+
+## Request that the server regenerate
+@rpc("authority", "call_local", "reliable")
+func request_regenerate_world() -> void:
+	assert(multiplayer.is_server())
+	randomize()
+	# this call will emit game_ready, which will update the seed text
+	var new_random_seed: int = randi()	
+	initialize_clients.rpc(new_random_seed)
+
+	launch_game.rpc()
+	
+
+## Register that this particular player is ready to start the game
+@rpc("any_peer", "call_local", "reliable")
+func register_player_ready() -> void:
+	# TODO: Move this to connection system.
+	assert(multiplayer.is_server())
+	num_players_ready += 1
+	var total_num_players := ConnectionSystem.get_num_players()
+
+	if num_players_ready >= total_num_players:
+		# Start the game now that all players are ready
+		_start_game()
 
 
 ## Returns the number of items possessed by the specified player.
@@ -152,6 +193,22 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 func get_buildings(player_id: int) -> Array[PlacedBuilding]:
 	var player_state : PlayerState = player_states.get_state(player_id)
 	return player_state.buildings_list
+
+
+## Should only be called on the server
+func _start_game():
+	assert(multiplayer.is_server())
+
+	# Start the timer on the server and only on the server.
+	_update_timer.start()
+
+	# Now initialize the clients
+	randomize()
+	var new_random_seed: int = randi()
+	initialize_clients.rpc(new_random_seed)
+
+	# Launch the game!
+	launch_game.rpc()
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.
