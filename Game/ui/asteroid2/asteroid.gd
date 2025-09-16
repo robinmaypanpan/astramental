@@ -1,37 +1,31 @@
-class_name Asteroid
+class_name Asteroid2
 extends Control
 ## Contains all player board logic.
 
+## This is the scene that hsould be used, one per player
 @export var player_board_scene: PackedScene
 
-var _player_boards: Dictionary[int, Node]
+## Dictionary to store a mapping of player ids to player boards
+var _player_id_to_board: Dictionary[int, Node]
 
-@onready var board_holder := %BoardHolder
-
+## Link to the container that will hold the boards
+@onready var board_holder := %PlayerBoardContainer
 
 func _ready() -> void:
-	AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_update_ore_tilemaps)
-	AsteroidViewModel.building_layout_changed_this_frame.connect(_on_update_buildings)
+	pass
+	#AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_ores_changed)
+	#AsteroidViewModel.building_layout_changed_this_frame.connect(_on_buildings_changed)
 
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
-	var board := player_board_scene.instantiate()
-
-	board.owner_id = player_id
-
+	var board : Control = player_board_scene.instantiate()
 	board_holder.add_child(board)
-	_register_player_board(player_id, board)
+	_player_id_to_board[player_id] = board
 
 
 ## Add all player boards and generate ores for them.
 func generate_player_boards() -> void:
-	# Clear out the old player boards, if necessary
-	for player_board in board_holder.get_children():
-		board_holder.remove_child(player_board)
-		player_board.queue_free()
-
-	# Generate new player boards!
 	for player_id in ConnectionSystem.get_player_id_list():
 		add_player_board(player_id)
 
@@ -72,12 +66,8 @@ func _generate_all_ores() -> void:
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
 
-func _register_player_board(player_id: int, player_board: Node) -> void:
-	_player_boards[player_id] = player_board
-
-
 func _get_player_board(player_id: int) -> Node:
-	return _player_boards[player_id]
+	return _player_id_to_board[player_id]
 
 
 func _get_tile_map(player_id: int) -> BuildingTileMap:
@@ -116,7 +106,7 @@ func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = "" # exit build mode
+		AsteroidViewModel.building_on_cursor = Types.Building.NONE  # exit build mode
 		if AsteroidViewModel.mouse_tile_map_pos:
 			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
@@ -162,7 +152,7 @@ func _input(_event: InputEvent) -> void:
 
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
 func _on_update_ore_tilemaps() -> void:
-	for player_board in _player_boards.values():
+	for player_board in _player_id_to_board.values():
 		var tile_map: BuildingTileMap = player_board.player_tile_map
 		var player_id: int = player_board.owner_id
 		var start_y := WorldGenModel.get_mine_layer_start_y()
@@ -175,7 +165,7 @@ func _on_update_ore_tilemaps() -> void:
 
 
 ## Request the server to let you place a building at the given position.
-func request_place_building(pos: TileMapPosition, building: String) -> void:
+func request_place_building(pos: TileMapPosition, building: Types.Building) -> void:
 	# do client side pretend placement
 	print("requesting place building from %d" % multiplayer.get_unique_id())
 	# then actually request the server to place the building
@@ -186,7 +176,7 @@ func request_place_building(pos: TileMapPosition, building: String) -> void:
 ## If it should, actually place the building for both players.
 @rpc("any_peer", "call_local", "reliable")
 func process_place_building(
-	player_id: int, tile_position: Vector2i, building: String
+	player_id: int, tile_position: Vector2i, building: Types.Building
 ) -> void:
 	print("processing place building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
@@ -222,4 +212,4 @@ func _on_update_buildings() -> void:
 		var player_id: int = player_board.owner_id
 		tile_map.building_tiles.clear()
 		for placed_building in Model.get_buildings(player_id):
-			tile_map.place_building(placed_building.position, placed_building.id)
+			tile_map.place_building(placed_building.position, placed_building.type)
