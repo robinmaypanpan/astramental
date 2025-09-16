@@ -15,6 +15,6 @@ script = ExtResource("1_b2ktb")
 name = "Solar Panel"
 id = 1
 icon = ExtResource("1_atdat")
-energy_drain = 0.0
+energy_drain = -1.0
 item_costs = Array[ExtResource("1_r87ev")]([SubResource("Resource_atdat")])
 metadata/_custom_type_script = "uid://dmnwciefckrau"

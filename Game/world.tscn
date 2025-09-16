@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cokmj1q7s6ab7" path="res://Game/world.gd" id="1_3kekb"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://UI/game_theme.tres" id="1_pecy7"]
-[ext_resource type="PackedScene" uid="uid://1mq2wn7s6nc0" path="res://Game/ui/left_panel.tscn" id="3_pecy7"]
-[ext_resource type="PackedScene" uid="uid://bncje5xywcr8m" path="res://Game/ui/top_panel.tscn" id="7_16ps5"]
+[ext_resource type="PackedScene" path="res://Game/ui/left_panel.tscn" id="3_pecy7"]
+[ext_resource type="PackedScene" path="res://Game/ui/top_panel.tscn" id="7_16ps5"]
 [ext_resource type="PackedScene" uid="uid://c45g1mdwk11yt" path="res://Game/asteroid.tscn" id="9_71s8c"]
 
 [node name="World" type="Control"]

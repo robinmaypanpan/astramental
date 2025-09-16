@@ -27,3 +27,10 @@ script = ExtResource("3_6exh1")
 unique_name_in_owner = true
 spawn_path = NodePath("../PlayerStates")
 spawn_limit = 3
+
+[node name="UpdateTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+process_callback = 0
+wait_time = 0.2
+
+[connection signal="timeout" from="UpdateTimer" to="." method="_on_update_timer_timeout"]

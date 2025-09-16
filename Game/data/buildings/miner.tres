@@ -15,6 +15,6 @@ script = ExtResource("2_ihwv0")
 name = "Miner"
 id = 2
 icon = ExtResource("1_ihwv0")
-energy_drain = 1.0
+energy_drain = 0.5
 item_costs = Array[ExtResource("1_rb5k8")]([SubResource("Resource_ihwv0")])
 metadata/_custom_type_script = "uid://dmnwciefckrau"
