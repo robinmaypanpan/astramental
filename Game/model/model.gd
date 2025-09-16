@@ -4,7 +4,7 @@ extends Node
 ## the complete current state of the game
 
 ## When an item quantity is changed, this signal fires
-signal item_count_changed(player_id: int, type: Types.Item, new_count: int)
+signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 ## Emitted when ores_layout in PlayerStates is updated.
 signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
@@ -16,10 +16,15 @@ var player_ids: Array[int]
 @onready var player_states: PlayerStates  = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
+@onready var _update_timer := %UpdateTimer
 
 
 func start_game() -> void:
 	player_states.start_game()
+	
+	if multiplayer.is_server():
+		# Start the timer on the server and only on the server.
+		_update_timer.start()
 
 
 ## Initialize world_seed and player_ids for both players
@@ -29,15 +34,16 @@ func initialize_both_player_variables(server_world_seed: int) -> void:
 	player_ids = ConnectionSystem.get_player_id_list()
 
 
-func get_item_count(player_id: int, type: Types.Item) -> int:
+## Returns the number of items possessed by the specified player.
+func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items[type]
 
 
 ## Given the item type and amount, add that many items to this player's PlayerState.
-func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:
+## TODO: Should we really allow clients to set things directly? Hmmm.
+func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:	
 	update_item_count.rpc(type, new_count, player_id)
-	item_count_changed.emit(player_id, type, new_count)
 
 
 ## Increases the specified item count by the amount specified
@@ -52,6 +58,9 @@ func increase_item_count(player_id: int, type: Types.Item, increase_amount: floa
 func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.items[type] = amount
+	if player_id == multiplayer.get_unique_id():
+		# If this change is for the local system, we need to update subscribers
+		item_count_changed.emit(player_id, type, amount)
 
 
 ## Returns true if we have the resources necessary to build this building
@@ -129,10 +138,10 @@ func set_building_at(
 @rpc("any_peer", "call_local", "reliable")
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())
-	var player_state = player_states.get_state(player_id)
-	var index_to_remove = -1
+	var player_state : PlayerState = player_states.get_state(player_id)
+	var index_to_remove := -1
 	for i in player_state.buildings_list.size():
-		var placed_building = player_state.buildings_list[i]
+		var placed_building : PlacedBuilding = player_state.buildings_list[i]
 		if placed_building.position == tile_position:
 			index_to_remove = i
 			break
@@ -141,7 +150,28 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 		buildings_updated.emit()
 
 
-## Get the list of all buildings a particular player has.
+## Retrieves a list of buildings for the specified player
 func get_buildings(player_id: int) -> Array[PlacedBuilding]:
-	var player_state = player_states.get_state(player_id)
+	var player_state : PlayerState = player_states.get_state(player_id)
 	return player_state.buildings_list
+
+
+## Fires whenever the update timer is fired. This should only run on the server.
+func _on_update_timer_timeout() -> void:
+	assert(multiplayer.is_server())
+	var update_time : float = _update_timer.wait_time
+	
+	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
+	
+	for player_id in player_list:
+		var buildings : Array[PlacedBuilding] = get_buildings(player_id)
+		var current_energy : float = get_item_count(player_id, Types.Item.ENERGY)
+		var new_energy = current_energy
+		
+		for building in buildings:
+			var building_resource: BuildingResource = Buildings.get_building_resource(building.type)
+			new_energy -= building_resource.energy_drain * update_time
+		
+		# Set the new energy in the player state 
+		if new_energy != current_energy:
+			set_item_count(player_id, Types.Item.ENERGY, new_energy)

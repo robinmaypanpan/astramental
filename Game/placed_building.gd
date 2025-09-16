@@ -8,5 +8,5 @@ var position: Vector2i
 var type: Types.Building
 
 func _init(p, t):
-    position = p
-    type = t
+	position = p
+	type = t

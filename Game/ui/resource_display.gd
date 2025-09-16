@@ -27,7 +27,7 @@ func setup_game() -> void:
 
 
 ## Updates the nubmer of items located currently
-func _update_item_count(_player_id: int, type: Types.Item, new_count: int) -> void:
+func _update_item_count(_player_id: int, type: Types.Item, new_count: float) -> void:
 	_item_type_to_row_dict[type].update_count(new_count)
 
 
