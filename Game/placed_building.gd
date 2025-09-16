@@ -4,7 +4,7 @@ extends Resource
 
 ## The tile position of the building.
 var position: Vector2i
-## What id of building is here.
+## What building is here.
 var id: String
 
 func _init(p, t):

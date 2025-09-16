@@ -1,10 +1,13 @@
 extends Node
 
+## The path to the folder containing all building resources.
 @export var path_to_buildings: String
 
+## Mapping between unique string id and building resource.
 var _buildings_dict: Dictionary[String, BuildingResource]
 
 
+## Dynamically build list of buildings by getting everything in the buildings directory.
 func _ready() -> void:
 	var paths := ResourceLoader.list_directory(path_to_buildings)
 	for path in paths:
