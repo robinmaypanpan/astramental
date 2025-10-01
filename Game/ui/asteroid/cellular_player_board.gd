@@ -63,9 +63,10 @@ func place_building(position: Vector2i, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	game_grid.get_cell(position.y, position.x).set_icon(building.icon)
 
+
 ## Set the position of the ghost building at the indicated position
 func set_ghost_building(x: int, y:int, building_id: String) -> void:
-	print("Setting ghost building %s at row %d, col %d" % [building_id, y, x])
+	clear_ghost_building()
 	ghost_building_position = Vector2i(x,y)
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	game_grid.get_cell(y, x).set_ghost(building.icon)
@@ -74,7 +75,6 @@ func set_ghost_building(x: int, y:int, building_id: String) -> void:
 ## Remove the ghost building from its position
 func clear_ghost_building() -> void:
 	if ghost_building_position.y >= 0:
-		print("Clearing ghost building")
 		game_grid.get_cell(ghost_building_position.y, ghost_building_position.x).set_ghost(null)
 		ghost_building_position = Vector2i(-1,-1)
 
