@@ -50,7 +50,18 @@ func _ready() -> void:
 func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:	
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
 	game_grid.get_cell(y, x).set_background(ore_resource.icon)
+
+
+## Hide all buildings on the grid
+func clear_buildings() -> void:
+	for cell:Cell in game_grid.all_cells():
+		cell.set_icon(null)
 	
+
+## Place a building at the desired location
+func place_building(position: Vector2i, building_id: String) -> void:
+	var building: BuildingResource = Buildings.get_by_id(building_id)
+	game_grid.get_cell(position.y, position.x).set_icon(building.icon)
 
 ## Set the position of the ghost building at the indicated position
 func set_ghost_building(x: int, y:int, building_id: String) -> void:

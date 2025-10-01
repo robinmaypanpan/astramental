@@ -198,10 +198,8 @@ func process_remove_building(
 
 ## Look at the model and redraw all the buildings to the screen.
 func _on_update_buildings() -> void:
-	print("update buildings for %d" % multiplayer.get_unique_id())
+	print("Updating buildings for %d" % multiplayer.get_unique_id())
 	for player_board in _player_boards.values():
-		var tile_map: BuildingTileMap = player_board.player_tile_map
-		var player_id: int = player_board.owner_id
-		tile_map.building_tiles.clear()
-		for placed_building in Model.get_buildings(player_id):
-			tile_map.place_building(placed_building.position, placed_building.id)
+		player_board.clear_buildings()
+		for placed_building in Model.get_buildings( player_board.owner_id):
+			player_board.place_building(placed_building.position, placed_building.id)

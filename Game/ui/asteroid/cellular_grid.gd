@@ -28,7 +28,11 @@ func generate_grid(rows:int, cols:int):
 			cell.name = "Cell %d,%d" % [r, c]
 			_grid_container.add_child(cell)
 
-
+## Returns an iterator over all cells
+func all_cells() -> AllCellIterator:
+	return AllCellIterator.new(self, _actual_rows, _actual_cols)
+	
+	
 ## Returns the cell at the indicated row and column
 func get_cell(row:int, col:int) -> Control:
 	var child_index = col + row * _actual_cols	
@@ -45,3 +49,40 @@ func get_cell_under_local_point(point:Vector2i) -> Vector2i:
 	var cell_height:int = my_rect.size.y / _actual_rows
 	var result := Vector2i(point.x / cell_width, point.y / cell_height)
 	return result
+
+
+class AllCellIterator:
+	var grid: CellularGrid
+	var row := 0
+	var col := 0
+	var rows := 0
+	var cols := 0
+
+
+	func _init(grid: CellularGrid, rows, cols):
+		self.grid = grid
+		self.rows = rows
+		self.cols = cols
+
+
+	func should_continue():
+		return row < rows and cols > 0
+
+
+	func _iter_init(arg):
+		row = 0
+		col = 0
+		return should_continue()
+
+
+	func _iter_next(arg):
+		col += 1
+		if col >= cols:
+			# Go to the next row
+			col = 0
+			row += 1
+		return should_continue()
+
+
+	func _iter_get(arg):
+		return grid.get_cell(row, col)
