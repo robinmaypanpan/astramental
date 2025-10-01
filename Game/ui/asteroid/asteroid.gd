@@ -4,6 +4,7 @@ extends Control
 
 @export var player_board_scene: PackedScene
 
+## Map of player ids to nodes
 var _player_boards: Dictionary[int, Node]
 
 @onready var board_holder := %BoardHolder
@@ -15,7 +16,8 @@ func _ready() -> void:
 
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
-func add_player_board(player_id: int) -> void:
+func add_player_board(player_id: int) -> void:	
+	print("Adding player id %s" % [player_id])
 	var board := player_board_scene.instantiate()
 
 	board.owner_id = player_id
@@ -26,6 +28,7 @@ func add_player_board(player_id: int) -> void:
 
 ## Add all player boards and generate ores for them.
 func generate_player_boards() -> void:
+	print("Generating player boards")
 	# Clear out the old player boards, if necessary
 	for player_board in board_holder.get_children():
 		board_holder.remove_child(player_board)
@@ -72,12 +75,14 @@ func _generate_all_ores() -> void:
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
 
-func _register_player_board(player_id: int, player_board: Node) -> void:
+func _register_player_board(player_id: int, player_board: Node) -> void:	
 	_player_boards[player_id] = player_board
 
 
 func _get_player_board(player_id: int) -> Node:
-	return _player_boards[player_id]
+	if _player_boards.has(player_id):
+		return _player_boards[player_id]
+	return null
 
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
@@ -93,7 +98,7 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 func _get_new_building_coordinates() -> TileMapPosition:
 	var player_id:int = multiplayer.get_unique_id()
 	var player_board := _get_player_board(player_id)
-	if player_board.is_mouse_over_factory_or_mine():
+	if player_board and player_board.is_mouse_over_factory_or_mine():
 		var tile_position: Vector2i = player_board.get_mouse_grid_position()
 		return TileMapPosition.new(player_id, tile_position)
 	return null
