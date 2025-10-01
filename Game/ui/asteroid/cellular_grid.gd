@@ -35,6 +35,7 @@ func get_cell(row:int, col:int) -> Control:
 	var child:Control = _grid_container.get_child(child_index)
 	return child
 	
+	
 ## Returns the cell under the provided point
 func get_cell_under_local_point(point:Vector2i) -> Vector2i:
 	var my_rect := get_rect()
@@ -42,4 +43,5 @@ func get_cell_under_local_point(point:Vector2i) -> Vector2i:
 		return Vector2i(-1,-1)
 	var cell_width: int = my_rect.size.x / _actual_cols
 	var cell_height:int = my_rect.size.y / _actual_rows
-	return Vector2i(point.x / cell_width, point.y / cell_height)
+	var result := Vector2i(point.x / cell_width, point.y / cell_height)
+	return result

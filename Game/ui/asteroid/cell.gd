@@ -13,15 +13,19 @@ func _ready() -> void:
 	heat_indicator.visible = false
 	heat_indicator.value = 0.0
 
+## Change the top layer for this cell for this cell
 func set_icon(texture:Texture):
 	icon.texture = texture
 
+## Set the background texture for this cell
 func set_background(texture:Texture):
 	background.texture = texture
 	
+## Set the heat level for this cell
 func set_heat(value:float):
 	heat_indicator.value = value
 	heat_indicator.visible = value > 0.0
-	
+
+## set the ghost texture for this cell
 func set_ghost(texture:Texture):
 	ghost.texture = texture

@@ -6,6 +6,7 @@ extends Control
 # multiplayer properties
 var owner_id: int
 var player: ConnectionSystem.NetworkPlayer
+var ghost_building_position := Vector2i(-1,-1)
 
 @onready var vertical_list := %VerticalListContainer
 @onready var sky := %Sky
@@ -49,6 +50,22 @@ func _ready() -> void:
 func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:	
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
 	game_grid.get_cell(y, x).set_background(ore_resource.icon)
+	
+
+## Set the position of the ghost building at the indicated position
+func set_ghost_building(x: int, y:int, building_id: String) -> void:
+	print("Setting ghost building %s at row %d, col %d" % [building_id, y, x])
+	ghost_building_position = Vector2i(x,y)
+	var building: BuildingResource = Buildings.get_by_id(building_id)
+	game_grid.get_cell(y, x).set_ghost(building.icon)
+
+
+## Remove the ghost building from its position
+func clear_ghost_building() -> void:
+	if ghost_building_position.y >= 0:
+		print("Clearing ghost building")
+		game_grid.get_cell(ghost_building_position.y, ghost_building_position.x).set_ghost(null)
+		ghost_building_position = Vector2i(-1,-1)
 
 
 ## Returns true if the mouse is over the factory or mine

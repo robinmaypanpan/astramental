@@ -87,29 +87,23 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 	for player_id in ConnectionSystem.get_player_id_list():
 		ores_for_each_player[player_id] = []
 	return ores_for_each_player
+	
 
-
-func _in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
-	if pos1 and pos2:
-		return pos1.player_id == pos2.player_id
-	else:
-		return false
-
-
-func _get_tile_map_pos() -> TileMapPosition:
-	for player_id in ConnectionSystem.get_player_id_list():
-		var player_board := _get_player_board(player_id)
-		if player_board.is_mouse_over_factory_or_mine():			
-			var tile_position: Vector2i = player_board.get_mouse_grid_position()
-			return TileMapPosition.new(player_id, tile_position)
+## Returns the grid coordinates the mouse is over
+func _get_new_building_coordinates() -> TileMapPosition:
+	var player_id:int = multiplayer.get_unique_id()
+	var player_board := _get_player_board(player_id)
+	if player_board.is_mouse_over_factory_or_mine():
+		var tile_position: Vector2i = player_board.get_mouse_grid_position()
+		return TileMapPosition.new(player_id, tile_position)
 	return null
 
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = "" # exit build mode
-		#if AsteroidViewModel.mouse_tile_map_pos:
-			#_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
+		AsteroidViewModel.building_on_cursor = "" # exit build mode		
+		var player_board := _get_player_board(multiplayer.get_unique_id())
+		player_board.clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.BUILDING
 	elif Input.is_action_just_pressed("right_mouse_button"):
@@ -117,41 +111,32 @@ func _input(_event: InputEvent) -> void:
 	elif Input.is_action_just_released("either_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.HOVERING
 
-	var new_mouse_tile_map_pos := _get_tile_map_pos()
-	var new_tile_map
-	var new_tile_pos
-	if new_mouse_tile_map_pos:
-		# TODO: RPG
-		#new_tile_map = _get_tile_map_from_pos(new_mouse_tile_map_pos)
-		new_tile_pos = new_mouse_tile_map_pos.tile_position
+	var new_building_position: TileMapPosition = _get_new_building_coordinates()
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if (
-			AsteroidViewModel.mouse_tile_map_pos
-			and not _in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos)
-		):
-			# TODO: RPG
-			pass
-			#var old_tile_map := _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
-			#old_tile_map.clear_ghost_building()
-		#if new_mouse_tile_map_pos:
-			#new_tile_map.move_ghost_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
+		if (AsteroidViewModel.mouse_tile_map_pos):			
+			print("Updating ghost")
+			var player_board := _get_player_board(multiplayer.get_unique_id())
+			player_board.clear_ghost_building()
+			if new_building_position:
+				var new_tile_pos: Vector2i = new_building_position.tile_position
+				player_board.set_ghost_building(new_tile_pos.x, new_tile_pos.y, AsteroidViewModel.building_on_cursor)
 
 	# place buildings
-	if new_mouse_tile_map_pos and AsteroidViewModel.mouse_state != MouseState.HOVERING:
+	if new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:
 		if (
 			AsteroidViewModel.in_build_mode
 			and AsteroidViewModel.mouse_state == MouseState.BUILDING
 			and Model.can_build(AsteroidViewModel.building_on_cursor)
 		):
-			request_place_building(new_mouse_tile_map_pos, AsteroidViewModel.building_on_cursor)
+			request_place_building(new_building_position, AsteroidViewModel.building_on_cursor)
 		if AsteroidViewModel.mouse_state == MouseState.DELETING:
 			# don't need to be in build mode to remove buildings
-			request_remove_building(new_mouse_tile_map_pos)
+			request_remove_building(new_building_position)
 
 	# update position
-	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
+	AsteroidViewModel.mouse_tile_map_pos = new_building_position
 
 
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
