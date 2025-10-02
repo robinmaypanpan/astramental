@@ -1,0 +1,71 @@
+[gd_scene load_steps=7 format=3 uid="uid://d2yy8jnf0n7kd"]
+
+[ext_resource type="Script" uid="uid://bxthbnkw8muop" path="res://Game/ui/asteroid/cell.gd" id="1_bh4gc"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_byno8"]
+[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/ores.png" id="2_bh4gc"]
+[ext_resource type="Texture2D" uid="uid://cmc5jexlbrfso" path="res://Assets/sprites/buildings/solar_panel.tres" id="3_iy3cy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jere3"]
+atlas = ExtResource("2_bh4gc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_byno8"]
+bg_color = Color(0.773271, 0, 0.0401725, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.8, 0)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[node name="Cell" type="Control"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1888.0
+offset_bottom = -1048.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bh4gc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundImage" type="TextureRect" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("AtlasTexture_jere3")
+
+[node name="IconImage" type="TextureRect" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_iy3cy")
+
+[node name="GhostImage" type="TextureRect" parent="MarginContainer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.517647)
+layout_mode = 2
+texture = ExtResource("3_iy3cy")
+
+[node name="HeatLevel" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+offset_left = 27.0
+offset_top = 31.0
+offset_right = 56.0
+offset_bottom = 35.0
+rotation = -1.5708
+theme = ExtResource("1_byno8")
+theme_override_styles/fill = SubResource("StyleBoxFlat_byno8")
+value = 25.0
+show_percentage = false

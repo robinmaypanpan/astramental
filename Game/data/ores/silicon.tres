@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="OreResource" load_steps=2 format=3 uid="uid://dl5753flq5hht"]
+[gd_resource type="Resource" script_class="OreResource" load_steps=3 format=3 uid="uid://dl5753flq5hht"]
 
 [ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/ore_resource.gd" id="1_mmxq8"]
+[ext_resource type="Texture2D" uid="uid://dfcdlqbffteq0" path="res://Assets/silicon_ore.tres" id="1_ngn2q"]
 
 [resource]
 script = ExtResource("1_mmxq8")
+icon = ExtResource("1_ngn2q")
 atlas_coordinates = Vector2i(4, 0)
 item_yield = 6

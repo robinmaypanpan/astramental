@@ -4,18 +4,20 @@ extends Control
 
 @export var player_board_scene: PackedScene
 
+## Map of player ids to nodes
 var _player_boards: Dictionary[int, Node]
 
 @onready var board_holder := %BoardHolder
 
 
 func _ready() -> void:
-	AsteroidViewModel.update_ore_tilemaps.connect(_on_update_ore_tilemaps)
-	AsteroidViewModel.update_buildings.connect(_on_update_buildings)
+	AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_update_ore_tilemaps)
+	AsteroidViewModel.building_layout_changed_this_frame.connect(_on_update_buildings)
 
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
-func add_player_board(player_id: int) -> void:
+func add_player_board(player_id: int) -> void:	
+	print("Adding player id %s" % [player_id])
 	var board := player_board_scene.instantiate()
 
 	board.owner_id = player_id
@@ -26,6 +28,7 @@ func add_player_board(player_id: int) -> void:
 
 ## Add all player boards and generate ores for them.
 func generate_player_boards() -> void:
+	print("Generating player boards")
 	# Clear out the old player boards, if necessary
 	for player_board in board_holder.get_children():
 		board_holder.remove_child(player_board)
@@ -72,16 +75,14 @@ func _generate_all_ores() -> void:
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
 
-func _register_player_board(player_id: int, player_board: Node) -> void:
+func _register_player_board(player_id: int, player_board: Node) -> void:	
 	_player_boards[player_id] = player_board
 
 
 func _get_player_board(player_id: int) -> Node:
-	return _player_boards[player_id]
-
-
-func _get_tile_map(player_id: int) -> BuildingTileMap:
-	return _get_player_board(player_id).player_tile_map
+	if _player_boards.has(player_id):
+		return _player_boards[player_id]
+	return null
 
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
@@ -91,34 +92,23 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 	for player_id in ConnectionSystem.get_player_id_list():
 		ores_for_each_player[player_id] = []
 	return ores_for_each_player
+	
 
-
-func _in_same_board(pos1: TileMapPosition, pos2: TileMapPosition) -> bool:
-	if pos1 and pos2:
-		return pos1.player_id == pos2.player_id
-	else:
-		return false
-
-
-func _get_tile_map_pos() -> TileMapPosition:
-	for player_id in ConnectionSystem.get_player_id_list():
-		var tile_map := _get_tile_map(player_id)
-		if tile_map.mouse_inside_tile_map():
-			var tile_position := tile_map.get_mouse_tile_map_coords()
-			return TileMapPosition.new(player_id, tile_position)
+## Returns the grid coordinates the mouse is over
+func _get_new_building_coordinates() -> TileMapPosition:
+	var player_id:int = multiplayer.get_unique_id()
+	var player_board := _get_player_board(player_id)
+	if player_board and player_board.is_mouse_over_factory_or_mine():
+		var tile_position: Vector2i = player_board.get_mouse_grid_position()
+		return TileMapPosition.new(player_id, tile_position)
 	return null
-
-
-func _get_tile_map_from_pos(pos: TileMapPosition) -> BuildingTileMap:
-	var player_id := pos.player_id
-	return _get_tile_map(player_id)
 
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = "" # exit build mode
-		if AsteroidViewModel.mouse_tile_map_pos:
-			_get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos).clear_ghost_building()
+		AsteroidViewModel.building_on_cursor = "" # exit build mode		
+		var player_board := _get_player_board(multiplayer.get_unique_id())
+		player_board.clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.BUILDING
 	elif Input.is_action_just_pressed("right_mouse_button"):
@@ -126,52 +116,44 @@ func _input(_event: InputEvent) -> void:
 	elif Input.is_action_just_released("either_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.HOVERING
 
-	var new_mouse_tile_map_pos := _get_tile_map_pos()
-	var new_tile_map
-	var new_tile_pos
-	if new_mouse_tile_map_pos:
-		new_tile_map = _get_tile_map_from_pos(new_mouse_tile_map_pos)
-		new_tile_pos = new_mouse_tile_map_pos.tile_position
+	var new_building_position: TileMapPosition = _get_new_building_coordinates()
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if (
-			AsteroidViewModel.mouse_tile_map_pos
-			and not _in_same_board(AsteroidViewModel.mouse_tile_map_pos, new_mouse_tile_map_pos)
-		):
-			var old_tile_map := _get_tile_map_from_pos(AsteroidViewModel.mouse_tile_map_pos)
-			old_tile_map.clear_ghost_building()
-		if new_mouse_tile_map_pos:
-			new_tile_map.move_ghost_building(new_tile_pos, AsteroidViewModel.building_on_cursor)
+		if (AsteroidViewModel.mouse_tile_map_pos):			
+			print("Updating ghost")
+			var player_board := _get_player_board(multiplayer.get_unique_id())
+			player_board.clear_ghost_building()
+			if new_building_position:
+				var new_tile_pos: Vector2i = new_building_position.tile_position
+				player_board.set_ghost_building(new_tile_pos.x, new_tile_pos.y, AsteroidViewModel.building_on_cursor)
 
 	# place buildings
-	if new_mouse_tile_map_pos and AsteroidViewModel.mouse_state != MouseState.HOVERING:
+	if new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:
 		if (
 			AsteroidViewModel.in_build_mode
 			and AsteroidViewModel.mouse_state == MouseState.BUILDING
 			and Model.can_build(AsteroidViewModel.building_on_cursor)
 		):
-			request_place_building(new_mouse_tile_map_pos, AsteroidViewModel.building_on_cursor)
+			request_place_building(new_building_position, AsteroidViewModel.building_on_cursor)
 		if AsteroidViewModel.mouse_state == MouseState.DELETING:
 			# don't need to be in build mode to remove buildings
-			request_remove_building(new_mouse_tile_map_pos)
+			request_remove_building(new_building_position)
 
 	# update position
-	AsteroidViewModel.mouse_tile_map_pos = new_mouse_tile_map_pos
+	AsteroidViewModel.mouse_tile_map_pos = new_building_position
 
 
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
 func _on_update_ore_tilemaps() -> void:
 	for player_board in _player_boards.values():
-		var tile_map: BuildingTileMap = player_board.player_tile_map
 		var player_id: int = player_board.owner_id
 		var start_y := WorldGenModel.get_mine_layer_start_y()
 		var end_y := WorldGenModel.get_all_layers_end_y()
 		for x in range(WorldGenModel.num_cols):
 			for y in range(start_y, end_y):
-				var ore := Model.get_ore_at(player_id, x, y)
-				var atlas_coordinates := Ores.get_atlas_coordinates(ore)
-				tile_map.set_background_tile(x, y, atlas_coordinates)
+				var ore: Types.Ore = Model.get_ore_at(player_id, x, y)
+				player_board.set_ore_at(x, y, ore)
 
 
 ## Request the server to let you place a building at the given position.
@@ -216,10 +198,8 @@ func process_remove_building(
 
 ## Look at the model and redraw all the buildings to the screen.
 func _on_update_buildings() -> void:
-	print("update buildings for %d" % multiplayer.get_unique_id())
+	print("Updating buildings for %d" % multiplayer.get_unique_id())
 	for player_board in _player_boards.values():
-		var tile_map: BuildingTileMap = player_board.player_tile_map
-		var player_id: int = player_board.owner_id
-		tile_map.building_tiles.clear()
-		for placed_building in Model.get_buildings(player_id):
-			tile_map.place_building(placed_building.position, placed_building.id)
+		player_board.clear_buildings()
+		for placed_building in Model.get_buildings( player_board.owner_id):
+			player_board.place_building(placed_building.position, placed_building.id)

@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="OreResource" load_steps=2 format=3 uid="uid://34vesocfe87i"]
+[gd_resource type="Resource" script_class="OreResource" load_steps=3 format=3 uid="uid://34vesocfe87i"]
 
 [ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/ore_resource.gd" id="1_5x48m"]
+[ext_resource type="Texture2D" uid="uid://bl6t4oh6maial" path="res://Assets/iron_ore.tres" id="1_op3lr"]
 
 [resource]
 script = ExtResource("1_5x48m")
+icon = ExtResource("1_op3lr")
 atlas_coordinates = Vector2i(2, 0)
 item_yield = 3

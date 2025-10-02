@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="OreResource" load_steps=2 format=3 uid="uid://frqhevb6e22v"]
+[gd_resource type="Resource" script_class="OreResource" load_steps=3 format=3 uid="uid://frqhevb6e22v"]
 
+[ext_resource type="Texture2D" uid="uid://b7dr4ho87va7o" path="res://Assets/rock_ore.tres" id="1_hc8wv"]
 [ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/ore_resource.gd" id="1_hyud4"]
 
 [resource]
 script = ExtResource("1_hyud4")
+icon = ExtResource("1_hc8wv")
 atlas_coordinates = Vector2i(1, 0)
 item_yield = 2

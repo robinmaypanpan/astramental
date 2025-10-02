@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://k1wwefkpb70t"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://k1wwefkpb70t"]
 
 [ext_resource type="FontFile" uid="uid://cpo7hb5cjiuce" path="res://Assets/fs-pixel-sans-unicode-regular/fs_pixel_sans_edited.ttf" id="1_t6uax"]
 
@@ -22,6 +22,18 @@ bg_color = Color(0.133333, 0.133333, 0.133333, 1)
 content_margin_left = 12.0
 bg_color = Color(0.156863, 0.156863, 0.156863, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vfxn"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
 [sub_resource type="FontVariation" id="FontVariation_drjrk"]
 base_font = ExtResource("1_t6uax")
 spacing_top = -12
@@ -35,4 +47,5 @@ Label/constants/shadow_outline_size = 1
 LineEdit/styles/focus = SubResource("StyleBoxFlat_drjrk")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_xj1xw")
 LineEdit/styles/read_only = SubResource("StyleBoxFlat_2iung")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_5vfxn")
 VBoxContainer/constants/separation = 5
