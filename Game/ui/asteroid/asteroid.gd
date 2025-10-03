@@ -2,6 +2,7 @@ class_name Asteroid
 extends Control
 ## Contains all player board logic.
 
+## This is the scene that should be instantiated to represent each player board.
 @export var player_board_scene: PackedScene
 
 ## Map of player ids to nodes
@@ -16,7 +17,7 @@ func _ready() -> void:
 
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
-func add_player_board(player_id: int) -> void:	
+func add_player_board(player_id: int) -> void:
 	print("Adding player id %s" % [player_id])
 	var board := player_board_scene.instantiate()
 
@@ -75,7 +76,7 @@ func _generate_all_ores() -> void:
 			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
 
 
-func _register_player_board(player_id: int, player_board: Node) -> void:	
+func _register_player_board(player_id: int, player_board: Node) -> void:
 	_player_boards[player_id] = player_board
 
 
@@ -92,7 +93,7 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 	for player_id in ConnectionSystem.get_player_id_list():
 		ores_for_each_player[player_id] = []
 	return ores_for_each_player
-	
+
 
 ## Returns the grid coordinates the mouse is over
 func _get_new_building_coordinates() -> TileMapPosition:
@@ -106,7 +107,7 @@ func _get_new_building_coordinates() -> TileMapPosition:
 
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = "" # exit build mode		
+		AsteroidViewModel.building_on_cursor = "" # exit build mode
 		var player_board := _get_player_board(multiplayer.get_unique_id())
 		player_board.clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
@@ -120,13 +121,16 @@ func _input(_event: InputEvent) -> void:
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if (AsteroidViewModel.mouse_tile_map_pos):			
+		if (AsteroidViewModel.mouse_tile_map_pos):
 			print("Updating ghost")
 			var player_board := _get_player_board(multiplayer.get_unique_id())
 			player_board.clear_ghost_building()
 			if new_building_position:
 				var new_tile_pos: Vector2i = new_building_position.tile_position
-				player_board.set_ghost_building(new_tile_pos.x, new_tile_pos.y, AsteroidViewModel.building_on_cursor)
+				player_board.set_ghost_building(
+					new_tile_pos.x, new_tile_pos.y,
+					AsteroidViewModel.building_on_cursor
+				)
 
 	# place buildings
 	if new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:

@@ -1,6 +1,7 @@
 class_name CellularPlayerBoard
 extends Control
 
+## Texture to populate the factory with
 @export var factory_texture: Texture
 
 # multiplayer properties
@@ -37,8 +38,12 @@ func _ready() -> void:
 	player_name_label.text = "%s\n(%s)" % [player.name, player.index]
 
 	factory_and_mine.custom_minimum_size = Vector2i(0, layer_height_px * num_layers)
-	
-	game_grid.generate_grid(WorldGenModel.layer_thickness*(WorldGenModel.get_num_mine_layers() + 1), WorldGenModel.num_cols)
+
+	game_grid.generate_grid(
+		WorldGenModel.layer_thickness*(
+			WorldGenModel.get_num_mine_layers() + 1),
+			WorldGenModel.num_cols
+	)
 
 	# Set up factory tiles to be all white tiles
 	for x in range(WorldGenModel.num_cols):
@@ -47,7 +52,7 @@ func _ready() -> void:
 
 
 ## Publicly sets the ore at the indicated location
-func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:	
+func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
 	game_grid.get_cell(y, x).set_background(ore_resource.icon)
 
@@ -56,7 +61,7 @@ func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:
 func clear_buildings() -> void:
 	for cell:Cell in game_grid.all_cells():
 		cell.set_icon(null)
-	
+
 
 ## Place a building at the desired location
 func place_building(position: Vector2i, building_id: String) -> void:
@@ -80,7 +85,7 @@ func clear_ghost_building() -> void:
 
 
 ## Returns true if the mouse is over the factory or mine
-func is_mouse_over_factory_or_mine() -> bool:	
+func is_mouse_over_factory_or_mine() -> bool:
 	var mouse_position := game_grid.get_local_mouse_position()
 	return game_grid.get_rect().has_point(mouse_position)
 
@@ -88,7 +93,7 @@ func is_mouse_over_factory_or_mine() -> bool:
 ## Returns the coordinates of the grid if the mouse is over them.
 func get_mouse_grid_position() -> Vector2i:
 	var mouse_position := game_grid.get_local_mouse_position()
-	return game_grid.get_cell_under_local_point(mouse_position)
+	return game_grid.get_cell_coordinates_at_local_point(mouse_position)
 
 
 ## Given ore generation data, generate the ores for the given layer number by filling
@@ -130,8 +135,6 @@ func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num
 
 ## Set a tile in the model to the specified ore.
 func _set_ore_tile(x: int, y: int, ore: Types.Ore) -> void:
-	## TODO: Move this to the model
-	var atlas_coordinates := Ores.get_atlas_coordinates(ore)
 	Model.set_ore_at(owner_id, x, y, ore)
 
 ## Defines a circle filled with the specified ore.
