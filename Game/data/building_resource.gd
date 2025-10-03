@@ -1,6 +1,13 @@
 class_name BuildingResource
 extends Resource
 
+## This enum is used to check if a building is placed in the factory 
+## or in the mines
+enum PlacementTypes {
+	FACTORY,
+	MINES
+}
+
 ## User facing name for this building
 @export var name: String = ""
 
@@ -21,3 +28,5 @@ var atlas_coordinates: Vector2i:
 	get:
 		var icon_region := icon.region
 		return icon_region.position / 16
+## Determines whether this building is placed in the factory or in the mines
+@export var placement_destination: PlacementTypes = PlacementTypes.MINES
