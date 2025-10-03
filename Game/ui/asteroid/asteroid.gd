@@ -106,6 +106,7 @@ func _get_new_building_coordinates() -> PlayerGridPosition:
 
 
 func _input(_event: InputEvent) -> void:
+	# TODO: (RPG) A lot of this function should move to the view model
 	if Input.is_action_just_pressed("ui_cancel"):
 		AsteroidViewModel.building_on_cursor = "" # exit build mode
 		var player_board := _get_player_board(multiplayer.get_unique_id())
@@ -122,15 +123,16 @@ func _input(_event: InputEvent) -> void:
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
 		if (AsteroidViewModel.mouse_tile_map_pos):
-			print("Updating ghost")
-			var player_board := _get_player_board(multiplayer.get_unique_id())
+			var player_id: int = multiplayer.get_unique_id()
+			var player_board: CellularPlayerBoard = _get_player_board(player_id)
+			var building_id: String = AsteroidViewModel.building_on_cursor
 			player_board.clear_ghost_building()
-			if new_building_position:
+			if (
+				new_building_position != null
+				and Model.can_build_at_location(building_id, new_building_position)
+			):
 				var new_tile_pos: Vector2i = new_building_position.tile_position
-				player_board.set_ghost_building(
-					new_tile_pos.x, new_tile_pos.y,
-					AsteroidViewModel.building_on_cursor
-				)
+				player_board.set_ghost_building(new_tile_pos.x, new_tile_pos.y, building_id)
 
 	# place buildings
 	if new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:
