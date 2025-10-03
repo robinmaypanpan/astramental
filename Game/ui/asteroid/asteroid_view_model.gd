@@ -20,7 +20,7 @@ var in_build_mode: bool:
 
 var mouse_state := MouseState.HOVERING
 # default value is null
-var mouse_tile_map_pos: TileMapPosition
+var mouse_tile_map_pos: PlayerGridPosition
 
 ## Whether the ores_layout in Model was updated this frame.
 var ores_layout_dirty: bool = false
