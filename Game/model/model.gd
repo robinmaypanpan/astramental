@@ -18,8 +18,6 @@ signal buildings_updated()
 ## The random number seed used for this game
 var world_seed: int
 
-## The random number seed used for this game
-
 ## The number of players seen as ready. Used to determine when it is okay to start the game
 var num_players_ready := 0
 
