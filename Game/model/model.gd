@@ -194,18 +194,12 @@ func get_building_at(pos: PlayerGridPosition) -> String:
 func set_building_at(
 	player_id: int, tile_position: Vector2i, building_id: String
 ) -> void:
-	print("doing set building for %d" % multiplayer.get_unique_id())
-	var player_state := player_states.get_state(player_id)
-	var building_already_there := false
-	# if there is a building already in building list, just change its type
-	for placed_building in player_state.buildings_list:
-		if placed_building.position == tile_position:
-			placed_building.id = building_id
-			building_already_there = true
-	# otherwise, add new building to building list
-	if not building_already_there:
+	var caller_id := multiplayer.get_remote_sender_id()
+	print("doing set building for %d" % caller_id)
+	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
+		var player_state := player_states.get_state(player_id)
 		player_state.buildings_list.append(PlacedBuilding.new(tile_position, building_id))
-	buildings_updated.emit()
+		buildings_updated.emit()
 
 
 ## Remove the building at the given position for all players.
