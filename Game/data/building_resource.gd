@@ -1,13 +1,6 @@
 class_name BuildingResource
 extends Resource
 
-## This enum is used to check if a building is placed in the factory 
-## or in the mines
-enum PlacementTypes {
-	FACTORY,
-	MINES
-}
-
 ## User facing name for this building
 @export var name: String = ""
 
@@ -24,4 +17,4 @@ enum PlacementTypes {
 @export var item_costs: Array[ItemCost] = []
 
 ## Determines whether this building is placed in the factory or in the mines
-@export var placement_destination: PlacementTypes = PlacementTypes.MINES
+@export var placement_destination: Types.Layer = Types.Layer.FACTORY

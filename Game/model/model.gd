@@ -138,14 +138,8 @@ func can_build_at_location(building_id:String, position: PlayerGridPosition) -> 
 	# Make sure that the building fits into this part of the grid
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 
-	if (building.placement_destination == BuildingResource.PlacementTypes.FACTORY
-		and position.tile_position.y >= WorldGenModel.layer_thickness):
-			# This building needs to be placed in the factory, but we're trying to place it in the mines
-			return false
-
-	if (building.placement_destination == BuildingResource.PlacementTypes.MINES
-		and position.tile_position.y < WorldGenModel.layer_thickness):
-			# This building needs to be placed in the mines, but we're trying to place it in the factory
+	if (building.placement_destination != WorldGenModel.get_layer_type(position.tile_position.y)):
+			# Can't place this building in this layer
 			return false
 
 	return true
