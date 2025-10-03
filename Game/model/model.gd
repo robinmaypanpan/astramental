@@ -115,9 +115,17 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 
 ## Returns true if we have the resources necessary to build this building
 func can_build(building_id: String) -> bool:
-	# We aren't handling this right now, so we can build anything
-	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
+	var building: BuildingResource = Buildings.get_by_id(building_id)
+	var costs: Array[ItemCost] = building.item_costs
+	var player_id = multiplayer.get_unique_id()
+	for cost in costs:
+		var item_type = cost.item_id
+		var cost_amount = cost.quantity
+		if get_item_count(player_id, item_type) < cost_amount:
+			return false
+	# otherwise we satisfy all the costs, so we are good
 	return true
+
 
 
 ## Returns true if this player can delete the building at the given position.
