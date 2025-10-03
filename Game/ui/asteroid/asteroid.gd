@@ -178,6 +178,7 @@ func process_place_building(
 	var caller_id := multiplayer.get_remote_sender_id()
 	if Model.can_build(building):
 		Model.set_building_at.rpc(player_id, tile_position, building)
+		Model.deduct_costs(player_id, building)
 
 
 ## Request the server to let you remove a building at the given position.
@@ -197,7 +198,10 @@ func process_remove_building(
 	print("processing remove building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
 	if Model.can_remove():
+		var tile_map_pos = TileMapPosition.new(player_id, tile_position)
+		var building_id_removed: String = Model.get_building_at(tile_map_pos)
 		Model.remove_building_at.rpc(player_id, tile_position)
+		Model.refund_costs(player_id, building_id_removed)
 
 
 ## Look at the model and redraw all the buildings to the screen.

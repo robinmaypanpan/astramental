@@ -112,7 +112,6 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 		item_count_changed.emit(player_id, type, amount)
 
 
-
 ## Returns true if we have the resources necessary to build this building
 func can_build(building_id: String) -> bool:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
@@ -126,6 +125,21 @@ func can_build(building_id: String) -> bool:
 	# otherwise we satisfy all the costs, so we are good
 	return true
 
+
+## Pay the item cost of a building when building it.
+func deduct_costs(player_id: int, building_id: String) -> void:
+	var building: BuildingResource = Buildings.get_by_id(building_id)
+	var costs: Array[ItemCost] = building.item_costs
+	for cost in costs:
+		increase_item_count(player_id, cost.item_id, -1*cost.quantity)
+
+
+## Refund the item cost of a building when deleting it.
+func refund_costs(player_id: int, building_id: String) -> void:
+	var building: BuildingResource = Buildings.get_by_id(building_id)
+	var costs: Array[ItemCost] = building.item_costs
+	for cost in costs:
+		increase_item_count(player_id, cost.item_id, cost.quantity)
 
 
 ## Returns true if this player can delete the building at the given position.
