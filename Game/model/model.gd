@@ -12,6 +12,8 @@ signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
+## Defines the resources people start the game with. Edit through model.tscn.
+@export var starting_resources: Dictionary[Types.Item, int]
 
 var world_seed: int
 var num_players_ready := 0
@@ -20,6 +22,7 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
+
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -36,7 +39,7 @@ func launch_game() -> void:
 
 
 ## Does any work that needs to be done now that the UI has loaded
-func ui_loaded() -> void:	
+func ui_loaded() -> void:
 	if ConnectionSystem.is_not_running_network():
 		_start_game()
 	else:
@@ -54,11 +57,11 @@ func request_regenerate_world() -> void:
 	assert(multiplayer.is_server())
 	randomize()
 	# this call will emit game_ready, which will update the seed text
-	var new_random_seed: int = randi()	
+	var new_random_seed: int = randi()
 	initialize_clients.rpc(new_random_seed)
 
 	launch_game.rpc()
-	
+
 
 ## Register that this particular player is ready to start the game
 @rpc("any_peer", "call_local", "reliable")
@@ -71,6 +74,13 @@ func register_player_ready() -> void:
 	if num_players_ready >= total_num_players:
 		# Start the game now that all players are ready
 		_start_game()
+
+
+## Return the starting amount of a resource a player should start with.
+## Controlled by starting_resources export in model.tscn. If a resource isn't listed in there,
+## the default starting amount is 0.
+func get_starting_item_count(type: Types.Item) -> float:
+	return float(starting_resources.get(type, 0))
 
 
 ## Returns the number of items possessed by the specified player.
@@ -102,15 +112,18 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 		item_count_changed.emit(player_id, type, amount)
 
 
+
 ## Returns true if we have the resources necessary to build this building
 func can_build(building_id: String) -> bool:
 	# We aren't handling this right now, so we can build anything
 	# RPG: I'll put this together. Allison should focus on _enter_build_mdoe
 	return true
 
+
 ## Returns true if this player can delete the building at the given position.
 func can_remove_building() -> bool:
 	return true
+
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
 ## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
@@ -206,9 +219,17 @@ func _start_game():
 	randomize()
 	var new_random_seed: int = randi()
 	initialize_clients.rpc(new_random_seed)
+	_set_starting_item_counts()
 
 	# Launch the game!
 	launch_game.rpc()
+
+
+func _set_starting_item_counts() -> void:
+	for player_id in ConnectionSystem.get_player_id_list():
+		for type in starting_resources.keys():
+			var amount: float = get_starting_item_count(type)
+			set_item_count(player_id, type, amount)
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.

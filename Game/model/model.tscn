@@ -11,6 +11,10 @@ properties/0/replication_mode = 1
 
 [node name="Model" type="Node"]
 script = ExtResource("1_xc5wf")
+starting_resources = Dictionary[int, int]({
+1: 50,
+3: 50
+})
 
 [node name="GameState" type="Node" parent="."]
 unique_name_in_owner = true

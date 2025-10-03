@@ -18,6 +18,7 @@ func _ready() -> void:
 
 	Model.ui_loaded()
 
+
 func _on_game_ready() -> void:
 	asteroid.generate_player_boards()
 
