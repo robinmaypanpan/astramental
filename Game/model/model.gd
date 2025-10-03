@@ -18,6 +18,8 @@ signal buildings_updated()
 ## The random number seed used for this game
 var world_seed: int
 
+## The random number seed used for this game
+
 ## The number of players seen as ready. Used to determine when it is okay to start the game
 var num_players_ready := 0
 
@@ -154,7 +156,6 @@ func can_build_at_location(building_id:String, position: PlayerGridPosition) -> 
 ## Returns true if this player can delete the building at the given position.
 func can_remove_building() -> bool:
 	return true
-
 
 
 ## Get the ore at the given x/y coordinates for the given player id.
