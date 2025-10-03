@@ -196,7 +196,7 @@ func process_remove_building(
 ) -> void:
 	print("processing remove building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
-	if Model.can_remove():
+	if Model.can_remove_building():
 		Model.remove_building_at.rpc(player_id, tile_position)
 
 
