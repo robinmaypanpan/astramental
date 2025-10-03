@@ -6,7 +6,7 @@ extends Control
 @export var player_board_scene: PackedScene
 
 ## Map of player ids to nodes
-var _player_boards: Dictionary[int, Node]
+var _player_boards: Dictionary[int, CellularPlayerBoard]
 
 @onready var board_holder := %BoardHolder
 
@@ -174,8 +174,8 @@ func request_place_building(pos: PlayerGridPosition, building: String) -> void:
 func process_place_building(
 	player_id: int, tile_position: Vector2i, building: String
 ) -> void:
-	print("processing place building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
+	print("processing place building from %d" % caller_id)
 	if Model.can_build(building):
 		Model.set_building_at.rpc(player_id, tile_position, building)
 
@@ -194,8 +194,8 @@ func request_remove_building(pos: PlayerGridPosition) -> void:
 func process_remove_building(
 	player_id: int, tile_position: Vector2i
 ) -> void:
-	print("processing remove building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
+	print("processing remove building from %d" % caller_id)
 	if Model.can_remove():
 		Model.remove_building_at.rpc(player_id, tile_position)
 
