@@ -6,7 +6,7 @@ extends Control
 @export var player_board_scene: PackedScene
 
 ## Map of player ids to nodes
-var _player_boards: Dictionary[int, Node]
+var _player_boards: Dictionary[int, CellularPlayerBoard]
 
 @onready var board_holder := %BoardHolder
 
@@ -96,16 +96,17 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 
 
 ## Returns the grid coordinates the mouse is over
-func _get_new_building_coordinates() -> TileMapPosition:
+func _get_new_building_coordinates() -> PlayerGridPosition:
 	var player_id:int = multiplayer.get_unique_id()
 	var player_board := _get_player_board(player_id)
 	if player_board and player_board.is_mouse_over_factory_or_mine():
 		var tile_position: Vector2i = player_board.get_mouse_grid_position()
-		return TileMapPosition.new(player_id, tile_position)
+		return PlayerGridPosition.new(player_id, tile_position)
 	return null
 
 
 func _input(_event: InputEvent) -> void:
+	# TODO: (RPG) A lot of this function should move to the view model
 	if Input.is_action_just_pressed("ui_cancel"):
 		AsteroidViewModel.building_on_cursor = "" # exit build mode
 		var player_board := _get_player_board(multiplayer.get_unique_id())
@@ -117,20 +118,21 @@ func _input(_event: InputEvent) -> void:
 	elif Input.is_action_just_released("either_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.HOVERING
 
-	var new_building_position: TileMapPosition = _get_new_building_coordinates()
+	var new_building_position: PlayerGridPosition = _get_new_building_coordinates()
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
 		if (AsteroidViewModel.mouse_tile_map_pos):
-			print("Updating ghost")
-			var player_board := _get_player_board(multiplayer.get_unique_id())
+			var player_id: int = multiplayer.get_unique_id()
+			var player_board: CellularPlayerBoard = _get_player_board(player_id)
+			var building_id: String = AsteroidViewModel.building_on_cursor
 			player_board.clear_ghost_building()
-			if new_building_position:
+			if (
+				new_building_position != null
+				and Model.can_build_at_location(building_id, new_building_position)
+			):
 				var new_tile_pos: Vector2i = new_building_position.tile_position
-				player_board.set_ghost_building(
-					new_tile_pos.x, new_tile_pos.y,
-					AsteroidViewModel.building_on_cursor
-				)
+				player_board.set_ghost_building(new_tile_pos.x, new_tile_pos.y, building_id)
 
 	# place buildings
 	if new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:
@@ -161,7 +163,7 @@ func _on_update_ore_tilemaps() -> void:
 
 
 ## Request the server to let you place a building at the given position.
-func request_place_building(pos: TileMapPosition, building: String) -> void:
+func request_place_building(pos: PlayerGridPosition, building: String) -> void:
 	# do client side pretend placement
 	print("requesting place building from %d" % multiplayer.get_unique_id())
 	# then actually request the server to place the building
@@ -174,14 +176,14 @@ func request_place_building(pos: TileMapPosition, building: String) -> void:
 func process_place_building(
 	player_id: int, tile_position: Vector2i, building: String
 ) -> void:
-	print("processing place building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
-	if Model.can_build(building):
+	print("processing place building from %d" % caller_id)
+	if Model.can_build_at_location(building, PlayerGridPosition.new(player_id, tile_position)):
 		Model.set_building_at.rpc(player_id, tile_position, building)
 
 
 ## Request the server to let you remove a building at the given position.
-func request_remove_building(pos: TileMapPosition) -> void:
+func request_remove_building(pos: PlayerGridPosition) -> void:
 	# do client side pretend placement
 	print("requesting delete building from %d" % multiplayer.get_unique_id())
 	# then actually request the server to place the building
@@ -194,8 +196,8 @@ func request_remove_building(pos: TileMapPosition) -> void:
 func process_remove_building(
 	player_id: int, tile_position: Vector2i
 ) -> void:
-	print("processing remove building from %d" % multiplayer.get_unique_id())
 	var caller_id := multiplayer.get_remote_sender_id()
+	print("processing remove building from %d" % caller_id)
 	if Model.can_remove():
 		Model.remove_building_at.rpc(player_id, tile_position)
 

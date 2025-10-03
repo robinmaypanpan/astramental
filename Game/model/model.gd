@@ -15,7 +15,10 @@ signal buildings_updated()
 ## Defines the resources people start the game with. Edit through model.tscn.
 @export var starting_resources: Dictionary[Types.Item, int]
 
+## The random number seed used for this game
 var world_seed: int
+
+## The number of players seen as ready. Used to determine when it is okay to start the game
 var num_players_ready := 0
 
 @onready var player_states: PlayerStates  = %PlayerStates
@@ -120,19 +123,31 @@ func can_build(building_id: String) -> bool:
 	return true
 
 
-## Returns true if this player can delete the building at the given position.
-func can_remove_building() -> bool:
+## Returns true if we can build the building indicated at the location specified
+func can_build_at_location(building_id:String, position: PlayerGridPosition) -> bool:
+	# Make sure we can build the building somewhere, before continuing
+	if not can_build(building_id):
+		# We can't build this building at all. just return false
+		return false
+
+	# Make sure that the space is open
+	if get_building_at(position) != "":
+		# The space isn't open. We can't build there.
+		return false
+
+	# Make sure that the building fits into this part of the grid
+	var building: BuildingResource = Buildings.get_by_id(building_id)
+
+	if (building.placement_destination != WorldGenModel.get_layer_type(position.tile_position.y)):
+			# Can't place this building in this layer
+			return false
+
 	return true
 
 
-## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
-## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
-func _get_index_into_ores_layout(x: int, y: int) -> int:
-	if WorldGenModel.get_layer_num(y) > 0:
-		y -= WorldGenModel.layer_thickness # correct for ores_layout not storing data for factory layer
-		return y * WorldGenModel.num_cols + x
-	else:
-		return -1 # no index for factory layer
+## Returns true if this player can delete the building at the given position.
+func can_remove_building() -> bool:
+	return true
 
 
 ## Get the ore at the given x/y coordinates for the given player id.
@@ -159,9 +174,9 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 
 
 ## Get the building type at the given position.
-func get_building_at(pos: TileMapPosition) -> String:
-	var player_state := player_states.get_state(pos.player_id)
-	for placed_building in player_state.buildings_list:
+func get_building_at(pos: PlayerGridPosition) -> String:
+	var player_state: PlayerState = player_states.get_state(pos.player_id)
+	for placed_building: PlacedBuilding in player_state.buildings_list:
 		if placed_building.position == pos.tile_position:
 			return placed_building.id
 	return ""
@@ -172,18 +187,12 @@ func get_building_at(pos: TileMapPosition) -> String:
 func set_building_at(
 	player_id: int, tile_position: Vector2i, building_id: String
 ) -> void:
-	print("doing set building for %d" % multiplayer.get_unique_id())
-	var player_state := player_states.get_state(player_id)
-	var building_already_there := false
-	# if there is a building already in building list, just change its type
-	for placed_building in player_state.buildings_list:
-		if placed_building.position == tile_position:
-			placed_building.id = building_id
-			building_already_there = true
-	# otherwise, add new building to building list
-	if not building_already_there:
+	var caller_id := multiplayer.get_remote_sender_id()
+	print("doing set building for %d" % caller_id)
+	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
+		var player_state := player_states.get_state(player_id)
 		player_state.buildings_list.append(PlacedBuilding.new(tile_position, building_id))
-	buildings_updated.emit()
+		buildings_updated.emit()
 
 
 ## Remove the building at the given position for all players.
@@ -251,3 +260,13 @@ func _on_update_timer_timeout() -> void:
 		# Set the new energy in the player state
 		if new_energy != current_energy:
 			set_item_count(player_id, Types.Item.ENERGY, new_energy)
+
+
+## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
+## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
+func _get_index_into_ores_layout(x: int, y: int) -> int:
+	if WorldGenModel.get_layer_num(y) > 0:
+		y -= WorldGenModel.layer_thickness # correct for ores_layout not storing data for factory layer
+		return y * WorldGenModel.num_cols + x
+	else:
+		return -1 # no index for factory layer
