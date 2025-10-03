@@ -99,6 +99,7 @@ func get_mouse_grid_position() -> Vector2i:
 ## Given ore generation data, generate the ores for the given layer number by filling
 ## out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num: int) -> void:
+	# TODO: RPG: This should be in the model, not the UI
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
 
