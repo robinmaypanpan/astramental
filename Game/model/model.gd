@@ -159,7 +159,7 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 
 
 ## Get the building type at the given position.
-func get_building_at(pos: TileMapPosition) -> String:
+func get_building_at(pos: PlayerGridPosition) -> String:
 	var player_state := player_states.get_state(pos.player_id)
 	for placed_building in player_state.buildings_list:
 		if placed_building.position == pos.tile_position:

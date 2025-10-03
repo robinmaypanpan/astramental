@@ -1,9 +1,10 @@
-class_name TileMapPosition
+class_name PlayerGridPosition
 extends Object
 
-## which player's board are we over
+## which player's board?
 var player_id: int
-## Which tile are we on in that board
+
+## Which tile on that board?
 var tile_position: Vector2i
 
 
