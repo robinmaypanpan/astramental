@@ -86,6 +86,12 @@ func get_starting_item_count(type: Types.Item) -> float:
 	return float(starting_resources.get(type, 0))
 
 
+## Returns a dictionary of all of the items posessed by the player
+func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.items.duplicate()
+
+
 ## Returns the number of items possessed by the specified player.
 func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
@@ -249,17 +255,25 @@ func _on_update_timer_timeout() -> void:
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
 
 	for player_id: int in player_list:
-		var buildings : Array[PlacedBuilding] = get_buildings(player_id)
-		var current_energy : float = get_item_count(player_id, Types.Item.ENERGY)
-		var new_energy := current_energy
+		var buildings: Array[PlacedBuilding] = get_buildings(player_id)
+		
+		var current_items: Dictionary[Types.Item, float] = get_all_item_counts(player_id)
+		var new_items: Dictionary[Types.Item, float] = current_items.duplicate()
 
-		for building in buildings:
+		for building: PlacedBuilding in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			new_energy -= building_resource.energy_drain * update_time
+			new_items[Types.Item.ENERGY] -= building_resource.energy_drain * update_time
+			
+			if (building_resource is MinerResource):
+				var miner_resource: MinerResource = building_resource
+				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
+				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
+				new_items[item_type_gained] += miner_resource.mining_speed * update_time
 
 		# Set the new energy in the player state
-		if new_energy != current_energy:
-			set_item_count(player_id, Types.Item.ENERGY, new_energy)
+		for item_type: Types.Item in new_items.keys():
+			if new_items[item_type] != current_items[item_type]:
+				set_item_count(player_id, item_type, new_items[item_type])
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
