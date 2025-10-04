@@ -28,6 +28,7 @@ func generate_grid(rows:int, cols:int):
 			cell.name = "Cell %d,%d" % [r, c]
 			_grid_container.add_child(cell)
 
+
 ## Returns an iterator over all cells
 func all_cells() -> AllCellIterator:
 	return AllCellIterator.new(self, _actual_rows, _actual_cols)
