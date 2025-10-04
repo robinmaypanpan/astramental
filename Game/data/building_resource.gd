@@ -16,8 +16,5 @@ extends Resource
 ## A list of item costs needed to build this building, if any
 @export var item_costs: Array[ItemCost] = []
 
-## The coordinates in the building tileset that correspond to the correct building image.
-var atlas_coordinates: Vector2i:
-	get:
-		var icon_region := icon.region
-		return icon_region.position / 16
+## Determines whether this building is placed in the factory or in the mines
+@export var placement_destination: Types.Layer = Types.Layer.FACTORY

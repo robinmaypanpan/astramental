@@ -40,21 +40,21 @@ func _ready() -> void:
 	factory_and_mine.custom_minimum_size = Vector2i(0, layer_height_px * num_layers)
 
 	game_grid.generate_grid(
+		WorldGenModel.num_cols,
 		WorldGenModel.layer_thickness*(
-			WorldGenModel.get_num_mine_layers() + 1),
-			WorldGenModel.num_cols
+			WorldGenModel.get_num_mine_layers() + 1)
 	)
 
 	# Set up factory tiles to be all white tiles
 	for x in range(WorldGenModel.num_cols):
 		for y in range(WorldGenModel.layer_thickness):
-			game_grid.get_cell(y, x).set_background(factory_texture)
+			game_grid.get_cell(x, y).set_background(factory_texture)
 
 
 ## Publicly sets the ore at the indicated location
 func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
-	game_grid.get_cell(y, x).set_background(ore_resource.icon)
+	game_grid.get_cell(x, y).set_background(ore_resource.icon)
 
 
 ## Hide all buildings on the grid
@@ -66,7 +66,7 @@ func clear_buildings() -> void:
 ## Place a building at the desired location
 func place_building(position: Vector2i, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
-	game_grid.get_cell(position.y, position.x).set_icon(building.icon)
+	game_grid.get_cell(position.x, position.y).set_icon(building.icon)
 
 
 ## Set the position of the ghost building at the indicated position
@@ -74,13 +74,13 @@ func set_ghost_building(x: int, y:int, building_id: String) -> void:
 	clear_ghost_building()
 	ghost_building_position = Vector2i(x,y)
 	var building: BuildingResource = Buildings.get_by_id(building_id)
-	game_grid.get_cell(y, x).set_ghost(building.icon)
+	game_grid.get_cell(x, y).set_ghost(building.icon)
 
 
 ## Remove the ghost building from its position
 func clear_ghost_building() -> void:
 	if ghost_building_position.y >= 0:
-		game_grid.get_cell(ghost_building_position.y, ghost_building_position.x).set_ghost(null)
+		game_grid.get_cell(ghost_building_position.x, ghost_building_position.y).set_ghost(null)
 		ghost_building_position = Vector2i(-1,-1)
 
 
@@ -99,6 +99,7 @@ func get_mouse_grid_position() -> Vector2i:
 ## Given ore generation data, generate the ores for the given layer number by filling
 ## out the tile map layer with the appropriate ores.
 func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num: int) -> void:
+	# TODO: RPG: This should be in the model, not the UI
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
 
