@@ -295,27 +295,47 @@ func _on_update_timer_timeout() -> void:
 		# Initialize our change rate table.
 		# TODO: Don't do this here.
 		var change_rates: Dictionary[Types.Item, float]
+		var total_energy_production: float = 0.0
+		var total_energy_consumption: float = 0.0
 		for item_type: Types.Item in Types.Item.values():
 			change_rates[item_type] = 0.0
 
+		# Do the energy pass to determine building efficiency
 		for building: PlacedBuilding in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			var energy_change_per_second: float = building_resource.energy_drain
+			var energy_drain_per_second: float = building_resource.energy_drain
 
 			# Consider doing change rates locally instead of here on the server
-			new_items[Types.Item.ENERGY] -= energy_change_per_second * update_time
-			change_rates[Types.Item.ENERGY] -= energy_change_per_second
+			new_items[Types.Item.ENERGY] -= energy_drain_per_second * update_time
+			change_rates[Types.Item.ENERGY] -= energy_drain_per_second
 
+			# Process energy production vs. consumption
+			if energy_drain_per_second > 0:
+				total_energy_consumption += energy_drain_per_second
+			elif energy_drain_per_second < 0:
+				total_energy_production -= energy_drain_per_second
+
+		# Calculate energy effienciency
+		var energy_effiency: float = 1.0
+		if new_items[Types.Item.ENERGY] <= 0.0:
+			# We are out of energy
+			new_items[Types.Item.ENERGY] = 0.0
+			energy_effiency = min(1.0, total_energy_production / total_energy_consumption)
+			print("Out of energy. %f / %f = %f effiency" % [total_energy_production, total_energy_consumption, energy_effiency])
+
+		# Now do the mining pass
+		for building: PlacedBuilding in buildings:
+			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 			if (building_resource is MinerResource):
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				var item_change_per_second: float = miner_resource.mining_speed
+				var item_change_per_second: float = miner_resource.mining_speed * energy_effiency
 
 				new_items[item_type_gained] += item_change_per_second * update_time
 				change_rates[item_type_gained] += item_change_per_second
 
-		# Set the new energy in the player state
+		# Set the new items in the player state
 		for item_type: Types.Item in new_items.keys():
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
