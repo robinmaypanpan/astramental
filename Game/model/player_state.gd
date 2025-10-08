@@ -63,12 +63,16 @@ func add_building(tile_position: Vector2i, building_id: String) -> void:
 
 func remove_building(tile_position: Vector2i) -> bool:
 	var index_to_remove := -1
+	var building_entity: BuildingEntity = null
 	for i in buildings_list.size():
 		var placed_building : BuildingEntity = buildings_list[i]
 		if placed_building.position == tile_position:
 			index_to_remove = i
+			building_entity = placed_building
 			break
 	if index_to_remove != -1:
+		for component in building_entity.components:
+			ComponentManager.remove_component(component)
 		buildings_list.remove_at(index_to_remove)
 		return true
 	else:
