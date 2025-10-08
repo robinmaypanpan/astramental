@@ -1,29 +1,29 @@
 [gd_resource type="Resource" script_class="ResourceListData" load_steps=9 format=3 uid="uid://dylcpxpn33g71"]
 
 [ext_resource type="Script" uid="uid://b2v70ie1xv58a" path="res://addons/resource_list/resource_list_datum.gd" id="1_k568v"]
-[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_dka42"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="2_62ssh"]
 [ext_resource type="Script" uid="uid://cudy3ci3kelwu" path="res://addons/resource_list/resource_list_data.gd" id="3_62ssh"]
-[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="3_dka42"]
-[ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/ore_resource.gd" id="4_62ssh"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/scripts/item_resource.gd" id="3_wtt5h"]
+[ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/scripts/ore_resource.gd" id="4_8bqui"]
 
 [sub_resource type="Resource" id="Resource_nlw5f"]
 script = ExtResource("1_k568v")
 type = "building"
-base_resource_script = ExtResource("2_dka42")
+base_resource_script = ExtResource("2_62ssh")
 resource_dir_path = "res://Game/data/buildings"
 metadata/_custom_type_script = "uid://b2v70ie1xv58a"
 
 [sub_resource type="Resource" id="Resource_62ssh"]
 script = ExtResource("1_k568v")
 type = "item"
-base_resource_script = ExtResource("3_dka42")
+base_resource_script = ExtResource("3_wtt5h")
 resource_dir_path = "res://Game/data/items"
 metadata/_custom_type_script = "uid://b2v70ie1xv58a"
 
 [sub_resource type="Resource" id="Resource_wtt5h"]
 script = ExtResource("1_k568v")
 type = "ore"
-base_resource_script = ExtResource("4_62ssh")
+base_resource_script = ExtResource("4_8bqui")
 resource_dir_path = "res://Game/data/ores"
 metadata/_custom_type_script = "uid://b2v70ie1xv58a"
 

@@ -1,11 +1,10 @@
 [gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://cechj8itdjo8e"]
 
-[ext_resource type="Texture2D" path="res://Assets/sprites/items/copper.tres" id="1_aioyr"]
-[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_hrofy"]
+[ext_resource type="Texture2D" uid="uid://bnhfq2dv5cvlo" path="res://Assets/sprites/items/copper.tres" id="1_aioyr"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/scripts/item_resource.gd" id="1_hrofy"]
 
 [resource]
 script = ExtResource("1_hrofy")
-type = 4
 icon = ExtResource("1_aioyr")
 can_trade = true
 sell_value = 2

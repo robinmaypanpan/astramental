@@ -1,11 +1,10 @@
 [gd_resource type="Resource" script_class="ItemResource" load_steps=3 format=3 uid="uid://cbkephyoptpxc"]
 
-[ext_resource type="Texture2D" path="res://Assets/sprites/items/energy.tres" id="1_6axuv"]
-[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="1_e2ncw"]
+[ext_resource type="Texture2D" uid="uid://10375ojdnctl" path="res://Assets/sprites/items/energy.tres" id="1_6axuv"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/scripts/item_resource.gd" id="1_e2ncw"]
 
 [resource]
 script = ExtResource("1_e2ncw")
-type = 1
 icon = ExtResource("1_6axuv")
 can_trade = false
 sell_value = 0

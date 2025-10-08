@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://bwocpff3efyfc"]
 
 [ext_resource type="Script" uid="uid://bh8hrlvxy5lmp" path="res://Game/items.gd" id="1_67yea"]
-[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/item_resource.gd" id="2_wgod3"]
+[ext_resource type="Script" uid="uid://c2bq2stnv5anq" path="res://Game/data/scripts/item_resource.gd" id="2_wgod3"]
 [ext_resource type="Resource" uid="uid://xf0d7ivek40k" path="res://Game/data/items/money.tres" id="3_et4x6"]
 [ext_resource type="Resource" uid="uid://cbkephyoptpxc" path="res://Game/data/items/energy.tres" id="4_x1ot4"]
 [ext_resource type="Resource" uid="uid://cedmjyoxqnt4s" path="res://Game/data/items/rock.tres" id="5_0ludx"]
