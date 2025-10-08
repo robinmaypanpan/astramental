@@ -209,7 +209,7 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 ## Get the building type at the given position.
 func get_building_at(pos: PlayerGridPosition) -> String:
 	var player_state: PlayerState = player_states.get_state(pos.player_id)
-	for placed_building: PlacedBuilding in player_state.buildings_list:
+	for placed_building: BuildingEntity in player_state.buildings_list:
 		if placed_building.position == pos.tile_position:
 			return placed_building.id
 	return ""
@@ -224,7 +224,7 @@ func set_building_at(
 	print("doing set building for %d" % caller_id)
 	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
 		var player_state := player_states.get_state(player_id)
-		player_state.buildings_list.append(PlacedBuilding.new(tile_position, building_id))
+		player_state.buildings_list.append(BuildingEntity.new(tile_position, building_id))
 		buildings_updated.emit()
 
 
@@ -235,7 +235,7 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	var player_state : PlayerState = player_states.get_state(player_id)
 	var index_to_remove := -1
 	for i in player_state.buildings_list.size():
-		var placed_building : PlacedBuilding = player_state.buildings_list[i]
+		var placed_building : BuildingEntity = player_state.buildings_list[i]
 		if placed_building.position == tile_position:
 			index_to_remove = i
 			break
@@ -245,7 +245,7 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 
 
 ## Retrieves a list of buildings for the specified player
-func get_buildings(player_id: int) -> Array[PlacedBuilding]:
+func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state : PlayerState = player_states.get_state(player_id)
 	return player_state.buildings_list
 
@@ -287,7 +287,7 @@ func _on_update_timer_timeout() -> void:
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
 
 	for player_id: int in player_list:
-		var buildings: Array[PlacedBuilding] = get_buildings(player_id)
+		var buildings: Array[BuildingEntity] = get_buildings(player_id)
 
 		var current_items: Dictionary[Types.Item, float] = get_all_item_counts(player_id)
 		var new_items: Dictionary[Types.Item, float] = current_items.duplicate()
@@ -301,7 +301,7 @@ func _on_update_timer_timeout() -> void:
 			change_rates[item_type] = 0.0
 
 		# Do the energy pass to determine building efficiency
-		for building: PlacedBuilding in buildings:
+		for building: BuildingEntity in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 			var energy_drain_per_second: float = building_resource.energy_drain
 
@@ -324,7 +324,7 @@ func _on_update_timer_timeout() -> void:
 			print("Out of energy. %f / %f = %f effiency" % [total_energy_production, total_energy_consumption, energy_effiency])
 
 		# Now do the mining pass
-		for building: PlacedBuilding in buildings:
+		for building: BuildingEntity in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 			if (building_resource is MinerResource):
 				var miner_resource: MinerResource = building_resource

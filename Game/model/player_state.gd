@@ -24,7 +24,7 @@ signal item_change_rate_changed(player_id: int, type: Types.Item, new_change_rat
 @export var ores_layout: Array[Types.Ore]
 
 ## Contains a list of the positions of each building for this player.
-@export var buildings_list: Array[PlacedBuilding]
+@export var buildings_list: Array[BuildingEntity]
 
 func _ready() -> void:
 	var num_layers := WorldGenModel.get_num_mine_layers()

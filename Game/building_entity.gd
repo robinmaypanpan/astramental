@@ -1,4 +1,4 @@
-class_name PlacedBuilding
+class_name BuildingEntity
 extends Resource
 ## Represents a building actually placed down in the Model.
 
