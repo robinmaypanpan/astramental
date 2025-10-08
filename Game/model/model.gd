@@ -300,20 +300,20 @@ func _on_update_timer_timeout() -> void:
 
 		for building: PlacedBuilding in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			var energy_change: float = building_resource.energy_drain * update_time
+			var energy_change_per_second: float = building_resource.energy_drain
 
 			# Consider doing change rates locally instead of here on the server
-			new_items[Types.Item.ENERGY] -= energy_change
-			change_rates[Types.Item.ENERGY] -= energy_change
+			new_items[Types.Item.ENERGY] -= energy_change_per_second * update_time
+			change_rates[Types.Item.ENERGY] -= energy_change_per_second
 
 			if (building_resource is MinerResource):
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				var item_change: float = miner_resource.mining_speed * update_time
+				var item_change_per_second: float = miner_resource.mining_speed
 
-				new_items[item_type_gained] += item_change
-				change_rates[item_type_gained] += item_change
+				new_items[item_type_gained] += item_change_per_second * update_time
+				change_rates[item_type_gained] += item_change_per_second
 
 		# Set the new energy in the player state
 		for item_type: Types.Item in new_items.keys():
