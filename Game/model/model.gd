@@ -174,7 +174,11 @@ func can_build_at_location(building_id:String, position: PlayerGridPosition) -> 
 
 
 ## Returns true if this player can delete the building at the given position.
-func can_remove_building() -> bool:
+func can_remove_building(position: PlayerGridPosition) -> bool:
+	if get_building_at(position) == "":
+		# no building to remove
+		return false
+
 	return true
 
 
