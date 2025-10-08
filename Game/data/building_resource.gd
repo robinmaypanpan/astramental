@@ -18,3 +18,6 @@ extends Resource
 
 ## Determines whether this building is placed in the factory or in the mines
 @export var placement_destination: Types.Layer = Types.Layer.FACTORY
+
+## Defines behavior of building through components.
+@export var building_components: Array[BuildingComponentData]
