@@ -18,9 +18,16 @@ func _ready() -> void:
 		var index := building_list.add_icon_item(building.icon)
 		building_list.set_item_text(index, building.name)
 		_buildings.push_back(building.id)
+		
+	Model.game_ready.connect(on_game_ready)
 
+# PRIVATE METHODS
+
+func on_game_ready() -> void:
 	# whether we can build a building is entirely dependent on our item counts
-	Model.item_count_changed.connect(_on_item_count_changed)
+	var player_id: int = multiplayer.get_unique_id()
+	var player_state: PlayerState = Model.player_states.get_state(player_id)
+	player_state.item_count_changed.connect(_on_item_count_changed)
 
 
 func _on_building_list_item_clicked(

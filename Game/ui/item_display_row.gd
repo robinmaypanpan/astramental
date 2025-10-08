@@ -35,4 +35,4 @@ func render_text() -> void:
 	# TODO I18N: This format needs to be internationalized
 
 	# truncates when doing float -> %d, which is the desired behavior
-	count_text.text = "%d (%+d/s)" % [item_count, change]
+	count_text.text = "%d (%+.1f/s)" % [item_count, change]

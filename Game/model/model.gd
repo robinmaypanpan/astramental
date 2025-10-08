@@ -93,7 +93,7 @@ func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
 func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items[type]
-	
+
 ## Returns the number of items possessed by the specified player.
 func get_item_change_rate(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
@@ -292,20 +292,34 @@ func _on_update_timer_timeout() -> void:
 		var current_items: Dictionary[Types.Item, float] = get_all_item_counts(player_id)
 		var new_items: Dictionary[Types.Item, float] = current_items.duplicate()
 
+		# Initialize our change rate table.
+		# TODO: Don't do this here.
+		var change_rates: Dictionary[Types.Item, float]
+		for item_type: Types.Item in Types.Item.values():
+			change_rates[item_type] = 0.0
+
 		for building: PlacedBuilding in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			new_items[Types.Item.ENERGY] -= building_resource.energy_drain * update_time
+			var energy_change: float = building_resource.energy_drain * update_time
+
+			# Consider doing change rates locally instead of here on the server
+			new_items[Types.Item.ENERGY] -= energy_change
+			change_rates[Types.Item.ENERGY] -= energy_change
 
 			if (building_resource is MinerResource):
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				new_items[item_type_gained] += miner_resource.mining_speed * update_time
+				var item_change: float = miner_resource.mining_speed * update_time
+
+				new_items[item_type_gained] += item_change
+				change_rates[item_type_gained] += item_change
 
 		# Set the new energy in the player state
 		for item_type: Types.Item in new_items.keys():
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
+			set_item_change_rate(player_id, item_type, change_rates[item_type])
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
