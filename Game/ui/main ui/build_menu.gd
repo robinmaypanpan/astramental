@@ -37,4 +37,4 @@ func _on_item_count_changed(_player_id: int, _type: Types.Item, _new_count: floa
 func _disable_unaffordable_buildings() -> void:
 	for index in range(_buildings.size()):
 		var building_id: String = _buildings[index]
-		building_list.set_item_disabled(index, not Model.can_build(building_id))
+		building_list.set_item_disabled(index, not Model.can_afford(building_id))

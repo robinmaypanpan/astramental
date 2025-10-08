@@ -139,7 +139,7 @@ func _input(_event: InputEvent) -> void:
 		if (
 			AsteroidViewModel.in_build_mode
 			and AsteroidViewModel.mouse_state == MouseState.BUILDING
-			and Model.can_build(AsteroidViewModel.building_on_cursor)
+			and Model.can_afford(AsteroidViewModel.building_on_cursor)
 		):
 			request_place_building(new_building_position, AsteroidViewModel.building_on_cursor)
 		if AsteroidViewModel.mouse_state == MouseState.DELETING:

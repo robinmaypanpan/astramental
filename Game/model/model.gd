@@ -121,11 +121,11 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 		item_count_changed.emit(player_id, type, amount)
 
 
-## Returns true if we have the resources necessary to build this building
-func can_build(building_id: String) -> bool:
+## Returns true if the given player_id (default is ourself) has the resources necessary
+## to build this building
+func can_afford(building_id: String, player_id: int = multiplayer.get_unique_id()) -> bool:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	var costs: Array[ItemCost] = building.item_costs
-	var player_id = multiplayer.get_unique_id()
 	for cost in costs:
 		var item_type = cost.item_id
 		var cost_amount = cost.quantity
@@ -154,7 +154,7 @@ func refund_costs(player_id: int, building_id: String) -> void:
 ## Returns true if we can build the building indicated at the location specified
 func can_build_at_location(building_id:String, position: PlayerGridPosition) -> bool:
 	# Make sure we can build the building somewhere, before continuing
-	if not can_build(building_id):
+	if not can_afford(building_id, position.player_id):
 		# We can't build this building at all. just return false
 		return false
 
