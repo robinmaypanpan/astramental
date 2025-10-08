@@ -2,6 +2,13 @@ class_name PlayerStates
 extends Node
 ## Primary container for all player states
 
+
+## When an item quantity is changed, this signal fires
+signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
+
+## When an item change rate changes, this signal fires
+signal item_change_rate_changed(player_id: int, type: Types.Item, new_change_rate: float)
+
 ## Stores mapping from player id -> instantiated player state
 var _player_states_dict: Dictionary[int, PlayerState]
 
@@ -30,6 +37,7 @@ func spawn_player_state(player_id: int) -> Node:
 	player_state.index = player.index
 	for type in Types.Item.values():
 		player_state.items[type] = 0.0
+		player_state.item_change_rate[type] = 0.0
 
 	_player_states_dict[player_id] = player_state
 
@@ -38,9 +46,21 @@ func spawn_player_state(player_id: int) -> Node:
 
 ## Spawn a new player state for the given player id.
 func add_state(player_id: int) -> PlayerState:
-	return player_spawner.spawn(player_id)
+	var player_state:PlayerState = player_spawner.spawn(player_id)
+	player_state.item_count_changed.connect(on_item_count_changed)
+	player_state.item_change_rate_changed.connect(on_item_change_rate_changed)
+	return player_state
 
 
 ## Given the player id, retrieve the corresponding PlayerState.
 func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
 	return _player_states_dict[player_id]
+
+# PRIVATE METHODS
+
+func on_item_count_changed(player_id: int, type: Types.Item, new_count: float) -> void:
+	item_count_changed.emit(player_id, type, new_count)
+
+
+func on_item_change_rate_changed(player_id: int, type: Types.Item, new_change_rate: float) -> void:
+	item_change_rate_changed.emit(player_id, type, new_change_rate)

@@ -1,12 +1,13 @@
 extends Node
 
-# subscribed to by cursor
+## subscribed to by cursor
 signal building_on_cursor_changed()
-# Emitted when the ore layout changes, subscribed to by asteroid
+## Emitted when the ore layout changes, subscribed to by asteroid
 signal ore_layout_changed_this_frame()
-# Emitted when the list of buildings for either player changes, subscribed to by asteroid
+## Emitted when the list of buildings for either player changes, subscribed to by asteroid
 signal building_layout_changed_this_frame()
 
+## used by the UI to indicate what's currently supposed to be on the cursor
 var building_on_cursor: String:
 	get:
 		return building_on_cursor
@@ -14,16 +15,20 @@ var building_on_cursor: String:
 		building_on_cursor = building
 		building_on_cursor_changed.emit()
 
+## Returns true when we're in build mode and the UI should react appropriately.
 var in_build_mode: bool:
 	get:
 		return building_on_cursor != ""
 
+## Stores the current state of the mouse
 var mouse_state := MouseState.HOVERING
-# default value is null
+
+# Position that the mouse is currently positioned over
 var mouse_tile_map_pos: PlayerGridPosition
 
 ## Whether the ores_layout in Model was updated this frame.
 var ores_layout_dirty: bool = false
+
 ## Whether the buildings list in Model was updated this frame.
 var buildings_dirty: bool = false
 
@@ -33,7 +38,7 @@ func _ready():
 	Model.buildings_updated.connect(_on_buildings_updated)
 
 
-## since this is UI updating, use _process instead of _physics_process
+# since this is UI updating, use _process instead of _physics_process
 func _process(_delta: float) -> void:
 	if ores_layout_dirty:
 		ore_layout_changed_this_frame.emit()

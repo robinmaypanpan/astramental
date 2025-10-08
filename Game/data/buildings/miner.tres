@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="1_ihwv0"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/item_cost.gd" id="1_rb5k8"]
-[ext_resource type="Script" uid="uid://fscxshc5eg0a" path="res://Game/data/buildings/miner_resource.gd" id="3_ihwv0"]
+[ext_resource type="Script" uid="uid://fscxshc5eg0a" path="res://Game/data/miner_resource.gd" id="3_ihwv0"]
 
 [sub_resource type="Resource" id="Resource_ihwv0"]
 script = ExtResource("1_rb5k8")
