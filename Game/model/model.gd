@@ -5,8 +5,6 @@ extends Node
 
 ## Emitted when the game is finished setting up and is ready to start playing
 signal game_ready
-## When an item quantity is changed, this signal fires
-signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 ## Emitted when ores_layout in PlayerStates is updated.
 signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
@@ -25,7 +23,6 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
-
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -97,28 +94,32 @@ func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items[type]
 
+## Returns the number of items possessed by the specified player.
+func get_item_change_rate(player_id: int, type: Types.Item) -> float:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.item_change_rate[type]
+
 
 ## Given the item type and amount, add that many items to this player's PlayerState.
-## TODO: Should we really allow clients to set things directly? Hmmm.
 func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:
-	update_item_count.rpc(type, new_count, player_id)
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.update_item_count(type, new_count)
+
+
+## Given the item type and amount, adjust the item change rate for this player's playerstate
+func set_item_change_rate(player_id: int, type: Types.Item, new_change_rate: float) -> void:
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.update_item_change_rate(type, new_change_rate)
 
 
 ## Increases the specified item count by the amount specified
 func increase_item_count(player_id: int, type: Types.Item, increase_amount: float) -> void:
+	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
 	var item_count := player_state.items[type]
 	set_item_count(player_id, type, item_count + increase_amount)
-
-
-## Given the item type and amount, add that many items to the given player id's PlayerState.
-@rpc("any_peer", "call_local", "reliable")
-func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.items[type] = amount
-	if player_id == multiplayer.get_unique_id():
-		# If this change is for the local system, we need to update subscribers
-		item_count_changed.emit(player_id, type, amount)
 
 
 ## Returns true if the given player_id (default is ourself) has the resources necessary
@@ -260,22 +261,27 @@ func _start_game():
 	randomize()
 	var new_random_seed: int = randi()
 	initialize_clients.rpc(new_random_seed)
-	_set_starting_item_counts()
+	set_starting_item_counts()
 
 	# Launch the game!
 	launch_game.rpc()
 
 
-func _set_starting_item_counts() -> void:
+# PRIVATE METHODS
+
+func set_starting_item_counts() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
 		for type in starting_resources.keys():
 			var amount: float = get_starting_item_count(type)
 			set_item_count(player_id, type, amount)
+			set_item_change_rate(player_id, type, 0.0)
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
+
+	# Stores the amount of time that should have passed since the previous wait time
 	var update_time : float = _update_timer.wait_time
 
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
@@ -286,20 +292,34 @@ func _on_update_timer_timeout() -> void:
 		var current_items: Dictionary[Types.Item, float] = get_all_item_counts(player_id)
 		var new_items: Dictionary[Types.Item, float] = current_items.duplicate()
 
+		# Initialize our change rate table.
+		# TODO: Don't do this here.
+		var change_rates: Dictionary[Types.Item, float]
+		for item_type: Types.Item in Types.Item.values():
+			change_rates[item_type] = 0.0
+
 		for building: PlacedBuilding in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			new_items[Types.Item.ENERGY] -= building_resource.energy_drain * update_time
+			var energy_change_per_second: float = building_resource.energy_drain
+
+			# Consider doing change rates locally instead of here on the server
+			new_items[Types.Item.ENERGY] -= energy_change_per_second * update_time
+			change_rates[Types.Item.ENERGY] -= energy_change_per_second
 
 			if (building_resource is MinerResource):
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				new_items[item_type_gained] += miner_resource.mining_speed * update_time
+				var item_change_per_second: float = miner_resource.mining_speed
+
+				new_items[item_type_gained] += item_change_per_second * update_time
+				change_rates[item_type_gained] += item_change_per_second
 
 		# Set the new energy in the player state
 		for item_type: Types.Item in new_items.keys():
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
+			set_item_change_rate(player_id, item_type, change_rates[item_type])
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
