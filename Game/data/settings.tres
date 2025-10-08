@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Settings" load_steps=2 format=3 uid="uid://bkmnx8ykayhod"]
+
+[ext_resource type="Script" uid="uid://b2p2kbckpx0pd" path="res://Game/data/scripts/settings.gd" id="1_bpvaq"]
+
+[resource]
+script = ExtResource("1_bpvaq")
+starting_resources = Dictionary[int, int]({
+1: 50,
+3: 50
+})
+metadata/_custom_type_script = "uid://b2p2kbckpx0pd"

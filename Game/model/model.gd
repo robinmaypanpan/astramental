@@ -10,9 +10,6 @@ signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
-## Defines the resources people start the game with. Edit through model.tscn.
-@export var starting_resources: Dictionary[Types.Item, int]
-
 ## The random number seed used for this game
 var world_seed: int
 
@@ -80,7 +77,7 @@ func register_player_ready() -> void:
 ## Controlled by starting_resources export in model.tscn. If a resource isn't listed in there,
 ## the default starting amount is 0.
 func get_starting_item_count(type: Types.Item) -> float:
-	return float(starting_resources.get(type, 0))
+	return float(Globals.settings.starting_resources.get(type, 0))
 
 
 ## Returns a dictionary of all of the items posessed by the player
@@ -271,7 +268,7 @@ func _start_game():
 
 func set_starting_item_counts() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
-		for type in starting_resources.keys():
+		for type in Globals.settings.starting_resources.keys():
 			var amount: float = get_starting_item_count(type)
 			set_item_count(player_id, type, amount)
 			set_item_change_rate(player_id, type, 0.0)

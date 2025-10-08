@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=7 format=3 uid="uid://bu5c247ke1rkw"]
 
 [ext_resource type="Texture2D" uid="uid://ds5rf8iw3y62d" path="res://Assets/sprites/buildings/battery.tres" id="1_omend"]
-[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/item_cost.gd" id="1_x4l37"]
-[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_omend"]
+[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="1_x4l37"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="2_omend"]
 
 [sub_resource type="Resource" id="Resource_osgy5"]
 script = ExtResource("1_x4l37")

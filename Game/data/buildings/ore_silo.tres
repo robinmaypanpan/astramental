@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=6 format=3 uid="uid://b1f87jarst80f"]
 
-[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/item_cost.gd" id="1_ldte1"]
+[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="1_ldte1"]
 [ext_resource type="Texture2D" uid="uid://b0a58q4ps5c4f" path="res://Assets/sprites/buildings/ore_silo.tres" id="1_ucscj"]
-[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="2_ucscj"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="2_ucscj"]
 
 [sub_resource type="Resource" id="Resource_eukut"]
 script = ExtResource("1_ldte1")
