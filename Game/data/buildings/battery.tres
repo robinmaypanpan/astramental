@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="StorageResource" load_steps=5 format=3 uid="uid://bu5c247ke1rkw"]
+[gd_resource type="Resource" script_class="StorageResource" load_steps=6 format=3 uid="uid://bu5c247ke1rkw"]
 
+[ext_resource type="Texture2D" uid="uid://ds5rf8iw3y62d" path="res://Assets/sprites/buildings/battery.tres" id="1_omend"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="2_omend"]
 [ext_resource type="Script" uid="uid://23solel1dope" path="res://Game/data/scripts/storage_resource.gd" id="2_x4l37"]
 
@@ -22,6 +23,7 @@ storage_increase = Dictionary[int, float]({
 })
 name = "Battery"
 id = "battery"
+icon = ExtResource("1_omend")
 energy_drain = 0.0
 item_costs = Array[ExtResource("2_omend")]([SubResource("Resource_osgy5"), SubResource("Resource_npclv")])
 placement_destination = 0

@@ -273,6 +273,28 @@ func set_starting_item_counts() -> void:
 			set_item_count(player_id, type, amount)
 			set_item_change_rate(player_id, type, 0.0)
 
+## Returns the storage limit for a given type if it exists.
+## If the storage limit does not exist, returns a very large float value
+func get_storage_limit(player_id: int, type: Types.Item) -> float:
+	# TODO: We need to stop iterating over buildings when we should already know they're here
+
+	# Grab the base storage limit
+	if not Globals.settings.storage_limits.has(type):
+		return 10000000000000000
+
+	var storage_limit: float = Globals.settings.storage_limits[type]
+
+	var buildings: Array[PlacedBuilding] = get_buildings(player_id)
+	for building: PlacedBuilding in buildings:
+		var building_resource: BuildingResource = Buildings.get_by_id(building.id)
+		if (building_resource is StorageResource):
+			var storage_resource:StorageResource = building_resource
+			for increase_type: Types.Item in storage_resource.storage_increase.keys():
+				if increase_type == type:
+					storage_limit += storage_resource.storage_increase[increase_type]
+
+	return storage_limit
+
 
 ## Fires whenever the update timer is fired. This should only run on the server.
 func _on_update_timer_timeout() -> void:
@@ -313,7 +335,7 @@ func _on_update_timer_timeout() -> void:
 				total_energy_production -= energy_drain_per_second
 
 		# Limit energy by energy storage
-		var max_energy: float = Globals.settings.get_storage_limit(Types.Item.ENERGY)
+		var max_energy: float = get_storage_limit(player_id, Types.Item.ENERGY)
 		new_items[Types.Item.ENERGY] = min(max_energy, new_items[Types.Item.ENERGY])
 
 		# Calculate energy effienciency
@@ -339,7 +361,7 @@ func _on_update_timer_timeout() -> void:
 
 		# Set the new items in the player state
 		for item_type: Types.Item in new_items.keys():
-			var max_count: float = Globals.settings.get_storage_limit(item_type)
+			var max_count: float = get_storage_limit(player_id, item_type)
 			new_items[item_type] = min(max_count, new_items[item_type])
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
