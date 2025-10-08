@@ -9,8 +9,16 @@ var player_id: int
 var position: Vector2i
 ## What building is here.
 var id: String
+## List of components keeping track of behavior
+var components: Array[BuildingComponent]
 
 func _init(pi, p, i: String):
 	player_id = pi
 	position = p
 	id = i
+	var building_resource = Buildings.get_by_id(i)
+	for component_data in building_resource.building_components:
+		var component = component_data.make_component(self)
+		ComponentManager.add_component(component)
+
+		components.append(component)
