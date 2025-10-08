@@ -1,6 +1,7 @@
 class_name BuildMenu extends PanelContainer
 
 signal on_building_clicked(building: String)
+signal available_buildings_changed()
 
 @export var path_to_building_assets: String
 
@@ -38,3 +39,4 @@ func _disable_unaffordable_buildings() -> void:
 	for index in range(_buildings.size()):
 		var building_id: String = _buildings[index]
 		building_list.set_item_disabled(index, not Model.can_afford(building_id))
+		available_buildings_changed.emit()
