@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=5 format=3 uid="uid://dr2a0i2d1ilm5"]
 
 [ext_resource type="Texture2D" uid="uid://cmc5jexlbrfso" path="res://Assets/sprites/buildings/solar_panel.tres" id="1_atdat"]
-[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/building_resource.gd" id="1_b2ktb"]
-[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/item_cost.gd" id="1_r87ev"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="1_b2ktb"]
+[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="1_r87ev"]
 
 [sub_resource type="Resource" id="Resource_atdat"]
 script = ExtResource("1_r87ev")

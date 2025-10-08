@@ -10,9 +10,6 @@ signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
-## Defines the resources people start the game with. Edit through model.tscn.
-@export var starting_resources: Dictionary[Types.Item, int]
-
 ## The random number seed used for this game
 var world_seed: int
 
@@ -80,7 +77,7 @@ func register_player_ready() -> void:
 ## Controlled by starting_resources export in model.tscn. If a resource isn't listed in there,
 ## the default starting amount is 0.
 func get_starting_item_count(type: Types.Item) -> float:
-	return float(starting_resources.get(type, 0))
+	return float(Globals.settings.starting_resources.get(type, 0))
 
 
 ## Returns a dictionary of all of the items posessed by the player
@@ -271,10 +268,32 @@ func _start_game():
 
 func set_starting_item_counts() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
-		for type in starting_resources.keys():
+		for type in Globals.settings.starting_resources.keys():
 			var amount: float = get_starting_item_count(type)
 			set_item_count(player_id, type, amount)
 			set_item_change_rate(player_id, type, 0.0)
+
+## Returns the storage limit for a given type if it exists.
+## If the storage limit does not exist, returns a very large float value
+func get_storage_limit(player_id: int, type: Types.Item) -> float:
+	# TODO: We need to stop iterating over buildings when we should already know they're here
+
+	# Grab the base storage limit
+	if not Globals.settings.storage_limits.has(type):
+		return 10000000000000000
+
+	var storage_limit: float = Globals.settings.storage_limits[type]
+
+	var buildings: Array[PlacedBuilding] = get_buildings(player_id)
+	for building: PlacedBuilding in buildings:
+		var building_resource: BuildingResource = Buildings.get_by_id(building.id)
+		if (building_resource is StorageResource):
+			var storage_resource:StorageResource = building_resource
+			for increase_type: Types.Item in storage_resource.storage_increase.keys():
+				if increase_type == type:
+					storage_limit += storage_resource.storage_increase[increase_type]
+
+	return storage_limit
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.
@@ -315,13 +334,18 @@ func _on_update_timer_timeout() -> void:
 			elif energy_drain_per_second < 0:
 				total_energy_production -= energy_drain_per_second
 
+		# Limit energy by energy storage
+		var max_energy: float = get_storage_limit(player_id, Types.Item.ENERGY)
+		new_items[Types.Item.ENERGY] = min(max_energy, new_items[Types.Item.ENERGY])
+
 		# Calculate energy effienciency
 		var energy_effiency: float = 1.0
 		if new_items[Types.Item.ENERGY] <= 0.0:
 			# We are out of energy
 			new_items[Types.Item.ENERGY] = 0.0
 			energy_effiency = min(1.0, total_energy_production / total_energy_consumption)
-			print("Out of energy. %f / %f = %f effiency" % [total_energy_production, total_energy_consumption, energy_effiency])
+			print("Out of energy. %f / %f = %f effiency"
+				% [total_energy_production, total_energy_consumption, energy_effiency])
 
 		# Now do the mining pass
 		for building: PlacedBuilding in buildings:
@@ -337,6 +361,8 @@ func _on_update_timer_timeout() -> void:
 
 		# Set the new items in the player state
 		for item_type: Types.Item in new_items.keys():
+			var max_count: float = get_storage_limit(player_id, item_type)
+			new_items[item_type] = min(max_count, new_items[item_type])
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
 			set_item_change_rate(player_id, item_type, change_rates[item_type])
