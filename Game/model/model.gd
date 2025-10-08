@@ -278,8 +278,8 @@ func get_storage_limit(player_id: int, type: Types.Item) -> float:
 
 	var storage_limit: float = Globals.settings.storage_limits[type]
 
-	var buildings: Array[PlacedBuilding] = get_buildings(player_id)
-	for building: PlacedBuilding in buildings:
+	var buildings: Array[BuildingEntity] = get_buildings(player_id)
+	for building: BuildingEntity in buildings:
 		var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 		if (building_resource is StorageResource):
 			var storage_resource:StorageResource = building_resource
