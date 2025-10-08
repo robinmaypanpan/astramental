@@ -126,9 +126,9 @@ func update_item_count(type: Types.Item, amount: float, player_id: int) -> void:
 func can_afford(building_id: String, player_id: int = multiplayer.get_unique_id()) -> bool:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	var costs: Array[ItemCost] = building.item_costs
-	for cost in costs:
-		var item_type = cost.item_id
-		var cost_amount = cost.quantity
+	for cost: ItemCost in costs:
+		var item_type: Types.Item = cost.item_id
+		var cost_amount: float = cost.quantity
 		if get_item_count(player_id, item_type) < cost_amount:
 			return false
 	# otherwise we satisfy all the costs, so we are good
@@ -139,7 +139,7 @@ func can_afford(building_id: String, player_id: int = multiplayer.get_unique_id(
 func deduct_costs(player_id: int, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	var costs: Array[ItemCost] = building.item_costs
-	for cost in costs:
+	for cost: ItemCost in costs:
 		increase_item_count(player_id, cost.item_id, -1*cost.quantity)
 
 
@@ -147,7 +147,7 @@ func deduct_costs(player_id: int, building_id: String) -> void:
 func refund_costs(player_id: int, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	var costs: Array[ItemCost] = building.item_costs
-	for cost in costs:
+	for cost: ItemCost in costs:
 		increase_item_count(player_id, cost.item_id, cost.quantity)
 
 
