@@ -40,16 +40,16 @@ func spawn_player_state(player_id: int) -> Node:
 		player_state.item_change_rate[type] = 0.0
 
 	_player_states_dict[player_id] = player_state
+		
+	player_state.item_count_changed.connect(on_item_count_changed)
+	player_state.item_change_rate_changed.connect(on_item_change_rate_changed)
 
 	return player_state
 
 
 ## Spawn a new player state for the given player id.
-func add_state(player_id: int) -> PlayerState:
-	var player_state:PlayerState = player_spawner.spawn(player_id)
-	player_state.item_count_changed.connect(on_item_count_changed)
-	player_state.item_change_rate_changed.connect(on_item_change_rate_changed)
-	return player_state
+func add_state(player_id: int) -> void:
+	player_spawner.spawn(player_id)
 
 
 ## Given the player id, retrieve the corresponding PlayerState.
