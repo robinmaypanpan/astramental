@@ -312,13 +312,18 @@ func _on_update_timer_timeout() -> void:
 			elif energy_drain_per_second < 0:
 				total_energy_production -= energy_drain_per_second
 
+		# Limit energy by energy storage
+		var max_energy: float = Globals.settings.get_storage_limit(Types.Item.ENERGY)
+		new_items[Types.Item.ENERGY] = min(max_energy, new_items[Types.Item.ENERGY])
+
 		# Calculate energy effienciency
 		var energy_effiency: float = 1.0
 		if new_items[Types.Item.ENERGY] <= 0.0:
 			# We are out of energy
 			new_items[Types.Item.ENERGY] = 0.0
 			energy_effiency = min(1.0, total_energy_production / total_energy_consumption)
-			print("Out of energy. %f / %f = %f effiency" % [total_energy_production, total_energy_consumption, energy_effiency])
+			print("Out of energy. %f / %f = %f effiency"
+				% [total_energy_production, total_energy_consumption, energy_effiency])
 
 		# Now do the mining pass
 		for building: PlacedBuilding in buildings:
@@ -334,6 +339,8 @@ func _on_update_timer_timeout() -> void:
 
 		# Set the new items in the player state
 		for item_type: Types.Item in new_items.keys():
+			var max_count: float = Globals.settings.get_storage_limit(item_type)
+			new_items[item_type] = min(max_count, new_items[item_type])
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
 			set_item_change_rate(player_id, item_type, change_rates[item_type])
