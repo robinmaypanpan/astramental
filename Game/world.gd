@@ -30,5 +30,5 @@ func _enter_build_mode(building: String) -> void:
 
 
 func _on_build_menu_building_clicked(building: String) -> void:
-	if Model.can_build(building):
+	if Model.can_afford(building):
 		_enter_build_mode(building)

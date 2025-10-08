@@ -139,7 +139,7 @@ func _input(_event: InputEvent) -> void:
 		if (
 			AsteroidViewModel.in_build_mode
 			and AsteroidViewModel.mouse_state == MouseState.BUILDING
-			and Model.can_build(AsteroidViewModel.building_on_cursor)
+			and Model.can_afford(AsteroidViewModel.building_on_cursor)
 		):
 			request_place_building(new_building_position, AsteroidViewModel.building_on_cursor)
 		if AsteroidViewModel.mouse_state == MouseState.DELETING:
@@ -180,6 +180,7 @@ func process_place_building(
 	print("processing place building from %d" % caller_id)
 	if Model.can_build_at_location(building, PlayerGridPosition.new(player_id, tile_position)):
 		Model.set_building_at.rpc(player_id, tile_position, building)
+		Model.deduct_costs(player_id, building)
 
 
 ## Request the server to let you remove a building at the given position.
@@ -198,8 +199,11 @@ func process_remove_building(
 ) -> void:
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("processing remove building from %d" % caller_id)
-	if Model.can_remove_building():
+	var tile_map_pos = PlayerGridPosition.new(player_id, tile_position)
+	if Model.can_remove_building(tile_map_pos):
+		var building_id_removed: String = Model.get_building_at(tile_map_pos)
 		Model.remove_building_at.rpc(player_id, tile_position)
+		Model.refund_costs(player_id, building_id_removed)
 
 
 ## Look at the model and redraw all the buildings to the screen.
