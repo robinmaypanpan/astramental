@@ -55,3 +55,21 @@ func sync_item_count(type: Types.Item, amount: float) -> void:
 func sync_item_change_rate(type: Types.Item, change_rate: float) -> void:
 	item_change_rate[type] = change_rate
 	item_change_rate_changed.emit(id, type, change_rate)
+
+func add_building(tile_position: Vector2i, building_id: String) -> void:
+	buildings_list.append(
+		BuildingEntity.new(id, tile_position, building_id)
+	)
+
+func remove_building(tile_position: Vector2i) -> bool:
+	var index_to_remove := -1
+	for i in buildings_list.size():
+		var placed_building : BuildingEntity = buildings_list[i]
+		if placed_building.position == tile_position:
+			index_to_remove = i
+			break
+	if index_to_remove != -1:
+		buildings_list.remove_at(index_to_remove)
+		return true
+	else:
+		return false

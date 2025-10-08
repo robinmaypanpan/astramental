@@ -224,7 +224,7 @@ func set_building_at(
 	print("doing set building for %d" % caller_id)
 	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
 		var player_state := player_states.get_state(player_id)
-		player_state.buildings_list.append(BuildingEntity.new(tile_position, building_id))
+		player_state.add_building(tile_position, building_id)
 		buildings_updated.emit()
 
 
@@ -233,14 +233,8 @@ func set_building_at(
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())
 	var player_state : PlayerState = player_states.get_state(player_id)
-	var index_to_remove := -1
-	for i in player_state.buildings_list.size():
-		var placed_building : BuildingEntity = player_state.buildings_list[i]
-		if placed_building.position == tile_position:
-			index_to_remove = i
-			break
-	if index_to_remove != -1:
-		player_state.buildings_list.remove_at(index_to_remove)
+	var did_remove_building = player_state.remove_building(tile_position)
+	if did_remove_building:
 		buildings_updated.emit()
 
 
