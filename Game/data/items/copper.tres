@@ -5,7 +5,6 @@
 
 [resource]
 script = ExtResource("1_hrofy")
-type = 4
 icon = ExtResource("1_aioyr")
 can_trade = true
 sell_value = 2

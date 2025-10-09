@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmq63q5y6o6ad"]
+
+[ext_resource type="Script" uid="uid://c35jbivpu1vjd" path="res://Game/ui/main ui/v_item_cost.gd" id="1_mihaq"]
+[ext_resource type="Texture2D" uid="uid://byji0rvxtap04" path="res://Assets/sprites/items/iron.tres" id="2_mrsjn"]
+
+[node name="Item Cost" type="VBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_mihaq")
+
+[node name="Icon" type="TextureRect" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("2_mrsjn")
+expand_mode = 5
+stretch_mode = 3
+
+[node name="Amount" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "10"
+horizontal_alignment = 1

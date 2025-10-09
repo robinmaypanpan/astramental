@@ -1,0 +1,61 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwe1ta8prq76n"]
+
+[ext_resource type="Script" uid="uid://bo6417gvpcqbl" path="res://Game/ui/main ui/build_menu_item.gd" id="1_3bjn0"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_w3jod"]
+[ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="2_c6a2e"]
+[ext_resource type="PackedScene" uid="uid://bmq63q5y6o6ad" path="res://Game/ui/main ui/v_item_cost.tscn" id="3_c6a2e"]
+
+[node name="BuildMenuItem" type="PanelContainer"]
+offset_right = 500.0
+offset_bottom = 83.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_3bjn0")
+item_cost_scene = ExtResource("3_c6a2e")
+enabled_modulation = Color(1, 1, 1, 1)
+disabled_modulation = Color(0.297706, 0.297706, 0.297706, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("1_w3jod")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme = ExtResource("1_w3jod")
+
+[node name="ReadyLight" type="ColorRect" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(0.129412, 0.764706, 0.368627, 1)
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme = ExtResource("1_w3jod")
+texture = ExtResource("2_c6a2e")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Drill"
+
+[node name="Cost" type="HBoxContainer" parent="MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 73)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Item Cost" parent="MarginContainer/Cost" instance=ExtResource("3_c6a2e")]
+layout_mode = 2
+
+[node name="Item Cost2" parent="MarginContainer/Cost" instance=ExtResource("3_c6a2e")]
+layout_mode = 2
+
+[node name="Item Cost3" parent="MarginContainer/Cost" instance=ExtResource("3_c6a2e")]
+layout_mode = 2
+size_flags_horizontal = 1

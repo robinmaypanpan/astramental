@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cho1mjxxemfva" path="res://Game/cheat_items.tscn" id="2_ojaca"]
 
 [node name="DebugMenuPanel" type="PanelContainer"]
+offset_right = 400.0
+offset_bottom = 92.0
 script = ExtResource("1_ojaca")
 
 [node name="DebugMenu" type="MarginContainer" parent="."]
