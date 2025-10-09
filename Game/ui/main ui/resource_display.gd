@@ -10,6 +10,7 @@ var _item_type_to_row_dict: Dictionary[Types.Item, Node]
 
 
 func _ready() -> void:
+	clear_item_display_list()
 	# set up an item display row for every item type
 	for type in Types.Item.values():
 		var new_row := item_display_row.instantiate()
@@ -21,6 +22,11 @@ func _ready() -> void:
 	Model.game_ready.connect(on_game_ready)
 
 # PRIVATE METHODS
+
+func clear_item_display_list():
+	for child in _item_display_list.get_children():
+		_item_display_list.remove_child(child)
+		child.queue_free()
 
 ## Updates the nubmer of items located currently
 func _update_item_count(_player_id: int, type: Types.Item, new_count: float) -> void:

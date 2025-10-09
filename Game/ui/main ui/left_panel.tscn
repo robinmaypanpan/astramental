@@ -32,6 +32,7 @@ item_display_row = ExtResource("3_1gn3h")
 
 [node name="Menus" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 current_tab = 0
 
 [node name="Build" parent="VBoxContainer/Menus" instance=ExtResource("5_ld2tw")]
