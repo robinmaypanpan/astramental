@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1_bpvaq")
-starting_resources = Dictionary[int, int]({
-1: 0,
-3: 10,
+starting_resources = Dictionary[int, float]({
+1: 0.0,
+3: 10.0,
 6: 10.0
 })
 storage_limits = Dictionary[int, float]({
