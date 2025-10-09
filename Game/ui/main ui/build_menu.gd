@@ -18,6 +18,13 @@ func _ready() -> void:
 		var new_menu_item: BuildMenuItem = building_menu_item_scene.instantiate()
 		building_container.add_child(new_menu_item)
 		new_menu_item.set_building_resource(building)
+		new_menu_item.gui_input.connect(
+			func(event:InputEvent):
+				if (event is InputEventMouseButton 
+					and event.is_pressed() 
+					and event.button_index == MOUSE_BUTTON_LEFT):
+						on_building_clicked.emit(building.id)
+		)
 		
 	Model.game_ready.connect(on_game_ready)
 
@@ -35,13 +42,6 @@ func on_game_ready() -> void:
 	var player_id: int = multiplayer.get_unique_id()
 	var player_state: PlayerState = Model.player_states.get_state(player_id)
 	player_state.item_count_changed.connect(_on_item_count_changed)
-
-
-func _on_building_list_item_clicked(
-	index: int, _at_position: Vector2, _mouse_button_index: int
-) -> void:
-	var building: BuildingResource = Buildings.get_all_buildings()[index]
-	on_building_clicked.emit(building.id)
 
 
 func _on_item_count_changed(_player_id: int, _type: Types.Item, _new_count: float) -> void:
