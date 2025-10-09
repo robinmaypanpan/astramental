@@ -7,6 +7,9 @@ signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 ## When an item change rate changes, this signal fires
 signal item_change_rate_changed(player_id: int, type: Types.Item, new_change_rate: float)
 
+## When energy satisfaction changes, this signal fires
+signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
+
 ## The player id, assigned by the multiplayer controller.
 @export var id: int
 
@@ -18,6 +21,9 @@ signal item_change_rate_changed(player_id: int, type: Types.Item, new_change_rat
 
 ## The change rate of each item that this player currently has.
 @export var item_change_rate: Dictionary[Types.Item, float]
+
+## The current energy satisfaction of all buildings, as a decimal from 0.0-1.0
+@export var energy_satisfaction: float
 
 ## Contains the layout of the ores for each player.
 ## Stored as a 1D array that we index into with Model.get_ore_at and Model.set_ore_at.
@@ -43,8 +49,12 @@ func update_item_count(type: Types.Item, amount: float) -> void:
 	assert(multiplayer.is_server())
 	sync_item_count.rpc(type, amount)
 
+## Used by the server to set the energy satisfaction
+func update_energy_satisfaction(new_es: float) -> void:
+	assert(multiplayer.is_server())
+	sync_energy_satisfaction.rpc(new_es)
 
-## Given the item type and amount, add that many items to the given player id's PlayerState.
+
 @rpc("any_peer", "call_local", "reliable")
 func sync_item_count(type: Types.Item, amount: float) -> void:
 	items[type] = amount
@@ -55,6 +65,11 @@ func sync_item_count(type: Types.Item, amount: float) -> void:
 func sync_item_change_rate(type: Types.Item, change_rate: float) -> void:
 	item_change_rate[type] = change_rate
 	item_change_rate_changed.emit(id, type, change_rate)
+
+@rpc("any_peer", "call_local", "reliable")
+func sync_energy_satisfaction(new_es: float) -> void:
+	energy_satisfaction = new_es
+	energy_satisfaction_changed.emit(id, new_es)
 
 func add_building(tile_position: Vector2i, building_id: String) -> void:
 	buildings_list.append(

@@ -240,6 +240,16 @@ func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state : PlayerState = player_states.get_state(player_id)
 	return player_state.buildings_list
 
+## Sets the energy satisfaction to the new value
+func set_energy_satisfaction(player_id: int, new_es: float) -> void:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.update_energy_satisfaction(new_es)
+
+
+## Gets energy satisfaction
+func get_energy_satisfaction(player_id: int) -> float:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.energy_satisfaction
 
 ## Should only be called on the server
 func _start_game():
@@ -334,13 +344,13 @@ func _on_update_timer_timeout() -> void:
 		new_items[Types.Item.ENERGY] = min(max_energy, new_items[Types.Item.ENERGY])
 
 		# Calculate energy efficiency
-		var energy_efficiency: float = 1.0
+		var energy_satisfaction = min(1.0, total_energy_production / total_energy_consumption)
+		set_energy_satisfaction(player_id, energy_satisfaction)
 		if new_items[Types.Item.ENERGY] <= 0.0:
 			# We are out of energy
 			new_items[Types.Item.ENERGY] = 0.0
-			energy_efficiency = min(1.0, total_energy_production / total_energy_consumption)
 			print("Out of energy. %f / %f = %f effiency"
-				% [total_energy_production, total_energy_consumption, energy_efficiency])
+				% [total_energy_production, total_energy_consumption, get_energy_satisfaction(player_id)])
 
 		# Now do the mining pass
 		for building: BuildingEntity in buildings:
@@ -349,7 +359,7 @@ func _on_update_timer_timeout() -> void:
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				var item_change_per_second: float = miner_resource.mining_speed * energy_efficiency
+				var item_change_per_second: float = miner_resource.mining_speed * get_energy_satisfaction(player_id)
 
 				new_items[item_type_gained] += item_change_per_second * update_time
 				change_rates[item_type_gained] += item_change_per_second
