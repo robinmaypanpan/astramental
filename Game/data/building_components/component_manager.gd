@@ -36,4 +36,4 @@ static func remove_component(component: BuildingComponent) -> bool:
 
 
 static func get_components(type: Types.BuildingComponent) -> Array:
-	return _components_list[type]
+	return _components_list.get(type, [])

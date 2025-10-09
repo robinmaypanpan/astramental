@@ -20,6 +20,7 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
+@onready var _energy_system := %EnergySystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -319,38 +320,13 @@ func _on_update_timer_timeout() -> void:
 		# Initialize our change rate table.
 		# TODO: Don't do this here.
 		var change_rates: Dictionary[Types.Item, float]
-		var total_energy_production: float = 0.0
-		var total_energy_consumption: float = 0.0
 		for item_type: Types.Item in Types.Item.values():
-			change_rates[item_type] = 0.0
+			# TODO: don't have this check because there are more systems in place
+			# This is currently needed to have the energy change not be 0 forever
+			if item_type != Types.Item.ENERGY:
+				change_rates[item_type] = 0.0
 
-		# Do the energy pass to determine building efficiency
-		for building: BuildingEntity in buildings:
-			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			var energy_drain_per_second: float = building_resource.energy_drain
-
-			# Consider doing change rates locally instead of here on the server
-			new_items[Types.Item.ENERGY] -= energy_drain_per_second * update_time
-			change_rates[Types.Item.ENERGY] -= energy_drain_per_second
-
-			# Process energy production vs. consumption
-			if energy_drain_per_second > 0:
-				total_energy_consumption += energy_drain_per_second
-			elif energy_drain_per_second < 0:
-				total_energy_production -= energy_drain_per_second
-
-		# Limit energy by energy storage
-		var max_energy: float = get_storage_limit(player_id, Types.Item.ENERGY)
-		new_items[Types.Item.ENERGY] = min(max_energy, new_items[Types.Item.ENERGY])
-
-		# Calculate energy efficiency
-		var energy_satisfaction = min(1.0, total_energy_production / total_energy_consumption)
-		set_energy_satisfaction(player_id, energy_satisfaction)
-		if new_items[Types.Item.ENERGY] <= 0.0:
-			# We are out of energy
-			new_items[Types.Item.ENERGY] = 0.0
-			print("Out of energy. %f / %f = %f effiency"
-				% [total_energy_production, total_energy_consumption, get_energy_satisfaction(player_id)])
+		_energy_system.update()
 
 		# Now do the mining pass
 		for building: BuildingEntity in buildings:
@@ -370,7 +346,10 @@ func _on_update_timer_timeout() -> void:
 			new_items[item_type] = min(max_count, new_items[item_type])
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
-			set_item_change_rate(player_id, item_type, change_rates[item_type])
+			# TODO: don't have this check because there are more systems in place
+			# This is currently needed to not have the game explode from the earlier change
+			if item_type != Types.Item.ENERGY:
+				set_item_change_rate(player_id, item_type, change_rates[item_type])
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
