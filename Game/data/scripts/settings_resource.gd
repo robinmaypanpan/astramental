@@ -6,3 +6,6 @@ extends Resource
 
 ## Provides base limits to storage for each item
 @export var storage_limits: Dictionary[Types.Item, float]
+
+## Define the update interval for the game, in fractions of a second = 1 tick
+@export_range(0.05, 1) var update_interval: float

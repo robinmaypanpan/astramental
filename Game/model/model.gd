@@ -246,6 +246,7 @@ func _start_game():
 	assert(multiplayer.is_server())
 
 	# Start the timer on the server and only on the server.
+	_update_timer.wait_time = Globals.settings.update_interval
 	_update_timer.start()
 
 	# Now initialize the clients
