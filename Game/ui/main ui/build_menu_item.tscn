@@ -18,10 +18,15 @@ disabled_modulation = Color(0.297706, 0.297706, 0.297706, 1)
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 theme = ExtResource("1_w3jod")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 theme = ExtResource("1_w3jod")
+theme_override_constants/separation = 6
 
 [node name="ReadyLight" type="ColorRect" parent="MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -49,6 +54,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 73)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_constants/separation = 17
 
 [node name="Item Cost" parent="MarginContainer/Cost" instance=ExtResource("3_c6a2e")]
 layout_mode = 2
