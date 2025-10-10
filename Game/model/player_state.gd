@@ -29,10 +29,10 @@ signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: floa
 
 ## Contains the layout of the ores for each player.
 ## Stored as a 1D array that we index into with Model.get_ore_at and Model.set_ore_at.
-@export var ores_layout: Array[Types.Ore]
+var ores_layout: Array[Types.Ore]
 
 ## Contains a list of the positions of each building for this player.
-@export var buildings_list: Array[BuildingEntity]
+var buildings_list: Array[BuildingEntity]
 
 func _ready() -> void:
 	# Initialize ores_layout array

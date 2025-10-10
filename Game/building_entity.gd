@@ -1,5 +1,5 @@
 class_name BuildingEntity
-extends Resource
+extends Object
 ## Represents a building actually placed down in the Model.
 
 ## Which player placed this building.
