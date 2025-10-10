@@ -10,9 +10,6 @@ extends Resource
 ## User facing icon to display in purchase shop
 @export var icon: AtlasTexture = null
 
-## The unit per second energy drain caused by this building
-@export var energy_drain: float = 0
-
 ## A list of item costs needed to build this building, if any
 @export var item_costs: Array[ItemCost] = []
 
