@@ -1,3 +1,4 @@
+class_name ItemDisplayRow
 extends MarginContainer
 
 ## This is the item that should be displayed in this widget
