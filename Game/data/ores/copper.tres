@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="OreResource" load_steps=3 format=3 uid="uid://b3jskwobwi3up"]
 
-[ext_resource type="Texture2D" uid="uid://da14n2nn5fosg" path="res://Assets/copper_ore.tres" id="1_j4xjs"]
+[ext_resource type="Texture2D" uid="uid://da14n2nn5fosg" path="res://Assets/sprites/ore/copper_ore.tres" id="1_j4xjs"]
 [ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/scripts/ore_resource.gd" id="1_lngge"]
 
 [resource]
