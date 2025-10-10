@@ -12,3 +12,6 @@ extends BuildingComponentData
 ## Once a building reaches the heat capacity, it will start cooling off at
 ## the cool off rate until it reaches 0 again.
 @export var heat_capacity: float
+
+
+## TODO: define make_component()

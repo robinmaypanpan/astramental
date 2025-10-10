@@ -92,6 +92,7 @@ func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items[type]
 
+
 ## Returns the number of items possessed by the specified player.
 func get_item_change_rate(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
@@ -236,21 +237,23 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 		buildings_updated.emit()
 
 
-## Retrieves a list of buildings for the specified player
+## Retrieves a list of buildings for the specified player.
 func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state : PlayerState = player_states.get_state(player_id)
 	return player_state.buildings_list
 
-## Sets the energy satisfaction to the new value
+
+## Sets the energy satisfaction to the new value.
 func set_energy_satisfaction(player_id: int, new_es: float) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.update_energy_satisfaction(new_es)
 
 
-## Gets energy satisfaction
+## Gets energy satisfaction.
 func get_energy_satisfaction(player_id: int) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.energy_satisfaction
+
 
 ## Should only be called on the server
 func _start_game():
@@ -335,7 +338,9 @@ func _on_update_timer_timeout() -> void:
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				var item_change_per_second: float = miner_resource.mining_speed * get_energy_satisfaction(player_id)
+				var item_change_per_second: float = (
+					miner_resource.mining_speed * get_energy_satisfaction(player_id)
+				)
 
 				new_items[item_type_gained] += item_change_per_second * update_time
 				change_rates[item_type_gained] += item_change_per_second
@@ -347,7 +352,8 @@ func _on_update_timer_timeout() -> void:
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
 			# TODO: don't have this check because there are more systems in place
-			# This is currently needed to not have the game explode from the earlier change
+			# This is currently needed to not have the game explode from
+			# non-existent key.
 			if item_type != Types.Item.ENERGY:
 				set_item_change_rate(player_id, item_type, change_rates[item_type])
 

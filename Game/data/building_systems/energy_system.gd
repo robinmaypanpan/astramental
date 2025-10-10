@@ -1,10 +1,19 @@
 class_name EnergySystem
 extends Node
+## System responsible for calculating and updating energy reserves and energy satisfaction.
 
+## For each player, how much energy they are producing per second this tick.
 var energy_production: Dictionary[int, float]
+
+## For each player, how much energy they are consuming per second this tick.
 var energy_consumption: Dictionary[int, float]
+
+## For each player, how much of the energy demand is being met by energy production,
+## stored as a decimal from 0.0 to 1.0. Affects production speed of all buildings.
 var energy_satisfaction: Dictionary[int, float]
 
+
+## Reset the production/consumption numbers back to 0 for this upcoming tick of production.
 func _reset_numbers() -> void:
 	var player_ids = ConnectionSystem.get_player_id_list()
 	for player_id in player_ids:
@@ -13,9 +22,15 @@ func _reset_numbers() -> void:
 		# no need to reset energy_satisfaction as it's set once and forgotten
 
 
+## Calculate energy production/consumption/satisfaction and adjust the amount of energy
+## each player has correspondingly. Also publish energy satisfaction.
 func update():
+	# First, reset our numbers we had from last tick
 	_reset_numbers()
-	var energy_components: Array = ComponentManager.get_components(Types.BuildingComponent.ENERGY)
+
+	# Iterate through EnergyComponents and calculate consumption/production
+	var energy_components: Array = ComponentManager.get_components(
+		Types.BuildingComponent.ENERGY)
 	for component: EnergyComponent in energy_components:
 		var energy_drain = component.energy_drain
 		var player_id = component.building_entity.player_id
@@ -25,18 +40,20 @@ func update():
 			# energy drain is negative, so need to subtract to make it positive
 			energy_production[player_id] -= energy_drain
 
+	# Update energy & energy satisfaction for each player and publish that information
+	# to the model
 	for player_id in ConnectionSystem.get_player_id_list():
 		var our_consumption = energy_consumption[player_id]
 		var our_production = energy_production[player_id]
 
 		var energy_change_per_sec = our_production - our_consumption
 		var update_interval = Globals.settings.update_interval
+		# energy production/consumption is unaffected by satisfaction
 		var energy_change_this_tick = energy_change_per_sec * update_interval
 
 		var current_energy = Model.get_item_count(player_id, Types.Item.ENERGY)
-
 		var new_energy = current_energy + energy_change_this_tick
-		## TODO: move this code to update_item_count, as this doesn't belong here
+		# TODO: move this code to update_item_count, as this doesn't belong here
 		var max_energy = Model.get_storage_limit(player_id, Types.Item.ENERGY)
 		new_energy = min(new_energy, max_energy)
 
