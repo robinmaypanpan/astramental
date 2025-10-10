@@ -22,9 +22,3 @@ enum Layer {
 	FACTORY,
 	MINE,
 }
-
-enum BuildingComponent {
-	ENERGY,
-	MINER,
-	HEAT,
-}

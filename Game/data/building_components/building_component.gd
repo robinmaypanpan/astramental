@@ -9,13 +9,13 @@ extends Object
 var building_entity: BuildingEntity
 
 ## What kind of component this is. Needed to classify components.
-var type: Types.BuildingComponent
+var type: String
 
 ## Reference to BuildingComponentData that this component is built from.
 var _data: BuildingComponentData
 
 
-func _init(bcd: BuildingComponentData, be: BuildingEntity, t: Types.BuildingComponent) -> void:
+func _init(bcd: BuildingComponentData, be: BuildingEntity) -> void:
 	_data = bcd
 	building_entity = be
-	type = t
+	type = get_script().get_global_name() # gets the class_name of the derived class

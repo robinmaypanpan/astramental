@@ -29,8 +29,7 @@ func update():
 	_reset_numbers()
 
 	# Iterate through EnergyComponents and calculate consumption/production
-	var energy_components: Array = ComponentManager.get_components(
-		Types.BuildingComponent.ENERGY)
+	var energy_components: Array = ComponentManager.get_components("EnergyComponent")
 	for component: EnergyComponent in energy_components:
 		var energy_drain = component.energy_drain
 		var player_id = component.building_entity.player_id
