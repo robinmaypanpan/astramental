@@ -4,36 +4,29 @@
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="2_df4nd"]
 
 [node name="ResourceDisplay" type="PanelContainer"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_3rmhb")
 
 [node name="ItemDisplay" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ItemDisplay"]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
 [node name="ItemDisplayList" type="VBoxContainer" parent="ItemDisplay/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="ItemDisplayRow" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
-storage_good = Color(0, 1, 0, 1)
-storage_almost_full = Color(1, 1, 0, 1)
-storage_full = Color(0.545098, 0, 0, 1)
 
 [node name="ItemDisplayRow2" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
-storage_good = Color(0, 1, 0, 1)
-storage_almost_full = Color(1, 1, 0, 1)
-storage_full = Color(0.545098, 0, 0, 1)
 
 [node name="ItemDisplayRow3" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
-storage_good = Color(0, 1, 0, 1)
-storage_almost_full = Color(1, 1, 0, 1)
-storage_full = Color(0.545098, 0, 0, 1)

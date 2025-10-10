@@ -62,7 +62,7 @@ func update_view() -> void:
 	# TODO I18N: This format needs to be internationalized
 	# truncates when doing float -> %d, which is the desired behavior
 	item_count_label.text = "%d" % [item_count]
-	change_rate_label.text = "(%+.1f/s)" % [abs(change)]
+	change_rate_label.text = "(%.1f/s)" % [abs(change)]
 	
 	if change > 0.0:
 		change_rate_indicator.texture = increasing_arrow
