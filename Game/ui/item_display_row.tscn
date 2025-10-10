@@ -1,12 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://fcbjc5acubwe"]
+[gd_scene load_steps=7 format=3 uid="uid://fcbjc5acubwe"]
 
 [ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/ores.png" id="1_6jci1"]
 [ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/ui/item_display_row.gd" id="1_82p7q"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_aqlvk"]
+[ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Game/ui/main ui/storage_bar_base.tres" id="4_bcn7r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
 atlas = ExtResource("1_6jci1")
 region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kyjvg"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="ItemDisplayRow" type="MarginContainer"]
 offset_right = 228.0
@@ -17,19 +30,27 @@ script = ExtResource("1_82p7q")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 8
-
-[node name="Icon" type="TextureRect" parent="HBoxContainer/MarginContainer"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 texture = SubResource("AtlasTexture_4ncwh")
 stretch_mode = 5
+
+[node name="StorageBar" type="ProgressBar" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("3_aqlvk")
+theme_override_styles/background = SubResource("StyleBoxFlat_kyjvg")
+theme_override_styles/fill = ExtResource("4_bcn7r")
+max_value = 1.0
+value = 1.0
+fill_mode = 3
+show_percentage = false
 
 [node name="CountText" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true

@@ -22,9 +22,18 @@ layout_mode = 2
 
 [node name="ItemDisplayRow" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
+storage_good = Color(0, 1, 0, 1)
+storage_almost_full = Color(1, 1, 0, 1)
+storage_full = Color(0.545098, 0, 0, 1)
 
 [node name="ItemDisplayRow2" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
+storage_good = Color(0, 1, 0, 1)
+storage_almost_full = Color(1, 1, 0, 1)
+storage_full = Color(0.545098, 0, 0, 1)
 
 [node name="ItemDisplayRow3" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
+storage_good = Color(0, 1, 0, 1)
+storage_almost_full = Color(1, 1, 0, 1)
+storage_full = Color(0.545098, 0, 0, 1)

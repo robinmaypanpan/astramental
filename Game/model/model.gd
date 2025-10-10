@@ -244,34 +244,11 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 ## Retrieves a list of buildings for the specified player
 func get_buildings(player_id: int) -> Array[PlacedBuilding]:
 	var player_state : PlayerState = player_states.get_state(player_id)
-	return player_state.buildings_list
+	if player_state != null:
+		return player_state.buildings_list
+	else:
+		return []
 
-
-## Should only be called on the server
-func _start_game():
-	assert(multiplayer.is_server())
-
-	# Start the timer on the server and only on the server.
-	_update_timer.start()
-
-	# Now initialize the clients
-	randomize()
-	var new_random_seed: int = randi()
-	initialize_clients.rpc(new_random_seed)
-	set_starting_item_counts()
-
-	# Launch the game!
-	launch_game.rpc()
-
-
-# PRIVATE METHODS
-
-func set_starting_item_counts() -> void:
-	for player_id in ConnectionSystem.get_player_id_list():
-		for type in Globals.settings.starting_resources.keys():
-			var amount: float = get_starting_item_count(type)
-			set_item_count(player_id, type, amount)
-			set_item_change_rate(player_id, type, 0.0)
 
 ## Returns the storage limit for a given type if it exists.
 ## If the storage limit does not exist, returns a very large float value
@@ -294,6 +271,32 @@ func get_storage_limit(player_id: int, type: Types.Item) -> float:
 					storage_limit += storage_resource.storage_increase[increase_type]
 
 	return storage_limit
+
+
+# PRIVATE METHODS
+
+## Used to actually start the game, once all clients are ready
+func _start_game():
+	assert(multiplayer.is_server())
+
+	# Start the timer on the server and only on the server.
+	_update_timer.start()
+
+	# Now initialize the clients
+	randomize()
+	var new_random_seed: int = randi()
+	initialize_clients.rpc(new_random_seed)
+	set_starting_item_counts()
+
+	# Launch the game!
+	launch_game.rpc()
+
+func set_starting_item_counts() -> void:
+	for player_id in ConnectionSystem.get_player_id_list():
+		for type in Globals.settings.starting_resources.keys():
+			var amount: float = get_starting_item_count(type)
+			set_item_count(player_id, type, amount)
+			set_item_change_rate(player_id, type, 0.0)
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.
@@ -344,8 +347,6 @@ func _on_update_timer_timeout() -> void:
 			# We are out of energy
 			new_items[Types.Item.ENERGY] = 0.0
 			energy_efficiency = min(1.0, total_energy_production / total_energy_consumption)
-			print("Out of energy. %f / %f = %f effiency"
-				% [total_energy_production, total_energy_consumption, energy_efficiency])
 
 		# Now do the mining pass
 		for building: PlacedBuilding in buildings:
