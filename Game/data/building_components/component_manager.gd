@@ -22,6 +22,15 @@ static func add_component(component: BuildingComponent) -> void:
 	print("components length is now %d" % _components_list[component.type].size())
 
 
+## Initialize components by adding components to the BuildingEntity and the component list.
+static func init_components_building(building: BuildingEntity) -> void:
+	var building_resource = Buildings.get_by_id(building.id)
+	for component_data in building_resource.building_components:
+		var component = component_data.make_component(building)
+		add_component(component)
+		building.components.append(component)
+
+
 ## Remove an existing component with the ComponentManager.
 ## Returns true if it was removed, and false if it wasn't.
 static func remove_component(component: BuildingComponent) -> bool:
@@ -42,6 +51,12 @@ static func remove_component(component: BuildingComponent) -> bool:
 		return true
 	else:
 		return false
+
+
+## Remove all components of a building from the component list.
+static func remove_components_building(building: BuildingEntity) -> void:
+	for component in building.components:
+		ComponentManager.remove_component(component)
 
 
 ## Return an array of all components of the given type.

@@ -82,9 +82,9 @@ func sync_energy_satisfaction(new_es: float) -> void:
 ## Add a building to the buildings list.
 ## Also adds all corresponding components to ComponentManager.
 func add_building(tile_position: Vector2i, building_id: String) -> void:
-	buildings_list.append(
-		BuildingEntity.new(id, tile_position, building_id)
-	)
+	var building = BuildingEntity.new(id, tile_position, building_id)
+	ComponentManager.init_components_building(building)
+	buildings_list.append(building)
 
 
 ## Remove a building from the buildings list.
@@ -99,8 +99,7 @@ func remove_building(tile_position: Vector2i) -> bool:
 			building_entity = placed_building
 			break
 	if index_to_remove != -1:
-		for component in building_entity.components:
-			ComponentManager.remove_component(component)
+		ComponentManager.remove_components_building(building_entity)
 		buildings_list.remove_at(index_to_remove)
 		return true
 	else:

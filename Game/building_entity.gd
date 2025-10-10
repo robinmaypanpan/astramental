@@ -15,9 +15,4 @@ func _init(pi, p, i: String):
 	player_id = pi
 	position = p
 	id = i
-	# Instantiate components and add them to ComponentManager and itself.
-	var building_resource = Buildings.get_by_id(i)
-	for component_data in building_resource.building_components:
-		var component = component_data.make_component(self)
-		ComponentManager.add_component(component)
-		components.append(component)
+	# components will be initialized by player state
