@@ -11,8 +11,8 @@ var id: String
 ## List of components keeping track of behavior.
 var components: Array[BuildingComponent]
 
-func _init(pi, p, i: String):
-	player_id = pi
-	position = p
-	id = i
+func _init(in_player_id: int, in_position: Vector2i, in_id: String):
+	player_id = in_player_id
+	position = in_position
+	id = in_id
 	# components will be initialized by player state

@@ -1,7 +1,6 @@
 class_name ComponentManager
 ## Contains convenient list of all components for all buildings, sorted by component type.
-## Model and BuildingEntity _init() call add/remove_component to register new components
-## with this.
+## PlayerState calls init/remove_components_building() to handle components.
 ## Systems call get_components() when they want a list of all components of one type.
 
 ## Collection of all building components, sorted by type.

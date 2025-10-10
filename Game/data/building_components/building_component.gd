@@ -15,7 +15,10 @@ var type: String
 var _data: BuildingComponentData
 
 
-func _init(bcd: BuildingComponentData, be: BuildingEntity) -> void:
-	_data = bcd
-	building_entity = be
+func _init(
+	in_building_comp_data: BuildingComponentData,
+	in_building_entity: BuildingEntity) -> void:
+	# start function
+	_data = in_building_comp_data
+	building_entity = in_building_entity
 	type = get_script().get_global_name() # gets the class_name of the derived class
