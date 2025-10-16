@@ -7,27 +7,27 @@
 [sub_resource type="Resource" id="Resource_eukut"]
 script = ExtResource("1_ldte1")
 item_id = 3
-quantity = 10.0
+quantity = 100.0
 metadata/_custom_type_script = "uid://b5xgpi0hflqa"
 
 [sub_resource type="Resource" id="Resource_26dyq"]
 script = ExtResource("1_ldte1")
 item_id = 2
-quantity = 10.0
+quantity = 100.0
 metadata/_custom_type_script = "uid://b5xgpi0hflqa"
 
 [resource]
 script = ExtResource("2_ucscj")
 storage_increase = Dictionary[int, float]({
-2: 10.0,
-3: 10.0,
-4: 10.0,
-5: 10.0,
-6: 10.0
+2: 100.0,
+3: 100.0,
+4: 100.0,
+5: 100.0,
+6: 100.0
 })
 name = "Ore Silo"
 id = "ore_silo"
 icon = ExtResource("1_ucscj")
-energy_drain = 0.1
+energy_drain = 1.0
 item_costs = Array[ExtResource("1_ldte1")]([SubResource("Resource_eukut"), SubResource("Resource_26dyq")])
 placement_destination = 0

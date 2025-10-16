@@ -4,21 +4,13 @@ class_name ResourceDisplay extends Control
 @export var item_display_row: PackedScene
 
 ## Mapping from item type -> instantiated item display row.
-var _item_type_to_row_dict: Dictionary[Types.Item, Node]
+var item_type_to_row_dict: Dictionary[Types.Item, ItemDisplayRow]
 
 @onready var _item_display_list := %ItemDisplayList
 
 
 func _ready() -> void:
 	clear_item_display_list()
-	# set up an item display row for every item type
-	for type in Types.Item.values():
-		var new_row := item_display_row.instantiate()
-		new_row.item_type = type
-		_item_display_list.add_child(new_row)
-		# add new item display row to the dictionary
-		_item_type_to_row_dict[type] = new_row
-		
 	Model.game_ready.connect(on_game_ready)
 
 # PRIVATE METHODS
@@ -30,12 +22,14 @@ func clear_item_display_list():
 
 ## Updates the nubmer of items located currently
 func _update_item_count(_player_id: int, type: Types.Item, new_count: float) -> void:
-	_item_type_to_row_dict[type].update_count(new_count)
+	if new_count > 0 or item_type_to_row_dict.has(type):
+		get_or_create_item_row(type).update_count(new_count)
 
 
 ## Updates the change rate of items located currently
 func _update_item_change_rate(_player_id: int, type: Types.Item, new_change_rate: float) -> void:
-	_item_type_to_row_dict[type].update_change_rate(new_change_rate)
+	if new_change_rate > 0 or item_type_to_row_dict.has(type):
+		get_or_create_item_row(type).update_change_rate(new_change_rate)
 
 
 func on_game_ready() -> void:
@@ -47,13 +41,30 @@ func on_game_ready() -> void:
 
 	resync_item_counts()
 
+func get_or_create_item_row(item_type: Types.Item) -> ItemDisplayRow:
+	if item_type_to_row_dict.has(item_type):
+		return item_type_to_row_dict[item_type]
+	else:
+		var new_row := item_display_row.instantiate()
+		new_row.item_type = item_type
+		_item_display_list.add_child(new_row)
+		# add new item display row to the dictionary
+		item_type_to_row_dict[item_type] = new_row
+		return new_row
+		
 
 ## Update the counts of all items to their current resource amounts.
 ## Must be called manually for the resource numbers to update.
 func resync_item_counts() -> void:
+	var player_id: int = multiplayer.get_unique_id()
+	
 	for type in Types.Item.values():
-		var player_id: int = multiplayer.get_unique_id()
-		var item_row = _item_type_to_row_dict[type]
+		var item_count: float = Model.get_item_count(player_id, type)
+		var item_change_rate: float = Model.get_item_change_rate(player_id, type)
+		
+		if item_count > 0 or item_change_rate > 0 or item_type_to_row_dict.has(type):
+			# Check if we're over 0 or if we've ever been over 0
+			var item_row: ItemDisplayRow = get_or_create_item_row(type)
 
-		item_row.update_count(Model.get_item_count(player_id, type))
-		item_row.update_change_rate(Model.get_item_change_rate(player_id, type))
+			item_row.update_count(item_count)
+			item_row.update_change_rate(item_change_rate)

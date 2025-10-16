@@ -240,7 +240,10 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 ## Retrieves a list of buildings for the specified player.
 func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state : PlayerState = player_states.get_state(player_id)
-	return player_state.buildings_list
+	if player_state != null:
+		return player_state.buildings_list
+	else:
+		return []
 
 
 ## Sets the energy satisfaction to the new value.
@@ -255,32 +258,10 @@ func get_energy_satisfaction(player_id: int) -> float:
 	return player_state.energy_satisfaction
 
 
-## Should only be called on the server
-func _start_game():
-	assert(multiplayer.is_server())
-
-	# Start the timer on the server and only on the server.
-	_update_timer.wait_time = Globals.settings.update_interval
-	_update_timer.start()
-
-	# Now initialize the clients
-	randomize()
-	var new_random_seed: int = randi()
-	initialize_clients.rpc(new_random_seed)
-	set_starting_item_counts()
-
-	# Launch the game!
-	launch_game.rpc()
 
 
 # PRIVATE METHODS
 
-func set_starting_item_counts() -> void:
-	for player_id in ConnectionSystem.get_player_id_list():
-		for type in Globals.settings.starting_resources.keys():
-			var amount: float = get_starting_item_count(type)
-			set_item_count(player_id, type, amount)
-			set_item_change_rate(player_id, type, 0.0)
 
 ## Returns the storage limit for a given type if it exists.
 ## If the storage limit does not exist, returns a very large float value
@@ -303,6 +284,32 @@ func get_storage_limit(player_id: int, type: Types.Item) -> float:
 					storage_limit += storage_resource.storage_increase[increase_type]
 
 	return storage_limit
+
+
+## Used to actually start the game, once all clients are ready
+func _start_game():
+	assert(multiplayer.is_server())
+
+	# Start the timer on the server and only on the server.
+	_update_timer.wait_time = Globals.settings.update_interval
+	_update_timer.start()
+
+	# Now initialize the clients
+	randomize()
+	var new_random_seed: int = randi()
+	initialize_clients.rpc(new_random_seed)
+	set_starting_item_counts()
+
+	# Launch the game!
+	launch_game.rpc()
+
+
+func set_starting_item_counts() -> void:
+	for player_id in ConnectionSystem.get_player_id_list():
+		for type in Globals.settings.starting_resources.keys():
+			var amount: float = get_starting_item_count(type)
+			set_item_count(player_id, type, amount)
+			set_item_change_rate(player_id, type, 0.0)
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.

@@ -54,7 +54,10 @@ func add_state(player_id: int) -> void:
 
 ## Given the player id, retrieve the corresponding PlayerState.
 func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
-	return _player_states_dict[player_id]
+	if _player_states_dict.has(player_id):
+		return _player_states_dict[player_id]
+	else:
+		return null
 
 # PRIVATE METHODS
 

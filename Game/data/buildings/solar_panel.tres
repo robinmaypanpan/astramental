@@ -14,7 +14,7 @@ metadata/_custom_type_script = "uid://c1jcpg405fmwb"
 [sub_resource type="Resource" id="Resource_atdat"]
 script = ExtResource("1_r87ev")
 item_id = 6
-quantity = 10.0
+quantity = 100.0
 metadata/_custom_type_script = "uid://b5xgpi0hflqa"
 
 [resource]
@@ -22,7 +22,7 @@ script = ExtResource("1_b2ktb")
 name = "Solar Panel"
 id = "solar_panel"
 icon = ExtResource("1_atdat")
-energy_drain = -1.0
+energy_drain = -10.0
 item_costs = Array[ExtResource("1_r87ev")]([SubResource("Resource_atdat")])
 placement_destination = 0
 building_components = Array[ExtResource("1_8q4hs")]([SubResource("Resource_bwyve")])
