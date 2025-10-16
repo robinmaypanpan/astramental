@@ -20,6 +20,7 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
+@onready var _energy_system := %EnergySystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -90,6 +91,7 @@ func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
 func get_item_count(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items[type]
+
 
 ## Returns the number of items possessed by the specified player.
 func get_item_change_rate(player_id: int, type: Types.Item) -> float:
@@ -206,7 +208,7 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 ## Get the building type at the given position.
 func get_building_at(pos: PlayerGridPosition) -> String:
 	var player_state: PlayerState = player_states.get_state(pos.player_id)
-	for placed_building: PlacedBuilding in player_state.buildings_list:
+	for placed_building: BuildingEntity in player_state.buildings_list:
 		if placed_building.position == pos.tile_position:
 			return placed_building.id
 	return ""
@@ -221,7 +223,7 @@ func set_building_at(
 	print("doing set building for %d" % caller_id)
 	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
 		var player_state := player_states.get_state(player_id)
-		player_state.buildings_list.append(PlacedBuilding.new(tile_position, building_id))
+		player_state.add_building(tile_position, building_id)
 		buildings_updated.emit()
 
 
@@ -230,24 +232,35 @@ func set_building_at(
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())
 	var player_state : PlayerState = player_states.get_state(player_id)
-	var index_to_remove := -1
-	for i in player_state.buildings_list.size():
-		var placed_building : PlacedBuilding = player_state.buildings_list[i]
-		if placed_building.position == tile_position:
-			index_to_remove = i
-			break
-	if index_to_remove != -1:
-		player_state.buildings_list.remove_at(index_to_remove)
+	var did_remove_building = player_state.remove_building(tile_position)
+	if did_remove_building:
 		buildings_updated.emit()
 
 
-## Retrieves a list of buildings for the specified player
-func get_buildings(player_id: int) -> Array[PlacedBuilding]:
+## Retrieves a list of buildings for the specified player.
+func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state : PlayerState = player_states.get_state(player_id)
 	if player_state != null:
 		return player_state.buildings_list
 	else:
 		return []
+
+
+## Sets the energy satisfaction to the new value.
+func set_energy_satisfaction(player_id: int, new_es: float) -> void:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.update_energy_satisfaction(new_es)
+
+
+## Gets energy satisfaction.
+func get_energy_satisfaction(player_id: int) -> float:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.energy_satisfaction
+
+
+
+
+# PRIVATE METHODS
 
 
 ## Returns the storage limit for a given type if it exists.
@@ -261,8 +274,8 @@ func get_storage_limit(player_id: int, type: Types.Item) -> float:
 
 	var storage_limit: float = Globals.settings.storage_limits[type]
 
-	var buildings: Array[PlacedBuilding] = get_buildings(player_id)
-	for building: PlacedBuilding in buildings:
+	var buildings: Array[BuildingEntity] = get_buildings(player_id)
+	for building: BuildingEntity in buildings:
 		var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 		if (building_resource is StorageResource):
 			var storage_resource:StorageResource = building_resource
@@ -273,13 +286,12 @@ func get_storage_limit(player_id: int, type: Types.Item) -> float:
 	return storage_limit
 
 
-# PRIVATE METHODS
-
 ## Used to actually start the game, once all clients are ready
 func _start_game():
 	assert(multiplayer.is_server())
 
 	# Start the timer on the server and only on the server.
+	_update_timer.wait_time = Globals.settings.update_interval
 	_update_timer.start()
 
 	# Now initialize the clients
@@ -290,6 +302,7 @@ func _start_game():
 
 	# Launch the game!
 	launch_game.rpc()
+
 
 func set_starting_item_counts() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
@@ -309,7 +322,7 @@ func _on_update_timer_timeout() -> void:
 	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
 
 	for player_id: int in player_list:
-		var buildings: Array[PlacedBuilding] = get_buildings(player_id)
+		var buildings: Array[BuildingEntity] = get_buildings(player_id)
 
 		var current_items: Dictionary[Types.Item, float] = get_all_item_counts(player_id)
 		var new_items: Dictionary[Types.Item, float] = current_items.duplicate()
@@ -317,45 +330,24 @@ func _on_update_timer_timeout() -> void:
 		# Initialize our change rate table.
 		# TODO: Don't do this here.
 		var change_rates: Dictionary[Types.Item, float]
-		var total_energy_production: float = 0.0
-		var total_energy_consumption: float = 0.0
 		for item_type: Types.Item in Types.Item.values():
-			change_rates[item_type] = 0.0
+			# TODO: don't have this check because there are more systems in place
+			# This is currently needed to have the energy change not be 0 forever
+			if item_type != Types.Item.ENERGY:
+				change_rates[item_type] = 0.0
 
-		# Do the energy pass to determine building efficiency
-		for building: PlacedBuilding in buildings:
-			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			var energy_drain_per_second: float = building_resource.energy_drain
-
-			# Consider doing change rates locally instead of here on the server
-			new_items[Types.Item.ENERGY] -= energy_drain_per_second * update_time
-			change_rates[Types.Item.ENERGY] -= energy_drain_per_second
-
-			# Process energy production vs. consumption
-			if energy_drain_per_second > 0:
-				total_energy_consumption += energy_drain_per_second
-			elif energy_drain_per_second < 0:
-				total_energy_production -= energy_drain_per_second
-
-		# Limit energy by energy storage
-		var max_energy: float = get_storage_limit(player_id, Types.Item.ENERGY)
-		new_items[Types.Item.ENERGY] = min(max_energy, new_items[Types.Item.ENERGY])
-
-		# Calculate energy efficiency
-		var energy_efficiency: float = 1.0
-		if new_items[Types.Item.ENERGY] <= 0.0:
-			# We are out of energy
-			new_items[Types.Item.ENERGY] = 0.0
-			energy_efficiency = min(1.0, total_energy_production / total_energy_consumption)
+		_energy_system.update()
 
 		# Now do the mining pass
-		for building: PlacedBuilding in buildings:
+		for building: BuildingEntity in buildings:
 			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
 			if (building_resource is MinerResource):
 				var miner_resource: MinerResource = building_resource
 				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
 				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				var item_change_per_second: float = miner_resource.mining_speed * energy_efficiency
+				var item_change_per_second: float = (
+					miner_resource.mining_speed * get_energy_satisfaction(player_id)
+				)
 
 				new_items[item_type_gained] += item_change_per_second * update_time
 				change_rates[item_type_gained] += item_change_per_second
@@ -366,7 +358,11 @@ func _on_update_timer_timeout() -> void:
 			new_items[item_type] = min(max_count, new_items[item_type])
 			if new_items[item_type] != current_items[item_type]:
 				set_item_count(player_id, item_type, new_items[item_type])
-			set_item_change_rate(player_id, item_type, change_rates[item_type])
+			# TODO: don't have this check because there are more systems in place
+			# This is currently needed to not have the game explode from
+			# non-existent key.
+			if item_type != Types.Item.ENERGY:
+				set_item_change_rate(player_id, item_type, change_rates[item_type])
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.

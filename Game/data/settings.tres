@@ -17,4 +17,5 @@ storage_limits = Dictionary[int, float]({
 5: 100.0,
 6: 100.0
 })
+update_interval = 0.1
 metadata/_custom_type_script = "uid://b2p2kbckpx0pd"
