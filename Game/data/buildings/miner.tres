@@ -1,15 +1,21 @@
-[gd_resource type="Resource" script_class="MinerResource" load_steps=8 format=3 uid="uid://xxt6y1h10g6h"]
+[gd_resource type="Resource" script_class="MinerResource" load_steps=10 format=3 uid="uid://xxt6y1h10g6h"]
 
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="1_ihwv0"]
 [ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_ii1my"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="1_rb5k8"]
 [ext_resource type="Script" uid="uid://c1jcpg405fmwb" path="res://Game/data/building_components/energy_component_data.gd" id="2_e3h3h"]
 [ext_resource type="Script" uid="uid://fscxshc5eg0a" path="res://Game/data/scripts/miner_resource.gd" id="3_ihwv0"]
+[ext_resource type="Script" uid="uid://dw1fhhoqnoc3" path="res://Game/data/building_components/miner_component_data.gd" id="3_ii1my"]
 
 [sub_resource type="Resource" id="Resource_fvx5w"]
 script = ExtResource("2_e3h3h")
 energy_drain = 0.5
 metadata/_custom_type_script = "uid://c1jcpg405fmwb"
+
+[sub_resource type="Resource" id="Resource_e3h3h"]
+script = ExtResource("3_ii1my")
+mining_speed = 2.0
+metadata/_custom_type_script = "uid://dw1fhhoqnoc3"
 
 [sub_resource type="Resource" id="Resource_ihwv0"]
 script = ExtResource("1_rb5k8")
@@ -23,8 +29,7 @@ mining_speed = 2.0
 name = "Miner"
 id = "miner"
 icon = ExtResource("1_ihwv0")
-energy_drain = 5.0
 item_costs = Array[ExtResource("1_rb5k8")]([SubResource("Resource_ihwv0")])
 placement_destination = 1
-building_components = Array[ExtResource("1_ii1my")]([SubResource("Resource_fvx5w")])
+building_components = Array[ExtResource("1_ii1my")]([SubResource("Resource_fvx5w"), SubResource("Resource_e3h3h")])
 metadata/_custom_type_script = "uid://dmnwciefckrau"
