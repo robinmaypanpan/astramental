@@ -21,6 +21,7 @@ var num_players_ready := 0
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
 @onready var _energy_system := %EnergySystem
+@onready var _miner_system: MinerSystem = %MinerSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -315,54 +316,9 @@ func set_starting_item_counts() -> void:
 ## Fires whenever the update timer is fired. This should only run on the server.
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
-
-	# Stores the amount of time that should have passed since the previous wait time
-	var update_time : float = _update_timer.wait_time
-
-	var player_list : Array[int] = ConnectionSystem.get_player_id_list()
-
-	for player_id: int in player_list:
-		var buildings: Array[BuildingEntity] = get_buildings(player_id)
-
-		var current_items: Dictionary[Types.Item, float] = get_all_item_counts(player_id)
-		var new_items: Dictionary[Types.Item, float] = current_items.duplicate()
-
-		# Initialize our change rate table.
-		# TODO: Don't do this here.
-		var change_rates: Dictionary[Types.Item, float]
-		for item_type: Types.Item in Types.Item.values():
-			# TODO: don't have this check because there are more systems in place
-			# This is currently needed to have the energy change not be 0 forever
-			if item_type != Types.Item.ENERGY:
-				change_rates[item_type] = 0.0
-
-		_energy_system.update()
-
-		# Now do the mining pass
-		for building: BuildingEntity in buildings:
-			var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-			if (building_resource is MinerResource):
-				var miner_resource: MinerResource = building_resource
-				var ore_type: Types.Ore = get_ore_at(player_id, building.position.x, building.position.y)
-				var item_type_gained: Types.Item = Ores.get_yield(ore_type)
-				var item_change_per_second: float = (
-					miner_resource.mining_speed * get_energy_satisfaction(player_id)
-				)
-
-				new_items[item_type_gained] += item_change_per_second * update_time
-				change_rates[item_type_gained] += item_change_per_second
-
-		# Set the new items in the player state
-		for item_type: Types.Item in new_items.keys():
-			var max_count: float = get_storage_limit(player_id, item_type)
-			new_items[item_type] = min(max_count, new_items[item_type])
-			if new_items[item_type] != current_items[item_type]:
-				set_item_count(player_id, item_type, new_items[item_type])
-			# TODO: don't have this check because there are more systems in place
-			# This is currently needed to not have the game explode from
-			# non-existent key.
-			if item_type != Types.Item.ENERGY:
-				set_item_change_rate(player_id, item_type, change_rates[item_type])
+	# TODO: only update systems when it is necessary
+	_energy_system.update()
+	_miner_system.update()
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
