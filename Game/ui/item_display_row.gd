@@ -51,8 +51,8 @@ func update_count(new_count: float) -> void:
 func update_change_rate(new_change: float) -> void:
 	change = new_change
 	update_view()
-	
-	
+
+
 # PRIVATE METHODS
 
 
@@ -64,7 +64,7 @@ func update_view() -> void:
 	# truncates when doing float -> %d, which is the desired behavior
 	item_count_label.text = "%d" % [item_count]
 	change_rate_label.text = "(%.1f/s)" % [abs(change)]
-	
+
 	if change > 0.0:
 		change_rate_indicator.texture = increasing_arrow
 	elif change < 0.0:
@@ -74,12 +74,12 @@ func update_view() -> void:
 
 
 func update_storage_bar() -> void:
-	var storage_limit: float = Model.get_storage_limit(multiplayer.get_unique_id(), item_type)
+	var storage_limit: float = Model.get_storage_cap(multiplayer.get_unique_id(), item_type)
 	var fill_style: StyleBox = storage_bar.get_theme_stylebox("fill").duplicate()
 	if item_count >= storage_limit:
 		# We are full
 		storage_bar.value = 1.0
-		
+
 		fill_style.bg_color = storage_full
 	else:
 		var storage_value = item_count / storage_limit
@@ -91,4 +91,4 @@ func update_storage_bar() -> void:
 
 	storage_bar.remove_theme_stylebox_override("fill")
 	storage_bar.add_theme_stylebox_override("fill", fill_style)
-	
+

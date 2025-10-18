@@ -53,7 +53,7 @@ func update():
 		var current_energy = Model.get_item_count(player_id, Types.Item.ENERGY)
 		var new_energy = current_energy + energy_change_this_tick
 		# TODO: move this code to update_item_count, as this doesn't belong here
-		var max_energy = Model.get_storage_limit(player_id, Types.Item.ENERGY)
+		var max_energy = Model.get_storage_cap(player_id, Types.Item.ENERGY)
 		new_energy = min(new_energy, max_energy)
 
 		energy_satisfaction[player_id] = min(1.0, player_production / player_consumption)
