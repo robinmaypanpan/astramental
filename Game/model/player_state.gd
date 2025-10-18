@@ -51,25 +51,29 @@ func _ready() -> void:
 ## Expected to be used by the server to set the current rate and propogate the responses downstream
 func update_item_change_rate(item: Types.Item, change_rate: float) -> void:
 	assert(multiplayer.is_server())
-	sync_item_change_rate.rpc(item, change_rate)
+	if item_change_rate[item] != change_rate:
+		sync_item_change_rate.rpc(item, change_rate)
 
 
 ## Used by the server to set the item count
 func update_item_count(type: Types.Item, amount: float) -> void:
 	assert(multiplayer.is_server())
-	sync_item_count.rpc(type, amount)
+	if items[type] != amount:
+		sync_item_count.rpc(type, amount)
 
 
 ## Used by server to set storage cap
 func update_storage_cap(type: Types.Item, new_cap: float) -> void:
 	assert(multiplayer.is_server())
-	sync_storage_cap.rpc(type, new_cap)
+	if storage_caps[type] != new_cap:
+		sync_storage_cap.rpc(type, new_cap)
 
 
 ## Used by the server to set the energy satisfaction
-func update_energy_satisfaction(new_es: float) -> void:
+func update_energy_satisfaction(new_energy_satisfaction: float) -> void:
 	assert(multiplayer.is_server())
-	sync_energy_satisfaction.rpc(new_es)
+	if energy_satisfaction != new_energy_satisfaction:
+		sync_energy_satisfaction.rpc(new_energy_satisfaction)
 
 
 ## Set item count for both players and fire item_count_changed signal.
@@ -88,16 +92,16 @@ func sync_storage_cap(type: Types.Item, new_cap: float) -> void:
 
 ## Set item change rate for both players and fire item_change_rate_changed signal.
 @rpc("any_peer", "call_local", "reliable")
-func sync_item_change_rate(type: Types.Item, change_rate: float) -> void:
-	item_change_rate[type] = change_rate
-	item_change_rate_changed.emit(id, type, change_rate)
+func sync_item_change_rate(type: Types.Item, new_change_rate: float) -> void:
+	item_change_rate[type] = new_change_rate
+	item_change_rate_changed.emit(id, type, new_change_rate)
 
 
 ## Set energy satisfaction for both players and fire energy_satisfaction_changed signal.
 @rpc("any_peer", "call_local", "reliable")
-func sync_energy_satisfaction(new_es: float) -> void:
-	energy_satisfaction = new_es
-	energy_satisfaction_changed.emit(id, new_es)
+func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
+	energy_satisfaction = new_energy_satisfaction
+	energy_satisfaction_changed.emit(id, new_energy_satisfaction)
 
 
 ## Add a building to the buildings list.
