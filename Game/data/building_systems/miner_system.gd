@@ -48,7 +48,7 @@ func update() -> void:
 
 	# Figure out ore production this tick and update numbers for each ore
 	for player_id in ConnectionSystem.get_player_id_list():
-		for ore in Types.Ore:
+		for ore in Types.Ore.values():
 			# figure ore production this tick
 			var ore_production_per_sec = get_ore_production(player_id, ore)
 			var update_interval = Globals.settings.update_interval
