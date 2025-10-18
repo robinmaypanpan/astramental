@@ -59,7 +59,7 @@ func update() -> void:
 			var current_ore = Model.get_item_count(player_id, ore_item)
 			var new_ore = current_ore + ore_production_this_tick
 			# TODO: move this code to update_item_count, as this doesn't belong here
-			var max_ore = Model.get_storage_limit(player_id, ore_item)
+			var max_ore = Model.get_storage_cap(player_id, ore_item)
 			new_ore = min(new_ore, max_ore)
 
 			# TODO: move this data out of the model. Consumers of this data can ask this system,

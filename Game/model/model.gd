@@ -10,6 +10,9 @@ signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
+## The hard cap for resources in the game.
+const STORAGE_LIMIT_HARD_CAP: float = 1_000_000_000
+
 ## The random number seed used for this game
 var world_seed: int
 
@@ -81,6 +84,11 @@ func register_player_ready() -> void:
 func get_starting_item_count(type: Types.Item) -> float:
 	return float(Globals.settings.starting_resources.get(type, 0))
 
+
+## Return the starting storage cap for a resource.
+## If there is no defined starting cap, use the storage limit hard cap.
+func get_starting_storage_cap(type: Types.Item) -> float:
+	return Globals.settings.storage_limits.get(type, STORAGE_LIMIT_HARD_CAP)
 
 ## Returns a dictionary of all of the items posessed by the player
 func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
@@ -259,32 +267,41 @@ func get_energy_satisfaction(player_id: int) -> float:
 	return player_state.energy_satisfaction
 
 
-
-
-# PRIVATE METHODS
+## Set the storage limit for a given type
+func set_storage_cap(player_id: int, type: Types.Item, new_cap: float) -> void:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.update_storage_cap(type, new_cap)
 
 
 ## Returns the storage limit for a given type if it exists.
-## If the storage limit does not exist, returns a very large float value
-func get_storage_limit(player_id: int, type: Types.Item) -> float:
-	# TODO: We need to stop iterating over buildings when we should already know they're here
+func get_storage_cap(player_id: int, type: Types.Item) -> float:
+	var player_state = player_states.get_state(player_id)
+	# This check is required because player_state is null the first time this function is called
+	# TODO: fix this being called when player_state isn't intialized
+	if player_state:
+		return player_state.storage_caps[type]
+	else:
+		return STORAGE_LIMIT_HARD_CAP
 
-	# Grab the base storage limit
-	if not Globals.settings.storage_limits.has(type):
-		return 10000000000000000
+	# # Grab the base storage limit
+	# if not Globals.settings.storage_limits.has(type):
+	# 	return 10000000000000000
 
-	var storage_limit: float = Globals.settings.storage_limits[type]
+	# var storage_limit: float = Globals.settings.storage_limits[type]
 
-	var buildings: Array[BuildingEntity] = get_buildings(player_id)
-	for building: BuildingEntity in buildings:
-		var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-		if (building_resource is StorageResource):
-			var storage_resource:StorageResource = building_resource
-			for increase_type: Types.Item in storage_resource.storage_increase.keys():
-				if increase_type == type:
-					storage_limit += storage_resource.storage_increase[increase_type]
+	# var buildings: Array[BuildingEntity] = get_buildings(player_id)
+	# for building: BuildingEntity in buildings:
+	# 	var building_resource: BuildingResource = Buildings.get_by_id(building.id)
+	# 	if (building_resource is StorageResource):
+	# 		var storage_resource:StorageResource = building_resource
+	# 		for increase_type: Types.Item in storage_resource.storage_increase.keys():
+	# 			if increase_type == type:
+	# 				storage_limit += storage_resource.storage_increase[increase_type]
 
-	return storage_limit
+	# return storage_limit
+
+
+# PRIVATE METHODS
 
 
 ## Used to actually start the game, once all clients are ready
@@ -299,18 +316,21 @@ func _start_game():
 	randomize()
 	var new_random_seed: int = randi()
 	initialize_clients.rpc(new_random_seed)
-	set_starting_item_counts()
+	set_starting_item_counts_and_storage_caps()
 
 	# Launch the game!
 	launch_game.rpc()
 
 
-func set_starting_item_counts() -> void:
+func set_starting_item_counts_and_storage_caps() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
 		for type in Globals.settings.starting_resources.keys():
 			var amount: float = get_starting_item_count(type)
 			set_item_count(player_id, type, amount)
 			set_item_change_rate(player_id, type, 0.0)
+		for type in Globals.settings.storage_limits.keys():
+			var cap: float = get_starting_storage_cap(type)
+			set_storage_cap(player_id, type, cap)
 
 
 ## Fires whenever the update timer is fired. This should only run on the server.
