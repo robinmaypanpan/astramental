@@ -23,6 +23,7 @@ var num_players_ready := 0
 @onready var _update_timer := %UpdateTimer
 @onready var _energy_system := %EnergySystem
 @onready var _miner_system: MinerSystem = %MinerSystem
+@onready var _storage_system: StorageSystem = %StorageSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -310,7 +311,7 @@ func set_starting_item_counts_and_storage_caps() -> void:
 			var amount: float = get_starting_item_count(type)
 			set_item_count(player_id, type, amount)
 			set_item_change_rate(player_id, type, 0.0)
-		for type in Globals.settings.storage_limits.keys():
+		for type in Globals.settings.storage_caps.keys():
 			var cap: float = get_starting_storage_cap(type)
 			set_storage_cap(player_id, type, cap)
 
@@ -319,6 +320,7 @@ func set_starting_item_counts_and_storage_caps() -> void:
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
+	_storage_system.update()
 	_energy_system.update()
 	_miner_system.update()
 

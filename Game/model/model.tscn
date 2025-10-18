@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://doi2igdy4h0gh"]
+[gd_scene load_steps=8 format=3 uid="uid://doi2igdy4h0gh"]
 
 [ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/model/game_state.gd" id="2_ahubk"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/model/player_states.gd" id="3_6exh1"]
 [ext_resource type="Script" uid="uid://chjqf2hbd3gmx" path="res://Game/data/building_systems/energy_system.gd" id="4_6exh1"]
 [ext_resource type="Script" uid="uid://bbsghvtoin0bs" path="res://Game/data/building_systems/miner_system.gd" id="5_e5nin"]
+[ext_resource type="Script" uid="uid://qxnxug305fjm" path="res://Game/data/building_systems/storage_system.gd" id="6_h8wyn"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_e5nin"]
 properties/0/path = NodePath("GameState:example_int")
@@ -44,5 +45,9 @@ metadata/_custom_type_script = "uid://chjqf2hbd3gmx"
 unique_name_in_owner = true
 script = ExtResource("5_e5nin")
 metadata/_custom_type_script = "uid://bbsghvtoin0bs"
+
+[node name="StorageSystem" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("6_h8wyn")
 
 [connection signal="timeout" from="UpdateTimer" to="." method="_on_update_timer_timeout"]
