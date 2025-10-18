@@ -277,6 +277,7 @@ func set_storage_cap(player_id: int, type: Types.Item, new_cap: float) -> void:
 func get_storage_cap(player_id: int, type: Types.Item) -> float:
 	var player_state = player_states.get_state(player_id)
 	# This check is required because player_state is null the first time this function is called
+	# in ItemDisplayRow._ready()
 	# TODO: fix this being called when player_state isn't intialized
 	if player_state:
 		return player_state.storage_caps[type]

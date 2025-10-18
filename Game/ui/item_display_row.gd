@@ -27,6 +27,7 @@ extends MarginContainer
 
 var item_count: float = 0.0
 var change: float = 0.0
+var storage_cap: float = 0.0
 
 @onready var icon := %Icon
 @onready var item_count_label: Label = %ItemCount
@@ -38,6 +39,7 @@ var change: float = 0.0
 func _ready() -> void:
 	var icon_to_use := Items.get_info(item_type).icon
 	icon.texture = icon_to_use
+	storage_cap = Model.get_storage_cap(multiplayer.get_unique_id(), item_type)
 	update_view()
 
 
@@ -52,6 +54,11 @@ func update_change_rate(new_change: float) -> void:
 	change = new_change
 	update_view()
 
+
+## Given new storage cap, update the current storage cap.
+func update_storage_cap(new_cap: float) -> void:
+	storage_cap = new_cap
+	update_storage_bar()
 
 # PRIVATE METHODS
 
@@ -74,15 +81,14 @@ func update_view() -> void:
 
 
 func update_storage_bar() -> void:
-	var storage_limit: float = Model.get_storage_cap(multiplayer.get_unique_id(), item_type)
 	var fill_style: StyleBox = storage_bar.get_theme_stylebox("fill").duplicate()
-	if item_count >= storage_limit:
+	if item_count >= storage_cap:
 		# We are full
 		storage_bar.value = 1.0
 
 		fill_style.bg_color = storage_full
 	else:
-		var storage_value = item_count / storage_limit
+		var storage_value = item_count / storage_cap
 		storage_bar.value = storage_value
 		if storage_value >= almost_full_threshold:
 			fill_style.bg_color = storage_almost_full
@@ -91,4 +97,3 @@ func update_storage_bar() -> void:
 
 	storage_bar.remove_theme_stylebox_override("fill")
 	storage_bar.add_theme_stylebox_override("fill", fill_style)
-
