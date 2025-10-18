@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="StorageResource" load_steps=6 format=3 uid="uid://b1f87jarst80f"]
+[gd_resource type="Resource" script_class="StorageResource" load_steps=7 format=3 uid="uid://b1f87jarst80f"]
 
+[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_eukut"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="1_ldte1"]
 [ext_resource type="Texture2D" uid="uid://b0a58q4ps5c4f" path="res://Assets/sprites/buildings/ore_silo.tres" id="1_ucscj"]
 [ext_resource type="Script" uid="uid://23solel1dope" path="res://Game/data/scripts/storage_resource.gd" id="2_ucscj"]
@@ -28,6 +29,6 @@ storage_increase = Dictionary[int, float]({
 name = "Ore Silo"
 id = "ore_silo"
 icon = ExtResource("1_ucscj")
-energy_drain = 1.0
 item_costs = Array[ExtResource("1_ldte1")]([SubResource("Resource_eukut"), SubResource("Resource_26dyq")])
 placement_destination = 0
+building_components = Array[ExtResource("1_eukut")]([])
