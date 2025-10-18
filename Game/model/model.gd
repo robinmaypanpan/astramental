@@ -10,8 +10,6 @@ signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
 
-## The hard cap for resources in the game.
-const STORAGE_LIMIT_HARD_CAP: float = 1_000_000_000
 
 ## The random number seed used for this game
 var world_seed: int
@@ -88,7 +86,7 @@ func get_starting_item_count(type: Types.Item) -> float:
 ## Return the starting storage cap for a resource.
 ## If there is no defined starting cap, use the storage limit hard cap.
 func get_starting_storage_cap(type: Types.Item) -> float:
-	return Globals.settings.storage_limits.get(type, STORAGE_LIMIT_HARD_CAP)
+	return Globals.settings.get_storage_cap_item(type)
 
 ## Returns a dictionary of all of the items posessed by the player
 func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
@@ -282,24 +280,7 @@ func get_storage_cap(player_id: int, type: Types.Item) -> float:
 	if player_state:
 		return player_state.storage_caps[type]
 	else:
-		return STORAGE_LIMIT_HARD_CAP
-
-	# # Grab the base storage limit
-	# if not Globals.settings.storage_limits.has(type):
-	# 	return 10000000000000000
-
-	# var storage_limit: float = Globals.settings.storage_limits[type]
-
-	# var buildings: Array[BuildingEntity] = get_buildings(player_id)
-	# for building: BuildingEntity in buildings:
-	# 	var building_resource: BuildingResource = Buildings.get_by_id(building.id)
-	# 	if (building_resource is StorageResource):
-	# 		var storage_resource:StorageResource = building_resource
-	# 		for increase_type: Types.Item in storage_resource.storage_increase.keys():
-	# 			if increase_type == type:
-	# 				storage_limit += storage_resource.storage_increase[increase_type]
-
-	# return storage_limit
+		return 0.0
 
 
 # PRIVATE METHODS
