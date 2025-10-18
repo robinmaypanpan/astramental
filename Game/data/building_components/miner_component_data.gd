@@ -5,7 +5,6 @@ extends BuildingComponentData
 @export var mining_speed: float
 
 
-## TODO: define make_component()
 func make_component(building_entity: BuildingEntity) -> MinerComponent:
     var player_id = building_entity.player_id
     var tile_pos = building_entity.position
