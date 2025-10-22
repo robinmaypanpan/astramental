@@ -40,7 +40,16 @@ func _ready() -> void:
 	var icon_to_use := Items.get_info(item_type).icon
 	icon.texture = icon_to_use
 	storage_cap = Model.get_storage_cap(multiplayer.get_unique_id(), item_type)
+	name = "Item Display Row for %s" % Types.Item.keys()[item_type]
 	update_view()
+
+
+func _on_mouse_entered() -> void:
+	Globals.update_tooltip_target(self)
+
+
+func _on_mouse_exited() -> void:
+	Globals.clear_tooltip_target(self)
 
 
 ## Given the new count, update the current item count to the new one.
@@ -59,6 +68,7 @@ func update_change_rate(new_change: float) -> void:
 func update_storage_cap(new_cap: float) -> void:
 	storage_cap = new_cap
 	update_storage_bar()
+
 
 # PRIVATE METHODS
 
@@ -97,11 +107,3 @@ func update_storage_bar() -> void:
 
 	storage_bar.remove_theme_stylebox_override("fill")
 	storage_bar.add_theme_stylebox_override("fill", fill_style)
-
-
-func _on_mouse_entered() -> void:
-	Globals.update_tooltip_target(self)
-
-
-func _on_mouse_exited() -> void:
-	Globals.clear_tooltip_target(self)
