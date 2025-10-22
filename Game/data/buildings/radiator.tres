@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="BuildingResource" load_steps=9 format=3 uid="uid://s0nqsqetqkm3"]
+
+[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_ti63p"]
+[ext_resource type="Script" uid="uid://bbbve6wxi0v56" path="res://Game/data/building_components/heat_component_data.gd" id="2_ild5j"]
+[ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="2_xyamt"]
+[ext_resource type="Texture2D" uid="uid://cxpjlqfl6itme" path="res://Assets/sprites/buildings/buildings.png" id="3_87eqn"]
+[ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="3_ild5j"]
+
+[sub_resource type="Resource" id="Resource_gj1yi"]
+script = ExtResource("2_ild5j")
+heat_production = 0.0
+heat_passive_cool_off = 2.0
+heat_capacity = 2.0
+metadata/_custom_type_script = "uid://bbbve6wxi0v56"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ard3e"]
+atlas = ExtResource("3_87eqn")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="Resource" id="Resource_trd6w"]
+script = ExtResource("2_xyamt")
+item_id = 4
+quantity = 100.0
+metadata/_custom_type_script = "uid://b5xgpi0hflqa"
+
+[resource]
+script = ExtResource("3_ild5j")
+name = "Radiator"
+id = "radiator"
+icon = SubResource("AtlasTexture_ard3e")
+item_costs = Array[ExtResource("2_xyamt")]([SubResource("Resource_trd6w")])
+placement_destination = 1
+building_components = Array[ExtResource("1_ti63p")]([SubResource("Resource_gj1yi")])
