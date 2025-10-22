@@ -25,6 +25,15 @@ extends BuildingComponent
 ## Carrier: no production, passive cool off, or heat capacity. (not implemented yet)
 var heat_building_type: Types.HeatBuilding
 
+## How much heat this building currently holds.
+var heat: float
+
+## The current state of this building.
+## Running: building is working as expected.
+##          transitions to overheated when reaching its heat capacity.
+## Overheated: building was above heat capacity and doesn't produce heat or update normally.
+##             transitions back to running when reaching 0 heat.
+var heat_state: Types.HeatState
 
 func _init(
     new_building_comp_data: BuildingComponentData,
@@ -40,3 +49,6 @@ func _init(
         heat_building_type = Types.HeatBuilding.CARRIER
     else:
         assert(false, "could not assign valid heat building type to this building")
+
+    heat = 0.0
+    heat_state = Types.HeatState.RUNNING
