@@ -20,7 +20,7 @@ func add_storage_cap(player_id: int, item: Types.Item, amount: float) -> void:
 ## Set the ore production for all players and ores back to the defaults.
 func _reset_numbers() -> void:
 	var player_ids = ConnectionSystem.get_player_id_list()
-	for player_id in player_ids:
+	for player_id: int in player_ids:
 		_storage_caps[player_id] = Globals.settings.get_storage_caps()
 
 
@@ -31,16 +31,16 @@ func update() -> void:
 	_reset_numbers()
 
 	# Iterate through StorageComponents and calculate caps
-	var storage_components = ComponentManager.get_components("StorageComponent")
-	for storage_component in storage_components:
-		var player_id = storage_component.building_entity.player_id
-		var storage_cap_changes = storage_component.storage_cap_changes
-		for item in storage_cap_changes.keys():
-			var amount = storage_cap_changes[item]
+	var storage_components: Array = ComponentManager.get_components("StorageComponent")
+	for storage_component: StorageComponent in storage_components:
+		var player_id: int = storage_component.building_entity.player_id
+		var storage_cap_changes: Dictionary[Types.Item, float] = storage_component.storage_cap_changes
+		for item: Types.Item in storage_cap_changes.keys():
+			var amount: float = storage_cap_changes[item]
 			add_storage_cap(player_id, item, amount)
 
 	# update storage caps
-	for player_id in ConnectionSystem.get_player_id_list():
-		for item in Types.Item.values():
-			var new_cap = get_storage_cap(player_id, item)
+	for player_id: int in ConnectionSystem.get_player_id_list():
+		for item: int in Types.Item.values():
+			var new_cap: float = get_storage_cap(player_id, item)
 			Model.set_storage_cap(player_id, item, new_cap)

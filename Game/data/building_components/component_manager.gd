@@ -18,9 +18,9 @@ func add_component(component: BuildingComponent) -> void:
 
 ## Initialize components by adding components to the BuildingEntity and the component list.
 func init_components_building(building: BuildingEntity) -> void:
-	var building_resource = Buildings.get_by_id(building.id)
-	for component_data in building_resource.building_components:
-		var component = component_data.make_component(building)
+	var building_resource: BuildingResource = Buildings.get_by_id(building.id)
+	for component_data: BuildingComponentData in building_resource.building_components:
+		var component: BuildingComponent = component_data.make_component(building)
 		add_component(component)
 		building.components.append(component)
 
@@ -28,13 +28,13 @@ func init_components_building(building: BuildingEntity) -> void:
 ## Remove an existing component with the ComponentManager.
 ## Returns true if it was removed, and false if it wasn't.
 func remove_component(component: BuildingComponent) -> bool:
-	var index_to_remove = -1
-	var components = _components_list.get(component.type)
+	var index_to_remove: int = -1
+	var components: Array = _components_list.get(component.type)
 	if not components:
 		return false
 
-	for index in range(components.size()):
-		var curr_component = components[index]
+	for index: int in range(components.size()):
+		var curr_component: BuildingComponent = components[index]
 		if curr_component == component: # compare by reference is desired behavior
 			index_to_remove = index
 
@@ -49,7 +49,7 @@ func remove_component(component: BuildingComponent) -> bool:
 
 ## Remove all components of a building from the component list.
 func remove_components_building(building: BuildingEntity) -> void:
-	for component in building.components:
+	for component: BuildingComponent in building.components:
 		remove_component(component)
 
 
