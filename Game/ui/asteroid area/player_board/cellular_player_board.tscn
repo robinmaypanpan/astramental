@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://bgdywbrkt60lc"]
 
-[ext_resource type="Script" uid="uid://c51484jy3nn0f" path="res://Game/ui/asteroid/cellular_player_board.gd" id="1_2jvp1"]
+[ext_resource type="Script" uid="uid://c51484jy3nn0f" path="res://Game/ui/asteroid area/player_board/cellular_player_board.gd" id="1_2jvp1"]
 [ext_resource type="Texture2D" uid="uid://d6qu00stj66f" path="res://Assets/sprites/factory_floor.tres" id="2_6fdg1"]
-[ext_resource type="PackedScene" uid="uid://qcnp7u3aieu4" path="res://Game/ui/asteroid/cellular_grid.tscn" id="2_xf4gk"]
-[ext_resource type="PackedScene" uid="uid://d2yy8jnf0n7kd" path="res://Game/ui/asteroid/cell.tscn" id="3_6fdg1"]
+[ext_resource type="PackedScene" uid="uid://qcnp7u3aieu4" path="res://Game/ui/asteroid area/player_board/cellular_grid.tscn" id="2_xf4gk"]
+[ext_resource type="PackedScene" uid="uid://d2yy8jnf0n7kd" path="res://Game/ui/asteroid area/player_board/cell.tscn" id="3_6fdg1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84gc3"]
 bg_color = Color(0.906971, 0.43494, 0.418012, 1)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cqo03y46lsise"]
 
-[ext_resource type="Script" uid="uid://cerxhqhc88ke7" path="res://Game/ui/menus/main.gd" id="1_vnck2"]
+[ext_resource type="Script" uid="uid://cerxhqhc88ke7" path="res://Game/ui/main menu/main.gd" id="1_vnck2"]
 [ext_resource type="Theme" uid="uid://durn6bdwy26ag" path="res://Game/ui/main_menu_theme.tres" id="2_emhnf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_whbce"]

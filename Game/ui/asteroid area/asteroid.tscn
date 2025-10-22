@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c45g1mdwk11yt"]
 
-[ext_resource type="Script" uid="uid://c43u3ttnh3yal" path="res://Game/ui/asteroid/asteroid.gd" id="1_noxfd"]
-[ext_resource type="PackedScene" uid="uid://bgdywbrkt60lc" path="res://Game/ui/asteroid/cellular_player_board.tscn" id="2_5shj1"]
+[ext_resource type="Script" uid="uid://c43u3ttnh3yal" path="res://Game/ui/asteroid area/asteroid.gd" id="1_noxfd"]
+[ext_resource type="PackedScene" uid="uid://bgdywbrkt60lc" path="res://Game/ui/asteroid area/player_board/cellular_player_board.tscn" id="2_5shj1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kekb"]
 bg_color = Color(0, 0, 0, 1)
