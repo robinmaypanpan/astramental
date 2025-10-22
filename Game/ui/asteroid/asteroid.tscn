@@ -17,3 +17,5 @@ player_board_scene = ExtResource("2_5shj1")
 [node name="BoardHolder" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

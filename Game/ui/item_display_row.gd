@@ -97,3 +97,11 @@ func update_storage_bar() -> void:
 
 	storage_bar.remove_theme_stylebox_override("fill")
 	storage_bar.add_theme_stylebox_override("fill", fill_style)
+
+
+func _on_mouse_entered() -> void:
+	Globals.update_tooltip_target(self)
+
+
+func _on_mouse_exited() -> void:
+	Globals.clear_tooltip_target(self)

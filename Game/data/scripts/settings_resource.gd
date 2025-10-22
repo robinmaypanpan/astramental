@@ -17,11 +17,11 @@ const STORAGE_LIMIT_HARD_CAP: float = 1_000_000_000
 ## Get the storage limits for all items. Return the storage limit hard cap if storage_caps
 ## doesn't include that item.
 func get_storage_caps() -> Dictionary[Types.Item, float]:
-    var new_storage_caps = storage_caps.duplicate()
-    for item in Types.Item.values():
-        new_storage_caps.get_or_add(item, STORAGE_LIMIT_HARD_CAP)
-    return new_storage_caps
+	var new_storage_caps = storage_caps.duplicate()
+	for item in Types.Item.values():
+		new_storage_caps.get_or_add(item, STORAGE_LIMIT_HARD_CAP)
+	return new_storage_caps
 
 ## Get the storage limit for the specified item.
 func get_storage_cap_item(item: Types.Item) -> float:
-    return storage_caps.get(item, STORAGE_LIMIT_HARD_CAP)
+	return storage_caps.get(item, STORAGE_LIMIT_HARD_CAP)

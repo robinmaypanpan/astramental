@@ -9,13 +9,6 @@ starting_resources = Dictionary[int, float]({
 3: 100.0,
 6: 100.0
 })
-storage_caps = Dictionary[int, float]({
-1: 0.0,
-2: 100.0,
-3: 100.0,
-4: 100.0,
-5: 100.0,
-6: 100.0
-})
+storage_caps = Dictionary[int, float]({})
 update_interval = 0.1
 metadata/_custom_type_script = "uid://b2p2kbckpx0pd"

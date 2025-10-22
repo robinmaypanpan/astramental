@@ -47,3 +47,5 @@ visible = false
 layout_mode = 2
 tooltip_text = "Provide access to cheats and such"
 metadata/_tab_index = 1
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
