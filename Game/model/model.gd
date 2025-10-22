@@ -23,7 +23,7 @@ var num_players_ready := 0
 @onready var _update_timer := %UpdateTimer
 @onready var _energy_system := %EnergySystem
 @onready var _miner_system: MinerSystem = %MinerSystem
-@onready var _storage_system: StorageSystem = %StorageSystem
+@onready var _storage_system: OreStorageSystem = %StorageSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")

@@ -1,4 +1,4 @@
-class_name StorageSystem
+class_name OreStorageSystem
 extends Node
 ## System responsible for calculating and updating storage caps.
 

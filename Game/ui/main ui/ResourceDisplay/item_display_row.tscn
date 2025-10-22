@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://fcbjc5acubwe"]
 
 [ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="1_6jci1"]
-[ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/ui/item_display_row.gd" id="1_82p7q"]
+[ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/ui/main ui/ResourceDisplay/item_display_row.gd" id="1_82p7q"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_aqlvk"]
 [ext_resource type="Texture2D" uid="uid://f0oc2vm1mayc" path="res://Assets/sprites/ui/decreasing_arrow.tres" id="3_prlt1"]
 [ext_resource type="Texture2D" uid="uid://chqwre6a15sxe" path="res://Assets/sprites/ui/not_changing.tres" id="4_5fff3"]
-[ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Game/ui/main ui/storage_bar_base.tres" id="4_bcn7r"]
+[ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Assets/sprites/storage_bar_base.tres" id="4_bcn7r"]
 [ext_resource type="Texture2D" uid="uid://dw0qpw8l0ft87" path="res://Assets/sprites/ui/increasing_arrow.tres" id="5_dl36m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
@@ -86,3 +86,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("5_dl36m")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

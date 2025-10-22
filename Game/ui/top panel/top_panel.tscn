@@ -1,5 +1,23 @@
-[gd_scene load_steps=0 format=3 uid="uid://bncje5xywcr8m"]
+[gd_scene load_steps=2 format=3 uid="uid://bncje5xywcr8m"]
+
+[ext_resource type="Script" uid="uid://6s8dpcho4kwt" path="res://Game/ui/top panel/top_panel.gd" id="1_cwmam"]
 
 [node name="TopPanel" type="Panel"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_cwmam")
+
+[node name="HFlowContainer" type="HFlowContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 137.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="HFlowContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Page of Awesome"

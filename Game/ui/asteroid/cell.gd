@@ -12,6 +12,15 @@ func _ready() -> void:
 	ghost.texture = null
 	heat_indicator.visible = false
 	heat_indicator.value = 0.0
+	
+	
+func _on_mouse_entered() -> void:
+	Globals.update_tooltip_target(self)
+
+
+func _on_mouse_exited() -> void:
+	Globals.clear_tooltip_target(self)
+
 
 ## Change the top layer for this cell for this cell
 func set_icon(texture:Texture):
