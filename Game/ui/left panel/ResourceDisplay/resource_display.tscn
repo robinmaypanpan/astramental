@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cao8qpde85dmt"]
 
-[ext_resource type="Script" uid="uid://c2ui7w82708r3" path="res://Game/ui/main ui/resource_display.gd" id="1_3rmhb"]
-[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/item_display_row.tscn" id="2_df4nd"]
+[ext_resource type="Script" uid="uid://c2ui7w82708r3" path="res://Game/ui/left panel/ResourceDisplay/resource_display.gd" id="1_3rmhb"]
+[ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/left panel/ResourceDisplay/item_display_row.tscn" id="2_df4nd"]
 
 [node name="ResourceDisplay" type="PanelContainer"]
 size_flags_horizontal = 3

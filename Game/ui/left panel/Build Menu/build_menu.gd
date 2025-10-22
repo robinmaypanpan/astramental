@@ -27,7 +27,7 @@ func _ready() -> void:
 		)
 		
 	Model.game_ready.connect(on_game_ready)
-
+	
 # PRIVATE METHODS
 
 ## Clears the list of buildings

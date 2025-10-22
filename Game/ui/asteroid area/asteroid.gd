@@ -15,7 +15,6 @@ func _ready() -> void:
 	AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_update_ore_tilemaps)
 	AsteroidViewModel.building_layout_changed_this_frame.connect(_on_update_buildings)
 
-
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
 	print("Adding player id %s" % [player_id])
