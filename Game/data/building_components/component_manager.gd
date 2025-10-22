@@ -3,6 +3,12 @@ extends Node
 ## PlayerState calls init/remove_components_building() to handle components.
 ## Systems call get_components() when they want a list of all components of one type.
 
+## Emitted when component is added.
+signal component_added(component: BuildingComponent)
+
+## Emitted when component is removed.
+signal component_removed(component: BuildingComponent)
+
 ## Collection of all building components, sorted by type.
 var _components_list: Dictionary[String, Array] = {}
 
@@ -12,6 +18,7 @@ func add_component(component: BuildingComponent) -> void:
 	if not _components_list.has(component.type):
 		_components_list[component.type] = []
 	_components_list[component.type].append(component)
+	component_added.emit(component)
 	print("added component of type %s" % [component.type])
 	print("components length is now %d" % _components_list[component.type].size())
 
@@ -40,6 +47,7 @@ func remove_component(component: BuildingComponent) -> bool:
 
 	if index_to_remove != -1:
 		components.remove_at(index_to_remove)
+		component_removed.emit(component)
 		print("removed component of type %s" % [component.type])
 		print("components length is now %d" % _components_list[component.type].size())
 		return true
