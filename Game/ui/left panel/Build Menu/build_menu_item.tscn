@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://bwe1ta8prq76n"]
 
-[ext_resource type="Script" uid="uid://bo6417gvpcqbl" path="res://Game/ui/main ui/build_menu_item.gd" id="1_3bjn0"]
+[ext_resource type="Script" uid="uid://bo6417gvpcqbl" path="res://Game/ui/left panel/Build Menu/build_menu_item.gd" id="1_3bjn0"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_w3jod"]
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="2_c6a2e"]
-[ext_resource type="PackedScene" uid="uid://bmq63q5y6o6ad" path="res://Game/ui/main ui/v_item_cost.tscn" id="3_c6a2e"]
+[ext_resource type="PackedScene" uid="uid://bmq63q5y6o6ad" path="res://Game/ui/left panel/Build Menu/v_item_cost.tscn" id="3_c6a2e"]
 
 [node name="BuildMenuItem" type="PanelContainer"]
 offset_right = 500.0
