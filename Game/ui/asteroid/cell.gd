@@ -21,6 +21,7 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	Globals.clear_tooltip_target(self)
 
+
 ## Change the top layer for this cell for this cell
 func set_icon(texture:Texture):
 	icon.texture = texture

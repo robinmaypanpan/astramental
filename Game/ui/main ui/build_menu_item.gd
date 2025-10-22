@@ -23,10 +23,21 @@ extends Control
 @onready var cost_container: Container = %Cost
 
 
+func _on_mouse_entered() -> void:
+	self_modulate = hovered_self_modulation
+	Globals.update_tooltip_target(self)
+
+
+func _on_mouse_exited() -> void:
+	self_modulate = unhovered_self_modulation
+	Globals.update_tooltip_target(self)
+	
+
 # Sets the building resource this item shoudl represent
 func set_building_resource(building: BuildingResource):
 	icon.texture = building.icon
 	building_name.text = building.name
+	name = "Build %s" % building.name
 
 	clear_cost_container()
 	for item_cost: ItemCost in building.item_costs:
@@ -48,13 +59,3 @@ func clear_cost_container() -> void:
 	for child in cost_container.get_children():
 		cost_container.remove_child(child)
 		child.queue_free()
-
-
-func _on_mouse_entered() -> void:
-	self_modulate = hovered_self_modulation
-	Globals.update_tooltip_target(self)
-
-
-func _on_mouse_exited() -> void:
-	self_modulate = unhovered_self_modulation
-	Globals.update_tooltip_target(self)
