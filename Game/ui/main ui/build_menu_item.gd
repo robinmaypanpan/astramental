@@ -30,7 +30,7 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	self_modulate = unhovered_self_modulation
-	Globals.update_tooltip_target(self)
+	Globals.clear_tooltip_target(self)
 	
 
 # Sets the building resource this item shoudl represent

@@ -7,7 +7,3 @@ class_name LeftPanel extends Control
 ## Returns the build menu
 func get_build_menu() -> BuildMenu:
 	return build_menu
-
-
-func _on_mouse_entered() -> void:
-	print('Entered the left panel');
