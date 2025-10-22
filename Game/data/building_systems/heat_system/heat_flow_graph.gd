@@ -6,13 +6,16 @@ extends Node
 # passive cool off rate. Use Ford-Fulkerson to solve the maximum flow problem.
 
 const HEAT_MAX_FLOW: float = 1e10
+# define omni-source and omni-sink as vectors so they can be compared to other vectors
+const SOURCE := Vector2i(-9, 0)
+const SINK := Vector2i(0, -9)
 
 var graph: DirectedWeightedGraph
 
-func _ready() -> void:
+func _init() -> void:
     graph = DirectedWeightedGraph.new()
-    graph.add_vertex("source")
-    graph.add_vertex("sink")
+    graph.add_vertex(SOURCE)
+    graph.add_vertex(SINK)
 
 func get_neighbors(position: Vector2i):
     return [
@@ -28,13 +31,13 @@ func add_building(heat_component: HeatComponent) -> void:
     graph.add_vertex(position)
 
     if heat_building_type == Types.HeatBuilding.SOURCE:
-        graph.add_edge("source", position, heat_component.heat_production)
+        graph.add_edge(SOURCE, position, heat_component.heat_production)
         for neighbor_position in get_neighbors(position):
             if graph.has_vertex(neighbor_position):
                 graph.add_edge(position, neighbor_position, HEAT_MAX_FLOW)
 
     elif heat_building_type == Types.HeatBuilding.SINK:
-        graph.add_edge(position, "sink", heat_component.heat_passive_cool_off)
+        graph.add_edge(position, SINK, heat_component.heat_passive_cool_off)
         for neighbor_position in get_neighbors(position):
             if graph.has_vertex(neighbor_position):
                 graph.add_edge(neighbor_position, position, HEAT_MAX_FLOW)
