@@ -14,4 +14,5 @@ extends BuildingComponentData
 @export var heat_capacity: float
 
 
-## TODO: define make_component()
+func make_component(building_entity: BuildingEntity) -> HeatComponent:
+    return HeatComponent.new(self, building_entity)
