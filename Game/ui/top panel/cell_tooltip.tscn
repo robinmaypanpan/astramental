@@ -38,8 +38,8 @@ theme_override_constants/separation = 15
 
 [node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
 
 [node name="IconBorder" type="PanelContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer/HFlowContainer"]
 layout_mode = 2
@@ -61,6 +61,7 @@ expand_mode = 3
 [node name="BuildingName" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer/HFlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 76
 text = "Drill"
 
 [node name="DynamicData" type="HFlowContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
@@ -97,6 +98,7 @@ text = "/s"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "WOW!  That's really a building right there.  A whole ass building. What a thing to see in this day and age."
 autowrap_mode = 3
 
@@ -123,13 +125,11 @@ theme_override_constants/separation = 10
 
 [node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/OreInfo/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
 
 [node name="IconBorder" type="PanelContainer" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer/IconBorder"]
 layout_mode = 2
@@ -142,16 +142,14 @@ theme_override_constants/margin_bottom = 4
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 texture = ExtResource("2_4ojyi")
 expand_mode = 3
 
 [node name="CellName" type="Label" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 0
 theme = ExtResource("3_wiutq")
+theme_override_font_sizes/font_size = 76
 text = "Cell tooltip"
 vertical_alignment = 1
 
@@ -161,5 +159,6 @@ custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 3
 theme = ExtResource("3_wiutq")
+theme_override_font_sizes/font_size = 40
 text = "This is a really cool cell, I mean there is just everything here.  Ore and materials and all kinds of relaly neat stuff."
 autowrap_mode = 3
