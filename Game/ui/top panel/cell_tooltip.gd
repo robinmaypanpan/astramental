@@ -4,6 +4,11 @@ extends Tooltip
 @onready var cell_name_label: Label = %CellName
 @onready var cell_description_label: Label = %CellDescription
 @onready var cell_icon: TextureRect = %CellIcon
+@onready var building_info: Control = %BuildingInfo
+@onready var building_name_label: Label = %BuildingName
+@onready var building_description_label: Label = %BuildingDescription
+@onready var building_icon: TextureRect = %BuildingIcon
+@onready var divider: Control = %Divider
 
 @onready var factory_resource: FactoryResource = preload("res://Game/data/factory_floor.tres")
 
@@ -13,7 +18,7 @@ func set_tooltip_source(node: Control) -> void:
 	assert(node is Cell, "CellTooltip can only accept Cell nodes as tooltip sources")
 	var cell: Cell = node as Cell
 
-	# Get the ore that is located at that position in the cell
+	# Handle the ore/floor first, since it is always there
 	var cell_position: Vector2i = cell.grid_position
 
 	var player_id: int = cell.get_owning_player_id()
@@ -31,3 +36,23 @@ func set_tooltip_source(node: Control) -> void:
 			cell_name_label.text = factory_resource.display_name
 			cell_description_label.text = factory_resource.description
 			cell_icon.texture = factory_resource.icon
+
+	# Now we check to see if we have a building
+	var building_id: String = Model.get_building_at(
+		PlayerGridPosition.new(player_id, cell_position)
+	)
+
+	if building_id == "":
+		show_building_info(false)
+	else:
+		var building: BuildingResource = Buildings.get_by_id(building_id)
+		building_name_label.text = building.name
+		building_description_label.text = building.description
+		building_icon.texture = building.icon
+		show_building_info(true)
+
+
+## Shows or hides building information in the tooltip
+func show_building_info(show: bool) -> void:
+	building_info.visible = show
+	divider.visible = show

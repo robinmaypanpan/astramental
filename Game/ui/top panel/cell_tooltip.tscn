@@ -17,84 +17,96 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_582xq")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_wiutq")
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
+theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="Building Tooltip" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="BuildingInfo" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/HBoxContainer/Building Tooltip"]
+[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/MarginContainer/BuildingInfo"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 
-[node name="IconBorder" type="PanelContainer" parent="MarginContainer/HBoxContainer/Building Tooltip/HFlowContainer"]
+[node name="IconBorder" type="PanelContainer" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Building Tooltip/HFlowContainer/IconBorder"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer/IconBorder"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="BuildingIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/Building Tooltip/HFlowContainer/IconBorder/MarginContainer"]
+[node name="BuildingIcon" type="TextureRect" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer/IconBorder/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("3_dwmh3")
 expand_mode = 3
 
-[node name="BuildingName" type="Label" parent="MarginContainer/HBoxContainer/Building Tooltip/HFlowContainer"]
+[node name="BuildingName" type="Label" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Drill"
 
-[node name="BuildingDescription" type="Label" parent="MarginContainer/HBoxContainer/Building Tooltip"]
+[node name="BuildingDescription" type="Label" parent="HBoxContainer/MarginContainer/BuildingInfo"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
 text = "WOW!  That's really a building right there.  A whole ass building. What a thing to see in this day and age."
 autowrap_mode = 3
 
-[node name="TextureRect" type="ColorRect" parent="MarginContainer/HBoxContainer"]
+[node name="Divider" type="ColorRect" parent="HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(5, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0, 0, 0, 1)
 
-[node name="OreTooltip" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="OreTooltip" type="VBoxContainer" parent="HBoxContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_wiutq")
 theme_override_constants/separation = 10
 
-[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/HBoxContainer/OreTooltip"]
+[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/MarginContainer2/OreTooltip"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 
-[node name="IconBorder" type="PanelContainer" parent="MarginContainer/HBoxContainer/OreTooltip/HFlowContainer"]
+[node name="IconBorder" type="PanelContainer" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/OreTooltip/HFlowContainer/IconBorder"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer/IconBorder"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="CellIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/OreTooltip/HFlowContainer/IconBorder/MarginContainer"]
+[node name="CellIcon" type="TextureRect" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer/IconBorder/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -103,7 +115,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_4ojyi")
 expand_mode = 3
 
-[node name="CellName" type="Label" parent="MarginContainer/HBoxContainer/OreTooltip/HFlowContainer"]
+[node name="CellName" type="Label" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -111,7 +123,7 @@ theme = ExtResource("3_wiutq")
 text = "Cell tooltip"
 vertical_alignment = 1
 
-[node name="CellDescription" type="Label" parent="MarginContainer/HBoxContainer/OreTooltip"]
+[node name="CellDescription" type="Label" parent="HBoxContainer/MarginContainer2/OreTooltip"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2

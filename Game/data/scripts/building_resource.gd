@@ -18,3 +18,6 @@ extends Resource
 
 ## Defines behavior of building through components.
 @export var building_components: Array[BuildingComponentData]
+
+## Describe the building to the user
+@export var description: String

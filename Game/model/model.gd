@@ -6,10 +6,9 @@ extends Node
 ## Emitted when the game is finished setting up and is ready to start playing
 signal game_ready
 ## Emitted when ores_layout in PlayerStates is updated.
-signal ores_layout_updated()
+signal ores_layout_updated
 ## Emitted when buildings_list in PlayerStates is updated.
-signal buildings_updated()
-
+signal buildings_updated
 
 ## The random number seed used for this game
 var world_seed: int
@@ -17,7 +16,7 @@ var world_seed: int
 ## The number of players seen as ready. Used to determine when it is okay to start the game
 var num_players_ready := 0
 
-@onready var player_states: PlayerStates  = %PlayerStates
+@onready var player_states: PlayerStates = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
@@ -89,6 +88,7 @@ func get_starting_item_count(type: Types.Item) -> float:
 func get_starting_storage_cap(type: Types.Item) -> float:
 	return Globals.settings.get_storage_cap_item(type)
 
+
 ## Returns a dictionary of all of the items posessed by the player
 func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
 	var player_state: PlayerState = player_states.get_state(player_id)
@@ -148,7 +148,7 @@ func deduct_costs(player_id: int, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	var costs: Array[ItemCost] = building.item_costs
 	for cost: ItemCost in costs:
-		increase_item_count(player_id, cost.item_id, -1*cost.quantity)
+		increase_item_count(player_id, cost.item_id, -1 * cost.quantity)
 
 
 ## Refund the item cost of a building when deleting it.
@@ -160,7 +160,7 @@ func refund_costs(player_id: int, building_id: String) -> void:
 
 
 ## Returns true if we can build the building indicated at the location specified
-func can_build_at_location(building_id:String, position: PlayerGridPosition) -> bool:
+func can_build_at_location(building_id: String, position: PlayerGridPosition) -> bool:
 	# Make sure we can build the building somewhere, before continuing
 	if not can_afford(building_id, position.player_id):
 		# We can't build this building at all. just return false
@@ -174,9 +174,9 @@ func can_build_at_location(building_id:String, position: PlayerGridPosition) -> 
 	# Make sure that the building fits into this part of the grid
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 
-	if (building.placement_destination != WorldGenModel.get_layer_type(position.tile_position.y)):
-			# Can't place this building in this layer
-			return false
+	if building.placement_destination != WorldGenModel.get_layer_type(position.tile_position.y):
+		# Can't place this building in this layer
+		return false
 
 	return true
 
@@ -198,7 +198,7 @@ func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
 		return player_state.ores_layout[index]
 	else:
 		print("trying to read ore to factory layer: (%d, %d, %d)" % [player_id, x, y])
-		return Types.Ore.ROCK # no ore in factory layer and must return type, so guess it's rock
+		return Types.Ore.ROCK  # no ore in factory layer and must return type, so guess it's rock
 
 
 ## Set the ore at the given x/y coordinates for the given player id.
@@ -224,9 +224,7 @@ func get_building_at(pos: PlayerGridPosition) -> String:
 
 ## Set the building at the given position to the given building type for all players.
 @rpc("any_peer", "call_local", "reliable")
-func set_building_at(
-	player_id: int, tile_position: Vector2i, building_id: String
-) -> void:
+func set_building_at(player_id: int, tile_position: Vector2i, building_id: String) -> void:
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("doing set building for %d" % caller_id)
 	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
@@ -239,7 +237,7 @@ func set_building_at(
 @rpc("any_peer", "call_local", "reliable")
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())
-	var player_state : PlayerState = player_states.get_state(player_id)
+	var player_state: PlayerState = player_states.get_state(player_id)
 	var did_remove_building = player_state.remove_building(tile_position)
 	if did_remove_building:
 		buildings_updated.emit()
@@ -247,7 +245,7 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 
 ## Retrieves a list of buildings for the specified player.
 func get_buildings(player_id: int) -> Array[BuildingEntity]:
-	var player_state : PlayerState = player_states.get_state(player_id)
+	var player_state: PlayerState = player_states.get_state(player_id)
 	if player_state != null:
 		return player_state.buildings_list
 	else:
@@ -329,7 +327,7 @@ func _on_update_timer_timeout() -> void:
 ## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
 func _get_index_into_ores_layout(x: int, y: int) -> int:
 	if WorldGenModel.get_layer_num(y) > 0:
-		y -= WorldGenModel.layer_thickness # correct for ores_layout not storing data for factory layer
+		y -= WorldGenModel.layer_thickness  # correct for ores_layout not storing data for factory layer
 		return y * WorldGenModel.num_cols + x
 	else:
-		return -1 # no index for factory layer
+		return -1  # no index for factory layer
