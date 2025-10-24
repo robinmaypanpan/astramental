@@ -54,6 +54,8 @@ func has_vertex(vertex: Variant) -> bool:
 
 ## Get the weight of the given edge. If the edge doesn't exist, return 0.0.
 func get_weight(start: Variant, end: Variant) -> float:
+	if not has_vertex(start):
+		return 0.0
 	var index = edges_out_of[start].find(end)
 	if index != -1:
 		return weights[start][index]
@@ -63,6 +65,7 @@ func get_weight(start: Variant, end: Variant) -> float:
 
 ## Set the weight of the given edge to the new weight.
 func set_weight(start: Variant, end: Variant, new_weight: float) -> void:
-	var index = edges_out_of[start].find(end)
-	if index != -1:
-		weights[start][index] = new_weight
+	if has_vertex(start):
+		var index = edges_out_of[start].find(end)
+		if index != -1:
+			weights[start][index] = new_weight
