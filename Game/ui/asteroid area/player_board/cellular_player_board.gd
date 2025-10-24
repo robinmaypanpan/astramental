@@ -1,8 +1,8 @@
 class_name CellularPlayerBoard
 extends Control
 
-## Texture to populate the factory with
-@export var factory_texture: Texture
+## When true, this board is not initialized and instead just does nothing
+@export var is_dummy: bool = false
 
 # multiplayer properties
 var owner_id: int
@@ -15,8 +15,15 @@ var ghost_building_position := Vector2i(-1, -1)
 @onready var factory_and_mine := %FactoryAndMine
 @onready var game_grid: CellularGrid = %GameGrid
 
+## Information about the factory that we can use to render the factory floor
+@onready var factory_resource: FactoryResource = preload("res://Game/data/factory_floor.tres")
+
 
 func _ready() -> void:
+	if is_dummy:
+		# Do nothing if I'm a dummy
+		return
+
 	if ConnectionSystem.is_not_running_network():
 		owner_id = 1
 		ConnectionSystem.host_server()
@@ -46,7 +53,7 @@ func _ready() -> void:
 	# Set up factory tiles to be all white tiles
 	for x in range(WorldGenModel.num_cols):
 		for y in range(WorldGenModel.layer_thickness):
-			game_grid.get_cell(x, y).set_background(factory_texture)
+			game_grid.get_cell(x, y).set_background(factory_resource.icon)
 
 
 ## Publicly sets the ore at the indicated location

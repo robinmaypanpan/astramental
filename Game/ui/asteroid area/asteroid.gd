@@ -12,8 +12,17 @@ var _player_boards: Dictionary[int, CellularPlayerBoard]
 
 
 func _ready() -> void:
+	# Remove dummy content first, before any initialization
+	_remove_dummy_content()
+
 	AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_update_ore_tilemaps)
 	AsteroidViewModel.building_layout_changed_this_frame.connect(_on_update_buildings)
+
+
+func _remove_dummy_content() -> void:
+	for child in board_holder.get_children():
+		board_holder.remove_child(child)
+		child.queue_free()
 
 
 ## Given a player id, instantiate and add a board whose owner is the given player.

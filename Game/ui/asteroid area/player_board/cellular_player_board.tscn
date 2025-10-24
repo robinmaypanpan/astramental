@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgdywbrkt60lc"]
+[gd_scene load_steps=5 format=3 uid="uid://bgdywbrkt60lc"]
 
 [ext_resource type="Script" uid="uid://c51484jy3nn0f" path="res://Game/ui/asteroid area/player_board/cellular_player_board.gd" id="1_2jvp1"]
-[ext_resource type="Texture2D" uid="uid://d6qu00stj66f" path="res://Assets/sprites/factory_floor.tres" id="2_6fdg1"]
 [ext_resource type="PackedScene" uid="uid://qcnp7u3aieu4" path="res://Game/ui/asteroid area/player_board/cellular_grid.tscn" id="2_xf4gk"]
 [ext_resource type="PackedScene" uid="uid://d2yy8jnf0n7kd" path="res://Game/ui/asteroid area/player_board/cell.tscn" id="3_6fdg1"]
 
@@ -9,14 +8,16 @@
 bg_color = Color(0.906971, 0.43494, 0.418012, 1)
 
 [node name="CellularPlayerBoard" type="Control"]
+custom_minimum_size = Vector2(225, 0)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1695.0
+offset_bottom = -539.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2jvp1")
-factory_texture = ExtResource("2_6fdg1")
 
 [node name="VerticalListContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
@@ -26,8 +27,9 @@ offset_bottom = 556.0
 
 [node name="Sky" type="Panel" parent="VerticalListContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_84gc3")
 
 [node name="PlayerNameLabel" type="Label" parent="VerticalListContainer/Sky"]
@@ -51,9 +53,11 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 8
 
 [node name="GameGrid" parent="VerticalListContainer/FactoryAndMine" instance=ExtResource("2_xf4gk")]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 1
 cell_scene = ExtResource("3_6fdg1")

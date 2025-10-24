@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://qcnp7u3aieu4"]
+[gd_scene load_steps=3 format=3 uid="uid://qcnp7u3aieu4"]
 
 [ext_resource type="Script" uid="uid://bkpna0a6xwmgo" path="res://Game/ui/asteroid area/player_board/cellular_grid.gd" id="1_occbk"]
+[ext_resource type="PackedScene" uid="uid://d2yy8jnf0n7kd" path="res://Game/ui/asteroid area/player_board/cell.tscn" id="2_k7khi"]
 
 [node name="CellularGrid" type="Control"]
 layout_mode = 3
@@ -9,6 +10,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
 script = ExtResource("1_occbk")
 
 [node name="GridContainer" type="GridContainer" parent="."]
@@ -18,4 +21,256 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 4
+columns = 7
+
+[node name="Cell" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell2" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell3" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell4" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell5" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell6" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell7" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell8" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell9" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell10" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell11" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell12" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell13" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell14" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell15" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell16" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell17" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell18" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell19" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell20" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell21" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell22" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell23" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell24" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell25" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell26" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell27" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell28" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell29" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell30" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell31" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell32" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell33" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell34" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell35" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell36" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell37" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell38" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell39" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell40" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell41" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell42" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell43" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell44" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell45" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell46" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell47" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell48" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell49" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell50" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell51" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell52" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell53" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell54" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell55" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell56" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell57" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell58" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell59" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell60" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell61" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell62" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell63" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell64" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell65" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell66" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell67" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell68" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell69" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell70" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell71" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell72" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell73" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell74" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell75" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell76" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell77" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell78" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell79" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell80" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell81" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell82" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell83" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
+
+[node name="Cell84" parent="GridContainer" instance=ExtResource("2_k7khi")]
+layout_mode = 2
