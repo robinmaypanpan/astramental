@@ -206,7 +206,7 @@ func process_remove_building(player_id: int, tile_position: Vector2i) -> void:
 	print("processing remove building from %d" % caller_id)
 	var tile_map_pos = PlayerGridPosition.new(player_id, tile_position)
 	if Model.can_remove_building(tile_map_pos):
-		var building_id_removed: String = Model.get_building_at(tile_map_pos)
+		var building_id_removed: String = Model.get_building_type_at(tile_map_pos)
 		Model.remove_building_at.rpc(player_id, tile_position)
 		Model.refund_costs(player_id, building_id_removed)
 

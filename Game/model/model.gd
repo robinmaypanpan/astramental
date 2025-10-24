@@ -167,7 +167,7 @@ func can_build_at_location(building_id: String, position: PlayerGridPosition) ->
 		return false
 
 	# Make sure that the space is open
-	if get_building_at(position) != "":
+	if get_building_at(position.player_id, position.tile_position) != null:
 		# The space isn't open. We can't build there.
 		return false
 
@@ -183,7 +183,7 @@ func can_build_at_location(building_id: String, position: PlayerGridPosition) ->
 
 ## Returns true if this player can delete the building at the given position.
 func can_remove_building(position: PlayerGridPosition) -> bool:
-	if get_building_at(position) == "":
+	if get_building_at(position.player_id, position.tile_position) == null:
 		# no building to remove
 		return false
 
@@ -213,13 +213,13 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 		print("trying to write ore to factory layer: (%d, %d, %d, %s)" % [player_id, x, y, ore])
 
 
-## Get the building type at the given position.
-func get_building_at(pos: PlayerGridPosition) -> String:
-	var player_state: PlayerState = player_states.get_state(pos.player_id)
-	for placed_building: BuildingEntity in player_state.buildings_list:
-		if placed_building.position == pos.tile_position:
-			return placed_building.id
-	return ""
+## Returns the building at the given position
+func get_building_at(player_id: int, tile_position: Vector2i) -> BuildingEntity:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	for building_entity: BuildingEntity in player_state.buildings_list:
+		if building_entity.position == tile_position:
+			return building_entity
+	return null
 
 
 ## Set the building at the given position to the given building type for all players.

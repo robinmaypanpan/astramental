@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bk1vb8w75hf3y"]
+[gd_scene load_steps=6 format=3 uid="uid://bk1vb8w75hf3y"]
 
 [ext_resource type="Script" uid="uid://bqwe7oxpbs8nf" path="res://Game/ui/top panel/cell_tooltip.gd" id="1_582xq"]
 [ext_resource type="Texture2D" uid="uid://bl6t4oh6maial" path="res://Assets/sprites/ore/iron_ore.tres" id="2_4ojyi"]
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="3_dwmh3"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_wiutq"]
+[ext_resource type="Texture2D" uid="uid://10375ojdnctl" path="res://Assets/sprites/items/energy.tres" id="4_qa420"]
 
 [node name="CellTooltip" type="PanelContainer"]
 anchors_preset = 15
@@ -24,15 +25,16 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_wiutq")
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/BuildingInfo"]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 15
 
 [node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
 layout_mode = 2
@@ -61,6 +63,36 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Drill"
 
+[node name="DynamicData" type="HFlowContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnergyUsage" type="HBoxContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer/DynamicData"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="EnergyDirection" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer/DynamicData/EnergyUsage"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Consuming:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer/DynamicData/EnergyUsage"]
+layout_mode = 2
+
+[node name="EnergyQuantity" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer/DynamicData/EnergyUsage/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1.0"
+
+[node name="ItemType" type="TextureRect" parent="HBoxContainer/BuildingInfo/VBoxContainer/DynamicData/EnergyUsage/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_qa420")
+expand_mode = 3
+
+[node name="Speed" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer/DynamicData/EnergyUsage/HBoxContainer"]
+layout_mode = 2
+text = "/s"
+
 [node name="BuildingDescription" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 100)
@@ -78,10 +110,10 @@ color = Color(0, 0, 0, 1)
 [node name="OreInfo" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/OreInfo"]
 layout_mode = 2

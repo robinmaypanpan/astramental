@@ -4,10 +4,16 @@ extends Tooltip
 @onready var cell_name_label: Label = %CellName
 @onready var cell_description_label: Label = %CellDescription
 @onready var cell_icon: TextureRect = %CellIcon
+
 @onready var building_info: Control = %BuildingInfo
 @onready var building_name_label: Label = %BuildingName
 @onready var building_description_label: Label = %BuildingDescription
 @onready var building_icon: TextureRect = %BuildingIcon
+
+@onready var energy_usage_container: Control = %EnergyUsage
+@onready var energy_direction_label: Label = %EnergyDirection
+@onready var energy_quantity_label: Label = %EnergyQuantity
+
 @onready var divider: Control = %Divider
 
 @onready var factory_resource: FactoryResource = preload("res://Game/data/factory_floor.tres")
@@ -42,17 +48,33 @@ func set_tooltip_source(node: Control) -> void:
 			cell_icon.texture = factory_resource.icon
 
 	# Now we check to see if we have a building
-	var building_id: String = Model.get_building_at(
-		PlayerGridPosition.new(player_id, cell_position)
-	)
+	var building_entity: BuildingEntity = Model.get_building_at(player_id, cell_position)
 
-	if building_id == "":
+	if building_entity == null:
 		show_building_info(false)
 	else:
-		var building: BuildingResource = Buildings.get_by_id(building_id)
-		building_name_label.text = building.name
-		building_description_label.text = building.description
-		building_icon.texture = building.icon
+		var building_resource: BuildingResource = building_entity.get_resource()
+		building_name_label.text = building_resource.name
+		building_description_label.text = building_resource.description
+		building_icon.texture = building_resource.icon
+
+		# Show energy usage info if applicable
+		var energy_component: EnergyComponent = (
+			building_entity.get_component("EnergyComponent") as EnergyComponent
+		)
+
+		if energy_component == null || energy_component.energy_drain == 0.0:
+			energy_usage_container.hide()
+		else:
+			var energy_usage: float = energy_component.energy_drain
+			if energy_usage > 0:
+				energy_direction_label.text = "Consumes"
+				energy_quantity_label.text = "%0.2f" % energy_usage
+			else:
+				energy_direction_label.text = "Produces"
+				energy_quantity_label.text = "%0.2f" % -energy_usage
+			energy_usage_container.show()
+
 		show_building_info(true)
 
 
