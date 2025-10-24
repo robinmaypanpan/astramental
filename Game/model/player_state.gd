@@ -40,6 +40,9 @@ var ores_layout: Array[Types.Ore]
 ## Contains a list of the positions of each building for this player.
 var buildings_list: Array[BuildingEntity]
 
+## Contains a list of all cells where heat should be shown.
+var heat_data_list: Array[HeatData]
+
 
 func _ready() -> void:
 	# Initialize ores_layout array

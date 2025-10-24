@@ -9,6 +9,8 @@ signal game_ready
 signal ores_layout_updated()
 ## Emitted when buildings_list in PlayerStates is updated.
 signal buildings_updated()
+## Emitted when heat_data_list in PlayerStates is updated.
+signal heat_data_updated()
 
 
 ## The random number seed used for this game
@@ -24,6 +26,7 @@ var num_players_ready := 0
 @onready var _energy_system := %EnergySystem
 @onready var _miner_system: MinerSystem = %MinerSystem
 @onready var _storage_system: OreStorageSystem = %StorageSystem
+@onready var _heat_system: HeatSystem = %HeatSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -284,6 +287,48 @@ func get_storage_cap(player_id: int, type: Types.Item) -> float:
 		return 0.0
 
 
+## Set the heat data for the given player to the data given.
+@rpc("any_peer", "call_local", "reliable")
+func add_heat_data_at(player_id: int, position: Vector2i, heat: float, heat_capacity: float) -> void:
+	var player_state = player_states.get_state(player_id)
+	var heat_data = HeatData.new(position, heat, heat_capacity)
+	player_state.heat_data_list.append(heat_data)
+	heat_data_updated.emit()
+
+
+## Delete the heat data for the given player at the given position.
+@rpc("any_peer", "call_local", "reliable")
+func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
+	var player_state = player_states.get_state(player_id)
+
+	var index_to_remove = -1
+	var heat_data_list = player_state.heat_data_list
+	for i in range(heat_data_list.size()):
+		var heat_data = heat_data_list[i]
+		if heat_data.position == position:
+			index_to_remove = i
+
+	if index_to_remove != -1:
+		heat_data_list.remove_at(index_to_remove)
+		heat_data_updated.emit()
+
+
+## Set the heat data heat value at the given position to the given value.
+@rpc("any_peer", "call_local", "reliable")
+func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:
+	var player_state = player_states.get_state(player_id)
+	for heat_data in player_state.heat_data_list:
+		if heat_data.position == position:
+			heat_data.heat = new_heat
+			heat_data_updated.emit()
+
+
+## Get the heat data for the given player.
+func get_heat_data(player_id: int) -> Array[HeatData]:
+	var player_state = player_states.get_state(player_id)
+	return player_state.heat_data_list
+
+
 # PRIVATE METHODS
 
 
@@ -322,6 +367,7 @@ func _on_update_timer_timeout() -> void:
 	# TODO: only update systems when it is necessary
 	_storage_system.update()
 	_energy_system.update()
+	_heat_system.update()
 	_miner_system.update()
 
 

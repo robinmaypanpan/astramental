@@ -69,6 +69,16 @@ func place_building(position: Vector2i, building_id: String) -> void:
 	game_grid.get_cell(position.x, position.y).set_icon(building.icon)
 
 
+## Clear all the heat bars
+func clear_heat_bars() -> void:
+	for cell: Cell in game_grid.all_cells():
+		cell.clear_heat_bar()
+
+
+## Set the heat bar for the given cell.
+func set_heat_bar(position: Vector2i, heat: float, heat_capacity: float) -> void:
+	game_grid.get_cell(position.x, position.y).set_heat_bar(heat, heat_capacity)
+
 ## Set the position of the ghost building at the indicated position
 func set_ghost_building(x: int, y:int, building_id: String) -> void:
 	clear_ghost_building()

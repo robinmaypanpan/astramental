@@ -14,6 +14,7 @@ var _player_boards: Dictionary[int, CellularPlayerBoard]
 func _ready() -> void:
 	AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_update_ore_tilemaps)
 	AsteroidViewModel.building_layout_changed_this_frame.connect(_on_update_buildings)
+	AsteroidViewModel.heat_changed_this_frame.connect(_on_update_heat)
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
@@ -212,3 +213,11 @@ func _on_update_buildings() -> void:
 		player_board.clear_buildings()
 		for placed_building in Model.get_buildings( player_board.owner_id):
 			player_board.place_building(placed_building.position, placed_building.id)
+
+
+## Look at the model and redraw heat bars to screen.
+func _on_update_heat() -> void:
+	for player_board: CellularPlayerBoard in _player_boards.values():
+		player_board.clear_heat_bars()
+		for heat_data in Model.get_heat_data(player_board.owner_id):
+			player_board.set_heat_bar(heat_data.position, heat_data.heat, heat_data.heat_capacity)

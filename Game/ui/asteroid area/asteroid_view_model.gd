@@ -6,6 +6,8 @@ signal building_on_cursor_changed()
 signal ore_layout_changed_this_frame()
 ## Emitted when the list of buildings for either player changes, subscribed to by asteroid
 signal building_layout_changed_this_frame()
+## Emitted when heat stuff changed this frame, subscribed to by asteroid
+signal heat_changed_this_frame()
 
 ## used by the UI to indicate what's currently supposed to be on the cursor
 var building_on_cursor: String:
@@ -32,10 +34,13 @@ var ores_layout_dirty: bool = false
 ## Whether the buildings list in Model was updated this frame.
 var buildings_dirty: bool = false
 
+##
+var heat_dirty: bool = false
 
 func _ready():
 	Model.ores_layout_updated.connect(_on_ores_layout_updated)
 	Model.buildings_updated.connect(_on_buildings_updated)
+	Model.heat_data_updated.connect(_on_heat_data_updated)
 
 
 # since this is UI updating, use _process instead of _physics_process
@@ -46,6 +51,9 @@ func _process(_delta: float) -> void:
 	if buildings_dirty:
 		building_layout_changed_this_frame.emit()
 		buildings_dirty = false
+	if heat_dirty:
+		heat_changed_this_frame.emit()
+		heat_dirty = false
 
 
 func _on_ores_layout_updated():
@@ -54,3 +62,7 @@ func _on_ores_layout_updated():
 
 func _on_buildings_updated():
 	buildings_dirty = true
+
+
+func _on_heat_data_updated():
+	heat_dirty = true
