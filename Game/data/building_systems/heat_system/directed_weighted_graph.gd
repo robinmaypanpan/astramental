@@ -24,12 +24,6 @@ func add_edge(start: Variant, end: Variant, weight: float) -> void:
 	weights[start].append(weight)
 
 
-## Add a two way edge to the graph.
-func add_two_way_edge(start: Variant, end: Variant, weight: float) -> void:
-	add_edge(start, end, weight)
-	add_edge(end, start, weight)
-
-
 ## Remove an edge in the graph if it exists.
 func remove_edge(start: Variant, end: Variant) -> void:
 	var end_vertices: Array[Variant] = edges_out_of[start]
@@ -56,3 +50,19 @@ func remove_vertex(vertex: Variant) -> void:
 ## Determine if the given vertex is part of the graph.
 func has_vertex(vertex: Variant) -> bool:
 	return edges_out_of.has(vertex)
+
+
+## Get the weight of the given edge. If the edge doesn't exist, return -1.0.
+func get_weight(start: Variant, end: Variant) -> float:
+	var index = edges_out_of[start].find(end)
+	if index != -1:
+		return weights[start][index]
+	else:
+		return -1.0
+
+
+## Set the weight of the given edge to the new weight.
+func set_weight(start: Variant, end: Variant, new_weight: float) -> void:
+	var index = edges_out_of[start].find(end)
+	if index != -1:
+		weights[start][index] = new_weight
