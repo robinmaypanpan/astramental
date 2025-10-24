@@ -12,8 +12,18 @@ var _player_boards: Dictionary[int, CellularPlayerBoard]
 
 
 func _ready() -> void:
+	# Remove dummy content first, before any initialization
+	_remove_dummy_content()
+
 	AsteroidViewModel.ore_layout_changed_this_frame.connect(_on_update_ore_tilemaps)
 	AsteroidViewModel.building_layout_changed_this_frame.connect(_on_update_buildings)
+
+
+func _remove_dummy_content() -> void:
+	for child in board_holder.get_children():
+		board_holder.remove_child(child)
+		child.queue_free()
+
 
 ## Given a player id, instantiate and add a board whose owner is the given player.
 func add_player_board(player_id: int) -> void:
@@ -96,7 +106,7 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 
 ## Returns the grid coordinates the mouse is over
 func _get_new_building_coordinates() -> PlayerGridPosition:
-	var player_id:int = multiplayer.get_unique_id()
+	var player_id: int = multiplayer.get_unique_id()
 	var player_board := _get_player_board(player_id)
 	if player_board and player_board.is_mouse_over_factory_or_mine():
 		var tile_position: Vector2i = player_board.get_mouse_grid_position()
@@ -107,7 +117,7 @@ func _get_new_building_coordinates() -> PlayerGridPosition:
 func _input(_event: InputEvent) -> void:
 	# TODO: (RPG) A lot of this function should move to the view model
 	if Input.is_action_just_pressed("ui_cancel"):
-		AsteroidViewModel.building_on_cursor = "" # exit build mode
+		AsteroidViewModel.building_on_cursor = ""  # exit build mode
 		var player_board := _get_player_board(multiplayer.get_unique_id())
 		player_board.clear_ghost_building()
 	elif Input.is_action_just_pressed("left_mouse_button"):
@@ -121,7 +131,7 @@ func _input(_event: InputEvent) -> void:
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if (AsteroidViewModel.mouse_tile_map_pos):
+		if AsteroidViewModel.mouse_tile_map_pos:
 			var player_id: int = multiplayer.get_unique_id()
 			var player_board: CellularPlayerBoard = _get_player_board(player_id)
 			var building_id: String = AsteroidViewModel.building_on_cursor
@@ -152,7 +162,7 @@ func _input(_event: InputEvent) -> void:
 ## Look at the model and write the ores_layout to the player board tile maps so they are visible.
 func _on_update_ore_tilemaps() -> void:
 	for player_board in _player_boards.values():
-		var player_id: int = player_board.owner_id
+		var player_id: int = player_board.get_owning_player_id()
 		var start_y := WorldGenModel.get_mine_layer_start_y()
 		var end_y := WorldGenModel.get_all_layers_end_y()
 		for x in range(WorldGenModel.num_cols):
@@ -172,9 +182,7 @@ func request_place_building(pos: PlayerGridPosition, building: String) -> void:
 ## On the server, determine if a building placement request should be allowed.
 ## If it should, actually place the building for both players.
 @rpc("any_peer", "call_local", "reliable")
-func process_place_building(
-	player_id: int, tile_position: Vector2i, building: String
-) -> void:
+func process_place_building(player_id: int, tile_position: Vector2i, building: String) -> void:
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("processing place building from %d" % caller_id)
 	if Model.can_build_at_location(building, PlayerGridPosition.new(player_id, tile_position)):
@@ -193,14 +201,12 @@ func request_remove_building(pos: PlayerGridPosition) -> void:
 ## On the server, determine if a building removal request should be allowed.
 ## If it should, actually remove the building for both players.
 @rpc("any_peer", "call_local", "reliable")
-func process_remove_building(
-	player_id: int, tile_position: Vector2i
-) -> void:
+func process_remove_building(player_id: int, tile_position: Vector2i) -> void:
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("processing remove building from %d" % caller_id)
 	var tile_map_pos = PlayerGridPosition.new(player_id, tile_position)
 	if Model.can_remove_building(tile_map_pos):
-		var building_id_removed: String = Model.get_building_at(tile_map_pos)
+		var building_id_removed: String = Model.get_building_type_at(tile_map_pos)
 		Model.remove_building_at.rpc(player_id, tile_position)
 		Model.refund_costs(player_id, building_id_removed)
 
@@ -210,5 +216,5 @@ func _on_update_buildings() -> void:
 	print("Updating buildings for %d" % multiplayer.get_unique_id())
 	for player_board in _player_boards.values():
 		player_board.clear_buildings()
-		for placed_building in Model.get_buildings( player_board.owner_id):
+		for placed_building in Model.get_buildings(player_board.get_owning_player_id()):
 			player_board.place_building(placed_building.position, placed_building.id)

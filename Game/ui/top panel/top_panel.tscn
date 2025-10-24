@@ -1,23 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://bncje5xywcr8m"]
+[gd_scene load_steps=3 format=3 uid="uid://bncje5xywcr8m"]
 
 [ext_resource type="Script" uid="uid://6s8dpcho4kwt" path="res://Game/ui/top panel/top_panel.gd" id="1_cwmam"]
+[ext_resource type="PackedScene" uid="uid://bk1vb8w75hf3y" path="res://Game/ui/top panel/cell_tooltip.tscn" id="2_q3l6b"]
 
 [node name="TopPanel" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -924.0
+offset_bottom = -914.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_cwmam")
 
-[node name="HFlowContainer" type="HFlowContainer" parent="."]
+[node name="TooltipContainer" type="MarginContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 137.0
-offset_bottom = 23.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="Label" parent="HFlowContainer"]
+[node name="CellTooltip" parent="TooltipContainer" instance=ExtResource("2_q3l6b")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Page of Awesome"
