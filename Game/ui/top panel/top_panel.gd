@@ -6,6 +6,7 @@ extends Panel
 
 func _ready() -> void:
 	Globals.tooltip_target_changed.connect(on_tooltip_target_changed)
+	set_visible_tooltip(null)
 
 
 ## Fires whenever the tooltip target changes

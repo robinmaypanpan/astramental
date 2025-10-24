@@ -13,6 +13,10 @@ extends Tooltip
 @onready var factory_resource: FactoryResource = preload("res://Game/data/factory_floor.tres")
 
 
+func _ready() -> void:
+	show_building_info(false)
+
+
 ## Override the parent class's tooltip source
 func set_tooltip_source(node: Control) -> void:
 	assert(node is Cell, "CellTooltip can only accept Cell nodes as tooltip sources")

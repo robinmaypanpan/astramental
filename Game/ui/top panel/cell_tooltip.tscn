@@ -20,7 +20,8 @@ script = ExtResource("1_582xq")
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+[node name="BuildingInfo" type="MarginContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_wiutq")
 theme_override_constants/margin_left = 10
@@ -28,40 +29,39 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 10
 
-[node name="BuildingInfo" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/BuildingInfo"]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/MarginContainer/BuildingInfo"]
+[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 
-[node name="IconBorder" type="PanelContainer" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer"]
+[node name="IconBorder" type="PanelContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer/HFlowContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer/IconBorder"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer/HFlowContainer/IconBorder"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="BuildingIcon" type="TextureRect" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer/IconBorder/MarginContainer"]
+[node name="BuildingIcon" type="TextureRect" parent="HBoxContainer/BuildingInfo/VBoxContainer/HFlowContainer/IconBorder/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("3_dwmh3")
 expand_mode = 3
 
-[node name="BuildingName" type="Label" parent="HBoxContainer/MarginContainer/BuildingInfo/HFlowContainer"]
+[node name="BuildingName" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer/HFlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Drill"
 
-[node name="BuildingDescription" type="Label" parent="HBoxContainer/MarginContainer/BuildingInfo"]
+[node name="BuildingDescription" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
@@ -75,7 +75,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 color = Color(0, 0, 0, 1)
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer"]
+[node name="OreInfo" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 5
@@ -83,30 +83,30 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="OreTooltip" type="VBoxContainer" parent="HBoxContainer/MarginContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/OreInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("3_wiutq")
 theme_override_constants/separation = 10
 
-[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/MarginContainer2/OreTooltip"]
+[node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer/OreInfo/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 
-[node name="IconBorder" type="PanelContainer" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer"]
+[node name="IconBorder" type="PanelContainer" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer/IconBorder"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer/IconBorder"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="CellIcon" type="TextureRect" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer/IconBorder/MarginContainer"]
+[node name="CellIcon" type="TextureRect" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer/IconBorder/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -115,7 +115,7 @@ size_flags_vertical = 4
 texture = ExtResource("2_4ojyi")
 expand_mode = 3
 
-[node name="CellName" type="Label" parent="HBoxContainer/MarginContainer2/OreTooltip/HFlowContainer"]
+[node name="CellName" type="Label" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -123,7 +123,7 @@ theme = ExtResource("3_wiutq")
 text = "Cell tooltip"
 vertical_alignment = 1
 
-[node name="CellDescription" type="Label" parent="HBoxContainer/MarginContainer2/OreTooltip"]
+[node name="CellDescription" type="Label" parent="HBoxContainer/OreInfo/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
