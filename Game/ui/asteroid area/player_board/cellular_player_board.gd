@@ -31,19 +31,7 @@ func _ready() -> void:
 	player = ConnectionSystem.get_player(owner_id)
 	name = "PlayerBoard%d" % owner_id
 
-	var tile_size := 16 * WorldGenModel.tile_map_scale
-	var board_width_px := tile_size * WorldGenModel.num_cols
-	var layer_height_px := tile_size * WorldGenModel.layer_thickness
-	# 1 factory layer + x mine layers
-	var num_layers := WorldGenModel.get_num_mine_layers() + 1
-
-	custom_minimum_size = Vector2i(board_width_px, 0)
-	vertical_list.custom_minimum_size = Vector2i(board_width_px, 0)
-
-	sky.custom_minimum_size = Vector2i(0, WorldGenModel.sky_height)
 	player_name_label.text = "%s\n(%s)" % [player.name, player.index]
-
-	factory_and_mine.custom_minimum_size = Vector2i(0, layer_height_px * num_layers)
 
 	game_grid.generate_grid(
 		WorldGenModel.num_cols,

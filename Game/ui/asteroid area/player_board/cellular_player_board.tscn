@@ -7,27 +7,24 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84gc3"]
 bg_color = Color(0.906971, 0.43494, 0.418012, 1)
 
-[node name="CellularPlayerBoard" type="Control"]
+[node name="CellularPlayerBoard" type="MarginContainer"]
 custom_minimum_size = Vector2(225, 0)
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -1695.0
-offset_bottom = -539.0
+offset_right = -1600.0
+offset_bottom = -392.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_2jvp1")
 
 [node name="VerticalListContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
-layout_mode = 0
-offset_right = 224.0
-offset_bottom = 556.0
+layout_mode = 2
 
 [node name="Sky" type="Panel" parent="VerticalListContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 150)
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_84gc3")
@@ -58,6 +55,4 @@ size_flags_vertical = 8
 [node name="GameGrid" parent="VerticalListContainer/FactoryAndMine" instance=ExtResource("2_xf4gk")]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 1
 cell_scene = ExtResource("3_6fdg1")
