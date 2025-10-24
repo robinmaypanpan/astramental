@@ -7,11 +7,13 @@ extends Node
 
 const HEAT_MAX_FLOW: float = 1e10
 # define omni-source and omni-sink as vectors so they can be compared to other vectors
+# cannot use -1 because it is technically adjacent to (0, 0) and that isn't desired
 const SOURCE := Vector2i(-9, 0)
 const SINK := Vector2i(0, -9)
 
 var graph: DirectedWeightedGraph
 
+var vertex_to_component_map: Dictionary[Vector2i, HeatComponent]
 
 func _init() -> void:
 	graph = DirectedWeightedGraph.new()
@@ -38,6 +40,7 @@ func add_building(heat_component: HeatComponent) -> void:
 	var heat_building_type = heat_component.heat_building_type
 	var position = heat_component.building_entity.position
 	graph.add_vertex(position)
+	vertex_to_component_map[position] = heat_component
 
 	if heat_building_type == Types.HeatBuilding.SOURCE:
 		add_two_way_flow_edge(SOURCE, position, heat_component.heat_production)
@@ -58,6 +61,11 @@ func add_building(heat_component: HeatComponent) -> void:
 func remove_building(heat_component: HeatComponent) -> void:
 	var position = heat_component.building_entity.position
 	graph.remove_vertex(position)
+	vertex_to_component_map.erase(position)
+
+
+func get_component_at(position: Vector2i) -> HeatComponent:
+	return vertex_to_component_map.get(position)
 
 
 func duplicate_graph() -> HeatFlowGraph:

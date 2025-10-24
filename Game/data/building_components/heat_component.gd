@@ -25,6 +25,14 @@ extends BuildingComponent
 ## Carrier: no production, passive cool off, or heat capacity. (not implemented yet)
 var heat_building_type: Types.HeatBuilding
 
+var is_source: bool:
+    get:
+        return heat_building_type == Types.HeatBuilding.SOURCE
+
+var is_sink: bool:
+    get:
+        return heat_building_type == Types.HeatBuilding.SINK
+
 ## How much heat this building currently holds.
 var heat: float
 
