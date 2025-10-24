@@ -5,6 +5,8 @@ extends Tooltip
 @onready var cell_description_label: Label = %CellDescription
 @onready var cell_icon: TextureRect = %CellIcon
 
+@onready var factory_resource: FactoryResource = preload("res://Game/data/factory_floor.tres")
+
 
 ## Override the parent class's tooltip source
 func set_tooltip_source(node: Control) -> void:
@@ -16,8 +18,16 @@ func set_tooltip_source(node: Control) -> void:
 
 	var player_id: int = cell.get_owning_player_id()
 
-	var ore_type: Types.Ore = Model.get_ore_at(player_id, cell_position.x, cell_position.y)
-	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
-	cell_name_label.text = ore_resource.display_name
-	cell_description_label.text = ore_resource.description
-	cell_icon.texture = ore_resource.icon
+	var layer_type: Types.Layer = WorldGenModel.get_layer_type(cell_position.y)
+
+	match layer_type:
+		Types.Layer.MINE:
+			var ore_type: Types.Ore = Model.get_ore_at(player_id, cell_position.x, cell_position.y)
+			var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
+			cell_name_label.text = ore_resource.display_name
+			cell_description_label.text = ore_resource.description
+			cell_icon.texture = ore_resource.icon
+		Types.Layer.FACTORY:
+			cell_name_label.text = factory_resource.display_name
+			cell_description_label.text = factory_resource.description
+			cell_icon.texture = factory_resource.icon
