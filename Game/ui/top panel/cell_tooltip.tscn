@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://bk1vb8w75hf3y"]
+
+[ext_resource type="Script" uid="uid://bqwe7oxpbs8nf" path="res://Game/ui/top panel/cell_tooltip.gd" id="1_582xq"]
+[ext_resource type="Texture2D" uid="uid://bl6t4oh6maial" path="res://Assets/sprites/ore/iron_ore.tres" id="2_4ojyi"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_wiutq"]
+
+[node name="CellTooltip" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1174.0
+offset_bottom = -901.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_582xq")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("3_wiutq")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme = ExtResource("3_wiutq")
+theme_override_constants/separation = 10
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="IconBorder" type="PanelContainer" parent="MarginContainer/VBoxContainer/HFlowContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="CellIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/HFlowContainer/IconBorder"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_4ojyi")
+expand_mode = 3
+
+[node name="CellName" type="Label" parent="MarginContainer/VBoxContainer/HFlowContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("3_wiutq")
+text = "Cell tooltip"
+vertical_alignment = 1
+
+[node name="CellDescription" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("3_wiutq")
+text = "This is a really cool cell, I mean there is just everything here.  Ore and materials and all kinds of relaly neat stuff."
+autowrap_mode = 3
