@@ -7,3 +7,7 @@ extends Resource
 @export var atlas_coordinates: Vector2i
 ## The item that the ore should yield when mined.
 @export var item_yield: Types.Item
+## Display name of this ore
+@export var display_name: String
+## Description of this ore
+@export var description: String

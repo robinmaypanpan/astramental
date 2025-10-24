@@ -26,6 +26,13 @@ func _on_mouse_exited() -> void:
 	Globals.clear_tooltip_target(self)
 
 
+## Returns the player ID that owns this cell
+func get_owning_player_id() -> int:
+	var parent_board: CellularPlayerBoard = find_parent("PlayerBoard*") as CellularPlayerBoard
+	assert(parent_board != null, "Cell is not a child of a CellularPlayerBoard")
+	return parent_board.get_owning_player_id()
+
+
 ## Change the top layer for this cell for this cell
 func set_icon(texture: Texture):
 	icon.texture = texture

@@ -11,8 +11,13 @@ func set_tooltip_source(node: Control) -> void:
 	assert(node is Cell, "CellTooltip can only accept Cell nodes as tooltip sources")
 	var cell: Cell = node as Cell
 
-	# Get the item that is located at that position in the cell
+	# Get the ore that is located at that position in the cell
 	var cell_position: Vector2i = cell.grid_position
 
-	# For now just set the name label to the cell name
-	cell_name_label.text = "Hello World"
+	var player_id: int = cell.get_owning_player_id()
+
+	var ore_type: Types.Ore = Model.get_ore_at(player_id, cell_position.x, cell_position.y)
+	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
+	cell_name_label.text = ore_resource.display_name
+	cell_description_label.text = ore_resource.description
+	cell_icon.texture = ore_resource.icon

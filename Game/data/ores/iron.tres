@@ -8,3 +8,5 @@ script = ExtResource("1_5x48m")
 icon = ExtResource("1_op3lr")
 atlas_coordinates = Vector2i(2, 0)
 item_yield = 3
+display_name = "Iron ore"
+description = "Iron is the backbone of building most of the fundamental equipment needed to mine these asteroids."
