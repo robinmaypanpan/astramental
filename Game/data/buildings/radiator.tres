@@ -31,3 +31,4 @@ icon = SubResource("AtlasTexture_ard3e")
 item_costs = Array[ExtResource("2_xyamt")]([SubResource("Resource_trd6w")])
 placement_destination = 1
 building_components = Array[ExtResource("1_ti63p")]([SubResource("Resource_gj1yi")])
+description = "Takes heat from the surrounding tiles and dissipates it to the vacuum of space."
