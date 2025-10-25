@@ -1,11 +1,11 @@
 extends Node
 
 ## subscribed to by cursor
-signal building_on_cursor_changed()
+signal building_on_cursor_changed
 ## Emitted when the ore layout changes, subscribed to by asteroid
-signal ore_layout_changed_this_frame()
+signal ore_layout_changed_this_frame
 ## Emitted when the list of buildings for either player changes, subscribed to by asteroid
-signal building_layout_changed_this_frame()
+signal building_layout_changed_this_frame
 
 ## used by the UI to indicate what's currently supposed to be on the cursor
 var building_on_cursor: String:
@@ -24,7 +24,7 @@ var in_build_mode: bool:
 var mouse_state := MouseState.HOVERING
 
 # Position that the mouse is currently positioned over
-var mouse_tile_map_pos: PlayerGridPosition
+var mouse_hover_grid_position: Vector2i = Vector2i(-1, -1)
 
 ## Whether the ores_layout in Model was updated this frame.
 var ores_layout_dirty: bool = false
