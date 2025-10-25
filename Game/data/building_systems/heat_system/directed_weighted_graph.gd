@@ -32,12 +32,7 @@ func add_edge(start: Variant, end: Variant, weight: float) -> void:
 ## Remove an edge in the graph if it exists.
 func remove_edge(start: Variant, end: Variant) -> void:
 	var end_vertices: Array[Variant] = edges_out_of[start]
-	var index_to_remove = -1
-	for index in range(end_vertices.size()):
-		var end_vertex: Variant = end_vertices[index]
-		if end_vertex == end:
-			index_to_remove = index
-			break
+	var index_to_remove: int = end_vertices.find(end)
 
 	if index_to_remove != -1:
 		end_vertices.remove_at(index_to_remove)
@@ -61,7 +56,7 @@ func has_vertex(vertex: Variant) -> bool:
 func get_weight(start: Variant, end: Variant) -> float:
 	if not has_vertex(start):
 		return 0.0
-	var index = edges_out_of[start].find(end)
+	var index: int = edges_out_of[start].find(end)
 	if index != -1:
 		return weights[start][index]
 	else:
@@ -71,6 +66,6 @@ func get_weight(start: Variant, end: Variant) -> float:
 ## Set the weight of the given edge to the new weight.
 func set_weight(start: Variant, end: Variant, new_weight: float) -> void:
 	if has_vertex(start):
-		var index = edges_out_of[start].find(end)
+		var index: int = edges_out_of[start].find(end)
 		if index != -1:
 			weights[start][index] = new_weight

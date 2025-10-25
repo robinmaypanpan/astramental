@@ -57,14 +57,14 @@ func _add_two_way_flow_edge(start, end, weight) -> void:
 ## If it is adjacent to any buildings already in the heat flow graph,
 ## add edges flowing out of the source or into the sink.
 func add_building(heat_component: HeatComponent) -> void:
-	var position = heat_component.building_entity.position
+	var position: Vector2i = heat_component.building_entity.position
 	graph.add_vertex(position)
 	vertex_to_component_map[position] = heat_component
 
 	if heat_component.is_source:
 		# omni-source -> source
 		_add_two_way_flow_edge(SOURCE, position, heat_component.heat_production)
-		for neighbor_position in _get_neighbors(position):
+		for neighbor_position: Vector2i in _get_neighbors(position):
 			if graph.has_vertex(neighbor_position):
 				# source -> neighbors
 				_add_two_way_flow_edge(position, neighbor_position, HEAT_MAX_FLOW)
@@ -72,7 +72,7 @@ func add_building(heat_component: HeatComponent) -> void:
 	elif heat_component.is_sink:
 		# sink -> omni-sink
 		_add_two_way_flow_edge(position, SINK, heat_component.heat_passive_cool_off)
-		for neighbor_position in _get_neighbors(position):
+		for neighbor_position: Vector2i in _get_neighbors(position):
 			if graph.has_vertex(neighbor_position):
 				# neighbors -> sink
 				_add_two_way_flow_edge(neighbor_position, position, HEAT_MAX_FLOW)
@@ -83,7 +83,7 @@ func add_building(heat_component: HeatComponent) -> void:
 
 ## Given a heat component, remove that building from the heat flow graph.
 func remove_building(heat_component: HeatComponent) -> void:
-	var position = heat_component.building_entity.position
+	var position: Vector2i = heat_component.building_entity.position
 	graph.remove_vertex(position)
 	vertex_to_component_map.erase(position)
 
@@ -96,10 +96,10 @@ func get_component_at(position: Vector2i) -> HeatComponent:
 
 ## Do a deep copy of this object and return the duplicate.
 func duplicate_graph() -> HeatFlowGraph:
-	var new_graph = DirectedWeightedGraph.new()
+	var new_graph: DirectedWeightedGraph = DirectedWeightedGraph.new()
 	new_graph.edges_out_of = graph.edges_out_of.duplicate(true)
 	new_graph.weights = graph.weights.duplicate(true)
-	var new_heat_flow_graph = HeatFlowGraph.new()
+	var new_heat_flow_graph: HeatFlowGraph = HeatFlowGraph.new()
 	new_heat_flow_graph.graph = new_graph
 	new_heat_flow_graph.vertex_to_component_map = vertex_to_component_map.duplicate()
 	return new_heat_flow_graph
@@ -109,25 +109,25 @@ func duplicate_graph() -> HeatFlowGraph:
 ## by breadth first search. Part of the Ford-Fulkerson algorithm.
 func find_augmenting_path() -> Array:
 	# do breadth first search
-	var vertex_queue: Array = [SOURCE]
+	var vertex_queue: Array[Variant] = [SOURCE]
 	var path_queue: Array[Array] = [[SOURCE]]
-	var explored_vertices = []
+	var explored_vertices: Array[Variant] = []
 	while vertex_queue.size() > 0:
-		var current_vertex = vertex_queue.pop_back()
+		var current_vertex: Variant = vertex_queue.pop_back()
 		explored_vertices.append(current_vertex)
-		var current_path = path_queue.pop_back()
+		var current_path: Array = path_queue.pop_back()
 
 		if current_vertex == HeatFlowGraph.SINK:
 			return current_path
 
-		var adjacent_vertices = graph.edges_out_of[current_vertex]
-		var edge_weights = graph.weights[current_vertex]
+		var adjacent_vertices: Array[Variant] = graph.edges_out_of[current_vertex]
+		var edge_weights: Array = graph.weights[current_vertex]
 		for i in range(edge_weights.size()):
-			var adjacent_vertex = adjacent_vertices[i]
-			var edge_weight = edge_weights[i]
+			var adjacent_vertex: Variant = adjacent_vertices[i]
+			var edge_weight: float = edge_weights[i]
 			if edge_weight > 0 and not explored_vertices.has(adjacent_vertex):
 				vertex_queue.push_front(adjacent_vertex)
-				var new_path = current_path.duplicate()
+				var new_path: Array[Variant] = current_path.duplicate()
 				new_path.append(adjacent_vertex)
 				path_queue.push_front(new_path)
 	# otherwise, no path found
@@ -137,20 +137,20 @@ func find_augmenting_path() -> Array:
 ## Given a path from omni-source to omni-sink, augment the flow along that path by the minimum of
 ## weights along that path. This reduces the forward flow by the min and increases the reverse flow
 ## by the min. Part of the Ford-Fulkerson algorithm.
-func augment_flow_along_path(path: Array):
+func augment_flow_along_path(path: Array[Variant]):
 	# find minimum weight along path
-	var min_weight = HEAT_MAX_FLOW
+	var min_weight: float = HEAT_MAX_FLOW
 	for i in range(path.size() - 1):
-		var start = path[i]
-		var end = path[i+1]
-		var weight = graph.get_weight(start, end)
+		var start: Variant = path[i]
+		var end: Variant = path[i+1]
+		var weight: float = graph.get_weight(start, end)
 		min_weight = min(min_weight, weight)
 	# augment flow along path
 	for i in range(path.size() - 1):
 		print("augmenting flow along path %s, min weight %d" % [path, min_weight])
-		var start = path[i]
-		var end = path[i+1]
-		var forward_weight = graph.get_weight(start, end)
+		var start: Variant = path[i]
+		var end: Variant = path[i+1]
+		var forward_weight: float = graph.get_weight(start, end)
 		graph.set_weight(start, end, forward_weight - min_weight)
-		var reverse_weight = graph.get_weight(end, start)
+		var reverse_weight: float = graph.get_weight(end, start)
 		graph.set_weight(end, start, reverse_weight + min_weight)

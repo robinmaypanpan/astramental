@@ -225,5 +225,5 @@ func _on_update_buildings() -> void:
 func _on_update_heat() -> void:
 	for player_board: CellularPlayerBoard in _player_boards.values():
 		player_board.clear_heat_bars()
-		for heat_data in Model.get_heat_data(player_board.owner_id):
+		for heat_data: HeatData in Model.get_heat_data(player_board.owner_id):
 			player_board.set_heat_bar(heat_data.position, heat_data.heat, heat_data.heat_capacity)

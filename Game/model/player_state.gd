@@ -110,7 +110,7 @@ func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
 ## Add a building to the buildings list.
 ## Also adds all corresponding components to ComponentManager.
 func add_building(tile_position: Vector2i, building_id: String) -> void:
-	var building = BuildingEntity.new(id, tile_position, building_id)
+	var building: BuildingEntity = BuildingEntity.new(id, tile_position, building_id)
 	ComponentManager.init_components_building(building)
 	buildings_list.append(building)
 

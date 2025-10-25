@@ -292,8 +292,8 @@ func add_heat_data_at(
 		player_id: int, position: Vector2i, heat: float, heat_capacity: float
 	) -> void:
 	# start function
-	var player_state = player_states.get_state(player_id)
-	var heat_data = HeatData.new(position, heat, heat_capacity)
+	var player_state: PlayerState = player_states.get_state(player_id)
+	var heat_data: HeatData = HeatData.new(position, heat, heat_capacity)
 	player_state.heat_data_list.append(heat_data)
 	heat_data_updated.emit()
 
@@ -301,14 +301,12 @@ func add_heat_data_at(
 ## Delete the heat data for the given player at the given position. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
 func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
-	var player_state = player_states.get_state(player_id)
+	var player_state: PlayerState = player_states.get_state(player_id)
 
-	var index_to_remove = -1
-	var heat_data_list = player_state.heat_data_list
-	for i in range(heat_data_list.size()):
-		var heat_data = heat_data_list[i]
-		if heat_data.position == position:
-			index_to_remove = i
+	var heat_data_list: Array[HeatData] = player_state.heat_data_list
+	var index_to_remove: int = heat_data_list.find_custom(
+		func(elem): return elem.position == position
+	)
 
 	if index_to_remove != -1:
 		heat_data_list.remove_at(index_to_remove)
@@ -318,8 +316,8 @@ func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
 ## Set the heat data heat value at the given position to the given value. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
 func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:
-	var player_state = player_states.get_state(player_id)
-	for heat_data in player_state.heat_data_list:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	for heat_data: HeatData in player_state.heat_data_list:
 		if heat_data.position == position:
 			heat_data.heat = new_heat
 			heat_data_updated.emit()
@@ -327,7 +325,7 @@ func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:
 
 ## Get the heat data list for the given player.
 func get_heat_data(player_id: int) -> Array[HeatData]:
-	var player_state = player_states.get_state(player_id)
+	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.heat_data_list
 
 
