@@ -43,6 +43,11 @@ func get_cell(x: int, y: int) -> Control:
 	return child
 
 
+## Returns the cell at the indicated position
+func get_cell_at(pos: Vector2i) -> Control:
+	return get_cell(pos.x, pos.y)
+
+
 ## Returns the cell under the provided point
 func get_cell_coordinates_at_local_point(point: Vector2i) -> Vector2i:
 	var my_rect := get_rect()

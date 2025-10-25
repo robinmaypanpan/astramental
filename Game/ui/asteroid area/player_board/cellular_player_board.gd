@@ -62,23 +62,23 @@ func get_owning_player_id() -> int:
 
 
 ## Place a building at the desired location
-func place_building(position: Vector2i, building_id: String) -> void:
+func place_building(pos: Vector2i, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
-	game_grid.get_cell(position.x, position.y).set_icon(building.icon)
+	game_grid.get_cell_at(pos).set_icon(building.icon)
 
 
 ## Set the position of the ghost building at the indicated position
-func set_ghost_building(x: int, y: int, building_id: String) -> void:
+func set_ghost_building(pos: Vector2i, building_id: String) -> void:
 	clear_ghost_building()
-	ghost_building_position = Vector2i(x, y)
+	ghost_building_position = pos
 	var building: BuildingResource = Buildings.get_by_id(building_id)
-	game_grid.get_cell(x, y).set_ghost(building.icon)
+	game_grid.get_cell_at(pos).set_ghost(building.icon)
 
 
 ## Remove the ghost building from its position
 func clear_ghost_building() -> void:
 	if ghost_building_position.y >= 0:
-		game_grid.get_cell(ghost_building_position.x, ghost_building_position.y).set_ghost(null)
+		game_grid.get_cell_at(ghost_building_position).set_ghost(null)
 		ghost_building_position = Vector2i(-1, -1)
 
 
