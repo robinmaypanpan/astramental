@@ -132,7 +132,11 @@ func update() -> void:
 			var heat_generated_per_sec: float = get_excess_heat_production_at(player_id, position)
 			if heat_generated_per_sec > 0:
 				var update_interval: float = Globals.settings.update_interval
-				var heat_generated_this_tick: float = heat_generated_per_sec * update_interval
+				# heat generation is affected by energy
+				var energy_satisfaction: float = Model.get_energy_satisfaction(player_id)
+				var heat_generated_this_tick: float = (
+					heat_generated_per_sec * update_interval * energy_satisfaction
+				)
 				var current_heat: float = heat_source.heat
 				heat_source.heat = min(
 					current_heat + heat_generated_this_tick,
@@ -146,6 +150,7 @@ func update() -> void:
 			var spare_cooling_per_sec: float = get_spare_cooling_at(player_id, position)
 			if spare_cooling_per_sec > 0:
 				var update_interval: float = Globals.settings.update_interval
+				# cooling is independent of energy
 				var spare_cooling_this_tick: float = spare_cooling_per_sec * update_interval
 				# find buildings next to this one with excess heat to cool off
 				var buildings_to_cool_off: Array[HeatComponent] = []
