@@ -123,6 +123,48 @@ func print_flow_rates() -> void:
 			print("heat component at %s: %d/%d" % [position, heat_consumed, heat_passive_cool_off])
 
 
+## Set the heat in the component and in the model to the specified heat.
+func set_heat(heat_component: HeatComponent, new_heat: float) -> void:
+	heat_component.heat = new_heat
+	var player_id = heat_component.building_entity.player_id
+	var position = heat_component.building_entity.position
+	Model.set_heat_to.rpc(player_id, position, new_heat)
+
+
+## Given a list of buildings and available cooling, cool off the hottest building. If there is
+## a tie, cool off all hottest buildings evenly.
+func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: float) -> void:
+	# sort by heat, descending
+	buildings.sort_custom(func(c1, c2): return c1.heat > c2.heat)
+	var index = 0
+	while not is_zero_approx(spare_cooling):
+		var hottest_building_heat: float = buildings[index].heat
+		if is_zero_approx(hottest_building_heat):
+			break # nothing left to cool down
+		var next_hottest_building_heat: float
+		if index < buildings.size() - 1:
+			next_hottest_building_heat = buildings[index + 1].heat
+		else:
+			next_hottest_building_heat = 0.0 # we went through all the buildings, cool to 0
+		var num_buildings_to_cool: int = index + 1
+		# cool down all buildings to cool to the next hottest building heat
+		var cool_amount = hottest_building_heat - next_hottest_building_heat
+		var required_heat: float = num_buildings_to_cool * cool_amount
+		if required_heat <= spare_cooling:
+			# we have enough cooling? cool the buildings
+			spare_cooling -= required_heat
+		else:
+			# we don't have enough cooling? cool evenly
+			cool_amount = spare_cooling / num_buildings_to_cool
+			spare_cooling = 0.0
+		# actually cool all the buildings
+		for i in range(num_buildings_to_cool):
+			set_heat(buildings[i], buildings[i].heat - cool_amount)
+		# cool off one more building than we were previously,
+		# which is now the same temp as last building or the loop is about to break
+		index += 1
+
+
 ## Update all heat buildings based on the steady state flow of heat.
 func update() -> void:
 	for player_id: int in ConnectionSystem.get_player_id_list():
@@ -138,12 +180,12 @@ func update() -> void:
 					heat_generated_per_sec * update_interval * energy_satisfaction
 				)
 				var current_heat: float = heat_source.heat
-				heat_source.heat = min(
+				var new_heat: float = min(
 					current_heat + heat_generated_this_tick,
 					heat_source.heat_capacity)
-				Model.set_heat_to.rpc(player_id, position, heat_source.heat)
+				set_heat(heat_source, new_heat)
 
-		# if a sink has excess cooling, find buildings with heat in them and cool them off evenly
+		# if a sink has excess cooling, find buildings with heat in them and cool them off
 		for heat_sink: HeatComponent in heat_sinks[player_id]:
 			# NOTE: Assigning position as Vector2i here causes a type mismatch error
 			# when accessing edges_out_of[position], so it must be Variant.
@@ -154,18 +196,12 @@ func update() -> void:
 				# cooling is independent of energy
 				var spare_cooling_this_tick: float = spare_cooling_per_sec * update_interval
 				# find buildings next to this one with excess heat to cool off
-				var buildings_to_cool_off: Array[HeatComponent] = []
+				var buildings_to_cool: Array[HeatComponent] = []
 				var adjacent_vertices: Array = heat_flow_graphs[player_id].graph.edges_out_of[position]
 				for adjacent_vertex: Vector2i in adjacent_vertices:
 					var heat_component = heat_flow_graphs[player_id].get_component_at(adjacent_vertex)
 					if heat_component and heat_component.heat > 0:
-						buildings_to_cool_off.append(heat_component)
-				# evenly take heat from all buildings that have heat
-				if buildings_to_cool_off != []:
-					var cooling_per_building: float = spare_cooling_this_tick / buildings_to_cool_off.size()
-					for heat_component: HeatComponent in buildings_to_cool_off:
-						heat_component.heat -= cooling_per_building
-						Model.set_heat_to.rpc(
-							player_id,
-							heat_component.building_entity.position,
-							heat_component.heat)
+						buildings_to_cool.append(heat_component)
+				# cool off the hottest building
+				if buildings_to_cool != []:
+					cool_off_hottest_building(buildings_to_cool, spare_cooling_this_tick)
