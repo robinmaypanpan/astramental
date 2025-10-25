@@ -34,7 +34,7 @@ var ores_layout_dirty: bool = false
 ## Whether the buildings list in Model was updated this frame.
 var buildings_dirty: bool = false
 
-##
+## Whether the heat on buildings in Model was updated this frame.
 var heat_dirty: bool = false
 
 func _ready():

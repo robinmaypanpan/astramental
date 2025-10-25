@@ -25,10 +25,12 @@ extends BuildingComponent
 ## Carrier: no production, passive cool off, or heat capacity. (not implemented yet)
 var heat_building_type: Types.HeatBuilding
 
+## Is this building a source.
 var is_source: bool:
     get:
         return heat_building_type == Types.HeatBuilding.SOURCE
 
+## Is this building a sink.
 var is_sink: bool:
     get:
         return heat_building_type == Types.HeatBuilding.SINK
@@ -37,10 +39,10 @@ var is_sink: bool:
 var heat: float
 
 ## The current state of this building.
-## Running: building is working as expected.
-##          transitions to overheated when reaching its heat capacity.
-## Overheated: building was above heat capacity and doesn't produce heat or update normally.
-##             transitions back to running when reaching 0 heat.
+## Running: Building is working as expected.
+##          Transitions to overheated when reaching its heat capacity.
+## Overheated: Building was above heat capacity and doesn't produce heat or update normally.
+##             Transitions to running when reaching 0 heat.
 var heat_state: Types.HeatState
 
 func _init(

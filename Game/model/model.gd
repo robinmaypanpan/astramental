@@ -286,16 +286,19 @@ func get_storage_cap(player_id: int, type: Types.Item) -> float:
 		return 0.0
 
 
-## Set the heat data for the given player to the data given.
+## Set the heat data for the given player to the data given. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
-func add_heat_data_at(player_id: int, position: Vector2i, heat: float, heat_capacity: float) -> void:
+func add_heat_data_at(
+		player_id: int, position: Vector2i, heat: float, heat_capacity: float
+	) -> void:
+	# start function
 	var player_state = player_states.get_state(player_id)
 	var heat_data = HeatData.new(position, heat, heat_capacity)
 	player_state.heat_data_list.append(heat_data)
 	heat_data_updated.emit()
 
 
-## Delete the heat data for the given player at the given position.
+## Delete the heat data for the given player at the given position. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
 func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
 	var player_state = player_states.get_state(player_id)
@@ -312,7 +315,7 @@ func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
 		heat_data_updated.emit()
 
 
-## Set the heat data heat value at the given position to the given value.
+## Set the heat data heat value at the given position to the given value. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
 func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:
 	var player_state = player_states.get_state(player_id)
@@ -322,7 +325,7 @@ func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:
 			heat_data_updated.emit()
 
 
-## Get the heat data for the given player.
+## Get the heat data list for the given player.
 func get_heat_data(player_id: int) -> Array[HeatData]:
 	var player_state = player_states.get_state(player_id)
 	return player_state.heat_data_list
@@ -349,6 +352,7 @@ func _start_game():
 	launch_game.rpc()
 
 
+## Set start item counts and storage caps at start of game.
 func set_starting_item_counts_and_storage_caps() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
 		for type in Globals.settings.starting_resources.keys():

@@ -62,9 +62,9 @@ func get_owning_player_id() -> int:
 
 
 ## Place a building at the desired location
-func place_building(position: Vector2i, building_id: String) -> void:
+func place_building(pos: Vector2i, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
-	game_grid.get_cell(position.x, position.y).set_icon(building.icon)
+	game_grid.get_cell(pos.x, pos.y).set_icon(building.icon)
 
 
 ## Clear all the heat bars
@@ -74,8 +74,8 @@ func clear_heat_bars() -> void:
 
 
 ## Set the heat bar for the given cell.
-func set_heat_bar(position: Vector2i, heat: float, heat_capacity: float) -> void:
-	game_grid.get_cell(position.x, position.y).set_heat_bar(heat, heat_capacity)
+func set_heat_bar(pos: Vector2i, heat: float, heat_capacity: float) -> void:
+	game_grid.get_cell(pos.x, pos.y).set_heat_bar(heat, heat_capacity)
 
 ## Set the position of the ghost building at the indicated position
 func set_ghost_building(x: int, y: int, building_id: String) -> void:

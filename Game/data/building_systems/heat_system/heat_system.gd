@@ -1,12 +1,24 @@
 class_name HeatSystem
 extends Node
+## Maintains and updates the heat of all buildings.
 
+## Represents the heat flow relationships between the heat buildings.
+## Is the starting point for the Ford-Fulkerson algorithm.
 var heat_flow_graphs: Dictionary[int, HeatFlowGraph]
 
+## Represents the steady state flow of heat as the application of the Ford-Fulkerson algorithm
+## to the heat flow graph.
+## The ending state of this algorithm is as follows:
+## weight from omni-source -> source: excess heat produced by building
+## weight from source -> omni-source: consumed heat flow from sinks
+## weight from omni-sink -> sink: unused cooling from building
+## weight from sink -> omni-sink: consumed heat flow from sources
 var steady_state_flows: Dictionary[int, HeatFlowGraph]
 
+## List of all heat sources.
 var heat_sources: Dictionary[int, Array]
 
+## List of all heat sinks.
 var heat_sinks: Dictionary[int, Array]
 
 func _ready() -> void:
@@ -15,6 +27,8 @@ func _ready() -> void:
 	Model.game_ready.connect(_on_game_ready)
 
 
+## When a heat component is added, update the internal state and re-calculate the steady state
+## flow of heat.
 func _on_component_added(component: BuildingComponent) -> void:
 	if component is HeatComponent:
 		var player_id = component.building_entity.player_id
@@ -36,6 +50,9 @@ func _on_component_added(component: BuildingComponent) -> void:
 
 		print_flow_rates()
 
+
+## When a heat component is removed, update the internal state and re-calculate the steady state
+## flow of heat.
 func _on_component_removed(component: BuildingComponent) -> void:
 	if component is HeatComponent:
 		var player_id = component.building_entity.player_id
@@ -55,6 +72,8 @@ func _on_component_removed(component: BuildingComponent) -> void:
 
 		print_flow_rates()
 
+
+## When game is ready, initialize starting state of heat system.
 func _on_game_ready() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
 		heat_flow_graphs[player_id] = HeatFlowGraph.new()
@@ -62,6 +81,9 @@ func _on_game_ready() -> void:
 		heat_sources[player_id] = []
 		heat_sinks[player_id] = []
 
+
+## Use the Ford-Fulkerson algorithm to calculate the steady state flow of heat.
+## Algorithm reference: https://brilliant.org/wiki/ford-fulkerson-algorithm/
 func calculate_steady_state_flow(player_id: int) -> void:
 	var heat_flow_graph = heat_flow_graphs[player_id]
 	steady_state_flows[player_id] = heat_flow_graph.duplicate_graph()
@@ -70,31 +92,40 @@ func calculate_steady_state_flow(player_id: int) -> void:
 		steady_state_flows[player_id].augment_flow_along_path(augmenting_path)
 		augmenting_path = steady_state_flows[player_id].find_augmenting_path()
 
+
+## Get the excess heat production for the source at the given position.
 func get_excess_heat_production_at(player_id: int, position: Vector2i) -> float:
 	return steady_state_flows[player_id].graph.get_weight(HeatFlowGraph.SOURCE, position)
 
+
+## Get the spare cooling rate for the sink at the given position.
 func get_spare_cooling_at(player_id: int, position: Vector2i) -> float:
 	return steady_state_flows[player_id].graph.get_weight(position, HeatFlowGraph.SINK)
 
+
+## Debug function for printing the flow rates for all sources and sinks.
 func print_flow_rates() -> void:
 	var heat_components = ComponentManager.get_components("HeatComponent")
 	for heat_component: HeatComponent in heat_components:
-		if heat_component.heat_building_type == Types.HeatBuilding.SOURCE:
+		if heat_component.is_source:
 			var heat_production = heat_component.heat_production
 			var position = heat_component.building_entity.position
 			var player_id = heat_component.building_entity.player_id
 			var heat_graph = steady_state_flows[player_id].graph
 			var heat_consumed = heat_graph.get_weight(position, HeatFlowGraph.SOURCE)
 			print("heat component at %s: %d/%d" % [position, heat_consumed, heat_production])
-		elif heat_component.heat_building_type == Types.HeatBuilding.SINK:
+		elif heat_component.is_sink:
 			var heat_passive_cool_off = heat_component.heat_passive_cool_off
 			var position = heat_component.building_entity.position
 			var player_id = heat_component.building_entity.player_id
 			var heat_consumed = steady_state_flows[player_id].graph.get_weight(HeatFlowGraph.SINK, position)
 			print("heat component at %s: %d/%d" % [position, heat_consumed, heat_passive_cool_off])
 
+
+## Update all heat buildings based on the steady state flow of heat.
 func update() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
+		# heat each source up by the excess heat production the steady state says
 		for heat_source: HeatComponent in heat_sources[player_id]:
 			var position = heat_source.building_entity.position
 			var heat_generated_per_sec = get_excess_heat_production_at(player_id, position)
@@ -107,6 +138,7 @@ func update() -> void:
 					heat_source.heat_capacity)
 				Model.set_heat_to.rpc(player_id, position, heat_source.heat)
 
+		# if a sink has excess cooling, find buildings with heat in them and cool them off evenly
 		for heat_sink: HeatComponent in heat_sinks[player_id]:
 			var position: Variant = heat_sink.building_entity.position
 			var spare_cooling_per_sec = get_spare_cooling_at(player_id, position)

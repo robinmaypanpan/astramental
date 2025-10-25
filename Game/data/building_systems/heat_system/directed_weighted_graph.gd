@@ -1,9 +1,14 @@
 class_name DirectedWeightedGraph
 extends Node
+## Represent a directed weighted graph.
 
 # Using an adjacency list representation. Each vertex is labelled by a string,
 # and stores an array of all vertices it is adjacent to.
+
+## Given a vertex, return all vertices adjacent to that vertex.
 var edges_out_of: Dictionary[Variant, Array]
+## Given a vertex, return the weights of all the edges leaving that vertex.
+## The ith entry of weights corresponds to the ith entry of `edges_out_of`.
 var weights: Dictionary[Variant, Array]
 
 ## Create a graph with no vertices and no edges.
