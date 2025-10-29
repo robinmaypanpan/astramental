@@ -160,21 +160,25 @@ func refund_costs(player_id: int, building_id: String) -> void:
 
 
 ## Returns true if we can build the building indicated at the location specified
-func can_build_at_location(building_id: String, position: PlayerGridPosition) -> bool:
+func can_build_at_location(building_id: String, player_id: int, grid_position: Vector2i) -> bool:
+	if grid_position.x < 0 or grid_position.x >= WorldGenModel.num_cols:
+		# Out of bounds
+		return false
+
 	# Make sure we can build the building somewhere, before continuing
-	if not can_afford(building_id, position.player_id):
+	if not can_afford(building_id, player_id):
 		# We can't build this building at all. just return false
 		return false
 
 	# Make sure that the space is open
-	if get_building_at(position.player_id, position.tile_position) != null:
+	if get_building_at(player_id, grid_position) != null:
 		# The space isn't open. We can't build there.
 		return false
 
 	# Make sure that the building fits into this part of the grid
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 
-	if building.placement_destination != WorldGenModel.get_layer_type(position.tile_position.y):
+	if building.placement_destination != WorldGenModel.get_layer_type(grid_position.y):
 		# Can't place this building in this layer
 		return false
 
@@ -182,8 +186,8 @@ func can_build_at_location(building_id: String, position: PlayerGridPosition) ->
 
 
 ## Returns true if this player can delete the building at the given position.
-func can_remove_building(position: PlayerGridPosition) -> bool:
-	if get_building_at(position.player_id, position.tile_position) == null:
+func can_remove_building(player_id: int, grid_position: Vector2i) -> bool:
+	if get_building_at(player_id, grid_position) == null:
 		# no building to remove
 		return false
 
@@ -214,22 +218,22 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 
 
 ## Returns the building at the given position
-func get_building_at(player_id: int, tile_position: Vector2i) -> BuildingEntity:
+func get_building_at(player_id: int, grid_position: Vector2i) -> BuildingEntity:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	for building_entity: BuildingEntity in player_state.buildings_list:
-		if building_entity.position == tile_position:
+		if building_entity.position == grid_position:
 			return building_entity
 	return null
 
 
 ## Set the building at the given position to the given building type for all players.
 @rpc("any_peer", "call_local", "reliable")
-func set_building_at(player_id: int, tile_position: Vector2i, building_id: String) -> void:
+func set_building_at(player_id: int, grid_position: Vector2i, building_id: String) -> void:
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("doing set building for %d" % caller_id)
-	if can_build_at_location(building_id, PlayerGridPosition.new(player_id, tile_position)):
+	if can_build_at_location(building_id, player_id, grid_position):
 		var player_state := player_states.get_state(player_id)
-		player_state.add_building(tile_position, building_id)
+		player_state.add_building(grid_position, building_id)
 		buildings_updated.emit()
 
 
