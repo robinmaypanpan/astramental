@@ -40,6 +40,9 @@ var ores_layout: Array[Types.Ore]
 ## Contains a list of the positions of each building for this player.
 var buildings_list: Array[BuildingEntity]
 
+## Contains a list of all cells where heat is located.
+var heat_data_list: Array[HeatData]
+
 
 func _ready() -> void:
 	# Initialize ores_layout array
@@ -107,7 +110,7 @@ func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
 ## Add a building to the buildings list.
 ## Also adds all corresponding components to ComponentManager.
 func add_building(tile_position: Vector2i, building_id: String) -> void:
-	var building = BuildingEntity.new(id, tile_position, building_id)
+	var building: BuildingEntity = BuildingEntity.new(id, tile_position, building_id)
 	ComponentManager.init_components_building(building)
 	buildings_list.append(building)
 

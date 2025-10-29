@@ -42,11 +42,16 @@ func set_icon(texture: Texture):
 func set_background(texture: Texture):
 	background.texture = texture
 
+## Set the heat bar for this cell
+func set_heat_bar(heat: float, heat_capacity: float):
+	heat_indicator.max_value = heat_capacity
+	heat_indicator.value = heat
+	heat_indicator.visible = true
 
-## Set the heat level for this cell
-func set_heat(value: float):
-	heat_indicator.value = value
-	heat_indicator.visible = value > 0.0
+## Clear the heat bar for this cell
+func clear_heat_bar() -> void:
+	heat_indicator.visible = false
+	heat_indicator.value = 0.0
 
 
 ## set the ghost texture for this cell
