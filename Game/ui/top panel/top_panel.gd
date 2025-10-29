@@ -3,6 +3,7 @@ extends Panel
 @onready var tooltip_container: Container = %TooltipContainer
 @onready var cell_tooltip: Tooltip = %CellTooltip
 @onready var building_tooltip: Tooltip = %BuildingTooltip
+@onready var resource_tooltip: Tooltip = %ResourceTooltip
 
 
 func _ready() -> void:
@@ -15,9 +16,12 @@ func on_tooltip_target_changed(control_node: Control):
 	# TODO: Initialize to a fallback tooltip
 
 	var next_tooltip: Tooltip = null
-	
+
 	if control_node is BuildMenuItem:
 		next_tooltip = building_tooltip
+
+	if control_node is ItemDisplayRow:
+		next_tooltip = resource_tooltip
 
 	if control_node is Cell:
 		next_tooltip = cell_tooltip
