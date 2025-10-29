@@ -28,8 +28,7 @@ func _ready() -> void:
 	Model.game_ready.connect(on_game_ready)
 
 
-## When a heat component is added, update the internal state and re-calculate the steady state
-## flow of heat.
+## When a heat component is added, update the internal state.
 func on_component_added(component: BuildingComponent) -> void:
 	if component is not HeatComponent:
 		return
@@ -46,8 +45,7 @@ func on_component_added(component: BuildingComponent) -> void:
 		component.heat_capacity)
 
 
-## When a heat component is removed, update the internal state and re-calculate the steady state
-## flow of heat.
+## When a heat component is removed, update the internal state.
 func on_component_removed(component: BuildingComponent) -> void:
 	if component is not HeatComponent:
 		return
@@ -132,7 +130,7 @@ func find_adjacent_buildings_with_heat(player_id: int, position: Vector2i) -> Ar
 
 
 ## Given a list of buildings and available cooling, cool off the hottest building. If there is
-## a tie, cool off all hottest buildings evenly.
+## a tie, cool off all hottest buildings evenly. Return the amount of cooling done.
 func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: float) -> float:
 	if buildings.is_empty():
 		return 0.0
@@ -207,7 +205,8 @@ func update() -> void:
 
 		# if a sink has excess cooling, find buildings with heat in them and cool them off
 		for heat_sink: HeatComponent in heat_flow_graph.heat_sinks:
-			# setting position to Vector2i gives an error
+			# NOTE: Assigning position as Vector2i here causes a type mismatch error
+			# when accessing edges_out_of[position], so it must be Variant.
 			var position: Variant = heat_sink.building_entity.position
 			var spare_cooling_per_sec: float = get_spare_cooling_at(player_id, position)
 			var update_interval: float = Globals.settings.update_interval
