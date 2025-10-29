@@ -172,8 +172,8 @@ func augment_flow_along_path(path: Array[Variant]):
 		var weight: float = graph.get_weight(start, end)
 		min_weight = min(min_weight, weight)
 	# augment flow along path
+	print("augmenting flow along path %s, min weight %f" % [path, min_weight])
 	for i in range(path.size() - 1):
-		print("augmenting flow along path %s, min weight %f" % [path, min_weight])
 		var start: Variant = path[i]
 		var end: Variant = path[i+1]
 		var forward_weight: float = graph.get_weight(start, end)
