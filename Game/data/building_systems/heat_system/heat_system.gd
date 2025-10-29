@@ -15,12 +15,6 @@ var heat_flow_graphs: Dictionary[int, HeatFlowGraph]
 ## weight from sink -> omni-sink: consumed heat flow from sources
 var steady_state_flows: Dictionary[int, HeatFlowGraph]
 
-## List of all heat sources.
-var heat_sources: Dictionary[int, Array]
-
-## List of all heat sinks.
-var heat_sinks: Dictionary[int, Array]
-
 func _ready() -> void:
 	ComponentManager.component_added.connect(_on_component_added)
 	ComponentManager.component_removed.connect(_on_component_removed)
@@ -34,11 +28,6 @@ func _on_component_added(component: BuildingComponent) -> void:
 		var player_id: int = component.building_entity.player_id
 
 		heat_flow_graphs[player_id].add_building(component)
-
-		if component.is_source:
-			heat_sources[player_id].append(component)
-		elif component.is_sink:
-			heat_sinks[player_id].append(component)
 
 		Model.add_heat_data_at.rpc(
 			component.building_entity.player_id,
@@ -57,11 +46,6 @@ func _on_component_removed(component: BuildingComponent) -> void:
 	if component is HeatComponent:
 		var player_id: int = component.building_entity.player_id
 
-		if component.is_source:
-			heat_sources.erase(component)
-		elif component.is_sink:
-			heat_sinks.erase(component)
-
 		heat_flow_graphs[player_id].remove_building(component)
 
 		Model.remove_heat_data_at.rpc(
@@ -78,8 +62,6 @@ func _on_game_ready() -> void:
 	for player_id: int in ConnectionSystem.get_player_id_list():
 		heat_flow_graphs[player_id] = HeatFlowGraph.new()
 		steady_state_flows[player_id] = HeatFlowGraph.new()
-		heat_sources[player_id] = []
-		heat_sinks[player_id] = []
 
 
 ## Use the Ford-Fulkerson algorithm to calculate the steady state flow of heat.
@@ -168,8 +150,9 @@ func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: f
 ## Update all heat buildings based on the steady state flow of heat.
 func update() -> void:
 	for player_id: int in ConnectionSystem.get_player_id_list():
+		var heat_flow_graph: HeatFlowGraph = heat_flow_graphs[player_id]
 		# heat each source up by the excess heat production the steady state says
-		for heat_source: HeatComponent in heat_sources[player_id]:
+		for heat_source: HeatComponent in heat_flow_graph.heat_sources:
 			var position: Vector2i = heat_source.building_entity.position
 			var heat_generated_per_sec: float = get_excess_heat_production_at(player_id, position)
 			if heat_generated_per_sec > 0:
@@ -186,9 +169,8 @@ func update() -> void:
 				set_heat(heat_source, new_heat)
 
 		# if a sink has excess cooling, find buildings with heat in them and cool them off
-		for heat_sink: HeatComponent in heat_sinks[player_id]:
-			# NOTE: Assigning position as Vector2i here causes a type mismatch error
-			# when accessing edges_out_of[position], so it must be Variant.
+		for heat_sink: HeatComponent in heat_flow_graph.heat_sinks:
+			# setting position to Vector2i gives an error
 			var position: Variant = heat_sink.building_entity.position
 			var spare_cooling_per_sec: float = get_spare_cooling_at(player_id, position)
 			if spare_cooling_per_sec > 0:
@@ -197,9 +179,9 @@ func update() -> void:
 				var spare_cooling_this_tick: float = spare_cooling_per_sec * update_interval
 				# find buildings next to this one with excess heat to cool off
 				var buildings_to_cool: Array[HeatComponent] = []
-				var adjacent_vertices: Array = heat_flow_graphs[player_id].graph.edges_out_of[position]
+				var adjacent_vertices: Array = heat_flow_graph.graph.edges_out_of[position]
 				for adjacent_vertex: Vector2i in adjacent_vertices:
-					var heat_component = heat_flow_graphs[player_id].get_component_at(adjacent_vertex)
+					var heat_component = heat_flow_graph.get_component_at(adjacent_vertex)
 					if heat_component and heat_component.heat > 0:
 						buildings_to_cool.append(heat_component)
 				# cool off the hottest building

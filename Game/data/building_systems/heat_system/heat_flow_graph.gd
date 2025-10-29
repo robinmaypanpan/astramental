@@ -26,6 +26,12 @@ var graph: DirectedWeightedGraph
 ## Store a map to convert vertex positions to their corresponding heat components.
 var vertex_to_component_map: Dictionary[Vector2i, HeatComponent]
 
+## List of all heat sources.
+var heat_sources: Array[HeatComponent]
+
+## List of all heat sinks.
+var heat_sinks: Array[HeatComponent]
+
 
 ## Create a new heat flow graph containing only the omni-source and omni-sink.
 func _init() -> void:
@@ -62,6 +68,7 @@ func add_building(heat_component: HeatComponent) -> void:
 	vertex_to_component_map[position] = heat_component
 
 	if heat_component.is_source:
+		heat_sources.append(heat_component)
 		# omni-source -> source
 		_add_two_way_flow_edge(SOURCE, position, heat_component.heat_production)
 		for neighbor_position: Vector2i in _get_neighbors(position):
@@ -70,6 +77,7 @@ func add_building(heat_component: HeatComponent) -> void:
 				_add_two_way_flow_edge(position, neighbor_position, HEAT_MAX_FLOW)
 
 	elif heat_component.is_sink:
+		heat_sinks.append(heat_component)
 		# sink -> omni-sink
 		_add_two_way_flow_edge(position, SINK, heat_component.heat_passive_cool_off)
 		for neighbor_position: Vector2i in _get_neighbors(position):
@@ -83,6 +91,11 @@ func add_building(heat_component: HeatComponent) -> void:
 
 ## Given a heat component, remove that building from the heat flow graph.
 func remove_building(heat_component: HeatComponent) -> void:
+	if heat_component.is_source:
+		heat_sources.erase(heat_component)
+	elif heat_component.is_sink:
+		heat_sinks.erase(heat_component)
+
 	var position: Vector2i = heat_component.building_entity.position
 	graph.remove_vertex(position)
 	vertex_to_component_map.erase(position)
@@ -102,6 +115,8 @@ func duplicate_graph() -> HeatFlowGraph:
 	var new_heat_flow_graph: HeatFlowGraph = HeatFlowGraph.new()
 	new_heat_flow_graph.graph = new_graph
 	new_heat_flow_graph.vertex_to_component_map = vertex_to_component_map.duplicate()
+	new_heat_flow_graph.heat_sources = heat_sources
+	new_heat_flow_graph.heat_sinks = heat_sinks
 	return new_heat_flow_graph
 
 
