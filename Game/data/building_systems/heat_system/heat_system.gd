@@ -6,6 +6,13 @@ extends Node
 ## Is the starting point for the Ford-Fulkerson algorithm.
 var heat_flow_graphs: Dictionary[int, HeatFlowGraph]
 
+## Represents the most up to date version of the heat flow graphs.
+## Becomes the current heat flow graph every update.
+var heat_flow_graphs_current: Dictionary[int, HeatFlowGraph]
+
+## Whether the heat flow graphs have been changed this frame.
+var heat_flow_graphs_dirty: Dictionary[int, bool]
+
 ## Represents the steady state flow of heat as the application of the Ford-Fulkerson algorithm
 ## to the heat flow graph.
 ## The ending state of this algorithm is as follows:
@@ -27,15 +34,14 @@ func _on_component_added(component: BuildingComponent) -> void:
 	if component is HeatComponent:
 		var player_id: int = component.building_entity.player_id
 
-		heat_flow_graphs[player_id].add_building(component)
+		heat_flow_graphs_current[player_id].add_building(component)
+		heat_flow_graphs_dirty[player_id] = true
 
 		Model.add_heat_data_at.rpc(
 			component.building_entity.player_id,
 			component.building_entity.position,
 			component.heat,
 			component.heat_capacity)
-
-		calculate_steady_state_flow(player_id)
 
 		print_flow_rates()
 
@@ -46,13 +52,12 @@ func _on_component_removed(component: BuildingComponent) -> void:
 	if component is HeatComponent:
 		var player_id: int = component.building_entity.player_id
 
-		heat_flow_graphs[player_id].remove_building(component)
+		heat_flow_graphs_current[player_id].remove_building(component)
+		heat_flow_graphs_dirty[player_id] = true
 
 		Model.remove_heat_data_at.rpc(
 			player_id,
 			component.building_entity.position)
-
-		calculate_steady_state_flow(player_id)
 
 		print_flow_rates()
 
@@ -61,7 +66,9 @@ func _on_component_removed(component: BuildingComponent) -> void:
 func _on_game_ready() -> void:
 	for player_id: int in ConnectionSystem.get_player_id_list():
 		heat_flow_graphs[player_id] = HeatFlowGraph.new()
+		heat_flow_graphs_current[player_id] = HeatFlowGraph.new()
 		steady_state_flows[player_id] = HeatFlowGraph.new()
+		heat_flow_graphs_dirty[player_id] = false
 
 
 ## Use the Ford-Fulkerson algorithm to calculate the steady state flow of heat.
@@ -150,6 +157,12 @@ func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: f
 ## Update all heat buildings based on the steady state flow of heat.
 func update() -> void:
 	for player_id: int in ConnectionSystem.get_player_id_list():
+		# was this updated this frame? if so, update our heat flow graph to the current one
+		if heat_flow_graphs_dirty[player_id]:
+			heat_flow_graphs[player_id] = heat_flow_graphs_current[player_id].duplicate_graph()
+			heat_flow_graphs_dirty[player_id] = false
+			calculate_steady_state_flow(player_id)
+
 		var heat_flow_graph: HeatFlowGraph = heat_flow_graphs[player_id]
 		# heat each source up by the excess heat production the steady state says
 		for heat_source: HeatComponent in heat_flow_graph.heat_sources:
