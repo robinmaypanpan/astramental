@@ -68,12 +68,23 @@ func on_game_ready() -> void:
 		steady_state_flows[player_id] = HeatFlowGraph.new()
 		heat_flow_graphs_dirty[player_id] = false
 
+	var player_states = Model.player_states
+	player_states.energy_satisfaction_changed.connect(on_energy_satisfaction_changed)
+
+
+## When energy satisfaction is changed, set heat flow graphs to dirty to recalc with new energy
+## satisfaction.
+func on_energy_satisfaction_changed(player_id: int, _new_energy_satisfaction: float):
+	heat_flow_graphs_dirty[player_id] = true
+
 
 ## Use the Ford-Fulkerson algorithm to calculate the steady state flow of heat.
 ## Algorithm reference: https://brilliant.org/wiki/ford-fulkerson-algorithm/
 func calculate_steady_state_flow(player_id: int) -> void:
 	var heat_flow_graph: HeatFlowGraph = heat_flow_graphs[player_id]
 	steady_state_flows[player_id] = heat_flow_graph.duplicate_graph()
+	var energy_satisfaction = Model.get_energy_satisfaction(player_id)
+	steady_state_flows[player_id].adjust_weights_for_energy_satisfaction(energy_satisfaction)
 	var augmenting_path: Array = steady_state_flows[player_id].find_augmenting_path()
 	while augmenting_path != []:
 		steady_state_flows[player_id].augment_flow_along_path(augmenting_path)
@@ -189,14 +200,8 @@ func update() -> void:
 		# heat each source up by the excess heat production the steady state says
 		for heat_source: HeatComponent in heat_flow_graph.heat_sources:
 			var position: Vector2i = heat_source.building_entity.position
-			var heat_generated_per_sec: float = get_excess_heat_production_at(player_id, position)
-			if heat_generated_per_sec > 0:
-				var update_interval: float = Globals.settings.update_interval
-				# heat generation is affected by energy
-				var energy_satisfaction: float = Model.get_energy_satisfaction(player_id)
-				var heat_generated_this_tick: float = (
-					heat_generated_per_sec * update_interval * energy_satisfaction
-				)
+			var heat_generated_this_tick: float = get_excess_heat_production_at(player_id, position)
+			if heat_generated_this_tick > 0:
 				var current_heat: float = heat_source.heat
 				var new_heat: float = min(
 					current_heat + heat_generated_this_tick,
@@ -208,10 +213,7 @@ func update() -> void:
 			# NOTE: Assigning position as Vector2i here causes a type mismatch error
 			# when accessing edges_out_of[position], so it must be Variant.
 			var position: Variant = heat_sink.building_entity.position
-			var spare_cooling_per_sec: float = get_spare_cooling_at(player_id, position)
-			var update_interval: float = Globals.settings.update_interval
-			# cooling is independent of energy
-			var spare_cooling_this_tick: float = spare_cooling_per_sec * update_interval
+			var spare_cooling_this_tick: float = get_spare_cooling_at(player_id, position)
 			var spare_heat_capacity: float = heat_sink.heat_capacity - heat_sink.heat
 			var total_capacity_cooling: float = spare_cooling_this_tick + spare_heat_capacity
 			if total_capacity_cooling > 0:
