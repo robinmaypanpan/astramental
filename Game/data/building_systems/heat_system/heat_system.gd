@@ -198,21 +198,18 @@ func update() -> void:
 
 		var heat_flow_graph: HeatFlowGraph = heat_flow_graphs[player_id]
 		# heat each source up by the excess heat production the steady state says
+
 		for heat_source: HeatComponent in heat_flow_graph.heat_sources:
 			var position: Vector2i = heat_source.building_entity.position
 			var heat_generated_this_tick: float = get_excess_heat_production_at(player_id, position)
 			if heat_generated_this_tick > 0:
 				var current_heat: float = heat_source.heat
-				var new_heat: float = min(
-					current_heat + heat_generated_this_tick,
-					heat_source.heat_capacity)
+				var new_heat: float = current_heat + heat_generated_this_tick
 				set_heat(heat_source, new_heat)
 
 		# if a sink has excess cooling, find buildings with heat in them and cool them off
 		for heat_sink: HeatComponent in heat_flow_graph.heat_sinks:
-			# NOTE: Assigning position as Vector2i here causes a type mismatch error
-			# when accessing edges_out_of[position], so it must be Variant.
-			var position: Variant = heat_sink.building_entity.position
+			var position: Vector2i = heat_sink.building_entity.position
 			var spare_cooling_this_tick: float = get_spare_cooling_at(player_id, position)
 			var spare_heat_capacity: float = heat_sink.heat_capacity - heat_sink.heat
 			var total_capacity_cooling: float = spare_cooling_this_tick + spare_heat_capacity
@@ -227,3 +224,25 @@ func update() -> void:
 				var net_heat_change = total_heat_pulled - spare_cooling_this_tick
 				var new_heat = max(heat_sink.heat + net_heat_change, 0.0)
 				set_heat(heat_sink, new_heat)
+
+		# overheated heat sources just cool down as much as they can
+		for overheated_source: HeatComponent in heat_flow_graph.overheated_heat_sources:
+			var update_interval = Globals.settings.update_interval
+			var cooling_this_tick: float = overheated_source.heat_passive_cool_off * update_interval
+			var new_heat = overheated_source.heat - cooling_this_tick
+			set_heat(overheated_source, new_heat)
+
+		# check if buildings are overheated/not overheated
+		for heat_source: HeatComponent in heat_flow_graph.heat_sources:
+			if (heat_source.heat > heat_source.heat_capacity
+				or is_equal_approx(heat_source.heat, heat_source.heat_capacity)
+				):
+				heat_source.heat = heat_source.heat_capacity
+				heat_flow_graphs_current[player_id].set_building_overheated(heat_source)
+				heat_flow_graphs_dirty[player_id] = true
+
+		for overheated_source: HeatComponent in heat_flow_graph.overheated_heat_sources:
+			if overheated_source.heat < 0.0 or is_zero_approx(overheated_source.heat):
+				overheated_source.heat = 0.0
+				heat_flow_graphs_current[player_id].set_building_running(overheated_source)
+				heat_flow_graphs_dirty[player_id] = true

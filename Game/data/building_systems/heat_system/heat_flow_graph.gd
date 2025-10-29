@@ -29,8 +29,31 @@ var vertex_to_component_map: Dictionary[Vector2i, HeatComponent]
 ## List of all heat sources.
 var heat_sources: Array[HeatComponent]
 
+## List of overheated heat sources.
+var overheated_heat_sources: Array[HeatComponent]
+
 ## List of all heat sinks.
 var heat_sinks: Array[HeatComponent]
+
+
+# TODO: there has to be a better way to do this than manually adding new attributes every time
+# this has to be updated.
+## Do a deep copy of this object and return the duplicate.
+func duplicate_graph() -> HeatFlowGraph:
+	var new_heat_flow_graph: HeatFlowGraph = HeatFlowGraph.new()
+
+	var new_graph: DirectedWeightedGraph = DirectedWeightedGraph.new()
+	new_graph.edges_out_of = graph.edges_out_of.duplicate(true)
+	new_graph.weights = graph.weights.duplicate(true)
+	new_heat_flow_graph.graph = new_graph
+
+	new_heat_flow_graph.vertex_to_component_map = vertex_to_component_map.duplicate()
+
+	new_heat_flow_graph.heat_sources = heat_sources.duplicate()
+	new_heat_flow_graph.overheated_heat_sources = overheated_heat_sources.duplicate()
+	new_heat_flow_graph.heat_sinks = heat_sinks.duplicate()
+
+	return new_heat_flow_graph
 
 
 ## Create a new heat flow graph containing only the omni-source and omni-sink.
@@ -104,23 +127,33 @@ func remove_building(heat_component: HeatComponent) -> void:
 	vertex_to_component_map.erase(position)
 
 
+## Set a building to the overheated state and disconnect it from the omni-source.
+func set_building_overheated(heat_source: HeatComponent) -> void:
+	heat_source.heat_state = Types.HeatState.OVERHEATED
+	overheated_heat_sources.append(heat_source)
+	heat_sources.erase(heat_source)
+
+	var grid_position = heat_source.building_entity.position
+	graph.set_weight(SOURCE, grid_position, 0.0)
+
+
+## Set a building to the running state and reconnect it to the omni-source.
+func set_building_running(heat_source: HeatComponent) -> void:
+	heat_source.heat_state = Types.HeatState.RUNNING
+	heat_sources.append(heat_source)
+	overheated_heat_sources.erase(heat_source)
+
+	var grid_position = heat_source.building_entity.position
+	var update_interval = Globals.settings.update_interval
+	var heating_weight = heat_source.heat_production * update_interval
+	graph.set_weight(SOURCE, grid_position, heating_weight)
+
+
 ## Given a vertex in the graph, get its corresponding heat component.
 ## Return null if there isn't one.
 func get_component_at(position: Vector2i) -> HeatComponent:
 	return vertex_to_component_map.get(position)
 
-
-## Do a deep copy of this object and return the duplicate.
-func duplicate_graph() -> HeatFlowGraph:
-	var new_graph: DirectedWeightedGraph = DirectedWeightedGraph.new()
-	new_graph.edges_out_of = graph.edges_out_of.duplicate(true)
-	new_graph.weights = graph.weights.duplicate(true)
-	var new_heat_flow_graph: HeatFlowGraph = HeatFlowGraph.new()
-	new_heat_flow_graph.graph = new_graph
-	new_heat_flow_graph.vertex_to_component_map = vertex_to_component_map.duplicate()
-	new_heat_flow_graph.heat_sources = heat_sources
-	new_heat_flow_graph.heat_sinks = heat_sinks
-	return new_heat_flow_graph
 
 
 ## Adjust weights out of the omni-source to account for energy satisfaction making buildings
