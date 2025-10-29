@@ -76,7 +76,7 @@ func register_player_ready() -> void:
 		_start_game()
 
 
-## Returns the collective information about storage for
+## Returns the collective information about storage for the given item.
 func get_item_storage_info(type: Types.Item) -> ItemStorageInfo:
 	var player_id: int = multiplayer.get_unique_id()
 	var storage_info := ItemStorageInfo.new()
