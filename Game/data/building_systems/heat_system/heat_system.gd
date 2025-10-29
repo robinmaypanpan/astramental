@@ -23,47 +23,47 @@ var heat_flow_graphs_dirty: Dictionary[int, bool]
 var steady_state_flows: Dictionary[int, HeatFlowGraph]
 
 func _ready() -> void:
-	ComponentManager.component_added.connect(_on_component_added)
-	ComponentManager.component_removed.connect(_on_component_removed)
-	Model.game_ready.connect(_on_game_ready)
+	ComponentManager.component_added.connect(on_component_added)
+	ComponentManager.component_removed.connect(on_component_removed)
+	Model.game_ready.connect(on_game_ready)
 
 
 ## When a heat component is added, update the internal state and re-calculate the steady state
 ## flow of heat.
-func _on_component_added(component: BuildingComponent) -> void:
-	if component is HeatComponent:
-		var player_id: int = component.building_entity.player_id
+func on_component_added(component: BuildingComponent) -> void:
+	if component is not HeatComponent:
+		return
 
-		heat_flow_graphs_current[player_id].add_building(component)
-		heat_flow_graphs_dirty[player_id] = true
+	var player_id: int = component.building_entity.player_id
 
-		Model.add_heat_data_at.rpc(
-			component.building_entity.player_id,
-			component.building_entity.position,
-			component.heat,
-			component.heat_capacity)
+	heat_flow_graphs_current[player_id].add_building(component)
+	heat_flow_graphs_dirty[player_id] = true
 
-		print_flow_rates()
+	Model.add_heat_data_at.rpc(
+		component.building_entity.player_id,
+		component.building_entity.position,
+		component.heat,
+		component.heat_capacity)
 
 
 ## When a heat component is removed, update the internal state and re-calculate the steady state
 ## flow of heat.
-func _on_component_removed(component: BuildingComponent) -> void:
-	if component is HeatComponent:
-		var player_id: int = component.building_entity.player_id
+func on_component_removed(component: BuildingComponent) -> void:
+	if component is not HeatComponent:
+		return
 
-		heat_flow_graphs_current[player_id].remove_building(component)
-		heat_flow_graphs_dirty[player_id] = true
+	var player_id: int = component.building_entity.player_id
 
-		Model.remove_heat_data_at.rpc(
-			player_id,
-			component.building_entity.position)
+	heat_flow_graphs_current[player_id].remove_building(component)
+	heat_flow_graphs_dirty[player_id] = true
 
-		print_flow_rates()
+	Model.remove_heat_data_at.rpc(
+		player_id,
+		component.building_entity.position)
 
 
 ## When game is ready, initialize starting state of heat system.
-func _on_game_ready() -> void:
+func on_game_ready() -> void:
 	for player_id: int in ConnectionSystem.get_player_id_list():
 		heat_flow_graphs[player_id] = HeatFlowGraph.new()
 		heat_flow_graphs_current[player_id] = HeatFlowGraph.new()
@@ -183,6 +183,9 @@ func update() -> void:
 			heat_flow_graphs[player_id] = heat_flow_graphs_current[player_id].duplicate_graph()
 			heat_flow_graphs_dirty[player_id] = false
 			calculate_steady_state_flow(player_id)
+			# debug info
+			if OS.is_debug_build():
+				print_flow_rates()
 
 		var heat_flow_graph: HeatFlowGraph = heat_flow_graphs[player_id]
 		# heat each source up by the excess heat production the steady state says
