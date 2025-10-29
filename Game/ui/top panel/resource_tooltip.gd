@@ -66,12 +66,11 @@ func set_tooltip_source(node: Control) -> void:
 	# Set storage info
 	update_storage(storage_info)
 
-	consumption_quantity_label.text = "%d" % storage_info.consumption
-	production_quantity_label.text = "%d" % storage_info.production
+	consumption_quantity_label.text = "%0.1f" % storage_info.consumption
+	production_quantity_label.text = "%0.1f" % storage_info.production
 
-	var net_change: int = storage_info.get_net_change()
-	net_quantity_label.text = "%+d" % net_change
-
+	var net_change: float = storage_info.get_net_change()
+	net_quantity_label.text = "%+0.1f" % net_change
 	# Update net change rate indicator
 	if net_change > 0:
 		net_change_rate_indicator_icon.texture = increasing_arrow
