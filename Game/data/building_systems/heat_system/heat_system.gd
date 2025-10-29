@@ -145,7 +145,8 @@ func update() -> void:
 
 		# if a sink has excess cooling, find buildings with heat in them and cool them off evenly
 		for heat_sink: HeatComponent in heat_sinks[player_id]:
-			# setting position to Vector2i gives an error
+			# NOTE: Assigning position as Vector2i here causes a type mismatch error
+			# when accessing edges_out_of[position], so it must be Variant.
 			var position: Variant = heat_sink.building_entity.position
 			var spare_cooling_per_sec: float = get_spare_cooling_at(player_id, position)
 			if spare_cooling_per_sec > 0:

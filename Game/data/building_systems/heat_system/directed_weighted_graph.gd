@@ -1,5 +1,5 @@
 class_name DirectedWeightedGraph
-extends Node
+extends Object
 ## Represent a directed weighted graph.
 
 # Using an adjacency list representation. Each vertex is labelled by a string,

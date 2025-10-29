@@ -15,4 +15,4 @@ extends BuildingComponentData
 
 
 func make_component(building_entity: BuildingEntity) -> HeatComponent:
-    return HeatComponent.new(self, building_entity)
+	return HeatComponent.new(self, building_entity)

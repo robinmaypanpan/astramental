@@ -1,5 +1,5 @@
 class_name HeatFlowGraph
-extends Node
+extends Object
 ## Represent the state of heat buildings and heat flow as a directed weighted graph.
 
 # Solve the heat flow problem as an instance of multi-source multi-sink maximum flow problem.

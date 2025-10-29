@@ -313,6 +313,7 @@ func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
 		heat_data_updated.emit()
 
 
+# TODO: Make this set heat for all cells at once
 ## Set the heat data heat value at the given position to the given value. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
 func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:

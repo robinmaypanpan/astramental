@@ -62,9 +62,9 @@ func get_owning_player_id() -> int:
 
 
 ## Place a building at the desired location
-func place_building(pos: Vector2i, building_id: String) -> void:
+func place_building(grid_position: Vector2i, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
-	game_grid.get_cell(pos.x, pos.y).set_icon(building.icon)
+	game_grid.get_cell(grid_position.x, grid_position.y).set_icon(building.icon)
 
 
 ## Clear all the heat bars

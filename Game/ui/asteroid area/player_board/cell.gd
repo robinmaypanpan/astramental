@@ -51,6 +51,7 @@ func set_heat_bar(heat: float, heat_capacity: float):
 ## Clear the heat bar for this cell
 func clear_heat_bar() -> void:
 	heat_indicator.visible = false
+	heat_indicator.value = 0.0
 
 
 ## set the ghost texture for this cell
