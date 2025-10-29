@@ -161,6 +161,10 @@ func refund_costs(player_id: int, building_id: String) -> void:
 
 ## Returns true if we can build the building indicated at the location specified
 func can_build_at_location(building_id: String, player_id: int, grid_position: Vector2i) -> bool:
+	if grid_position.x < 0 or grid_position.x >= WorldGenModel.num_cols:
+		# Out of bounds
+		return false
+
 	# Make sure we can build the building somewhere, before continuing
 	if not can_afford(building_id, player_id):
 		# We can't build this building at all. just return false

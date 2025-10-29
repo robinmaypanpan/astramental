@@ -105,7 +105,7 @@ func _init_ores_for_each_player() -> Dictionary[int, Array]:
 
 
 ## Returns the grid coordinates the mouse is over
-func _get_new_building_coordinates() -> Vector2i:
+func get_new_building_coordinates() -> Vector2i:
 	var player_id: int = multiplayer.get_unique_id()
 	var player_board := get_player_board(player_id)
 	if player_board and player_board.is_mouse_over_factory_or_mine():
@@ -126,23 +126,27 @@ func _input(_event: InputEvent) -> void:
 	elif Input.is_action_just_released("either_mouse_button"):
 		AsteroidViewModel.mouse_state = MouseState.HOVERING
 
-	var new_building_position: Vector2i = _get_new_building_coordinates()
+	var new_building_position: Vector2i = get_new_building_coordinates()
+	var is_valid_new_building_position: bool = (
+		new_building_position.x >= 0 and new_building_position.y >= 0
+	)
+	var is_valid_mouse_hover_position: bool = (
+		AsteroidViewModel.mouse_hover_grid_position.x >= 0
+		and AsteroidViewModel.mouse_hover_grid_position.y >= 0
+	)
 
 	# update ghost
 	if AsteroidViewModel.in_build_mode:
-		if AsteroidViewModel.mouse_hover_grid_position:
+		if is_valid_mouse_hover_position:
 			var player_id: int = multiplayer.get_unique_id()
 			var player_board: CellularPlayerBoard = get_player_board(player_id)
 			var building_id: String = AsteroidViewModel.building_on_cursor
 			player_board.clear_ghost_building()
-			if (
-				new_building_position != null
-				and Model.can_build_at_location(building_id, player_id, new_building_position)
-			):
+			if Model.can_build_at_location(building_id, player_id, new_building_position):
 				player_board.set_ghost_building(new_building_position, building_id)
 
 	# place buildings
-	if new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:
+	if is_valid_new_building_position and AsteroidViewModel.mouse_state != MouseState.HOVERING:
 		if (
 			AsteroidViewModel.in_build_mode
 			and AsteroidViewModel.mouse_state == MouseState.BUILDING
