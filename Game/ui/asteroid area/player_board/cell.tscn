@@ -32,6 +32,7 @@ offset_bottom = -1048.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bh4gc")
+overheated_tint_color = Color(1, 0, 0, 0.435294)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -50,6 +51,11 @@ texture = SubResource("AtlasTexture_jere3")
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("3_iy3cy")
+
+[node name="OverheatedCellTint" type="ColorRect" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(1, 0, 0, 0)
 
 [node name="GhostImage" type="TextureRect" parent="MarginContainer"]
 unique_name_in_owner = true

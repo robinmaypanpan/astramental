@@ -8,6 +8,10 @@ var grid_position: Vector2i = Vector2i.ZERO
 @onready var icon: TextureRect = %IconImage
 @onready var background: TextureRect = %BackgroundImage
 @onready var ghost: TextureRect = %GhostImage
+@onready var overheated_cell_tint: ColorRect = %OverheatedCellTint
+
+@export var overheated_tint_color: Color = Color(1, 0, 0, 0.625)
+var transparent_tint_color: Color = Color(1, 1, 1, 0)
 
 
 func _ready() -> void:
@@ -16,6 +20,7 @@ func _ready() -> void:
 	ghost.texture = null
 	heat_indicator.visible = false
 	heat_indicator.value = 0.0
+	overheated_cell_tint.color = transparent_tint_color
 
 
 func _on_mouse_entered() -> void:
@@ -42,16 +47,26 @@ func set_icon(texture: Texture):
 func set_background(texture: Texture):
 	background.texture = texture
 
+
 ## Set the heat bar for this cell
 func set_heat_bar(heat: float, heat_capacity: float):
 	heat_indicator.max_value = heat_capacity
 	heat_indicator.value = heat
 	heat_indicator.visible = true
 
+
 ## Clear the heat bar for this cell
 func clear_heat_bar() -> void:
 	heat_indicator.visible = false
 	heat_indicator.value = 0.0
+
+
+## Set the overheated tint to a red tint if the building is overheated
+func set_heat_state(heat_state: Types.HeatState) -> void:
+	if heat_state == Types.HeatState.OVERHEATED:
+		overheated_cell_tint.color = overheated_tint_color
+	elif heat_state == Types.HeatState.RUNNING:
+		overheated_cell_tint.color = transparent_tint_color
 
 
 ## set the ghost texture for this cell
