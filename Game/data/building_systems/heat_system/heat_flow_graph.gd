@@ -155,7 +155,6 @@ func get_component_at(position: Vector2i) -> HeatComponent:
 	return vertex_to_component_map.get(position)
 
 
-
 ## Adjust weights out of the omni-source to account for energy satisfaction making buildings
 ## produce less heat.
 func adjust_weights_for_energy_satisfaction(energy_satisfaction: float) -> void:
@@ -201,14 +200,14 @@ func augment_flow_along_path(path: Array[Variant]):
 	var min_weight: float = HEAT_MAX_FLOW
 	for i in range(path.size() - 1):
 		var start: Variant = path[i]
-		var end: Variant = path[i+1]
+		var end: Variant = path[i + 1]
 		var weight: float = graph.get_weight(start, end)
 		min_weight = min(min_weight, weight)
 	# augment flow along path
 	print("augmenting flow along path %s, min weight %f" % [path, min_weight])
 	for i in range(path.size() - 1):
 		var start: Variant = path[i]
-		var end: Variant = path[i+1]
+		var end: Variant = path[i + 1]
 		var forward_weight: float = graph.get_weight(start, end)
 		graph.set_weight(start, end, forward_weight - min_weight)
 		var reverse_weight: float = graph.get_weight(end, start)

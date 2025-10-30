@@ -22,6 +22,7 @@ var heat_flow_graphs_dirty: Dictionary[int, bool]
 ## weight from sink -> omni-sink: consumed heat flow from sources
 var steady_state_flows: Dictionary[int, HeatFlowGraph]
 
+
 func _ready() -> void:
 	ComponentManager.component_added.connect(on_component_added)
 	ComponentManager.component_removed.connect(on_component_removed)
@@ -42,7 +43,8 @@ func on_component_added(component: BuildingComponent) -> void:
 		component.building_entity.player_id,
 		component.building_entity.position,
 		component.heat,
-		component.heat_capacity)
+		component.heat_capacity
+	)
 
 
 ## When a heat component is removed, update the internal state.
@@ -55,9 +57,7 @@ func on_component_removed(component: BuildingComponent) -> void:
 	heat_flow_graphs_current[player_id].remove_building(component)
 	heat_flow_graphs_dirty[player_id] = true
 
-	Model.remove_heat_data_at.rpc(
-		player_id,
-		component.building_entity.position)
+	Model.remove_heat_data_at.rpc(player_id, component.building_entity.position)
 
 
 ## When game is ready, initialize starting state of heat system.
@@ -132,7 +132,9 @@ func set_heat(heat_component: HeatComponent, new_heat: float) -> void:
 ## Given a position, find all buildings next to that position with heat in them.
 func find_adjacent_buildings_with_heat(player_id: int, position: Vector2i) -> Array[HeatComponent]:
 	var buildings_with_heat: Array[HeatComponent] = []
-	var adjacent_vertices: Array = heat_flow_graphs[player_id].graph.edges_out_of[position as Variant]
+	var adjacent_vertices: Array = heat_flow_graphs[player_id].graph.edges_out_of[
+		position as Variant
+	]
 	for adjacent_vertex: Vector2i in adjacent_vertices:
 		var heat_component = heat_flow_graphs[player_id].get_component_at(adjacent_vertex)
 		if heat_component and heat_component.heat > 0:
@@ -152,12 +154,12 @@ func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: f
 	while not is_zero_approx(spare_cooling):
 		var hottest_building_heat: float = buildings[index].heat
 		if is_zero_approx(hottest_building_heat):
-			break # nothing left to cool down
+			break  # nothing left to cool down
 		var next_hottest_building_heat: float
 		if index < buildings.size() - 1:
 			next_hottest_building_heat = buildings[index + 1].heat
 		else:
-			next_hottest_building_heat = 0.0 # we went through all the buildings, cool to 0
+			next_hottest_building_heat = 0.0  # we went through all the buildings, cool to 0
 		var num_buildings_to_cool: int = index + 1
 		# cool down all buildings to cool to the next hottest building heat
 		var cool_amount = hottest_building_heat - next_hottest_building_heat
@@ -215,12 +217,13 @@ func update() -> void:
 			var total_capacity_cooling: float = spare_cooling_this_tick + spare_heat_capacity
 			if total_capacity_cooling > 0:
 				# find buildings next to this one with excess heat to cool off
-				var buildings_to_cool: Array[HeatComponent] = (
-					find_adjacent_buildings_with_heat(player_id, position)
+				var buildings_to_cool: Array[HeatComponent] = find_adjacent_buildings_with_heat(
+					player_id, position
 				)
 				# cool off the hottest building
 				var total_heat_pulled: float = cool_off_hottest_building(
-					buildings_to_cool, total_capacity_cooling)
+					buildings_to_cool, total_capacity_cooling
+				)
 				var net_heat_change = total_heat_pulled - spare_cooling_this_tick
 				var new_heat = max(heat_sink.heat + net_heat_change, 0.0)
 				set_heat(heat_sink, new_heat)
@@ -234,9 +237,10 @@ func update() -> void:
 
 		# check if buildings are overheated/not overheated
 		for heat_source: HeatComponent in heat_flow_graph.heat_sources:
-			if (heat_source.heat > heat_source.heat_capacity
+			if (
+				heat_source.heat > heat_source.heat_capacity
 				or is_equal_approx(heat_source.heat, heat_source.heat_capacity)
-				):
+			):
 				heat_source.heat = heat_source.heat_capacity
 				heat_flow_graphs_current[player_id].set_building_overheated(heat_source)
 				heat_flow_graphs_dirty[player_id] = true
