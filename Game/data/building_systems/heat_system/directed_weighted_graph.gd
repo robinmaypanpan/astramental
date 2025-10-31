@@ -11,6 +11,7 @@ var edges_out_of: Dictionary[Variant, Array]
 ## The ith entry of weights corresponds to the ith entry of `edges_out_of`.
 var weights: Dictionary[Variant, Array]
 
+
 ## Create a graph with no vertices and no edges.
 func _init() -> void:
 	edges_out_of = {}

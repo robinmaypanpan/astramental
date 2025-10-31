@@ -32,6 +32,7 @@ offset_bottom = -1048.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bh4gc")
+overheated_modulate = Color(1, 0.501961, 0.501961, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1

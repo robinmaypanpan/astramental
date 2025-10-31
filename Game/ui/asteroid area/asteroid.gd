@@ -228,3 +228,4 @@ func _on_update_heat() -> void:
 		player_board.clear_heat_bars()
 		for heat_data: HeatData in Model.get_heat_data(player_board.owner_id):
 			player_board.set_heat_bar(heat_data.position, heat_data.heat, heat_data.heat_capacity)
+			player_board.set_heat_state(heat_data.position, heat_data.heat_state)
