@@ -24,7 +24,7 @@ extends Resource
 
 
 ## Returns the associated component
-func get_component(component_type: String) -> BuildingComponentData:
+func get_component_data(component_type: String) -> BuildingComponentData:
 	for component in building_components:
 		if component.type == component_type:
 			return component

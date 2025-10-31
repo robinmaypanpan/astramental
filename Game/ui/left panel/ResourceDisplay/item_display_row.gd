@@ -79,7 +79,6 @@ func update_storage_cap(new_cap: float) -> void:
 
 ## Internal function to render the text
 func update_view() -> void:
-	storage_cap = Model.get_storage_cap(multiplayer.get_unique_id(), item_type)
 	update_storage_bar()
 
 	# TODO I18N: This format needs to be internationalized

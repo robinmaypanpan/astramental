@@ -49,7 +49,6 @@ func set_tooltip_source(node: Control) -> void:
 	var item_row: ItemDisplayRow = node as ItemDisplayRow
 	var item_type: Types.Item = item_row.get_item_type()
 
-	var player_id: int = multiplayer.get_unique_id()
 	var storage_info: ItemStorageInfo = Model.get_item_storage_info(item_type)
 	var item_resource: ItemResource = Items.get_info(item_type)
 

@@ -54,7 +54,7 @@ func populate_costs(item_costs: Array[ItemCost]) -> void:
 ## Show energy usage information for the building
 func show_energy_usage(building_resource: BuildingResource) -> void:
 	var energy_component_data: EnergyComponentData = (
-		building_resource.get_component("EnergyComponentData") as EnergyComponentData
+		building_resource.get_component_data("EnergyComponentData") as EnergyComponentData
 	)
 
 	if not energy_component_data:
