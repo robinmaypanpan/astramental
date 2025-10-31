@@ -1,0 +1,130 @@
+[gd_scene load_steps=6 format=3 uid="uid://b00ioj6lldnr8"]
+
+[ext_resource type="Script" uid="uid://0oy8b8ml2a31" path="res://Game/ui/top panel/buliding_tooltip.gd" id="1_uklxu"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="2_qo6im"]
+[ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="3_sy7kl"]
+[ext_resource type="Texture2D" uid="uid://10375ojdnctl" path="res://Assets/sprites/items/energy.tres" id="4_r70q2"]
+[ext_resource type="PackedScene" uid="uid://bmq63q5y6o6ad" path="res://Game/ui/left panel/Build Menu/v_item_cost.tscn" id="4_uklxu"]
+
+[node name="BuildingTooltip" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -720.0
+offset_bottom = -694.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_uklxu")
+item_cost_scene = ExtResource("4_uklxu")
+
+[node name="BuildingInfo" type="MarginContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_qo6im")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildingInfo"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="HFlowContainer" type="HFlowContainer" parent="BuildingInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+
+[node name="IconBorder" type="PanelContainer" parent="BuildingInfo/VBoxContainer/HFlowContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BuildingInfo/VBoxContainer/HFlowContainer/IconBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="BuildingIcon" type="TextureRect" parent="BuildingInfo/VBoxContainer/HFlowContainer/IconBorder/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_sy7kl")
+expand_mode = 3
+
+[node name="BuildingName" type="Label" parent="BuildingInfo/VBoxContainer/HFlowContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 76
+text = "Drill"
+
+[node name="Cost Container" type="HBoxContainer" parent="BuildingInfo/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="BuildingInfo/VBoxContainer/Cost Container"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("2_qo6im")
+theme_override_font_sizes/font_size = 60
+text = "Cost"
+
+[node name="CostContainer" type="HBoxContainer" parent="BuildingInfo/VBoxContainer/Cost Container"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 73)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 17
+
+[node name="Item Cost" parent="BuildingInfo/VBoxContainer/Cost Container/CostContainer" instance=ExtResource("4_uklxu")]
+layout_mode = 2
+
+[node name="Item Cost2" parent="BuildingInfo/VBoxContainer/Cost Container/CostContainer" instance=ExtResource("4_uklxu")]
+layout_mode = 2
+
+[node name="Item Cost3" parent="BuildingInfo/VBoxContainer/Cost Container/CostContainer" instance=ExtResource("4_uklxu")]
+layout_mode = 2
+size_flags_horizontal = 1
+
+[node name="DynamicData" type="HFlowContainer" parent="BuildingInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnergyUsage" type="HBoxContainer" parent="BuildingInfo/VBoxContainer/DynamicData"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="EnergyDirection" type="Label" parent="BuildingInfo/VBoxContainer/DynamicData/EnergyUsage"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Consumes:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BuildingInfo/VBoxContainer/DynamicData/EnergyUsage"]
+layout_mode = 2
+
+[node name="EnergyQuantity" type="Label" parent="BuildingInfo/VBoxContainer/DynamicData/EnergyUsage/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1.0"
+
+[node name="ItemType" type="TextureRect" parent="BuildingInfo/VBoxContainer/DynamicData/EnergyUsage/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_r70q2")
+expand_mode = 3
+
+[node name="Speed" type="Label" parent="BuildingInfo/VBoxContainer/DynamicData/EnergyUsage/HBoxContainer"]
+layout_mode = 2
+text = "/s"
+
+[node name="BuildingDescription" type="Label" parent="BuildingInfo/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "WOW!  That's really a building right there.  A whole ass building. What a thing to see in this day and age."
+autowrap_mode = 3

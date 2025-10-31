@@ -80,6 +80,23 @@ func register_player_ready() -> void:
 		_start_game()
 
 
+## Returns the collective information about storage for the given item.
+func get_item_storage_info(type: Types.Item) -> ItemStorageInfo:
+	var player_id: int = multiplayer.get_unique_id()
+	var storage_info := ItemStorageInfo.new()
+
+	storage_info.starting_quantity = get_starting_item_count(type)
+	storage_info.starting_storage_cap = get_starting_storage_cap(type)
+	storage_info.current_quantity = get_item_count(player_id, type)
+	storage_info.storage_cap = get_storage_cap(player_id, type)
+
+	# We need to split production up into production and consumption.
+	storage_info.production = get_item_change_rate(player_id, type)
+	storage_info.consumption = 1.42
+
+	return storage_info
+
+
 ## Return the starting amount of a resource a player should start with.
 ## Controlled by starting_resources export in model.tscn. If a resource isn't listed in there,
 ## the default starting amount is 0.

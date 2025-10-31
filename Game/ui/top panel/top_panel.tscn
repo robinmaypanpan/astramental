@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://bncje5xywcr8m"]
+[gd_scene load_steps=5 format=3 uid="uid://bncje5xywcr8m"]
 
 [ext_resource type="Script" uid="uid://6s8dpcho4kwt" path="res://Game/ui/top panel/top_panel.gd" id="1_cwmam"]
 [ext_resource type="PackedScene" uid="uid://bk1vb8w75hf3y" path="res://Game/ui/top panel/cell_tooltip.tscn" id="2_q3l6b"]
+[ext_resource type="PackedScene" uid="uid://b00ioj6lldnr8" path="res://Game/ui/top panel/buliding_tooltip.tscn" id="3_abf6f"]
+[ext_resource type="PackedScene" uid="uid://1y4imsrnqj5a" path="res://Game/ui/top panel/resource_tooltip.tscn" id="4_x5vcc"]
 
 [node name="TopPanel" type="Panel"]
 anchors_preset = 15
@@ -26,4 +28,15 @@ grow_vertical = 2
 
 [node name="CellTooltip" parent="TooltipContainer" instance=ExtResource("2_q3l6b")]
 unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="BuildingTooltip" parent="TooltipContainer" instance=ExtResource("3_abf6f")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ResourceTooltip" parent="TooltipContainer" instance=ExtResource("4_x5vcc")]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2

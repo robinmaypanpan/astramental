@@ -8,3 +8,5 @@ script = ExtResource("1_fiv1g")
 icon = ExtResource("1_f8hdk")
 can_trade = true
 sell_value = 2
+display_name = "Silicon"
+description = "We took a rock and gave it depression. That depression lives on as a solar panel and other bits and bobs."

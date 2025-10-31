@@ -39,7 +39,6 @@ var storage_cap: float = 0.0
 func _ready() -> void:
 	var icon_to_use := Items.get_info(item_type).icon
 	icon.texture = icon_to_use
-	storage_cap = Model.get_storage_cap(multiplayer.get_unique_id(), item_type)
 	name = "Item Display Row for %s" % Types.Item.keys()[item_type]
 	update_view()
 
@@ -50,6 +49,11 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	Globals.clear_tooltip_target(self)
+
+
+## Returns the item type that this particular resource display row represents
+func get_item_type() -> Types.Item:
+	return item_type
 
 
 ## Given the new count, update the current item count to the new one.
