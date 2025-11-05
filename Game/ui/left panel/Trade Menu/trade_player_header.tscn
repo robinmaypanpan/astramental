@@ -10,11 +10,13 @@ script = ExtResource("1_cgu7w")
 layout_mode = 2
 
 [node name="TradeIcon" type="TextureRect" parent="HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("1_r22ws")
 stretch_mode = 5
 
 [node name="PlayerText" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "robin"
