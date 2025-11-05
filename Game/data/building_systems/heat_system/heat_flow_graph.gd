@@ -26,6 +26,35 @@ var graph: DirectedWeightedGraph
 ## Store a map to convert vertex positions to their corresponding heat components.
 var vertex_to_component_map: Dictionary[Vector2i, HeatComponent]
 
+## List of all heat sources.
+var heat_sources: Array[HeatComponent]
+
+## List of overheated heat sources.
+var overheated_heat_sources: Array[HeatComponent]
+
+## List of all heat sinks.
+var heat_sinks: Array[HeatComponent]
+
+
+# TODO: there has to be a better way to do this than manually adding new attributes every time
+# this has to be updated.
+## Do a deep copy of this object and return the duplicate.
+func duplicate_graph() -> HeatFlowGraph:
+	var new_heat_flow_graph: HeatFlowGraph = HeatFlowGraph.new()
+
+	var new_graph: DirectedWeightedGraph = DirectedWeightedGraph.new()
+	new_graph.edges_out_of = graph.edges_out_of.duplicate(true)
+	new_graph.weights = graph.weights.duplicate(true)
+	new_heat_flow_graph.graph = new_graph
+
+	new_heat_flow_graph.vertex_to_component_map = vertex_to_component_map.duplicate()
+
+	new_heat_flow_graph.heat_sources = heat_sources.duplicate()
+	new_heat_flow_graph.overheated_heat_sources = overheated_heat_sources.duplicate()
+	new_heat_flow_graph.heat_sinks = heat_sinks.duplicate()
+
+	return new_heat_flow_graph
+
 
 ## Create a new heat flow graph containing only the omni-source and omni-sink.
 func _init() -> void:
@@ -58,20 +87,25 @@ func _add_two_way_flow_edge(start, end, weight) -> void:
 ## add edges flowing out of the source or into the sink.
 func add_building(heat_component: HeatComponent) -> void:
 	var position: Vector2i = heat_component.building_entity.position
+	var update_interval: float = Globals.settings.update_interval
 	graph.add_vertex(position)
 	vertex_to_component_map[position] = heat_component
 
 	if heat_component.is_source:
+		heat_sources.append(heat_component)
 		# omni-source -> source
-		_add_two_way_flow_edge(SOURCE, position, heat_component.heat_production)
+		var weight: float = heat_component.heat_production * update_interval
+		_add_two_way_flow_edge(SOURCE, position, weight)
 		for neighbor_position: Vector2i in _get_neighbors(position):
 			if graph.has_vertex(neighbor_position):
 				# source -> neighbors
 				_add_two_way_flow_edge(position, neighbor_position, HEAT_MAX_FLOW)
 
 	elif heat_component.is_sink:
+		heat_sinks.append(heat_component)
 		# sink -> omni-sink
-		_add_two_way_flow_edge(position, SINK, heat_component.heat_passive_cool_off)
+		var weight: float = heat_component.heat_passive_cool_off * update_interval
+		_add_two_way_flow_edge(position, SINK, weight)
 		for neighbor_position: Vector2i in _get_neighbors(position):
 			if graph.has_vertex(neighbor_position):
 				# neighbors -> sink
@@ -83,9 +117,36 @@ func add_building(heat_component: HeatComponent) -> void:
 
 ## Given a heat component, remove that building from the heat flow graph.
 func remove_building(heat_component: HeatComponent) -> void:
+	if heat_component.is_source:
+		heat_sources.erase(heat_component)
+	elif heat_component.is_sink:
+		heat_sinks.erase(heat_component)
+
 	var position: Vector2i = heat_component.building_entity.position
 	graph.remove_vertex(position)
 	vertex_to_component_map.erase(position)
+
+
+## Set a building to the overheated state and disconnect it from the omni-source.
+func set_building_overheated(heat_source: HeatComponent) -> void:
+	heat_source.heat_state = Types.HeatState.OVERHEATED
+	overheated_heat_sources.append(heat_source)
+	heat_sources.erase(heat_source)
+
+	var grid_position: Vector2i = heat_source.building_entity.position
+	graph.set_weight(SOURCE, grid_position, 0.0)
+
+
+## Set a building to the running state and reconnect it to the omni-source.
+func set_building_running(heat_source: HeatComponent) -> void:
+	heat_source.heat_state = Types.HeatState.RUNNING
+	heat_sources.append(heat_source)
+	overheated_heat_sources.erase(heat_source)
+
+	var grid_position: Vector2i = heat_source.building_entity.position
+	var update_interval: float = Globals.settings.update_interval
+	var heating_weight: float = heat_source.heat_production * update_interval
+	graph.set_weight(SOURCE, grid_position, heating_weight)
 
 
 ## Given a vertex in the graph, get its corresponding heat component.
@@ -94,15 +155,12 @@ func get_component_at(position: Vector2i) -> HeatComponent:
 	return vertex_to_component_map.get(position)
 
 
-## Do a deep copy of this object and return the duplicate.
-func duplicate_graph() -> HeatFlowGraph:
-	var new_graph: DirectedWeightedGraph = DirectedWeightedGraph.new()
-	new_graph.edges_out_of = graph.edges_out_of.duplicate(true)
-	new_graph.weights = graph.weights.duplicate(true)
-	var new_heat_flow_graph: HeatFlowGraph = HeatFlowGraph.new()
-	new_heat_flow_graph.graph = new_graph
-	new_heat_flow_graph.vertex_to_component_map = vertex_to_component_map.duplicate()
-	return new_heat_flow_graph
+## Adjust weights out of the omni-source to account for energy satisfaction making buildings
+## produce less heat.
+func adjust_weights_for_energy_satisfaction(energy_satisfaction: float) -> void:
+	var source_edge_weights: Array = graph.weights[SOURCE as Variant]
+	for i in range(source_edge_weights.size()):
+		source_edge_weights[i] = source_edge_weights[i] * energy_satisfaction
 
 
 ## Find a path from omni-source to omni-sink where the forward weights are >= 0
@@ -142,14 +200,14 @@ func augment_flow_along_path(path: Array[Variant]):
 	var min_weight: float = HEAT_MAX_FLOW
 	for i in range(path.size() - 1):
 		var start: Variant = path[i]
-		var end: Variant = path[i+1]
+		var end: Variant = path[i + 1]
 		var weight: float = graph.get_weight(start, end)
 		min_weight = min(min_weight, weight)
 	# augment flow along path
+	print("augmenting flow along path %s, min weight %f" % [path, min_weight])
 	for i in range(path.size() - 1):
-		print("augmenting flow along path %s, min weight %d" % [path, min_weight])
 		var start: Variant = path[i]
-		var end: Variant = path[i+1]
+		var end: Variant = path[i + 1]
 		var forward_weight: float = graph.get_weight(start, end)
 		graph.set_weight(start, end, forward_weight - min_weight)
 		var reverse_weight: float = graph.get_weight(end, start)
