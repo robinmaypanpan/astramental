@@ -1,9 +1,14 @@
 class_name CellTooltip
 extends Tooltip
 
+@export
+var production_indicator_format: String = "Produces [img=center,center,32x32]%s[/img] when mined"
+
 @onready var cell_name_label: Label = %CellName
 @onready var cell_description_label: Label = %CellDescription
 @onready var cell_icon: TextureRect = %CellIcon
+
+@onready var production_indicator: RichTextLabel = %ProductionIndicator
 
 @onready var building_info: Control = %BuildingInfo
 @onready var building_name_label: Label = %BuildingName
@@ -42,6 +47,12 @@ func set_tooltip_source(node: Control) -> void:
 			cell_name_label.text = ore_resource.display_name
 			cell_description_label.text = ore_resource.description
 			cell_icon.texture = ore_resource.icon
+
+			var ore_yield: Types.Item = Ores.get_yield(ore_type)
+			var yield_item_resource: ItemResource = Items.get_info(ore_yield)
+			production_indicator.text = (
+				production_indicator_format % yield_item_resource.icon.resource_path
+			)
 		Types.Layer.FACTORY:
 			cell_name_label.text = factory_resource.display_name
 			cell_description_label.text = factory_resource.description
