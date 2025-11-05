@@ -9,6 +9,9 @@ var grid_position: Vector2i = Vector2i.ZERO
 @onready var background: TextureRect = %BackgroundImage
 @onready var ghost: TextureRect = %GhostImage
 
+@export var overheated_modulate: Color
+var default_modulate: Color = Color(1, 1, 1, 1)
+
 
 func _ready() -> void:
 	icon.texture = null
@@ -42,16 +45,26 @@ func set_icon(texture: Texture):
 func set_background(texture: Texture):
 	background.texture = texture
 
+
 ## Set the heat bar for this cell
 func set_heat_bar(heat: float, heat_capacity: float):
 	heat_indicator.max_value = heat_capacity
 	heat_indicator.value = heat
 	heat_indicator.visible = true
 
+
 ## Clear the heat bar for this cell
 func clear_heat_bar() -> void:
 	heat_indicator.visible = false
 	heat_indicator.value = 0.0
+
+
+## Set the overheated tint to a red tint if the building is overheated
+func set_heat_state(heat_state: Types.HeatState) -> void:
+	if heat_state == Types.HeatState.OVERHEATED:
+		icon.modulate = overheated_modulate
+	elif heat_state == Types.HeatState.RUNNING:
+		icon.modulate = default_modulate
 
 
 ## set the ghost texture for this cell

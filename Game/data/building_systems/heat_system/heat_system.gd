@@ -246,9 +246,15 @@ func update() -> void:
 				heat_source.heat = heat_source.heat_capacity
 				heat_flow_graphs_current[player_id].set_building_overheated(heat_source)
 				heat_flow_graphs_dirty[player_id] = true
+				Model.set_heat_state_to(
+					player_id, heat_source.building_entity.position, Types.HeatState.OVERHEATED
+				)
 
 		for overheated_source: HeatComponent in heat_flow_graph.overheated_heat_sources:
 			if overheated_source.heat < 0.0 or is_zero_approx(overheated_source.heat):
 				overheated_source.heat = 0.0
 				heat_flow_graphs_current[player_id].set_building_running(overheated_source)
 				heat_flow_graphs_dirty[player_id] = true
+				Model.set_heat_state_to(
+					player_id, overheated_source.building_entity.position, Types.HeatState.RUNNING
+				)

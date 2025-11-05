@@ -36,7 +36,11 @@ func update() -> void:
 	# Iterate through MinerComponents and calc production
 	var miner_components: Array = ComponentManager.get_components("MinerComponent")
 	for miner_component: MinerComponent in miner_components:
-		var player_id: int = miner_component.building_entity.player_id
+		var building_entity: BuildingEntity = miner_component.building_entity
+		var heat_component: HeatComponent = building_entity.get_component("HeatComponent")
+		if heat_component.heat_state == Types.HeatState.OVERHEATED:
+			continue  # can't mine if you're overheated
+		var player_id: int = building_entity.player_id
 		var ore: Types.Ore = miner_component.ore_under_miner
 
 		# account for energy satisfaction slowing down buildings
