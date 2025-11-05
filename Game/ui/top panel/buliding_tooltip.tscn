@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://b00ioj6lldnr8"]
+[gd_scene load_steps=7 format=3 uid="uid://b00ioj6lldnr8"]
 
 [ext_resource type="Script" uid="uid://0oy8b8ml2a31" path="res://Game/ui/top panel/buliding_tooltip.gd" id="1_uklxu"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="2_qo6im"]
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="3_sy7kl"]
 [ext_resource type="Texture2D" uid="uid://10375ojdnctl" path="res://Assets/sprites/items/energy.tres" id="4_r70q2"]
 [ext_resource type="PackedScene" uid="uid://bmq63q5y6o6ad" path="res://Game/ui/left panel/Build Menu/v_item_cost.tscn" id="4_uklxu"]
+[ext_resource type="Theme" uid="uid://de1q5xgojhw72" path="res://Game/ui/top panel/tooltip_theme.tres" id="6_qo6im"]
 
 [node name="BuildingTooltip" type="PanelContainer"]
 anchors_preset = 15
@@ -16,6 +17,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("6_qo6im")
 script = ExtResource("1_uklxu")
 item_cost_scene = ExtResource("4_uklxu")
 
@@ -32,7 +34,7 @@ theme_override_constants/margin_bottom = 20
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 15
+theme = ExtResource("6_qo6im")
 
 [node name="HFlowContainer" type="HFlowContainer" parent="BuildingInfo/VBoxContainer"]
 layout_mode = 2
@@ -121,9 +123,16 @@ expand_mode = 3
 layout_mode = 2
 text = "/s"
 
-[node name="BuildingDescription" type="Label" parent="BuildingInfo/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="BuildingInfo/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("6_qo6im")
+
+[node name="MarginContainer" type="MarginContainer" parent="BuildingInfo/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="BuildingDescription" type="Label" parent="BuildingInfo/VBoxContainer/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(50, 100)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "WOW!  That's really a building right there.  A whole ass building. What a thing to see in this day and age."
