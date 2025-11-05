@@ -87,14 +87,14 @@ func _add_two_way_flow_edge(start, end, weight) -> void:
 ## add edges flowing out of the source or into the sink.
 func add_building(heat_component: HeatComponent) -> void:
 	var position: Vector2i = heat_component.building_entity.position
-	var update_interval = Globals.settings.update_interval
+	var update_interval: float = Globals.settings.update_interval
 	graph.add_vertex(position)
 	vertex_to_component_map[position] = heat_component
 
 	if heat_component.is_source:
 		heat_sources.append(heat_component)
 		# omni-source -> source
-		var weight = heat_component.heat_production * update_interval
+		var weight: float = heat_component.heat_production * update_interval
 		_add_two_way_flow_edge(SOURCE, position, weight)
 		for neighbor_position: Vector2i in _get_neighbors(position):
 			if graph.has_vertex(neighbor_position):
@@ -104,7 +104,7 @@ func add_building(heat_component: HeatComponent) -> void:
 	elif heat_component.is_sink:
 		heat_sinks.append(heat_component)
 		# sink -> omni-sink
-		var weight = heat_component.heat_passive_cool_off * update_interval
+		var weight: float = heat_component.heat_passive_cool_off * update_interval
 		_add_two_way_flow_edge(position, SINK, weight)
 		for neighbor_position: Vector2i in _get_neighbors(position):
 			if graph.has_vertex(neighbor_position):
@@ -133,7 +133,7 @@ func set_building_overheated(heat_source: HeatComponent) -> void:
 	overheated_heat_sources.append(heat_source)
 	heat_sources.erase(heat_source)
 
-	var grid_position = heat_source.building_entity.position
+	var grid_position: Vector2i = heat_source.building_entity.position
 	graph.set_weight(SOURCE, grid_position, 0.0)
 
 
@@ -143,9 +143,9 @@ func set_building_running(heat_source: HeatComponent) -> void:
 	heat_sources.append(heat_source)
 	overheated_heat_sources.erase(heat_source)
 
-	var grid_position = heat_source.building_entity.position
-	var update_interval = Globals.settings.update_interval
-	var heating_weight = heat_source.heat_production * update_interval
+	var grid_position: Vector2i = heat_source.building_entity.position
+	var update_interval: float = Globals.settings.update_interval
+	var heating_weight: float = heat_source.heat_production * update_interval
 	graph.set_weight(SOURCE, grid_position, heating_weight)
 
 
@@ -158,7 +158,7 @@ func get_component_at(position: Vector2i) -> HeatComponent:
 ## Adjust weights out of the omni-source to account for energy satisfaction making buildings
 ## produce less heat.
 func adjust_weights_for_energy_satisfaction(energy_satisfaction: float) -> void:
-	var source_edge_weights = graph.weights[SOURCE as Variant]
+	var source_edge_weights: Array = graph.weights[SOURCE as Variant]
 	for i in range(source_edge_weights.size()):
 		source_edge_weights[i] = source_edge_weights[i] * energy_satisfaction
 

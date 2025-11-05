@@ -39,12 +39,11 @@ func on_component_added(component: BuildingComponent) -> void:
 	heat_flow_graphs_current[player_id].add_building(component)
 	heat_flow_graphs_dirty[player_id] = true
 
-	Model.add_heat_data_at.rpc(
+	Model.add_heat_data_at(
 		component.building_entity.player_id,
 		component.building_entity.position,
 		component.heat,
-		component.heat_capacity,
-		component.heat_state
+		component.heat_capacity
 	)
 
 
@@ -58,7 +57,7 @@ func on_component_removed(component: BuildingComponent) -> void:
 	heat_flow_graphs_current[player_id].remove_building(component)
 	heat_flow_graphs_dirty[player_id] = true
 
-	Model.remove_heat_data_at.rpc(player_id, component.building_entity.position)
+	Model.remove_heat_data_at(player_id, component.building_entity.position)
 
 
 ## When game is ready, initialize starting state of heat system.
@@ -69,7 +68,7 @@ func on_game_ready() -> void:
 		steady_state_flows[player_id] = HeatFlowGraph.new()
 		heat_flow_graphs_dirty[player_id] = false
 
-	var player_states = Model.player_states
+	var player_states: PlayerStates = Model.player_states
 	player_states.energy_satisfaction_changed.connect(on_energy_satisfaction_changed)
 
 
@@ -84,7 +83,7 @@ func on_energy_satisfaction_changed(player_id: int, _new_energy_satisfaction: fl
 func calculate_steady_state_flow(player_id: int) -> void:
 	var heat_flow_graph: HeatFlowGraph = heat_flow_graphs[player_id]
 	steady_state_flows[player_id] = heat_flow_graph.duplicate_graph()
-	var energy_satisfaction = Model.get_energy_satisfaction(player_id)
+	var energy_satisfaction: float = Model.get_energy_satisfaction(player_id)
 	steady_state_flows[player_id].adjust_weights_for_energy_satisfaction(energy_satisfaction)
 	var augmenting_path: Array = steady_state_flows[player_id].find_augmenting_path()
 	while augmenting_path != []:
@@ -125,9 +124,9 @@ func print_flow_rates() -> void:
 ## Set the heat in the component and in the model to the specified heat.
 func set_heat(heat_component: HeatComponent, new_heat: float) -> void:
 	heat_component.heat = new_heat
-	var player_id = heat_component.building_entity.player_id
-	var position = heat_component.building_entity.position
-	Model.set_heat_to.rpc(player_id, position, new_heat)
+	var player_id: int = heat_component.building_entity.player_id
+	var position: Vector2i = heat_component.building_entity.position
+	Model.set_heat_to(player_id, position, new_heat)
 
 
 ## Given a position, find all buildings next to that position with heat in them.
@@ -137,7 +136,9 @@ func find_adjacent_buildings_with_heat(player_id: int, position: Vector2i) -> Ar
 		position as Variant
 	]
 	for adjacent_vertex: Vector2i in adjacent_vertices:
-		var heat_component = heat_flow_graphs[player_id].get_component_at(adjacent_vertex)
+		var heat_component: HeatComponent = heat_flow_graphs[player_id].get_component_at(
+			adjacent_vertex
+		)
 		if heat_component and heat_component.heat > 0:
 			buildings_with_heat.append(heat_component)
 	return buildings_with_heat
@@ -163,7 +164,7 @@ func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: f
 			next_hottest_building_heat = 0.0  # we went through all the buildings, cool to 0
 		var num_buildings_to_cool: int = index + 1
 		# cool down all buildings to cool to the next hottest building heat
-		var cool_amount = hottest_building_heat - next_hottest_building_heat
+		var cool_amount: float = hottest_building_heat - next_hottest_building_heat
 		var required_heat: float = num_buildings_to_cool * cool_amount
 		if required_heat <= spare_cooling:
 			# we have enough cooling? cool the buildings
@@ -225,15 +226,15 @@ func update() -> void:
 				var total_heat_pulled: float = cool_off_hottest_building(
 					buildings_to_cool, total_capacity_cooling
 				)
-				var net_heat_change = total_heat_pulled - spare_cooling_this_tick
-				var new_heat = max(heat_sink.heat + net_heat_change, 0.0)
+				var net_heat_change: float = total_heat_pulled - spare_cooling_this_tick
+				var new_heat: float = max(heat_sink.heat + net_heat_change, 0.0)
 				set_heat(heat_sink, new_heat)
 
 		# overheated heat sources just cool down as much as they can
 		for overheated_source: HeatComponent in heat_flow_graph.overheated_heat_sources:
-			var update_interval = Globals.settings.update_interval
+			var update_interval: float = Globals.settings.update_interval
 			var cooling_this_tick: float = overheated_source.heat_passive_cool_off * update_interval
-			var new_heat = overheated_source.heat - cooling_this_tick
+			var new_heat: float = overheated_source.heat - cooling_this_tick
 			set_heat(overheated_source, new_heat)
 
 		# check if buildings are overheated/not overheated

@@ -79,6 +79,23 @@ func register_player_ready() -> void:
 		_start_game()
 
 
+## Returns the collective information about storage for the given item.
+func get_item_storage_info(type: Types.Item) -> ItemStorageInfo:
+	var player_id: int = multiplayer.get_unique_id()
+	var storage_info := ItemStorageInfo.new()
+
+	storage_info.starting_quantity = get_starting_item_count(type)
+	storage_info.starting_storage_cap = get_starting_storage_cap(type)
+	storage_info.current_quantity = get_item_count(player_id, type)
+	storage_info.storage_cap = get_storage_cap(player_id, type)
+
+	# We need to split production up into production and consumption.
+	storage_info.production = get_item_change_rate(player_id, type)
+	storage_info.consumption = 1.42
+
+	return storage_info
+
+
 ## Return the starting amount of a resource a player should start with.
 ## Controlled by starting_resources export in model.tscn. If a resource isn't listed in there,
 ## the default starting amount is 0.
@@ -288,45 +305,54 @@ func get_storage_cap(player_id: int, type: Types.Item) -> float:
 	else:
 		return 0.0
 
-
-## Set the heat data for the given player to the data given. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
+## Set the heat data for the given player to the data given.
 func add_heat_data_at(
-	player_id: int,
-	position: Vector2i,
-	heat: float,
-	heat_capacity: float,
-	heat_state: Types.HeatState
+	player_id: int, grid_position: Vector2i, heat: float, heat_capacity: float
+) -> void:
+	add_heat_data_for_all_players.rpc(player_id, grid_position, heat, heat_capacity)
+
+## Set the heat data for the given player to the data given for all players. Is an RPC.
+@rpc("any_peer", "call_local", "reliable")
+func add_heat_data_for_all_players(
+	player_id: int, grid_position: Vector2i, heat: float, heat_capacity: float
 ) -> void:
 	# start function
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var heat_data: HeatData = HeatData.new(position, heat, heat_capacity, heat_state)
+	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity)
 	player_state.heat_data_list.append(heat_data)
 	heat_data_updated.emit()
 
+## Delete the heat data for the given player at the given position.
+func remove_heat_data_at(player_id: int, grid_position: Vector2i) -> void:
+	remove_heat_data_for_all_players.rpc(player_id, grid_position)
 
-## Delete the heat data for the given player at the given position. Is an RPC.
+## Delete the heat data for the given player at the given position for all players. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
-func remove_heat_data_at(player_id: int, position: Vector2i) -> void:
+func remove_heat_data_for_all_players(player_id: int, grid_position: Vector2i) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 
 	var heat_data_list: Array[HeatData] = player_state.heat_data_list
 	var index_to_remove: int = heat_data_list.find_custom(
-		func(elem): return elem.position == position
+		func(elem): return elem.position == grid_position
 	)
 
 	if index_to_remove != -1:
 		heat_data_list.remove_at(index_to_remove)
 		heat_data_updated.emit()
 
+# TODO: Make this set heat for all cells at once
+## Set the heat data heat value at the given position to the given value.
+func set_heat_to(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
+	set_heat_for_all_players.rpc(player_id, grid_position, new_heat)
+
 
 # TODO: Make this set heat for all cells at once
-## Set the heat data heat value at the given position to the given value. Is an RPC.
+## Set the heat data heat value at the given position to the given value for all players. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
-func set_heat_to(player_id: int, position: Vector2i, new_heat: float) -> void:
+func set_heat_for_all_players(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	for heat_data: HeatData in player_state.heat_data_list:
-		if heat_data.position == position:
+		if heat_data.position == grid_position:
 			heat_data.heat = new_heat
 			heat_data_updated.emit()
 

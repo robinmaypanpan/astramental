@@ -17,6 +17,9 @@ extends Control
 ## Background color when not hovered
 @export var unhovered_self_modulation: Color
 
+## Stores the building resource being represented by this menu item
+var building_resource: BuildingResource
+
 @onready var ready_light: ColorRect = %ReadyLight
 @onready var icon: TextureRect = %Icon
 @onready var building_name: Label = %Name
@@ -31,10 +34,11 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	self_modulate = unhovered_self_modulation
 	Globals.clear_tooltip_target(self)
-	
+
 
 # Sets the building resource this item shoudl represent
 func set_building_resource(building: BuildingResource):
+	building_resource = building
 	icon.texture = building.icon
 	building_name.text = building.name
 	name = "Build %s" % building.name
@@ -44,6 +48,11 @@ func set_building_resource(building: BuildingResource):
 		var new_item_cost: BuildMenuItemCost = item_cost_scene.instantiate()
 		cost_container.add_child(new_item_cost)
 		new_item_cost.set_item_cost(item_cost)
+
+
+## Returns the building resource currently being represented by this build item
+func get_building_resource() -> BuildingResource:
+	return building_resource
 
 
 func set_enabled(new_enabled: bool) -> void:

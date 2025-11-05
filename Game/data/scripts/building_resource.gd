@@ -21,3 +21,11 @@ extends Resource
 
 ## Describe the building to the user
 @export var description: String
+
+
+## Returns the associated component
+func get_component_data(component_type: String) -> BuildingComponentData:
+	for component in building_components:
+		if component.type == component_type:
+			return component
+	return null

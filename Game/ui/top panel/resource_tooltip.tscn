@@ -1,0 +1,224 @@
+[gd_scene load_steps=7 format=3 uid="uid://1y4imsrnqj5a"]
+
+[ext_resource type="Script" uid="uid://l7mjxstxh2av" path="res://Game/ui/top panel/resource_tooltip.gd" id="1_w2ikm"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_23e1k"]
+[ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Assets/sprites/storage_bar_base.tres" id="3_kgwo2"]
+[ext_resource type="Texture2D" uid="uid://dw0qpw8l0ft87" path="res://Assets/sprites/ui/increasing_arrow.tres" id="4_loums"]
+[ext_resource type="Texture2D" uid="uid://byji0rvxtap04" path="res://Assets/sprites/items/iron.tres" id="4_w2ikm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23e1k"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="ResourceTooltip" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -720.0
+offset_bottom = -694.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_w2ikm")
+
+[node name="ResourceInfo" type="MarginContainer" parent="."]
+layout_mode = 2
+theme = ExtResource("3_23e1k")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ResourceInfo"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 30
+
+[node name="HFlowContainer" type="HFlowContainer" parent="ResourceInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+
+[node name="IconBorder" type="PanelContainer" parent="ResourceInfo/VBoxContainer/HFlowContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="ResourceInfo/VBoxContainer/HFlowContainer/IconBorder"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ResourceIcon" type="TextureRect" parent="ResourceInfo/VBoxContainer/HFlowContainer/IconBorder/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("4_w2ikm")
+expand_mode = 3
+
+[node name="ResourceName" type="Label" parent="ResourceInfo/VBoxContainer/HFlowContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 76
+text = "Iron"
+
+[node name="StorageQuantity" type="Label" parent="ResourceInfo/VBoxContainer/HFlowContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 1
+theme = ExtResource("3_23e1k")
+theme_override_font_sizes/font_size = 64
+text = "100 / 600"
+vertical_alignment = 1
+
+[node name="StorageBar" type="ProgressBar" parent="ResourceInfo/VBoxContainer/HFlowContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("3_23e1k")
+theme_override_styles/background = SubResource("StyleBoxFlat_23e1k")
+theme_override_styles/fill = ExtResource("3_kgwo2")
+max_value = 1.0
+value = 1.0
+fill_mode = 3
+show_percentage = false
+
+[node name="Production Info" type="HBoxContainer" parent="ResourceInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Labels" type="VBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info"]
+layout_mode = 2
+
+[node name="ConsumptionLabel" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Labels"]
+layout_mode = 2
+text = "Consuming"
+
+[node name="ProductionLabel" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Labels"]
+layout_mode = 2
+text = "Producing"
+
+[node name="Quantities" type="VBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info"]
+layout_mode = 2
+
+[node name="Consumption" type="HBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info/Quantities"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Consumption"]
+layout_mode = 2
+
+[node name="Minus" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Consumption/HBoxContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="ConsumptionQuantity" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Consumption/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1.0"
+
+[node name="ConsumptionTypeIcon" type="TextureRect" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Consumption/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("4_w2ikm")
+expand_mode = 3
+
+[node name="Speed" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Consumption/HBoxContainer"]
+layout_mode = 2
+text = "/s"
+
+[node name="Production" type="HBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info/Quantities"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Production"]
+layout_mode = 2
+
+[node name="Plus" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Production/HBoxContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="ProductionQuantity" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Production/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1.0"
+
+[node name="ProductionTypeIcon" type="TextureRect" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Production/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("4_w2ikm")
+expand_mode = 3
+
+[node name="Speed" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/Quantities/Production/HBoxContainer"]
+layout_mode = 2
+text = "/s"
+
+[node name="Combination symbol" type="Label" parent="ResourceInfo/VBoxContainer/Production Info"]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("3_23e1k")
+theme_override_font_sizes/font_size = 69
+text = ">"
+vertical_alignment = 1
+
+[node name="NetLabel" type="Label" parent="ResourceInfo/VBoxContainer/Production Info"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 68
+text = "Net:"
+vertical_alignment = 1
+
+[node name="NetResults" type="HBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ResourceInfo/VBoxContainer/Production Info/NetResults"]
+layout_mode = 2
+
+[node name="NetQuantity" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/NetResults/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 68
+text = "1.0"
+
+[node name="NetTypeIcon" type="TextureRect" parent="ResourceInfo/VBoxContainer/Production Info/NetResults/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("4_w2ikm")
+stretch_mode = 5
+
+[node name="Speed" type="Label" parent="ResourceInfo/VBoxContainer/Production Info/NetResults/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 68
+text = "/s"
+
+[node name="ChangeRateIndicator" type="TextureRect" parent="ResourceInfo/VBoxContainer/Production Info"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("4_loums")
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Description" type="Label" parent="ResourceInfo/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "I can't believe that iron is a whole ass substance that can exist within the universe. How did that even begin to happen?"
+autowrap_mode = 3

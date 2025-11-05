@@ -2,7 +2,6 @@ class_name PlayerStates
 extends Node
 ## Primary container for all player states
 
-
 ## When an item quantity is changed, this signal fires
 signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 
@@ -26,7 +25,7 @@ func _ready() -> void:
 func generate_player_states() -> void:
 	var player_ids := ConnectionSystem.get_player_id_list()
 
-	for player_id:int in player_ids:
+	for player_id: int in player_ids:
 		add_state(player_id)
 
 
@@ -64,7 +63,9 @@ func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
 	else:
 		return null
 
+
 # PRIVATE METHODS
+
 
 func on_item_count_changed(player_id: int, type: Types.Item, new_count: float) -> void:
 	item_count_changed.emit(player_id, type, new_count)

@@ -8,3 +8,5 @@ script = ExtResource("1_e2ncw")
 icon = ExtResource("1_6axuv")
 can_trade = false
 sell_value = 0
+display_name = "Energy"
+description = "Energy is the lifeblood of every asteroid mining operation, used to fuel miners and other equipment"
