@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://1mq2wn7s6nc0"]
+[gd_scene load_steps=8 format=3 uid="uid://1mq2wn7s6nc0"]
 
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_ahpvq"]
 [ext_resource type="Script" uid="uid://dk8t5y1a6qtrs" path="res://Game/ui/left panel/left_panel.gd" id="1_sfd31"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/left panel/ResourceDisplay/item_display_row.tscn" id="3_1gn3h"]
 [ext_resource type="PackedScene" uid="uid://d0l0gw6yjjatc" path="res://Game/ui/left panel/Debug Menu/debug_menu_panel.tscn" id="4_aa1ah"]
 [ext_resource type="PackedScene" uid="uid://bgq3xg7wrmxn5" path="res://Game/ui/left panel/Build Menu/build_menu.tscn" id="5_ld2tw"]
+[ext_resource type="PackedScene" uid="uid://bvx1p8ly2j3na" path="res://Game/ui/left panel/Trade Menu/trade_section.tscn" id="7_eqqbn"]
 
 [node name="LeftPanel" type="Panel"]
 anchors_preset = 15
@@ -33,10 +34,11 @@ item_display_row = ExtResource("3_1gn3h")
 [node name="Menus" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 2
 
 [node name="Build" parent="VBoxContainer/Menus" instance=ExtResource("5_ld2tw")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 tooltip_text = "Construct buildings"
 metadata/_tab_index = 0
@@ -47,5 +49,22 @@ visible = false
 layout_mode = 2
 tooltip_text = "Provide access to cheats and such"
 metadata/_tab_index = 1
+
+[node name="Trade" type="MarginContainer" parent="VBoxContainer/Menus"]
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Menus/Trade"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Menus/Trade/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TradeSection" parent="VBoxContainer/Menus/Trade/ScrollContainer/VBoxContainer" instance=ExtResource("7_eqqbn")]
+layout_mode = 2
+
+[node name="TradeSection2" parent="VBoxContainer/Menus/Trade/ScrollContainer/VBoxContainer" instance=ExtResource("7_eqqbn")]
+layout_mode = 2
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

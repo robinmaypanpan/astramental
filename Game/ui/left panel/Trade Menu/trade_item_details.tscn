@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://rjniofyydmax"]
+
+[ext_resource type="Texture2D" uid="uid://byji0rvxtap04" path="res://Assets/sprites/items/iron.tres" id="1_m6p0j"]
+
+[node name="TradeItemDetails" type="MarginContainer"]
+
+[node name="Indent" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Indent"]
+layout_mode = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Indent/HBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("1_m6p0j")
+
+[node name="ItemProductionText" type="Label" parent="Indent/HBoxContainer2"]
+layout_mode = 2
+text = "+5/s (net +11/s)"
