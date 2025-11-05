@@ -43,7 +43,8 @@ func on_component_added(component: BuildingComponent) -> void:
 		component.building_entity.player_id,
 		component.building_entity.position,
 		component.heat,
-		component.heat_capacity
+		component.heat_capacity,
+		component.heat_state
 	)
 
 

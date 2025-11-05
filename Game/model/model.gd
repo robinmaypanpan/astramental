@@ -305,26 +305,38 @@ func get_storage_cap(player_id: int, type: Types.Item) -> float:
 	else:
 		return 0.0
 
+
 ## Set the heat data for the given player to the data given.
 func add_heat_data_at(
-	player_id: int, grid_position: Vector2i, heat: float, heat_capacity: float
+	player_id: int,
+	grid_position: Vector2i,
+	heat: float,
+	heat_capacity: float,
+	heat_state: Types.HeatState
 ) -> void:
-	add_heat_data_for_all_players.rpc(player_id, grid_position, heat, heat_capacity)
+	add_heat_data_for_all_players.rpc(player_id, grid_position, heat, heat_capacity, heat_state)
+
 
 ## Set the heat data for the given player to the data given for all players. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
 func add_heat_data_for_all_players(
-	player_id: int, grid_position: Vector2i, heat: float, heat_capacity: float
+	player_id: int,
+	grid_position: Vector2i,
+	heat: float,
+	heat_capacity: float,
+	heat_state: Types.HeatState
 ) -> void:
 	# start function
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity)
+	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity, heat_state)
 	player_state.heat_data_list.append(heat_data)
 	heat_data_updated.emit()
+
 
 ## Delete the heat data for the given player at the given position.
 func remove_heat_data_at(player_id: int, grid_position: Vector2i) -> void:
 	remove_heat_data_for_all_players.rpc(player_id, grid_position)
+
 
 ## Delete the heat data for the given player at the given position for all players. Is an RPC.
 @rpc("any_peer", "call_local", "reliable")
@@ -339,6 +351,7 @@ func remove_heat_data_for_all_players(player_id: int, grid_position: Vector2i) -
 	if index_to_remove != -1:
 		heat_data_list.remove_at(index_to_remove)
 		heat_data_updated.emit()
+
 
 # TODO: Make this set heat for all cells at once
 ## Set the heat data heat value at the given position to the given value.
