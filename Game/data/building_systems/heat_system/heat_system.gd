@@ -39,7 +39,7 @@ func on_component_added(component: BuildingComponent) -> void:
 	heat_flow_graphs_current[player_id].add_building(component)
 	heat_flow_graphs_dirty[player_id] = true
 
-	Model.add_heat_data_at.rpc(
+	Model.add_heat_data_at(
 		component.building_entity.player_id,
 		component.building_entity.position,
 		component.heat,
@@ -57,7 +57,7 @@ func on_component_removed(component: BuildingComponent) -> void:
 	heat_flow_graphs_current[player_id].remove_building(component)
 	heat_flow_graphs_dirty[player_id] = true
 
-	Model.remove_heat_data_at.rpc(player_id, component.building_entity.position)
+	Model.remove_heat_data_at(player_id, component.building_entity.position)
 
 
 ## When game is ready, initialize starting state of heat system.
@@ -126,7 +126,7 @@ func set_heat(heat_component: HeatComponent, new_heat: float) -> void:
 	heat_component.heat = new_heat
 	var player_id: int = heat_component.building_entity.player_id
 	var position: Vector2i = heat_component.building_entity.position
-	Model.set_heat_to.rpc(player_id, position, new_heat)
+	Model.set_heat_to(player_id, position, new_heat)
 
 
 ## Given a position, find all buildings next to that position with heat in them.
