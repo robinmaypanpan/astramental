@@ -33,3 +33,8 @@ enum HeatState {
 	RUNNING,
 	OVERHEATED,
 }
+
+enum TradeDirection {
+	RECEIVING,
+	SENDING,
+}
