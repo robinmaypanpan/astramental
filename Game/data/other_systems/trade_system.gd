@@ -1,4 +1,3 @@
-class_name TradeSystem
 extends Node
 ## Maintains trade routes and updates resources based on trade routes.
 
