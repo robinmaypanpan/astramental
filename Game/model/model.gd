@@ -26,6 +26,7 @@ var num_players_ready := 0
 @onready var _miner_system: MinerSystem = %MinerSystem
 @onready var _storage_system: OreStorageSystem = %StorageSystem
 @onready var _heat_system: HeatSystem = %HeatSystem
+@onready var _trade_system: TradeSystem = %TradeSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -435,6 +436,7 @@ func _on_update_timer_timeout() -> void:
 	_energy_system.update()
 	_heat_system.update()
 	_miner_system.update()
+	_trade_system.update()
 
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
