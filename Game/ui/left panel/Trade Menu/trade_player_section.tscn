@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4q00l3fg7p6b"]
+[gd_scene load_steps=5 format=3 uid="uid://c4q00l3fg7p6b"]
 
+[ext_resource type="Script" uid="uid://dgg7ul86k7jjv" path="res://Game/ui/left panel/Trade Menu/trade_player_section.gd" id="1_kwvta"]
 [ext_resource type="PackedScene" uid="uid://civkhy8be88je" path="res://Game/ui/left panel/Trade Menu/trade_player_header.tscn" id="1_pusi8"]
 [ext_resource type="PackedScene" uid="uid://rjniofyydmax" path="res://Game/ui/left panel/Trade Menu/trade_item_details.tscn" id="2_kwvta"]
 
@@ -7,16 +8,19 @@
 bg_color = Color(0.33, 0.33, 0.33, 1)
 
 [node name="TradePlayerSection" type="MarginContainer"]
+script = ExtResource("1_kwvta")
 
 [node name="ContentBackground" type="PanelContainer" parent="."]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pusi8")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ContentBackground"]
+[node name="DetailsListContainer" type="VBoxContainer" parent="ContentBackground"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TradePlayerHeader" parent="ContentBackground/VBoxContainer" instance=ExtResource("1_pusi8")]
+[node name="TradePlayerHeader" parent="ContentBackground/DetailsListContainer" instance=ExtResource("1_pusi8")]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TradeItemDetails" parent="ContentBackground/VBoxContainer" instance=ExtResource("2_kwvta")]
+[node name="TradeItemDetails" parent="ContentBackground/DetailsListContainer" instance=ExtResource("2_kwvta")]
 layout_mode = 2
