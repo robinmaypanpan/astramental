@@ -149,6 +149,14 @@ func increase_item_count(player_id: int, type: Types.Item, increase_amount: floa
 	set_item_count(player_id, type, item_count + increase_amount)
 
 
+## Increase the specified item change rate by the given amount.
+func increase_item_change_rate(player_id: int, type: Types.Item, increase_amount: float) -> void:
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	var item_change_rate: float = player_state.item_change_rate[type]
+	player_state.update_item_change_rate(type, item_change_rate + increase_amount)
+
+
 ## Returns true if the given player_id (default is ourself) has the resources necessary
 ## to build this building
 func can_afford(building_id: String, player_id: int = multiplayer.get_unique_id()) -> bool:
