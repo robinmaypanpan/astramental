@@ -92,8 +92,8 @@ func get_item_storage_info(type: Types.Item) -> ItemStorageInfo:
 	storage_info.storage_cap = get_storage_cap(player_id, type)
 
 	# We need to split production up into production and consumption.
-	storage_info.production = get_item_change_rate(player_id, type)
-	storage_info.consumption = 1.42
+	storage_info.production = get_item_production(player_id, type)
+	storage_info.consumption = get_item_consumption(player_id, type)
 
 	return storage_info
 
@@ -123,10 +123,22 @@ func get_item_count(player_id: int, type: Types.Item) -> float:
 	return player_state.items[type]
 
 
-## Returns the number of items possessed by the specified player.
+## Returns the net change rate of the item by the specified player.
 func get_item_change_rate(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	return player_state.item_change_rate[type]
+	return player_state.item_production[type] - player_state.item_consumption[type]
+
+
+## Returns the production rate of the item by the specified player.
+func get_item_production(player_id: int, type: Types.Item) -> float:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.item_production[type]
+
+
+## Returns the consumption rate of the item by the specified player.
+func get_item_consumption(player_id: int, type: Types.Item) -> float:
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.item_consumption[type]
 
 
 ## Given the item type and amount, add that many items to this player's PlayerState.
@@ -136,11 +148,18 @@ func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:
 	player_state.update_item_count(type, new_count)
 
 
-## Given the item type and amount, adjust the item change rate for this player's playerstate
-func set_item_change_rate(player_id: int, type: Types.Item, new_change_rate: float) -> void:
+## Given the item type and new production rate, adjust the item production for this player's playerstate
+func set_item_production(player_id: int, type: Types.Item, new_production: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.update_item_change_rate(type, new_change_rate)
+	player_state.update_item_production(type, new_production)
+
+
+## Given the item type and new consumption rate, adjust the item consumption for this player's playerstate
+func set_item_consumption(player_id: int, type: Types.Item, new_consumption: float) -> void:
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.update_item_consumption(type, new_consumption)
 
 
 ## Increases the specified item count by the amount specified
@@ -423,7 +442,8 @@ func set_starting_item_counts_and_storage_caps() -> void:
 		for type in Globals.settings.starting_resources.keys():
 			var amount: float = get_starting_item_count(type)
 			set_item_count(player_id, type, amount)
-			set_item_change_rate(player_id, type, 0.0)
+			set_item_production(player_id, type, 0.0)
+			set_item_consumption(player_id, type, 0.0)
 		for type in Globals.settings.storage_caps.keys():
 			var cap: float = get_starting_storage_cap(type)
 			set_storage_cap(player_id, type, cap)

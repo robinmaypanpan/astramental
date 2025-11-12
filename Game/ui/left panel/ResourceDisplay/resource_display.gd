@@ -13,22 +13,35 @@ func _ready() -> void:
 	clear_item_display_list()
 	Model.game_ready.connect(on_game_ready)
 
+
 # PRIVATE METHODS
+
 
 func clear_item_display_list():
 	for child in _item_display_list.get_children():
 		_item_display_list.remove_child(child)
 		child.queue_free()
 
-## Updates the nubmer of items located currently
+
+## Updates the number of items located currently
 func _update_item_count(_player_id: int, type: Types.Item, new_count: float) -> void:
 	if new_count > 0 or item_type_to_row_dict.has(type):
 		get_or_create_item_row(type).update_count(new_count)
 
 
 ## Updates the change rate of items located currently
-func _update_item_change_rate(_player_id: int, type: Types.Item, new_change_rate: float) -> void:
-	if new_change_rate > 0 or item_type_to_row_dict.has(type):
+func _update_item_production(player_id: int, type: Types.Item, new_production_rate: float) -> void:
+	if new_production_rate > 0 or item_type_to_row_dict.has(type):
+		var new_change_rate: float = Model.get_item_change_rate(player_id, type)
+		get_or_create_item_row(type).update_change_rate(new_change_rate)
+
+
+## Updates the change rate of items located currently
+func _update_item_consumption(
+	player_id: int, type: Types.Item, new_consumption_rate: float
+) -> void:
+	if new_consumption_rate > 0 or item_type_to_row_dict.has(type):
+		var new_change_rate: float = Model.get_item_change_rate(player_id, type)
 		get_or_create_item_row(type).update_change_rate(new_change_rate)
 
 
@@ -44,10 +57,12 @@ func on_game_ready() -> void:
 	var player_id: int = multiplayer.get_unique_id()
 	var player_state: PlayerState = Model.player_states.get_state(player_id)
 	player_state.item_count_changed.connect(_update_item_count)
-	player_state.item_change_rate_changed.connect(_update_item_change_rate)
+	player_state.item_production_changed.connect(_update_item_production)
+	player_state.item_consumption_changed.connect(_update_item_consumption)
 	player_state.storage_cap_changed.connect(_update_storage_cap)
 
 	resync_item_counts()
+
 
 func get_or_create_item_row(item_type: Types.Item) -> ItemDisplayRow:
 	if item_type_to_row_dict.has(item_type):
