@@ -1,32 +1,52 @@
-[gd_scene load_steps=3 format=3 uid="uid://cao8qpde85dmt"]
+[gd_scene load_steps=4 format=3 uid="uid://cao8qpde85dmt"]
 
 [ext_resource type="Script" uid="uid://c2ui7w82708r3" path="res://Game/ui/left panel/ResourceDisplay/resource_display.gd" id="1_3rmhb"]
 [ext_resource type="PackedScene" uid="uid://fcbjc5acubwe" path="res://Game/ui/left panel/ResourceDisplay/item_display_row.tscn" id="2_df4nd"]
+[ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="2_rvasd"]
 
 [node name="ResourceDisplay" type="PanelContainer"]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_3rmhb")
 
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_vertical = 0
+
 [node name="ItemDisplay" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="ItemDisplay"]
-custom_minimum_size = Vector2(50, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="ItemDisplay"]
 layout_mode = 2
+theme = ExtResource("2_rvasd")
+theme_override_constants/separation = 30
 
-[node name="ItemDisplayList" type="VBoxContainer" parent="ItemDisplay/ScrollContainer"]
+[node name="Label" type="Label" parent="ItemDisplay/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_rvasd")
+theme_override_font_sizes/font_size = 60
+text = "Resources"
+vertical_alignment = 1
+
+[node name="ItemDisplayList" type="VBoxContainer" parent="ItemDisplay/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
 theme_override_constants/separation = 10
 
-[node name="ItemDisplayRow" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
+[node name="ItemDisplayRow" parent="ItemDisplay/VBoxContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
 
-[node name="ItemDisplayRow2" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
+[node name="ItemDisplayRow2" parent="ItemDisplay/VBoxContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
 
-[node name="ItemDisplayRow3" parent="ItemDisplay/ScrollContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
+[node name="ItemDisplayRow3" parent="ItemDisplay/VBoxContainer/ItemDisplayList" instance=ExtResource("2_df4nd")]
 layout_mode = 2
