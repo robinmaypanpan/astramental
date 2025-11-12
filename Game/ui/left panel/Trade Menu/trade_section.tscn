@@ -24,17 +24,17 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="TradeSectionList" type="VBoxContainer" parent="HeaderBackground/AllMargins"]
+[node name="TradePlayerSectionList" type="VBoxContainer" parent="HeaderBackground/AllMargins"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TradeSectionHeaderText" type="Label" parent="HeaderBackground/AllMargins/TradeSectionList"]
+[node name="TradeSectionHeader" type="Label" parent="HeaderBackground/AllMargins/TradePlayerSectionList"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Receiving"
 
-[node name="TradePlayerSection" parent="HeaderBackground/AllMargins/TradeSectionList" instance=ExtResource("1_blnmi")]
+[node name="TradePlayerSection" parent="HeaderBackground/AllMargins/TradePlayerSectionList" instance=ExtResource("1_blnmi")]
 layout_mode = 2
 
-[node name="TradePlayerSection2" parent="HeaderBackground/AllMargins/TradeSectionList" instance=ExtResource("1_blnmi")]
+[node name="TradePlayerSection2" parent="HeaderBackground/AllMargins/TradePlayerSectionList" instance=ExtResource("1_blnmi")]
 layout_mode = 2

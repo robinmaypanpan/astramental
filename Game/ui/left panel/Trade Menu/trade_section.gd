@@ -13,7 +13,7 @@ var trade_player_section_scene: PackedScene = preload(
 
 ## Given a list of trade routes that are all sending routes or all receiving routes, generate the
 ## appropriate TradePlayerSections and add them to the trade section list.
-func update_section(trade_routes: Array[TradeRoute], trade_direction: Types.TradeDirection) -> void:
+func update_section(trade_routes: Array, trade_direction: Types.TradeDirection) -> void:
 	_remove_player_sections()
 
 	if trade_direction == Types.TradeDirection.RECEIVING:
@@ -39,8 +39,9 @@ func update_section(trade_routes: Array[TradeRoute], trade_direction: Types.Trad
 	for other_player_id: int in trade_routes_by_other_player.keys():
 		var routes_with_other_player: Array = trade_routes_by_other_player[other_player_id]
 		var trade_player_section: TradePlayerSection = trade_player_section_scene.instantiate()
-		trade_player_section.update_section(routes_with_other_player, trade_direction)
+		# when add_child happens, _ready code will run, which has to happen before update_section
 		trade_player_section_list.add_child(trade_player_section)
+		trade_player_section.update_section(routes_with_other_player, trade_direction)
 
 
 func _ready() -> void:

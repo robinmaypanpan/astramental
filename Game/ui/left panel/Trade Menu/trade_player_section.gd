@@ -12,7 +12,7 @@ var trade_item_details_scene: PackedScene = preload(
 
 ## Given an array of trade routes with receiving and sending player id identical, fill out the
 ## player header and item details for the trade routes.
-func update_section(trade_routes: Array[TradeRoute], trade_direction: Types.TradeDirection) -> void:
+func update_section(trade_routes: Array, trade_direction: Types.TradeDirection) -> void:
 	_remove_item_details()
 	if trade_routes.is_empty():
 		assert(false, "trade player section given no trade routes to list")
@@ -37,10 +37,11 @@ func update_section(trade_routes: Array[TradeRoute], trade_direction: Types.Trad
 		var amount: float = trade_route.amount
 		var net_production: float = Model.get_item_change_rate(our_player_id, item)
 		var trade_item_details: TradeItemDetails = trade_item_details_scene.instantiate()
-		trade_item_details.update_item_icon(Items.get_info(item).icon)
 		# TODO: trade details should display trade amount specified vs actual amount traded
-		trade_item_details.update_item_production_text(amount, net_production)
+		# when add_child happens, _ready code will run, which has to happen before updates
 		details_list_container.add_child(trade_item_details)
+		trade_item_details.update_item_icon(Items.get_info(item).icon)
+		trade_item_details.update_item_production_text(amount, net_production)
 
 
 func _ready() -> void:

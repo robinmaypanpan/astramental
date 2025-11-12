@@ -21,8 +21,8 @@ func update_player(new_player_name: String) -> void:
 ## Update the trade direction to the given one, changing the trade icon shown.
 func update_trade_direction(trade_direction: Types.TradeDirection) -> void:
 	if trade_direction == Types.TradeDirection.RECEIVING:
-		trade_icon.icon = receiving_arrow
+		trade_icon.texture = receiving_arrow
 	elif trade_direction == Types.TradeDirection.SENDING:
-		trade_icon.icon = sending_arrow
+		trade_icon.texture = sending_arrow
 	else:
 		assert(false, "unknown trade direction %s" % Types.TradeDirection.keys()[trade_direction])
