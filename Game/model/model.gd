@@ -11,6 +11,8 @@ signal ores_layout_updated
 signal buildings_updated
 ## Emitted when heat_data_list in PlayerStates is updated.
 signal heat_data_updated
+## Emitted for both players when the update tick is done.
+signal tick_done
 
 ## The random number seed used for this game
 var world_seed: int
@@ -436,7 +438,12 @@ func _on_update_timer_timeout() -> void:
 	_heat_system.update()
 	_miner_system.update()
 	TradeSystem.update()
+	_broadcast_tick_done.rpc()
 
+
+@rpc("any_peer", "call_local", "reliable")
+func _broadcast_tick_done() -> void:
+	tick_done.emit()
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
 ## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
