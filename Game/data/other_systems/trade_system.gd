@@ -9,15 +9,15 @@ var _next_trade_route_id: int = 0
 
 
 ## code for testing adding trade route
-# func _ready() -> void:
-# 	Model.game_ready.connect(_on_game_ready_test)
+func _ready() -> void:
+	Model.game_ready.connect(_on_game_ready_test)
 
-# func _on_game_ready_test() -> void:
-# 	if multiplayer.is_server():
-# 		var player_ids = ConnectionSystem.get_player_id_list()
-# 		var first_player = player_ids[0]
-# 		var second_player = player_ids[1]
-# 		add_trade_route(first_player, second_player, Types.Item.IRON, 1)
+func _on_game_ready_test() -> void:
+	if multiplayer.is_server():
+		var player_ids = ConnectionSystem.get_player_id_list()
+		var first_player = player_ids[0]
+		var second_player = player_ids[1]
+		add_trade_route(first_player, second_player, Types.Item.IRON, 1)
 
 
 ## Add a new trade route.
@@ -68,9 +68,9 @@ func update() -> void:
 			var send_amount_per_tick = send_amount_per_sec * update_interval
 
 			Model.increase_item_count(sending_player_id, item, -send_amount_per_tick)
-			Model.increase_item_change_rate(sending_player_id, item, -send_amount_per_sec)
+			Model.increase_item_consumption(sending_player_id, item, send_amount_per_sec)
 			Model.increase_item_count(receiving_player_id, item, send_amount_per_tick)
-			Model.increase_item_change_rate(receiving_player_id, item, send_amount_per_sec)
+			Model.increase_item_production(receiving_player_id, item, send_amount_per_sec)
 
 
 ## Add a new trade route for all players.
