@@ -27,10 +27,10 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## The storage cap for each item.
 @export var storage_caps: Dictionary[Types.Item, float]
 
-## The change rate of each item that this player currently has.
+## The production rate of each item that this player currently has.
 @export var item_production: Dictionary[Types.Item, float]
 
-## The change rate of each item that this player currently has.
+## The consumption rate of each item that this player currently has.
 @export var item_consumption: Dictionary[Types.Item, float]
 
 ## The current energy satisfaction of all buildings, which defines how much of the current
@@ -105,14 +105,14 @@ func sync_storage_cap(type: Types.Item, new_cap: float) -> void:
 	storage_cap_changed.emit(id, type, new_cap)
 
 
-## Set item production for both players and fire item_production_changed signal.
+## Set item production rate for both players and fire item_production_changed signal.
 @rpc("any_peer", "call_local", "reliable")
 func sync_item_production(type: Types.Item, new_production: float) -> void:
 	item_production[type] = new_production
 	item_production_changed.emit(id, type, new_production)
 
 
-## Set item change rate for both players and fire item_consumption_changed signal.
+## Set item consumption rate for both players and fire item_consumption_changed signal.
 @rpc("any_peer", "call_local", "reliable")
 func sync_item_consumption(type: Types.Item, new_consumption: float) -> void:
 	item_consumption[type] = new_consumption
