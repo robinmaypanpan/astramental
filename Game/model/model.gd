@@ -121,7 +121,7 @@ func get_item_count(player_id: int, type: Types.Item) -> float:
 	return player_state.items[type]
 
 
-## Returns the number of items possessed by the specified player.
+## Returns the net change rate of the item by the specified player.
 func get_item_change_rate(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.item_production[type] - player_state.item_consumption[type]
