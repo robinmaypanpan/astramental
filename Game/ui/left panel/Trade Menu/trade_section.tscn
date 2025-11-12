@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvx1p8ly2j3na"]
+[gd_scene load_steps=4 format=3 uid="uid://bvx1p8ly2j3na"]
 
 [ext_resource type="PackedScene" uid="uid://c4q00l3fg7p6b" path="res://Game/ui/left panel/Trade Menu/trade_player_section.tscn" id="1_blnmi"]
+[ext_resource type="Script" uid="uid://b6mjt1377sxcp" path="res://Game/ui/left panel/Trade Menu/trade_section.gd" id="1_yr8au"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6a74"]
 bg_color = Color(0.22, 0.22, 0.22, 1)
@@ -10,6 +11,7 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
+script = ExtResource("1_yr8au")
 
 [node name="HeaderBackground" type="PanelContainer" parent="."]
 layout_mode = 2
@@ -22,15 +24,17 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HeaderBackground/AllMargins"]
+[node name="TradeSectionList" type="VBoxContainer" parent="HeaderBackground/AllMargins"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="TradeSectionHeaderText" type="Label" parent="HeaderBackground/AllMargins/VBoxContainer"]
+[node name="TradeSectionHeaderText" type="Label" parent="HeaderBackground/AllMargins/TradeSectionList"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Receiving"
 
-[node name="TradePlayerSection" parent="HeaderBackground/AllMargins/VBoxContainer" instance=ExtResource("1_blnmi")]
+[node name="TradePlayerSection" parent="HeaderBackground/AllMargins/TradeSectionList" instance=ExtResource("1_blnmi")]
 layout_mode = 2
 
-[node name="TradePlayerSection2" parent="HeaderBackground/AllMargins/VBoxContainer" instance=ExtResource("1_blnmi")]
+[node name="TradePlayerSection2" parent="HeaderBackground/AllMargins/TradeSectionList" instance=ExtResource("1_blnmi")]
 layout_mode = 2

@@ -12,27 +12,21 @@ var trade_item_details_scene: PackedScene = preload(
 
 ## Given an array of trade routes with receiving and sending player id identical, fill out the
 ## player header and item details for the trade routes.
-func update_section(trade_routes: Array[TradeRoute]) -> void:
+func update_section(trade_routes: Array[TradeRoute], trade_direction: Types.TradeDirection) -> void:
 	_remove_item_details()
 	if trade_routes.is_empty():
-		trade_player_header.visible = false
-		return
+		assert(false, "trade player section given no trade routes to list")
 
 	var first_trade_route: TradeRoute = trade_routes[0]
 	var sending_id: int = first_trade_route.sending_player_id
 	var receiving_id: int = first_trade_route.receiving_player_id
 	var our_player_id: int = multiplayer.get_unique_id()
 
-	var trade_direction: Types.TradeDirection
 	var other_player_name: String
-	if receiving_id == our_player_id:
-		trade_direction = Types.TradeDirection.RECEIVING
+	if trade_direction == Types.TradeDirection.RECEIVING:
 		other_player_name = ConnectionSystem.get_player(sending_id).name
-	elif sending_id == our_player_id:
-		trade_direction = Types.TradeDirection.SENDING
+	elif trade_direction == Types.TradeDirection.SENDING:
 		other_player_name = ConnectionSystem.get_player(receiving_id).name
-	else:
-		assert(false, "trade section given route that doesn't involve our player id")
 
 	trade_player_header.visible = true
 	trade_player_header.update_trade_direction(trade_direction)
