@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bk1vb8w75hf3y"]
+[gd_scene load_steps=7 format=3 uid="uid://bk1vb8w75hf3y"]
 
 [ext_resource type="Script" uid="uid://bqwe7oxpbs8nf" path="res://Game/ui/top panel/cell_tooltip.gd" id="1_582xq"]
 [ext_resource type="Texture2D" uid="uid://bl6t4oh6maial" path="res://Assets/sprites/ore/iron_ore.tres" id="2_4ojyi"]
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="3_dwmh3"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_wiutq"]
 [ext_resource type="Texture2D" uid="uid://10375ojdnctl" path="res://Assets/sprites/items/energy.tres" id="4_qa420"]
+[ext_resource type="Theme" uid="uid://de1q5xgojhw72" path="res://Game/ui/top panel/tooltip_theme.tres" id="5_jlvlg"]
 
 [node name="CellTooltip" type="PanelContainer"]
 anchors_preset = 15
@@ -94,11 +95,20 @@ expand_mode = 3
 layout_mode = 2
 text = "/s"
 
-[node name="BuildingDescription" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_jlvlg")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/BuildingInfo/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("5_jlvlg")
+
+[node name="BuildingDescription" type="Label" parent="HBoxContainer/BuildingInfo/VBoxContainer/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("5_jlvlg")
+theme_override_font_sizes/font_size = 35
 text = "WOW!  That's really a building right there.  A whole ass building. What a thing to see in this day and age."
 autowrap_mode = 3
 
@@ -153,12 +163,27 @@ theme_override_font_sizes/font_size = 76
 text = "Cell tooltip"
 vertical_alignment = 1
 
-[node name="CellDescription" type="Label" parent="HBoxContainer/OreInfo/VBoxContainer"]
+[node name="ProductionIndicator" type="RichTextLabel" parent="HBoxContainer/OreInfo/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_wiutq")
+bbcode_enabled = true
+text = "Produces [img=center,center,32x32]res://Assets/sprites/items/iron.tres[/img] when mined"
+fit_content = true
+
+[node name="CellDescriptionContainer" type="PanelContainer" parent="HBoxContainer/OreInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/OreInfo/VBoxContainer/CellDescriptionContainer"]
+layout_mode = 2
+theme = ExtResource("5_jlvlg")
+
+[node name="CellDescription" type="Label" parent="HBoxContainer/OreInfo/VBoxContainer/CellDescriptionContainer/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("3_wiutq")
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("5_jlvlg")
+theme_type_variation = &"Description"
 text = "This is a really cool cell, I mean there is just everything here.  Ore and materials and all kinds of relaly neat stuff."
 autowrap_mode = 3

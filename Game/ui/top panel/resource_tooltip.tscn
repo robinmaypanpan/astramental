@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://1y4imsrnqj5a"]
+[gd_scene load_steps=8 format=3 uid="uid://1y4imsrnqj5a"]
 
 [ext_resource type="Script" uid="uid://l7mjxstxh2av" path="res://Game/ui/top panel/resource_tooltip.gd" id="1_w2ikm"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_23e1k"]
 [ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Assets/sprites/storage_bar_base.tres" id="3_kgwo2"]
 [ext_resource type="Texture2D" uid="uid://dw0qpw8l0ft87" path="res://Assets/sprites/ui/increasing_arrow.tres" id="4_loums"]
 [ext_resource type="Texture2D" uid="uid://byji0rvxtap04" path="res://Assets/sprites/items/iron.tres" id="4_w2ikm"]
+[ext_resource type="Theme" uid="uid://de1q5xgojhw72" path="res://Game/ui/top panel/tooltip_theme.tres" id="6_loums"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23e1k"]
 border_width_left = 1
@@ -215,10 +216,19 @@ texture = ExtResource("4_loums")
 expand_mode = 2
 stretch_mode = 5
 
-[node name="Description" type="Label" parent="ResourceInfo/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="ResourceInfo/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("6_loums")
+
+[node name="MarginContainer" type="MarginContainer" parent="ResourceInfo/VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("6_loums")
+
+[node name="Description" type="Label" parent="ResourceInfo/VBoxContainer/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 100)
 layout_mode = 2
+theme = ExtResource("6_loums")
 theme_override_font_sizes/font_size = 40
 text = "I can't believe that iron is a whole ass substance that can exist within the universe. How did that even begin to happen?"
 autowrap_mode = 3
