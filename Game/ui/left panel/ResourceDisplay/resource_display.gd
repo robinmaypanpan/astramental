@@ -23,7 +23,7 @@ func clear_item_display_list():
 		child.queue_free()
 
 
-## Updates the nubmer of items located currently
+## Updates the number of items located currently
 func _update_item_count(_player_id: int, type: Types.Item, new_count: float) -> void:
 	if new_count > 0 or item_type_to_row_dict.has(type):
 		get_or_create_item_row(type).update_count(new_count)
