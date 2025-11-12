@@ -69,4 +69,4 @@ func update() -> void:
 			# TODO: move this data out of the model. Consumers of this data can ask this system,
 			# not the model.
 			Model.set_item_count(player_id, ore_item, new_ore)
-			Model.set_item_production(player_id, ore_item, ore_production_per_sec)
+			Model.increase_item_production(player_id, ore_item, ore_production_per_sec)

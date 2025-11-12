@@ -24,7 +24,7 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
-@onready var _energy_system := %EnergySystem
+@onready var _energy_system: EnergySystem = %EnergySystem
 @onready var _miner_system: MinerSystem = %MinerSystem
 @onready var _storage_system: OreStorageSystem = %StorageSystem
 @onready var _heat_system: HeatSystem = %HeatSystem
@@ -457,10 +457,19 @@ func set_starting_item_counts_and_storage_caps() -> void:
 			set_storage_cap(player_id, type, cap)
 
 
+## Reset the item production and consumption numbers for the update loop.
+func _reset_production_consumption() -> void:
+	for player_id in ConnectionSystem.get_player_id_list():
+		for type in Globals.settings.starting_resources.keys():
+			set_item_production(player_id, type, 0.0)
+			set_item_consumption(player_id, type, 0.0)
+
+
 ## Fires whenever the update timer is fired. This should only run on the server.
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
+	_reset_production_consumption()
 	_storage_system.update()
 	_energy_system.update()
 	_heat_system.update()
