@@ -127,13 +127,13 @@ func get_item_change_rate(player_id: int, type: Types.Item) -> float:
 	return player_state.item_production[type] - player_state.item_consumption[type]
 
 
-## Returns the number of items possessed by the specified player.
+## Returns the production rate of the item by the specified player.
 func get_item_production(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.item_production[type]
 
 
-## Returns the number of items possessed by the specified player.
+## Returns the consumption rate of the item by the specified player.
 func get_item_consumption(player_id: int, type: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.item_consumption[type]
@@ -146,14 +146,14 @@ func set_item_count(player_id: int, type: Types.Item, new_count: float) -> void:
 	player_state.update_item_count(type, new_count)
 
 
-## Given the item type and amount, adjust the item production for this player's playerstate
+## Given the item type and new production rate, adjust the item production for this player's playerstate
 func set_item_production(player_id: int, type: Types.Item, new_production: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.update_item_production(type, new_production)
 
 
-## Given the item type and amount, adjust the item consumption for this player's playerstate
+## Given the item type and new consumption rate, adjust the item consumption for this player's playerstate
 func set_item_consumption(player_id: int, type: Types.Item, new_consumption: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
