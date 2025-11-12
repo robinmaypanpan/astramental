@@ -1,11 +1,13 @@
 class_name PlayerState extends Node
 
-
 ## When an item quantity is changed, this signal fires
 signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
 
-## When an item change rate changes, this signal fires
-signal item_change_rate_changed(player_id: int, type: Types.Item, new_change_rate: float)
+## When an item production rate changes, this signal fires
+signal item_production_changed(player_id: int, type: Types.Item, new_production: float)
+
+## When an item consumption rate changes, this signal fires
+signal item_consumption_changed(player_id: int, type: Types.Item, new_consumption: float)
 
 ## When energy satisfaction changes, this signal fires
 signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
@@ -25,8 +27,11 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## The storage cap for each item.
 @export var storage_caps: Dictionary[Types.Item, float]
 
-## The change rate of each item that this player currently has.
-@export var item_change_rate: Dictionary[Types.Item, float]
+## The production rate of each item that this player currently has.
+@export var item_production: Dictionary[Types.Item, float]
+
+## The consumption rate of each item that this player currently has.
+@export var item_consumption: Dictionary[Types.Item, float]
 
 ## The current energy satisfaction of all buildings, which defines how much of the current
 ## energy demand is satisfied by current energy production. Stored as a decimal between
@@ -52,10 +57,17 @@ func _ready() -> void:
 
 
 ## Expected to be used by the server to set the current rate and propogate the responses downstream
-func update_item_change_rate(item: Types.Item, change_rate: float) -> void:
+func update_item_production(item: Types.Item, change_rate: float) -> void:
 	assert(multiplayer.is_server())
-	if item_change_rate[item] != change_rate:
-		sync_item_change_rate.rpc(item, change_rate)
+	if item_production[item] != change_rate:
+		sync_item_production.rpc(item, change_rate)
+
+
+## Expected to be used by the server to set the current rate and propogate the responses downstream
+func update_item_consumption(item: Types.Item, change_rate: float) -> void:
+	assert(multiplayer.is_server())
+	if item_consumption[item] != change_rate:
+		sync_item_consumption.rpc(item, change_rate)
 
 
 ## Used by the server to set the item count
@@ -93,11 +105,18 @@ func sync_storage_cap(type: Types.Item, new_cap: float) -> void:
 	storage_cap_changed.emit(id, type, new_cap)
 
 
-## Set item change rate for both players and fire item_change_rate_changed signal.
+## Set item production rate for both players and fire item_production_changed signal.
 @rpc("any_peer", "call_local", "reliable")
-func sync_item_change_rate(type: Types.Item, new_change_rate: float) -> void:
-	item_change_rate[type] = new_change_rate
-	item_change_rate_changed.emit(id, type, new_change_rate)
+func sync_item_production(type: Types.Item, new_production: float) -> void:
+	item_production[type] = new_production
+	item_production_changed.emit(id, type, new_production)
+
+
+## Set item consumption rate for both players and fire item_consumption_changed signal.
+@rpc("any_peer", "call_local", "reliable")
+func sync_item_consumption(type: Types.Item, new_consumption: float) -> void:
+	item_consumption[type] = new_consumption
+	item_consumption_changed.emit(id, type, new_consumption)
 
 
 ## Set energy satisfaction for both players and fire energy_satisfaction_changed signal.

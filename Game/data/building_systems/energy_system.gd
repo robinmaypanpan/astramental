@@ -59,11 +59,16 @@ func update():
 		energy_satisfaction[player_id] = min(1.0, player_production / player_consumption)
 		if new_energy < 0.0:
 			new_energy = 0.0
-			print("Out of energy; efficiency = %f / %f = %f"
-				% [player_production, player_consumption, energy_satisfaction[player_id]])
+			print(
+				(
+					"Out of energy; efficiency = %f / %f = %f"
+					% [player_production, player_consumption, energy_satisfaction[player_id]]
+				)
+			)
 
 		# TODO: move this data out of the model. Consumers of this data can ask this system,
 		# not the model.
 		Model.set_item_count(player_id, Types.Item.ENERGY, new_energy)
-		Model.set_item_change_rate(player_id, Types.Item.ENERGY, energy_change_per_sec)
+		Model.set_item_production(player_id, Types.Item.ENERGY, player_production)
+		Model.set_item_consumption(player_id, Types.Item.ENERGY, player_consumption)
 		Model.set_energy_satisfaction(player_id, energy_satisfaction[player_id])
