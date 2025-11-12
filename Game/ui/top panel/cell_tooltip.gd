@@ -53,7 +53,9 @@ func set_tooltip_source(node: Control) -> void:
 			production_indicator.text = (
 				production_indicator_format % yield_item_resource.icon.resource_path
 			)
+			production_indicator.show()
 		Types.Layer.FACTORY:
+			production_indicator.hide()
 			cell_name_label.text = factory_resource.display_name
 			cell_description_label.text = factory_resource.description
 			cell_icon.texture = factory_resource.icon
