@@ -14,7 +14,7 @@ signal item_consumption_changed(player_id: int, type: Types.Item, new_consumptio
 ## When an energy satisfaction level changes, this signal fires
 signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
 
-##
+## Scene of player state object to instantiate when making a new player state.
 var player_state_scene: PackedScene = preload("res://Game/model/player_state/player_state.tscn")
 
 ## Stores mapping from player id -> instantiated player state
