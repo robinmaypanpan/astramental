@@ -111,46 +111,40 @@ func get_starting_storage_cap(type: Types.Item) -> float:
 	return Globals.settings.get_storage_cap_item(type)
 
 
-## Returns a dictionary of all of the items posessed by the player
-# func get_all_item_counts(player_id: int) -> Dictionary[Types.Item, float]:
-# 	var player_state: PlayerState = player_states.get_state(player_id)
-# 	return player_state.items.duplicate()
-
-
 ## Returns the number of items possessed by the specified player.
 func get_item_count(player_id: int, item: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	return item_model.counts.get_for(item)
+	var items: ItemModel = player_state.items
+	return items.counts.get_for(item)
 
 
 ## Returns the net change rate of the item by the specified player.
 func get_item_change_rate(player_id: int, item: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	return item_model.get_item_change_rate(item)
+	var items: ItemModel = player_state.items
+	return items.get_item_change_rate(item)
 
 
 ## Returns the production rate of the item by the specified player.
 func get_item_production(player_id: int, item: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	return item_model.production.get_for(item)
+	var items: ItemModel = player_state.items
+	return items.production.get_for(item)
 
 
 ## Returns the consumption rate of the item by the specified player.
 func get_item_consumption(player_id: int, item: Types.Item) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	return item_model.consumption.get_for(item)
+	var items: ItemModel = player_state.items
+	return items.consumption.get_for(item)
 
 
 ## Given the item type and amount, add that many items to this player's PlayerState.
 func set_item_count(player_id: int, item: Types.Item, new_count: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.counts.set_for(item, new_count)
+	var items: ItemModel = player_state.items
+	items.counts.set_for(item, new_count)
 
 
 ## Given the item type and new production rate, adjust the item production for this player's
@@ -158,8 +152,8 @@ func set_item_count(player_id: int, item: Types.Item, new_count: float) -> void:
 func set_item_production(player_id: int, item: Types.Item, new_production: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.production.set_for(item, new_production)
+	var items: ItemModel = player_state.items
+	items.production.set_for(item, new_production)
 
 
 ## Given the item type and new consumption rate, adjust the item consumption for this player's
@@ -167,39 +161,39 @@ func set_item_production(player_id: int, item: Types.Item, new_production: float
 func set_item_consumption(player_id: int, item: Types.Item, new_consumption: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.consumption.set_for(item, new_consumption)
+	var items: ItemModel = player_state.items
+	items.consumption.set_for(item, new_consumption)
 
 
 ## Increases the specified item count by the amount specified
 func increase_item_count(player_id: int, item: Types.Item, increase_amount: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.counts.increase_for(item, increase_amount)
+	var items: ItemModel = player_state.items
+	items.counts.increase_for(item, increase_amount)
 
 
 ## Increase the item count by as much as you can while not going over the item's storage cap.
 ## Returns the amount that the item count was actually increased by.
 func increase_item_count_apply_cap(player_id: int, item: Types.Item, amount: float) -> float:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	return player_state.item_model.increase_item_count_apply_cap(item, amount)
+	return player_state.items.increase_item_count_apply_cap(item, amount)
 
 
 ## Increase the specified item consumption rate by the given amount.
 func increase_item_consumption(player_id: int, item: Types.Item, increase_amount: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.consumption.increase_for(item, increase_amount)
+	var items: ItemModel = player_state.items
+	items.consumption.increase_for(item, increase_amount)
 
 
 ## Increase the specified item production rate by the given amount.
 func increase_item_production(player_id: int, item: Types.Item, increase_amount: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.production.increase_for(item, increase_amount)
+	var items: ItemModel = player_state.items
+	items.production.increase_for(item, increase_amount)
 
 
 ## Returns true if the given player_id (default is ourself) has the resources necessary
@@ -344,8 +338,8 @@ func get_energy_satisfaction(player_id: int) -> float:
 ## Set the storage limit for a given type
 func set_storage_cap(player_id: int, item: Types.Item, new_cap: float) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var item_model: ItemModel = player_state.item_model
-	item_model.storage_caps.set_for(item, new_cap)
+	var items: ItemModel = player_state.items
+	items.storage_caps.set_for(item, new_cap)
 
 
 ## Returns the storage limit for a given type if it exists.
@@ -355,8 +349,8 @@ func get_storage_cap(player_id: int, item: Types.Item) -> float:
 	# in ItemDisplayRow._ready()
 	# TODO: fix this being called when player_state isn't intialized
 	if player_state:
-		var item_model: ItemModel = player_state.item_model
-		return item_model.storage_caps.get_for(item)
+		var items: ItemModel = player_state.items
+		return items.storage_caps.get_for(item)
 	else:
 		return 0.0
 
@@ -474,7 +468,7 @@ func set_starting_item_counts_and_storage_caps() -> void:
 			var cap: float = get_starting_storage_cap(type)
 			set_storage_cap(player_id, type, cap)
 		# TODO: fix this hack
-		player_states.get_state(player_id).item_model.sync()
+		player_states.get_state(player_id).items.sync()
 
 
 ## TODO: this code causes flickering of production numbers. This will be fixed in the Model rework.
@@ -500,7 +494,7 @@ func _on_update_timer_timeout() -> void:
 	# TODO: remove this hack by rewriting UI code
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
-		player_state.item_model.sync()
+		player_state.items.sync()
 	player_states.get_state().fire_all_changed_signals()
 
 	_broadcast_tick_done.rpc()
