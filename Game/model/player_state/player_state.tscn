@@ -1,23 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://b47vu2y258g5v"]
+[gd_scene load_steps=4 format=3 uid="uid://b47vu2y258g5v"]
 
-[ext_resource type="Script" uid="uid://bynttyeyjf7i5" path="res://Game/model/player_state.gd" id="1_hlkx3"]
+[ext_resource type="Script" uid="uid://4wh2gi5ydyre" path="res://Game/model/player_state/item_property.gd" id="2_f77f7"]
+[ext_resource type="Script" uid="uid://clga8v64ljqmd" path="res://Game/model/player_state/item_model.gd" id="2_wyreu"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_iq7yb"]
-properties/0/path = NodePath(".:money")
+properties/0/path = NodePath("ItemModel/ItemCounts:value_dict")
 properties/0/spawn = true
 properties/0/replication_mode = 1
-properties/1/path = NodePath(".:energy")
+properties/1/path = NodePath("ItemModel/ItemProduction:value_dict")
 properties/1/spawn = true
 properties/1/replication_mode = 1
-properties/2/path = NodePath(".:id")
+properties/2/path = NodePath("ItemModel/ItemConsumption:value_dict")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath(".:index")
+properties/3/path = NodePath("ItemModel/StorageCaps:value_dict")
 properties/3/spawn = true
 properties/3/replication_mode = 1
-properties/4/path = NodePath(".:items")
-properties/4/spawn = true
-properties/4/replication_mode = 1
 
 [node name="PlayerState" type="Control"]
 layout_mode = 3
@@ -26,7 +24,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_hlkx3")
+
+[node name="ItemModel" type="Node" parent="."]
+script = ExtResource("2_wyreu")
+metadata/_custom_type_script = "uid://clga8v64ljqmd"
+
+[node name="ItemCounts" type="Node" parent="ItemModel"]
+script = ExtResource("2_f77f7")
+
+[node name="ItemProduction" type="Node" parent="ItemModel"]
+script = ExtResource("2_f77f7")
+
+[node name="ItemConsumption" type="Node" parent="ItemModel"]
+script = ExtResource("2_f77f7")
+
+[node name="StorageCaps" type="Node" parent="ItemModel"]
+script = ExtResource("2_f77f7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_iq7yb")

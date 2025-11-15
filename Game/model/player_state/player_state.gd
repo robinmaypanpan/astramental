@@ -48,6 +48,7 @@ var buildings_list: Array[BuildingEntity]
 ## Contains a list of all cells where heat is located.
 var heat_data_list: Array[HeatData]
 
+@onready var item_model: ItemModel = %ItemModel
 
 func _ready() -> void:
 	# Initialize ores_layout array
