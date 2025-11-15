@@ -7,16 +7,16 @@
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_iq7yb"]
 properties/0/path = NodePath("ItemModel/ItemCounts:value_dict")
 properties/0/spawn = true
-properties/0/replication_mode = 1
+properties/0/replication_mode = 2
 properties/1/path = NodePath("ItemModel/ItemProduction:value_dict")
 properties/1/spawn = true
-properties/1/replication_mode = 1
+properties/1/replication_mode = 2
 properties/2/path = NodePath("ItemModel/ItemConsumption:value_dict")
 properties/2/spawn = true
-properties/2/replication_mode = 1
+properties/2/replication_mode = 2
 properties/3/path = NodePath("ItemModel/StorageCaps:value_dict")
 properties/3/spawn = true
-properties/3/replication_mode = 1
+properties/3/replication_mode = 2
 
 [node name="PlayerState" type="Control"]
 layout_mode = 3
@@ -51,4 +51,4 @@ script = ExtResource("2_f77f7")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_iq7yb")
 
-[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
+[connection signal="delta_synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]

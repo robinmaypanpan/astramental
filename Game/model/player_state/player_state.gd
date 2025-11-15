@@ -99,6 +99,6 @@ func fire_all_changed_signals() -> void:
 
 func _on_multiplayer_synchronizer_synchronized() -> void:
 	# This acts kinda weird. Hooking off synchronize calls this like 8 times a tick, and hooking
-	# off delta_synchronize makes it not work at all.
+	# off delta_synchronize makes it call like 1-2 times a tick.
 	print("received synchronize as %d" % [multiplayer.get_unique_id()])
 	fire_all_changed_signals()
