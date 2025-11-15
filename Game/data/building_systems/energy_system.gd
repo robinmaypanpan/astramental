@@ -69,6 +69,6 @@ func update():
 		# TODO: move this data out of the model. Consumers of this data can ask this system,
 		# not the model.
 		Model.set_item_count(player_id, Types.Item.ENERGY, new_energy)
-		Model.set_item_production(player_id, Types.Item.ENERGY, player_production)
-		Model.set_item_consumption(player_id, Types.Item.ENERGY, player_consumption)
+		Model.increase_item_production(player_id, Types.Item.ENERGY, player_production)
+		Model.increase_item_consumption(player_id, Types.Item.ENERGY, player_consumption)
 		Model.set_energy_satisfaction(player_id, energy_satisfaction[player_id])

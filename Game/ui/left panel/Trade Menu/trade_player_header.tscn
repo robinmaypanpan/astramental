@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://civkhy8be88je"]
+
+[ext_resource type="Script" uid="uid://by5rjxak1ejto" path="res://Game/ui/left panel/Trade Menu/trade_player_header.gd" id="1_cgu7w"]
+[ext_resource type="Texture2D" uid="uid://bpft44n3ix4r3" path="res://Assets/sprites/ui/receiving_arrow.tres" id="1_r22ws"]
+[ext_resource type="Texture2D" uid="uid://b0us1faxo6120" path="res://Assets/sprites/ui/sending_arrow.tres" id="2_07uhc"]
+
+[node name="TradePlayerHeader" type="MarginContainer"]
+script = ExtResource("1_cgu7w")
+sending_arrow = ExtResource("2_07uhc")
+receiving_arrow = ExtResource("1_r22ws")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TradeIcon" type="TextureRect" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("1_r22ws")
+stretch_mode = 5
+
+[node name="PlayerText" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "robin"

@@ -11,6 +11,8 @@ signal ores_layout_updated
 signal buildings_updated
 ## Emitted when heat_data_list in PlayerStates is updated.
 signal heat_data_updated
+## Emitted for both players when the update tick is done.
+signal tick_done
 
 ## The random number seed used for this game
 var world_seed: int
@@ -22,7 +24,7 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
-@onready var _energy_system := %EnergySystem
+@onready var _energy_system: EnergySystem = %EnergySystem
 @onready var _miner_system: MinerSystem = %MinerSystem
 @onready var _storage_system: OreStorageSystem = %StorageSystem
 @onready var _heat_system: HeatSystem = %HeatSystem
@@ -166,6 +168,22 @@ func increase_item_count(player_id: int, type: Types.Item, increase_amount: floa
 	var player_state: PlayerState = player_states.get_state(player_id)
 	var item_count := player_state.items[type]
 	set_item_count(player_id, type, item_count + increase_amount)
+
+
+## Increase the specified item consumption rate by the given amount.
+func increase_item_consumption(player_id: int, type: Types.Item, increase_amount: float) -> void:
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	var item_consumption: float = player_state.item_consumption[type]
+	player_state.update_item_consumption(type, item_consumption + increase_amount)
+
+
+## Increase the specified item production rate by the given amount.
+func increase_item_production(player_id: int, type: Types.Item, increase_amount: float) -> void:
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	var item_production: float = player_state.item_production[type]
+	player_state.update_item_production(type, item_production + increase_amount)
 
 
 ## Returns true if the given player_id (default is ourself) has the resources necessary
@@ -439,15 +457,31 @@ func set_starting_item_counts_and_storage_caps() -> void:
 			set_storage_cap(player_id, type, cap)
 
 
+## TODO: this code causes flickering of production numbers. This will be fixed in the Model rework.
+## Reset the item production and consumption numbers for the update loop.
+func _reset_production_consumption() -> void:
+	for player_id in ConnectionSystem.get_player_id_list():
+		for type in Globals.settings.starting_resources.keys():
+			set_item_production(player_id, type, 0.0)
+			set_item_consumption(player_id, type, 0.0)
+
+
 ## Fires whenever the update timer is fired. This should only run on the server.
 func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
+	_reset_production_consumption()
 	_storage_system.update()
 	_energy_system.update()
 	_heat_system.update()
 	_miner_system.update()
+	TradeSystem.update()
+	_broadcast_tick_done.rpc()
 
+
+@rpc("any_peer", "call_local", "reliable")
+func _broadcast_tick_done() -> void:
+	tick_done.emit()
 
 ## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
 ## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
