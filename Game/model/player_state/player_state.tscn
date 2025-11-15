@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://b47vu2y258g5v"]
+[gd_scene load_steps=5 format=3 uid="uid://b47vu2y258g5v"]
 
+[ext_resource type="Script" uid="uid://bhb47oq4pvkq8" path="res://Game/model/player_state/player_state.gd" id="1_f77f7"]
 [ext_resource type="Script" uid="uid://4wh2gi5ydyre" path="res://Game/model/player_state/item_property.gd" id="2_f77f7"]
 [ext_resource type="Script" uid="uid://clga8v64ljqmd" path="res://Game/model/player_state/item_model.gd" id="2_wyreu"]
 
@@ -24,22 +25,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_f77f7")
 
 [node name="ItemModel" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("2_wyreu")
 metadata/_custom_type_script = "uid://clga8v64ljqmd"
 
 [node name="ItemCounts" type="Node" parent="ItemModel"]
+unique_name_in_owner = true
 script = ExtResource("2_f77f7")
 
 [node name="ItemProduction" type="Node" parent="ItemModel"]
+unique_name_in_owner = true
 script = ExtResource("2_f77f7")
 
 [node name="ItemConsumption" type="Node" parent="ItemModel"]
+unique_name_in_owner = true
 script = ExtResource("2_f77f7")
 
 [node name="StorageCaps" type="Node" parent="ItemModel"]
+unique_name_in_owner = true
 script = ExtResource("2_f77f7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_iq7yb")
+
+[connection signal="synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]

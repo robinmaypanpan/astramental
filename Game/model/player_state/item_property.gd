@@ -13,6 +13,12 @@ extends Node
 var _value_dict_shadow: Dictionary[Types.Item, float]
 
 
+func _ready() -> void:
+	for item: Types.Item in Types.Item.values():
+		value_dict[item] = 0.0
+		_value_dict_shadow[item] = 0.0
+
+
 ## Get the real values of this property for the given item.
 func get_for(item: Types.Item) -> float:
 	return value_dict[item]

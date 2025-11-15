@@ -60,13 +60,10 @@ func update() -> void:
 
 			# figure out what new ore count should be
 			var ore_item: Types.Item = Ores.get_yield(ore)
-			var current_ore: float = Model.get_item_count(player_id, ore_item)
-			var new_ore: float = current_ore + ore_production_this_tick
-			# TODO: move this code to update_item_count, as this doesn't belong here
-			var max_ore: float = Model.get_storage_cap(player_id, ore_item)
-			new_ore = min(new_ore, max_ore)
+			var actual_increase: float = Model.increase_item_count_apply_cap(
+				player_id, ore_item, ore_production_this_tick
+			)
 
 			# TODO: move this data out of the model. Consumers of this data can ask this system,
 			# not the model.
-			Model.set_item_count(player_id, ore_item, new_ore)
 			Model.increase_item_production(player_id, ore_item, ore_production_per_sec)

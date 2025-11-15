@@ -153,3 +153,20 @@ func remove_building(tile_position: Vector2i) -> bool:
 		return true
 	else:
 		return false
+
+
+# TODO: remove this by rewriting how UI updates
+## Temporary code to fire all changed signals based on the new item model counts.
+func fire_all_changed_signals() -> void:
+	for item in Types.Item.values():
+		item_count_changed.emit(id, item, item_model.counts.get_for(item))
+		item_consumption_changed.emit(id, item, item_model.consumption.get_for(item))
+		item_production_changed.emit(id, item, item_model.production.get_for(item))
+		storage_cap_changed.emit(id, item, item_model.storage_caps.get_for(item))
+
+
+func _on_multiplayer_synchronizer_synchronized() -> void:
+	# This acts kinda weird. Hooking off synchronize calls this like 8 times a tick, and hooking
+	# off delta_synchronize makes it not work at all.
+	print("received synchronize as %d" % [multiplayer.get_unique_id()])
+	fire_all_changed_signals()

@@ -14,6 +14,9 @@ signal item_consumption_changed(player_id: int, type: Types.Item, new_consumptio
 ## When an energy satisfaction level changes, this signal fires
 signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
 
+##
+var player_state_scene: PackedScene = preload("res://Game/model/player_state/player_state.tscn")
+
 ## Stores mapping from player id -> instantiated player state
 var _player_states_dict: Dictionary[int, PlayerState]
 
@@ -34,17 +37,17 @@ func generate_player_states() -> void:
 
 ## Given a player id, instantiate a new PlayerState and return it.
 func spawn_player_state(player_id: int) -> Node:
-	var player_state := PlayerState.new()
+	var player_state: PlayerState = player_state_scene.instantiate()
 	var player := ConnectionSystem.get_player(player_id)
 
 	player_state.name = str(player_id)
 	player_state.id = player_id
 	player_state.index = player.index
-	for type in Types.Item.values():
-		player_state.items[type] = 0.0
-		player_state.item_production[type] = 0.0
-		player_state.item_consumption[type] = 0.0
-		player_state.storage_caps[type] = 0.0
+	# for type in Types.Item.values():
+	# 	player_state.items[type] = 0.0
+	# 	player_state.item_production[type] = 0.0
+	# 	player_state.item_consumption[type] = 0.0
+	# 	player_state.storage_caps[type] = 0.0
 
 	_player_states_dict[player_id] = player_state
 
