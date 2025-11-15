@@ -5,13 +5,13 @@ extends Node
 ## real copy.
 
 ## Item counts for each item.
-@onready var item_counts: ItemProperty = %ItemCounts
+@onready var counts: ItemProperty = %ItemCounts
 
 ## Item production for each item.
-@onready var item_production: ItemProperty = %ItemProduction
+@onready var production: ItemProperty = %ItemProduction
 
 ## Item consumption for each item.
-@onready var item_consumption: ItemProperty = %ItemConsumption
+@onready var consumption: ItemProperty = %ItemConsumption
 
 ## Storage caps for each item.
 @onready var storage_caps: ItemProperty = %StorageCaps
@@ -19,22 +19,23 @@ extends Node
 
 ## Sync all properties of this model across the network.
 func sync() -> void:
-	item_counts.sync()
-	item_production.sync()
-	item_consumption.sync()
+	counts.sync()
+	production.sync()
+	consumption.sync()
 	storage_caps.sync()
 
 
-## Increase the item count by as much as you can while not going over the item's storage cap.
-## Returns the amount that the item count was actually increased by.
+## Increase the item count by as much as you can while not going over the item's storage cap and
+## not below 0. Returns the amount that the item count was actually increased by.
 func increase_item_count_apply_cap(item: Types.Item, amount: float) -> float:
 	var storage_cap: float = storage_caps.get_for(item)
-	var current_item_count: float = item_counts.get_shadow_for(item)
-	var capped_amount: float = min(amount, storage_cap - current_item_count)
-	item_counts.increase_for(item, capped_amount)
-	return capped_amount
+	var current_item_count: float = counts.get_shadow_for(item)
+	var new_item_count: float = clampf(current_item_count + amount, 0.0, storage_cap)
+	var actual_change: float = new_item_count - current_item_count
+	counts.set_for(item, new_item_count)
+	return actual_change
 
 
 ## Get the given item's change rate, which is (production - consumption).
 func get_item_change_rate(item: Types.Item) -> float:
-	return item_production.get_for(item) - item_consumption.get_for(item)
+	return production.get_for(item) - consumption.get_for(item)
