@@ -6,8 +6,15 @@ var trade_item_details_scene: PackedScene = preload(
 	"res://Game/ui/left panel/Trade Menu/trade_item_details.tscn"
 )
 
+## Container for TradeItemDetails.
 @onready var details_list_container: VBoxContainer = %DetailsListContainer
+
+## Displays the trade direction and player we are trading with.
 @onready var trade_player_header: TradePlayerHeader = %TradePlayerHeader
+
+
+func _ready() -> void:
+	_remove_item_details()
 
 
 ## Given an array of trade routes with receiving and sending player id identical, fill out the
@@ -42,10 +49,6 @@ func update_section(trade_routes: Array, trade_direction: Types.TradeDirection) 
 		details_list_container.add_child(trade_item_details)
 		trade_item_details.update_item_icon(Items.get_info(item).icon)
 		trade_item_details.update_item_production_text(amount, net_production)
-
-
-func _ready() -> void:
-	_remove_item_details()
 
 
 ## Remove all TradeItemDetails, leaving only the TradePlayerHeader.

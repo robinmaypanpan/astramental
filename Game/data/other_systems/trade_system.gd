@@ -51,22 +51,22 @@ func get_routes_sent_by_player(player_id: int) -> Array[TradeRoute]:
 func update() -> void:
 	var update_interval = Globals.settings.update_interval
 	for trade_route: TradeRoute in trade_routes:
-		var sending_player_id = trade_route.sending_player_id
+		var sending_player_id: int = trade_route.sending_player_id
 		var receiving_player_id = trade_route.receiving_player_id
-		var item = trade_route.item
+		var item: Types.Item = trade_route.item
 
 		# amount to send capped by how much I have to send
-		var sending_capacity = Model.get_item_count(sending_player_id, item)
+		var sending_capacity: float = Model.get_item_count(sending_player_id, item)
 
 		# amount to receive capped by how much space I have to receive
-		var receiving_item_count = Model.get_item_count(receiving_player_id, item)
-		var receiving_storage_cap = Model.get_storage_cap(receiving_player_id, item)
-		var receiving_capacity = receiving_storage_cap - receiving_item_count
+		var receiving_item_count: float = Model.get_item_count(receiving_player_id, item)
+		var receiving_storage_cap: float = Model.get_storage_cap(receiving_player_id, item)
+		var receiving_capacity: float = receiving_storage_cap - receiving_item_count
 
 		# figure out amount to send
-		var send_amount_per_sec = min(trade_route.amount, sending_capacity, receiving_capacity)
+		var send_amount_per_sec: float = min(trade_route.amount, sending_capacity, receiving_capacity)
 		if not is_zero_approx(send_amount_per_sec):
-			var send_amount_per_tick = send_amount_per_sec * update_interval
+			var send_amount_per_tick: float = send_amount_per_sec * update_interval
 
 			Model.increase_item_count(sending_player_id, item, -send_amount_per_tick)
 			Model.increase_item_consumption(sending_player_id, item, send_amount_per_sec)

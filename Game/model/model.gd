@@ -457,6 +457,7 @@ func set_starting_item_counts_and_storage_caps() -> void:
 			set_storage_cap(player_id, type, cap)
 
 
+## TODO: this code causes flickering of production numbers. This will be fixed in the Model rework.
 ## Reset the item production and consumption numbers for the update loop.
 func _reset_production_consumption() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
