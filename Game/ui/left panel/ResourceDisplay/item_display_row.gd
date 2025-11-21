@@ -22,8 +22,11 @@ extends MarginContainer
 ## Shown when the value is decreasing
 @export var decreasing_arrow: Texture
 
-## Shown the the value is not changing
+## Shown when the value is not changing
 @export var not_changing: Texture
+
+## Shown when the value is blocked because storage is full
+@export var storage_full_indicator: Texture
 
 var item_count: float = 0.0
 var change: float = 0.0
@@ -71,7 +74,7 @@ func update_change_rate(new_change: float) -> void:
 ## Given new storage cap, update the current storage cap.
 func update_storage_cap(new_cap: float) -> void:
 	storage_cap = new_cap
-	update_storage_bar()
+	update_view()
 
 
 # PRIVATE METHODS
@@ -86,7 +89,9 @@ func update_view() -> void:
 	item_count_label.text = "%d" % [item_count]
 	change_rate_label.text = "(%.1f/s)" % [abs(change)]
 
-	if change > 0.0:
+	if not is_zero_approx(change) and item_count >= storage_cap and storage_cap > 0.0:
+		change_rate_indicator.texture = storage_full_indicator
+	elif change > 0.0:
 		change_rate_indicator.texture = increasing_arrow
 	elif change < 0.0:
 		change_rate_indicator.texture = decreasing_arrow

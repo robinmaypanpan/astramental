@@ -50,19 +50,9 @@ func update():
 		# energy production/consumption is unaffected by satisfaction
 		var energy_change_this_tick: float = energy_change_per_sec * update_interval
 
-		Model.increase_item_count_apply_cap(
-			player_id, Types.Item.ENERGY, energy_change_this_tick
-		)
-		var new_energy: float = Model.get_item_count(player_id, Types.Item.ENERGY)
+		Model.increase_item_count_apply_cap(player_id, Types.Item.ENERGY, energy_change_this_tick)
 
 		energy_satisfaction[player_id] = min(1.0, player_production / player_consumption)
-		if is_zero_approx(new_energy):
-			print(
-				(
-					"Out of energy; efficiency = %f / %f = %f"
-					% [player_production, player_consumption, energy_satisfaction[player_id]]
-				)
-			)
 
 		# TODO: move this data out of the model. Consumers of this data can ask this system,
 		# not the model.
