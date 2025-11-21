@@ -28,6 +28,7 @@ func sync() -> void:
 ## Increase the item count by as much as you can while not going over the item's storage cap and
 ## not below 0. Returns the amount that the item count was actually increased by.
 func increase_item_count_apply_cap(item: Types.Item, amount: float) -> float:
+	assert(multiplayer.is_server())
 	var storage_cap: float = storage_caps.get_for(item)
 	var current_item_count: float = counts.get_shadow_for(item)
 	var new_item_count: float = clampf(current_item_count + amount, 0.0, storage_cap)

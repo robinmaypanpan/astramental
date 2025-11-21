@@ -2,7 +2,7 @@ class_name ItemProperty
 extends Node
 ## Node representing an item property like item_counts or storage_caps. Gets are done from the real
 ## copy, and sets are done to a shadow copy, that replicates to the real copy when the sync()
-## method is called. The value_Pdict should be replicated across the server with a
+## method is called. The value_dict should be replicated across the server with a
 ## MultiplayerSynchronizer.
 
 ## The real values of the property this tick. Is synced by the MultiplayerSynchronizer.

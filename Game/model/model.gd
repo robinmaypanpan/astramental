@@ -176,6 +176,7 @@ func increase_item_count(player_id: int, item: Types.Item, increase_amount: floa
 ## Increase the item count by as much as you can while not going over the item's storage cap.
 ## Returns the amount that the item count was actually increased by.
 func increase_item_count_apply_cap(player_id: int, item: Types.Item, amount: float) -> float:
+	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
 	return player_state.items.increase_item_count_apply_cap(item, amount)
 
@@ -337,6 +338,7 @@ func get_energy_satisfaction(player_id: int) -> float:
 
 ## Set the storage limit for a given type
 func set_storage_cap(player_id: int, item: Types.Item, new_cap: float) -> void:
+	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
 	var items: ItemModel = player_state.items
 	items.storage_caps.set_for(item, new_cap)

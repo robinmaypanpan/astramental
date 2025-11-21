@@ -50,10 +50,10 @@ func update():
 		# energy production/consumption is unaffected by satisfaction
 		var energy_change_this_tick: float = energy_change_per_sec * update_interval
 
-		var actual_increase = Model.increase_item_count_apply_cap(
+		Model.increase_item_count_apply_cap(
 			player_id, Types.Item.ENERGY, energy_change_this_tick
 		)
-		var new_energy = Model.get_item_count(player_id, Types.Item.ENERGY)
+		var new_energy: float = Model.get_item_count(player_id, Types.Item.ENERGY)
 
 		energy_satisfaction[player_id] = min(1.0, player_production / player_consumption)
 		if is_zero_approx(new_energy):

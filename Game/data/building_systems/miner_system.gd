@@ -60,7 +60,7 @@ func update() -> void:
 
 			# figure out what new ore count should be
 			var ore_item: Types.Item = Ores.get_yield(ore)
-			var actual_increase: float = Model.increase_item_count_apply_cap(
+			Model.increase_item_count_apply_cap(
 				player_id, ore_item, ore_production_this_tick
 			)
 
