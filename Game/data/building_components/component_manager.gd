@@ -25,7 +25,7 @@ func add_component(component: BuildingComponent) -> void:
 
 ## Initialize components by adding components to the BuildingEntity and the component list.
 func init_components_building(building: BuildingEntity) -> void:
-	var building_resource: BuildingResource = Buildings.get_by_id(building.id)
+	var building_resource: BuildingResource = Buildings.get_by_id(building.building_id)
 	for component_data: BuildingComponentData in building_resource.building_components:
 		var component: BuildingComponent = component_data.make_component(building)
 		add_component(component)

@@ -32,6 +32,10 @@ var buildings_list: Array[BuildingEntity]
 ## Contains a list of all cells where heat is located.
 var heat_data_list: Array[HeatData]
 
+# TODO: move this to BuildingModel
+## Next number to use for the id of new buildings
+var _next_building_unique_id: int = 0
+
 ## Model for all item information and accessing.
 @onready var items: ItemModel = %ItemModel
 
@@ -56,7 +60,10 @@ func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
 ## Add a building to the buildings list.
 ## Also adds all corresponding components to ComponentManager.
 func add_building(tile_position: Vector2i, building_id: String) -> void:
-	var building: BuildingEntity = BuildingEntity.new(id, tile_position, building_id)
+	var building: BuildingEntity = BuildingEntity.new(
+		_next_building_unique_id, id, tile_position, building_id
+	)
+	_next_building_unique_id += 1
 	ComponentManager.init_components_building(building)
 	buildings_list.append(building)
 

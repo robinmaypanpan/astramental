@@ -20,14 +20,14 @@ func _ready() -> void:
 		new_menu_item.set_building_resource(building)
 		new_menu_item.gui_input.connect(
 			func(event:InputEvent):
-				if (event is InputEventMouseButton 
-					and event.is_pressed() 
+				if (event is InputEventMouseButton
+					and event.is_pressed()
 					and event.button_index == MOUSE_BUTTON_LEFT):
 						on_building_clicked.emit(building.id)
 		)
-		
+
 	Model.game_ready.connect(on_game_ready)
-	
+
 # PRIVATE METHODS
 
 ## Clears the list of buildings
@@ -42,7 +42,7 @@ func on_game_ready() -> void:
 	var player_id: int = multiplayer.get_unique_id()
 	var player_state: PlayerState = Model.player_states.get_state(player_id)
 	player_state.item_count_changed.connect(_on_item_count_changed)
-	
+
 	_disable_unaffordable_buildings()
 
 
