@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://fcbjc5acubwe"]
+[gd_scene load_steps=10 format=3 uid="uid://fcbjc5acubwe"]
 
 [ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="1_6jci1"]
 [ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/ui/left panel/ResourceDisplay/item_display_row.gd" id="1_82p7q"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://f0oc2vm1mayc" path="res://Assets/sprites/ui/decreasing_arrow.tres" id="3_prlt1"]
 [ext_resource type="Texture2D" uid="uid://chqwre6a15sxe" path="res://Assets/sprites/ui/not_changing.tres" id="4_5fff3"]
 [ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Assets/sprites/storage_bar_base.tres" id="4_bcn7r"]
-[ext_resource type="Texture2D" uid="uid://ttut6okui5fr" path="res://Assets/sprites/ui/blocked_arrow.tres" id="5_4r8am"]
 [ext_resource type="Texture2D" uid="uid://dw0qpw8l0ft87" path="res://Assets/sprites/ui/increasing_arrow.tres" id="5_dl36m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
@@ -34,7 +33,6 @@ script = ExtResource("1_82p7q")
 increasing_arrow = ExtResource("5_dl36m")
 decreasing_arrow = ExtResource("3_prlt1")
 not_changing = ExtResource("4_5fff3")
-storage_full_indicator = ExtResource("5_4r8am")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
