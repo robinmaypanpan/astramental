@@ -37,3 +37,45 @@ func get_component(component_type: String) -> BuildingComponent:
 		if component.type == component_type:
 			return component
 	return null
+
+
+## Return a primitive object that can be synchronized across the network with
+## MultiplayerSynchronizer.
+func serialize() -> Dictionary:
+	var serialized_building_entity: Dictionary = {}
+	serialized_building_entity["unique_id"] = unique_id
+	serialized_building_entity["player_id"] = player_id
+	serialized_building_entity["position"] = position
+	serialized_building_entity["building_id"] = building_id
+	var component_unique_ids: Array[int] = []
+	for component: BuildingComponent in components:
+		component_unique_ids.append(component.unique_id)
+	serialized_building_entity["components"] = component_unique_ids
+
+	return serialized_building_entity
+
+
+## Given a primitive object of this type received over the network, turn it into a BuildingEntity.
+static func from_serialized(serialized_building_entity: Dictionary) -> BuildingEntity:
+	var new_unique_id: int = serialized_building_entity["unique_id"]
+	var new_player_id: int = serialized_building_entity["player_id"]
+	var new_position: Vector2i = serialized_building_entity["position"]
+	var new_building_id: String = serialized_building_entity["building_id"]
+	var new_building_entity: BuildingEntity = (
+		BuildingEntity.new(
+			new_unique_id,
+			new_player_id,
+			new_position,
+			new_building_id,
+		)
+	)
+	var component_unique_ids: Array[int] = serialized_building_entity["components"]
+	for component_unique_id: int in component_unique_ids:
+		var component = ComponentManager.get_by_id(component_unique_id)
+		assert(
+			component != null,
+			"tried to add component id %d that doesn't exist" % component_unique_id
+		)
+		new_building_entity.components.append(component)
+
+	return new_building_entity
