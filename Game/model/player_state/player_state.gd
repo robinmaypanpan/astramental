@@ -26,10 +26,6 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## 0.0 and 1.0. Affects the speed at which buildings run.
 @export var energy_satisfaction: float
 
-## Contains the layout of the ores for each player.
-## Stored as a 1D array that we index into with Model.get_ore_at and Model.set_ore_at.
-var ores_layout: Array[Types.Ore]
-
 ## Contains a list of the positions of each building for this player.
 var buildings_list: Array[BuildingEntity]
 
@@ -39,11 +35,8 @@ var heat_data_list: Array[HeatData]
 ## Model for all item information and accessing.
 @onready var items: ItemModel = %ItemModel
 
-func _ready() -> void:
-	# Initialize ores_layout array
-	var num_layers := WorldGenModel.get_num_mine_layers()
-	var layer_size := WorldGenModel.num_cols * WorldGenModel.layer_thickness
-	ores_layout.resize(num_layers * layer_size)
+## Model for all ore information.
+@onready var ores: OreModel = %OreModel
 
 
 ## Used by the server to set the energy satisfaction
@@ -95,6 +88,12 @@ func fire_all_changed_signals() -> void:
 		item_consumption_changed.emit(id, item, items.consumption.get_for(item))
 		item_production_changed.emit(id, item, items.production.get_for(item))
 		storage_cap_changed.emit(id, item, items.storage_caps.get_for(item))
+
+
+## Sync all properties of this state to the network.
+func sync() -> void:
+	items.sync()
+	ores.sync()
 
 
 func _on_multiplayer_synchronizer_synchronized() -> void:
