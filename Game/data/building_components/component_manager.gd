@@ -12,6 +12,9 @@ signal component_removed(component: BuildingComponent)
 ## Collection of all building components, sorted by type.
 var _components_list: Dictionary[String, Array] = {}
 
+## Next unique id to use for component
+var _next_component_unique_id: int = 0
+
 
 ## Register a new component with the ComponentManager.
 func add_component(component: BuildingComponent) -> void:
@@ -27,7 +30,10 @@ func add_component(component: BuildingComponent) -> void:
 func init_components_building(building: BuildingEntity) -> void:
 	var building_resource: BuildingResource = Buildings.get_by_id(building.building_id)
 	for component_data: BuildingComponentData in building_resource.building_components:
-		var component: BuildingComponent = component_data.make_component(building)
+		var component: BuildingComponent = component_data.make_component(
+			_next_component_unique_id, building
+		)
+		_next_component_unique_id += 1
 		add_component(component)
 		building.components.append(component)
 
@@ -42,7 +48,7 @@ func remove_component(component: BuildingComponent) -> bool:
 
 	for index: int in range(components.size()):
 		var curr_component: BuildingComponent = components[index]
-		if curr_component == component: # compare by reference is desired behavior
+		if curr_component == component:  # compare by reference is desired behavior
 			index_to_remove = index
 
 	if index_to_remove != -1:

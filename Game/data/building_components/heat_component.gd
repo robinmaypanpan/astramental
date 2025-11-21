@@ -47,10 +47,12 @@ var heat_state: Types.HeatState
 
 
 func _init(
-	new_building_comp_data: BuildingComponentData, new_building_entity: BuildingEntity
+	new_unique_id: int,
+	new_building_comp_data: BuildingComponentData,
+	new_building_entity: BuildingEntity
 ) -> void:
 	# start func
-	super(new_building_comp_data, new_building_entity)
+	super(new_unique_id, new_building_comp_data, new_building_entity)
 
 	if heat_production > 0.0:
 		heat_building_type = Types.HeatBuilding.SOURCE

@@ -14,5 +14,5 @@ extends BuildingComponentData
 @export var heat_capacity: float
 
 
-func make_component(building_entity: BuildingEntity) -> HeatComponent:
-	return HeatComponent.new(self, building_entity)
+func make_component(unique_id: int, building_entity: BuildingEntity) -> HeatComponent:
+	return HeatComponent.new(unique_id, self, building_entity)
