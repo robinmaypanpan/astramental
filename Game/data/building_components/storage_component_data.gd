@@ -7,4 +7,16 @@ extends BuildingComponentData
 
 
 func make_component(unique_id: int, building_entity: BuildingEntity) -> StorageComponent:
-    return StorageComponent.new(unique_id, self, building_entity)
+	return StorageComponent.new(unique_id, self, building_entity)
+
+
+func serialize() -> Dictionary:
+	var serialized_component_data: Dictionary = super.serialize()
+	serialized_component_data["storage_cap_changes"] = storage_cap_changes
+	return serialized_component_data
+
+
+static func from_serialized(serialized_component_data: Dictionary) -> StorageComponentData:
+	var component_data = StorageComponentData.new()
+	component_data.storage_cap_changes = serialized_component_data["storage_cap_changes"]
+	return component_data

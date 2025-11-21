@@ -7,6 +7,10 @@ extends Resource
 var type: String
 
 
+func _init() -> void:
+	type = get_script().get_global_name()  # gets the class_name of the derived class
+
+
 ## Make a BuildingComponent given this object, used when instantiating a BuildingEntity.
 func make_component(_unique_id: int, _building_entity: BuildingEntity) -> BuildingComponent:
 	# defined by derived classes: base class function should never be called.
@@ -14,5 +18,12 @@ func make_component(_unique_id: int, _building_entity: BuildingEntity) -> Buildi
 	return null
 
 
-func _init() -> void:
-	type = get_script().get_global_name()  # gets the class_name of the derived class
+func serialize() -> Dictionary:
+	var serialized_component_data: Dictionary = {}
+	serialized_component_data["type"] = type
+	return serialized_component_data
+
+
+static func from_serialized(_serialized_component_data: Dictionary) -> BuildingComponentData:
+	var component_data = BuildingComponentData.new()
+	return component_data
