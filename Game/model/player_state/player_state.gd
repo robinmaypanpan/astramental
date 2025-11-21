@@ -87,6 +87,16 @@ func remove_building(tile_position: Vector2i) -> bool:
 		return false
 
 
+
+## Find a building by its unique id.
+func get_building_by_unique_id(unique_id: int) -> BuildingEntity:
+	var buildings_index = buildings_list.find_custom(func(elem): return elem.unique_id == unique_id)
+	if buildings_index == -1:
+		return null
+	else:
+		return buildings_list[buildings_index]
+
+
 # TODO: remove this by rewriting how UI updates
 ## Temporary code to fire all changed signals based on the new item model counts.
 func fire_all_changed_signals() -> void:
