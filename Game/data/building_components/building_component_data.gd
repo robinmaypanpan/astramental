@@ -18,12 +18,14 @@ func make_component(_unique_id: int, _building_entity: BuildingEntity) -> Buildi
 	return null
 
 
+## Convert component data to a dictionary that can be synchronized across the network.
 func serialize() -> Dictionary:
 	var serialized_component_data: Dictionary = {}
 	serialized_component_data["type"] = type
 	return serialized_component_data
 
 
+## Take serialized component data from the network and turn it into real component data.
 static func from_serialized(_serialized_component_data: Dictionary) -> BuildingComponentData:
 	var component_data = BuildingComponentData.new()
 	return component_data
