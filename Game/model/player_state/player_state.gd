@@ -39,6 +39,9 @@ var heat_data_list: Array[HeatData]
 ## Model for all item information and accessing.
 @onready var items: ItemModel = %ItemModel
 
+## Model for all ore information.
+@onready var ores: OreModel = %OreModel
+
 func _ready() -> void:
 	# Initialize ores_layout array
 	var num_layers := WorldGenModel.get_num_mine_layers()
