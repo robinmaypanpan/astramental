@@ -75,7 +75,7 @@ func restrict_ore_production(player_id: int, ore: Types.Ore) -> void:
 	# Limit that by the production capacity
 	if actual_production_this_tick > available_storage:
 		# We can't produce this much ore, limit it
-		# NBD: We divide by the update interval because we'll be multiplying
+		# NB: We divide by the update interval because we'll be multiplying
 		# by it later to get the per tick value
 		actual_production = available_storage / Globals.settings.update_interval
 
@@ -83,7 +83,7 @@ func restrict_ore_production(player_id: int, ore: Types.Ore) -> void:
 	actual_ore_production[player_id][ore] = actual_production
 
 
-## Calculate the ore production based on this miner component, and then
+## Calculate the ore production based on this miner component and update the appropriate tables
 func update_ore_production(miner_component: MinerComponent) -> void:
 	var building_entity: BuildingEntity = miner_component.building_entity
 	var player_id: int = building_entity.player_id
@@ -94,16 +94,16 @@ func update_ore_production(miner_component: MinerComponent) -> void:
 	# It is a sort of "maximum" production value
 	desired_ore_production[player_id][ore] += mining_speed
 
-	var actual_production: float = mining_speed
+	var actual_production: float = 0.0
 
 	# Apply heat reduction
 	var heat_component: HeatComponent = building_entity.get_component("HeatComponent")
 	if heat_component.heat_state == Types.HeatState.OVERHEATED:
-		# If the component is overheated, it's production drops to 0
+		# If the component is overheated, its production drops to 0
 		actual_production = 0.0
 	else:
-		# Otherwise, it's production is the mining speed
-		actual_production = miner_component.mining_speed
+		# Otherwise, its production is the mining speed
+		actual_production = mining_speed
 
 	actual_ore_production[player_id][ore] += actual_production
 
