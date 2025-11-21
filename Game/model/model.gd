@@ -263,25 +263,16 @@ func can_remove_building(player_id: int, grid_position: Vector2i) -> bool:
 
 ## Get the ore at the given x/y coordinates for the given player id.
 func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
-	var index := _get_index_into_ores_layout(x, y)
-	if index != -1:
-		var player_state := player_states.get_state(player_id)
-		return player_state.ores_layout[index]
-	else:
-		print("trying to read ore to factory layer: (%d, %d, %d)" % [player_id, x, y])
-		return Types.Ore.ROCK  # no ore in factory layer and must return type, so guess it's rock
+	var player_state: PlayerState = player_states.get_state(player_id)
+	return player_state.ores.get_ore(Vector2i(x, y))
 
 
 ## Set the ore at the given x/y coordinates for the given player id.
 ## Emits the ores_layout_updated signal.
 func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
-	var index := _get_index_into_ores_layout(x, y)
-	if index != -1:
-		var player_state := player_states.get_state(player_id)
-		player_state.ores_layout[index] = ore
-		ores_layout_updated.emit()
-	else:
-		print("trying to write ore to factory layer: (%d, %d, %d, %s)" % [player_id, x, y, ore])
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.ores.set_ore(Vector2i(x, y), ore)
+	Model.ores_layout_updated.emit()
 
 
 ## Returns the building at the given position
@@ -494,7 +485,7 @@ func _on_update_timer_timeout() -> void:
 	# TODO: remove this hack by rewriting UI code
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
-		player_state.items.sync()
+		player_state.sync()
 	player_states.get_state().fire_all_changed_signals()
 
 	_broadcast_tick_done.rpc()

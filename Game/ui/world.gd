@@ -21,6 +21,10 @@ func _ready() -> void:
 
 func _on_game_ready() -> void:
 	asteroid.generate_player_boards()
+	# TODO: remove this hack
+	for player_id: int in ConnectionSystem.get_player_id_list():
+		var player_state: PlayerState = Model.player_states.get_state(player_id)
+		player_state.ores.sync()
 
 
 ## Set the UI to the building mode and show the building cursor

@@ -100,6 +100,12 @@ func fire_all_changed_signals() -> void:
 		storage_cap_changed.emit(id, item, items.storage_caps.get_for(item))
 
 
+## Sync all properties of this state to the network.
+func sync() -> void:
+	items.sync()
+	ores.sync()
+
+
 func _on_multiplayer_synchronizer_synchronized() -> void:
 	# This acts kinda weird. Hooking off synchronize calls this like 8 times a tick, and hooking
 	# off delta_synchronize makes it call like 1-2 times a tick.
