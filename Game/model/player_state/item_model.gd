@@ -31,9 +31,17 @@ func increase_item_count_apply_cap(item: Types.Item, amount: float) -> float:
 	assert(multiplayer.is_server())
 	var storage_cap: float = storage_caps.get_for(item)
 	var current_item_count: float = counts.get_shadow_for(item)
-	var new_item_count: float = clampf(current_item_count + amount, 0.0, storage_cap)
-	var actual_change: float = new_item_count - current_item_count
+
+	var available_capacity: float = max(0.0, storage_cap - current_item_count)
+
+	var actual_change: float = clampf(amount, -current_item_count, available_capacity)
+
+	if is_zero_approx(actual_change):
+		return 0.0
+
+	var new_item_count: float = current_item_count + actual_change
 	counts.set_for(item, new_item_count)
+
 	return actual_change
 
 

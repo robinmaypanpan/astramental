@@ -13,6 +13,9 @@ const STORAGE_LIMIT_HARD_CAP: float = 1_000_000_000
 ## Define the update interval for the game, defined as how many seconds equals 1 tick.
 @export_range(0.05, 1) var update_interval: float
 
+## When true, selling buildings will not provide resources beyond storage caps.
+@export var enable_storage_caps_for_building_sales: bool = false
+
 
 ## Get the storage limits for all items. Return the storage limit hard cap if storage_caps
 ## doesn't include that item.
@@ -21,6 +24,7 @@ func get_storage_caps() -> Dictionary[Types.Item, float]:
 	for item in Types.Item.values():
 		new_storage_caps.get_or_add(item, STORAGE_LIMIT_HARD_CAP)
 	return new_storage_caps
+
 
 ## Get the storage limit for the specified item.
 func get_storage_cap_item(item: Types.Item) -> float:

@@ -1,22 +1,26 @@
 extends Node
 
+## Signal that fires when the tooltip target changes
+signal tooltip_target_changed(tooltip_target)
+
+## Stores a link to settings
 var settings: SettingsResource
 
 ## Stores the current target of the tooltip
-var tooltip_target: Control;
+var tooltip_target: Control
 
-## Signal that fires when the tooltip target changes
-signal tooltip_target_changed(tooltip_target);
 
 func _ready() -> void:
 	settings = preload("Game/data/settings.tres")
 
+
 ## Updates the tooltip target, posting an event if it has actually changed
 func update_tooltip_target(new_target: Control):
 	if tooltip_target != new_target:
-		tooltip_target = new_target;
-		tooltip_target_changed.emit(new_target);
-	
+		tooltip_target = new_target
+		tooltip_target_changed.emit(new_target)
+
+
 ## Clears the current tooltip target and publishes an event indicating that
 ## this has changed. If the optional target_to_remove parameter is passed in,
 ## the target will be cleared only if the the current target matches the specified
@@ -25,11 +29,9 @@ func update_tooltip_target(new_target: Control):
 func clear_tooltip_target(target_to_remove: Control):
 	if tooltip_target == null:
 		# Nothing to do here
-		return;
-		
+		return
+
 	if tooltip_target == target_to_remove || target_to_remove == null:
 		# If this is the target, or we don't have a target to remove...
-		tooltip_target = null;
-		tooltip_target_changed.emit(null);
-		
-	
+		tooltip_target = null
+		tooltip_target_changed.emit(null)

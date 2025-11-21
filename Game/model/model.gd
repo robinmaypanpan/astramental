@@ -169,8 +169,7 @@ func set_item_consumption(player_id: int, item: Types.Item, new_consumption: flo
 func increase_item_count(player_id: int, item: Types.Item, increase_amount: float) -> void:
 	assert(multiplayer.is_server())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var items: ItemModel = player_state.items
-	items.counts.increase_for(item, increase_amount)
+	player_state.items.counts.increase_for(item, increase_amount)
 
 
 ## Increase the item count by as much as you can while not going over the item's storage cap.
@@ -224,7 +223,10 @@ func refund_costs(player_id: int, building_id: String) -> void:
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 	var costs: Array[ItemCost] = building.item_costs
 	for cost: ItemCost in costs:
-		increase_item_count(player_id, cost.item_id, cost.quantity)
+		if Globals.settings.enable_storage_caps_for_building_sales:
+			increase_item_count_apply_cap(player_id, cost.item_id, cost.quantity)
+		else:
+			increase_item_count(player_id, cost.item_id, cost.quantity)
 
 
 ## Returns true if we can build the building indicated at the location specified
