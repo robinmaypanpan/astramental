@@ -494,12 +494,3 @@ func _on_update_timer_timeout() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func _broadcast_tick_done() -> void:
 	tick_done.emit()
-
-## Translate x/y coordinates from the world into the 1D index ores_layout stores data in.
-## (0,7) -> 0, (1,7) -> 1, ..., (9,7) -> 10, (0,8) -> 11, ...
-func _get_index_into_ores_layout(x: int, y: int) -> int:
-	if WorldGenModel.get_layer_num(y) > 0:
-		y -= WorldGenModel.layer_thickness  # correct for ores_layout not storing data for factory layer
-		return y * WorldGenModel.num_cols + x
-	else:
-		return -1  # no index for factory layer
