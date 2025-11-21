@@ -210,7 +210,7 @@ func process_remove_building(grid_position: Vector2i) -> void:
 	if Model.can_remove_building(caller_id, grid_position):
 		var building_removed: BuildingEntity = Model.get_building_at(caller_id, grid_position)
 		Model.remove_building_at.rpc(caller_id, grid_position)
-		Model.refund_costs(caller_id, building_removed.id)
+		Model.refund_costs(caller_id, building_removed.building_id)
 
 
 ## Look at the model and redraw all the buildings to the screen.
@@ -218,8 +218,8 @@ func _on_update_buildings() -> void:
 	print("Updating buildings for %d" % multiplayer.get_unique_id())
 	for player_board in _player_boards.values():
 		player_board.clear_buildings()
-		for placed_building in Model.get_buildings(player_board.get_owning_player_id()):
-			player_board.place_building(placed_building.position, placed_building.id)
+		for placed_building: BuildingEntity in Model.get_buildings(player_board.get_owning_player_id()):
+			player_board.place_building(placed_building.position, placed_building.building_id)
 
 
 ## Look at the model and redraw heat bars to screen.
