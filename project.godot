@@ -45,6 +45,10 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/resource_list/plugin.cfg")
 
+[gdunit4]
+
+settings/test/test_timeout_seconds=5
+
 [input]
 
 left_mouse_button={
