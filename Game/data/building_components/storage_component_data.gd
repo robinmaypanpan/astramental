@@ -6,5 +6,5 @@ extends BuildingComponentData
 @export var storage_cap_changes: Dictionary[Types.Item, float]
 
 
-func make_component(building_entity: BuildingEntity) -> StorageComponent:
-    return StorageComponent.new(self, building_entity)
+func make_component(unique_id: int, building_entity: BuildingEntity) -> StorageComponent:
+	return StorageComponent.new(unique_id, self, building_entity)

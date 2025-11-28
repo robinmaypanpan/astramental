@@ -6,5 +6,5 @@ extends BuildingComponentData
 @export var energy_drain: float
 
 
-func make_component(building_entity: BuildingEntity) -> EnergyComponent:
-	return EnergyComponent.new(self, building_entity)
+func make_component(unique_id: int, building_entity: BuildingEntity) -> EnergyComponent:
+	return EnergyComponent.new(unique_id, self, building_entity)

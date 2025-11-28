@@ -7,12 +7,12 @@ extends Resource
 var type: String
 
 
+func _init() -> void:
+	type = get_script().get_global_name()  # gets the class_name of the derived class
+
+
 ## Make a BuildingComponent given this object, used when instantiating a BuildingEntity.
-func make_component(_building_entity: BuildingEntity) -> BuildingComponent:
+func make_component(_unique_id: int, _building_entity: BuildingEntity) -> BuildingComponent:
 	# defined by derived classes: base class function should never be called.
 	assert(false, "cannot make component for derived class that doesn't define how to make one")
 	return null
-
-
-func _init() -> void:
-	type = get_script().get_global_name()  # gets the class_name of the derived class

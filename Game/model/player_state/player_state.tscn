@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://b47vu2y258g5v"]
+[gd_scene load_steps=7 format=3 uid="uid://b47vu2y258g5v"]
 
 [ext_resource type="Script" uid="uid://bhb47oq4pvkq8" path="res://Game/model/player_state/player_state.gd" id="1_f77f7"]
 [ext_resource type="Script" uid="uid://4wh2gi5ydyre" path="res://Game/model/player_state/item_property.gd" id="2_f77f7"]
 [ext_resource type="Script" uid="uid://clga8v64ljqmd" path="res://Game/model/player_state/item_model.gd" id="2_wyreu"]
 [ext_resource type="Script" uid="uid://bh2vsaywv750x" path="res://Game/model/player_state/ore_model.gd" id="4_kvvmd"]
+[ext_resource type="Script" uid="uid://dpx2k8by1fc0s" path="res://Game/model/player_state/building_model.gd" id="5_dg143"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_iq7yb"]
 properties/0/path = NodePath("ItemModel/ItemCounts:value_dict")
@@ -21,6 +22,9 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath("OreModel:ores")
 properties/4/spawn = true
 properties/4/replication_mode = 2
+properties/5/path = NodePath("BuildingModel:buildings_serialized")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
 [node name="PlayerState" type="Control"]
 layout_mode = 3
@@ -58,5 +62,10 @@ replication_config = SubResource("SceneReplicationConfig_iq7yb")
 [node name="OreModel" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_kvvmd")
+
+[node name="BuildingModel" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_dg143")
+metadata/_custom_type_script = "uid://dpx2k8by1fc0s"
 
 [connection signal="delta_synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
