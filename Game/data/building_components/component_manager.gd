@@ -46,8 +46,8 @@ func init_components_building(building: BuildingEntity) -> void:
 		building.components.append(component)
 
 		component_added.emit(component)
-		print("added component of type %s, component id %d" % [component.type, unique_id])
-		print("component type length is now %d" % _components_by_type[component.type].size())
+		print_debug("added component of type %s, component id %d" % [component.type, unique_id])
+		print_debug("component type length is now %d" % _components_by_type[component.type].size())
 
 
 ## Remove an existing component with the ComponentManager.
@@ -69,8 +69,8 @@ func remove_component(component: BuildingComponent) -> bool:
 	_vacant_indices.append(unique_id)
 
 	component_removed.emit(component)
-	print("removed component of type %s, component id %d" % [component.type, unique_id])
-	print("component type length is now %d" % _components_by_type[component.type].size())
+	print_debug("removed component of type %s, component id %d" % [component.type, unique_id])
+	print_debug("component type length is now %d" % _components_by_type[component.type].size())
 	return true
 
 
@@ -83,7 +83,7 @@ func remove_components_building(building: BuildingEntity) -> void:
 ## Return an array of all components of the given type.
 func get_components(type: String) -> Array:
 	if _components_by_type.has(type):
-		var components = []
+		var components: Array[BuildingComponent] = []
 		for unique_id: int in _components_by_type[type]:
 			components.append(_components_list[unique_id])
 		return components
