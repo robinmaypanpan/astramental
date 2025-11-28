@@ -42,6 +42,9 @@ var _next_building_unique_id: int = 0
 ## Model for all ore information.
 @onready var ores: OreModel = %OreModel
 
+## Model for all building information.
+@onready var buildings: BuildingModel = %BuildingModel
+
 
 ## Used by the server to set the energy satisfaction
 func update_energy_satisfaction(new_energy_satisfaction: float) -> void:
@@ -87,6 +90,16 @@ func remove_building(tile_position: Vector2i) -> bool:
 		return false
 
 
+
+## Find a building by its unique id.
+func get_building_by_unique_id(unique_id: int) -> BuildingEntity:
+	var buildings_index = buildings_list.find_custom(func(elem): return elem.unique_id == unique_id)
+	if buildings_index == -1:
+		return null
+	else:
+		return buildings_list[buildings_index]
+
+
 # TODO: remove this by rewriting how UI updates
 ## Temporary code to fire all changed signals based on the new item model counts.
 func fire_all_changed_signals() -> void:
@@ -101,10 +114,12 @@ func fire_all_changed_signals() -> void:
 func sync() -> void:
 	items.sync()
 	ores.sync()
+	buildings.sync()
 
 
 func _on_multiplayer_synchronizer_synchronized() -> void:
 	# This acts kinda weird. Hooking off synchronize calls this like 8 times a tick, and hooking
 	# off delta_synchronize makes it call like 1-2 times a tick.
 	print("received synchronize as %d" % [multiplayer.get_unique_id()])
+	buildings.deserialize_buildings()
 	fire_all_changed_signals()
