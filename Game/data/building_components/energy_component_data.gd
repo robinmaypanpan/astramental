@@ -8,17 +8,3 @@ extends BuildingComponentData
 
 func make_component(unique_id: int, building_entity: BuildingEntity) -> EnergyComponent:
 	return EnergyComponent.new(unique_id, self, building_entity)
-
-
-## Convert component data to a dictionary that can be synchronized across the network.
-func serialize() -> Dictionary:
-	var serialized_component_data: Dictionary = super.serialize()
-	serialized_component_data["energy_drain"] = energy_drain
-	return serialized_component_data
-
-
-## Take serialized component data from the network and turn it into real component data.
-static func from_serialized(serialized_component_data: Dictionary) -> EnergyComponentData:
-	var component_data = EnergyComponentData.new()
-	component_data.energy_drain = serialized_component_data["energy_drain"]
-	return component_data
