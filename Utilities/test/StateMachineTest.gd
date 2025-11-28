@@ -111,5 +111,5 @@ func test_update_calls_update_only_on_current_state() -> void:
 	state_machine._process(delta_time)
 
 	# Verify that update was called on the current state
-	verify(mock_state1).update(delta_time)
-	verify_no_interactions(mock_state2).update(any_float())
+	verify(mock_state1, 1).update(delta_time)
+	verify(mock_state2, 0).update(any_float())
