@@ -9,18 +9,21 @@ extends GdUnitTestSuite
 const __source: String = "res://Utilities/StateMachine.gd"
 
 # our mocks
-var mock_state1: State
-var mock_state2: State
+var mock_state1: MockedState
+var mock_state2: MockedState
 var state_machine: StateMachine
+
+
+func create_mock_state(mock_name: String) -> MockedState:
+	var mock_state = auto_free(MockedState.new(mock_name))
+	return spy(mock_state)
 
 
 # Setup test data here
 func before_test():
 	# Create our mock states
-	mock_state1 = mock(State)
-	mock_state1.name = "MockState1"
-	mock_state2 = mock(State)
-	mock_state2.name = "MockState2"
+	mock_state1 = create_mock_state("MockState1")
+	mock_state2 = create_mock_state("MockState2")
 
 	# Create our state machine
 	state_machine = StateMachine.new()
@@ -32,6 +35,9 @@ func before_test():
 
 	if not state_machine.is_node_ready():
 		await state_machine.ready
+
+	# Add a small delay to allow signal processing
+	await get_tree().process_frame
 
 
 # Cleanup test data here
@@ -68,3 +74,48 @@ func test_transition_state() -> void:
 	# Verify that exit was called on mock_state1 and enter on mock_state2
 	verify(mock_state1).exit("MockState2", {})
 	verify(mock_state2).enter("MockState1", {})
+
+
+func test_finished_signal_triggers_transition() -> void:
+	# Make sure we're on state 1
+	assert_object(state_machine.current_state).is_not_null()
+	assert_object(state_machine.current_state).is_same(mock_state1)
+
+	# Emit the finished signal from mock_state1
+	mock_state1.finished.emit("MockState2", {})
+
+	await get_tree().process_frame
+
+	# Verify that the current state is now mock_state2
+	assert_object(state_machine.current_state).is_not_null()
+	(
+		assert_object(state_machine.current_state)
+		. override_failure_message(
+			(
+				"expected current state to be %s, but it's %s"
+				% [mock_state2.name, state_machine.current_state.name]
+			)
+		)
+		. is_same(mock_state2)
+	)
+
+	# Verify that exit was called on mock_state1 and enter on mock_state2
+	verify(mock_state1).exit("MockState2", {})
+	verify(mock_state2).enter("MockState1", {})
+
+
+func test_update_calls_update_only_on_current_state() -> void:
+	# Call _process on the state machine
+	var delta_time: float = 0.16
+	state_machine._process(delta_time)
+
+	# Verify that update was called on the current state
+	verify(mock_state1).update(delta_time)
+	verify_no_interactions(mock_state2).update(any_float())
+
+
+class MockedState:
+	extends State
+
+	func _init(state_name: String):
+		name = state_name

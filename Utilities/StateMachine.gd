@@ -8,9 +8,11 @@ var current_state: State
 
 
 func _ready() -> void:
-	var children := find_children("*", "State")
-	for child: State in children:
-		child.finished.connect(transition_state)
+	var children := get_children()
+	for child: Node in children:
+		var state_child := child as State
+		if state_child != null:
+			state_child.finished.connect(transition_state)
 	var ready_state := get_initial_state()
 	transition_state(ready_state.name, {"firstTime": true})
 
