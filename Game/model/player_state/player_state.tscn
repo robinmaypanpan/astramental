@@ -22,6 +22,9 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath("OreModel:ores")
 properties/4/spawn = true
 properties/4/replication_mode = 2
+properties/5/path = NodePath("BuildingModel:buildings_serialized")
+properties/5/spawn = true
+properties/5/replication_mode = 2
 
 [node name="PlayerState" type="Control"]
 layout_mode = 3

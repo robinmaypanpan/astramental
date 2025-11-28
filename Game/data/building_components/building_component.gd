@@ -27,3 +27,12 @@ func _init(
 	_data = in_building_comp_data
 	building_entity = in_building_entity
 	type = get_script().get_global_name() # gets the class_name of the derived class
+
+
+func serialize() -> Dictionary:
+	var serialized_component: Dictionary = {}
+	serialized_component["unique_id"] = unique_id
+	serialized_component["building_entity"] = building_entity.unique_id
+	serialized_component["type"] = type
+	serialized_component["_data"] = _data.serialize()
+	return serialized_component

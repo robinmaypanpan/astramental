@@ -68,6 +68,8 @@ func add_building(tile_position: Vector2i, building_id: String) -> void:
 	)
 	_next_building_unique_id += 1
 	ComponentManager.init_components_building(building)
+	if multiplayer.is_server():
+		buildings.add_building(tile_position, building_id)
 	buildings_list.append(building)
 
 
@@ -85,6 +87,8 @@ func remove_building(tile_position: Vector2i) -> bool:
 	if index_to_remove != -1:
 		ComponentManager.remove_components_building(building_entity)
 		buildings_list.remove_at(index_to_remove)
+		if multiplayer.is_server():
+			buildings.remove_building(building_entity.unique_id)
 		return true
 	else:
 		return false
