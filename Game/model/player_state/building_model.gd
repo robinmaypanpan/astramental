@@ -11,7 +11,7 @@ extends Node
 var buildings: Array[BuildingEntity]
 
 ## Shadow copy of buildings.
-var _buildings_shadow: Array[BuildingEntity]
+var _buildings_shadow: Array[BuildingEntity] = []
 
 ## Next number to use for the id of new buildings.
 var _next_building_unique_id: int = 0

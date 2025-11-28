@@ -2,7 +2,7 @@ class_name BuildingEntity
 extends Object
 ## Represents a building actually placed down in the Model.
 
-## Unique unique_id used to identify this building.
+## Unique ID used to identify this building.
 var unique_id: int
 
 # TODO: Remove this

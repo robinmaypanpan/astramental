@@ -10,15 +10,15 @@ signal component_added(component: BuildingComponent)
 signal component_removed(component: BuildingComponent)
 
 ## Collection of all building components.
-var _components_list: Array[BuildingComponent]
+var _components_list: Array[BuildingComponent] = []
 
 ## Each key of components_by_type is component.type, and the value is an array of unique ids to
 ## reference in the components_list.
-var _components_by_type: Dictionary[String, Array]
+var _components_by_type: Dictionary[String, Array] = {}
 
 ## List of array indices that are vacant in components_list.
 ## Used when inserting into components_list.
-var _vacant_indices: Array[int]
+var _vacant_indices: Array[int] = []
 
 
 ## Initialize components by adding components to the BuildingEntity and the component list.
