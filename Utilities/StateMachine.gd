@@ -19,7 +19,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if current_state != null:
-		current_state.handleInput(event)
+		current_state.handle_input(event)
 
 
 func _process(delta: float) -> void:
@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if current_state != null:
-		current_state.physicsUpdate(delta)
+		current_state.physics_update(delta)
 
 
 func transition_state(next_state: String, flags: Dictionary) -> void:
