@@ -9,14 +9,15 @@ extends GdUnitTestSuite
 const __source: String = "res://Utilities/StateMachine.gd"
 
 # our mocks
-var mock_state1: MockedState
-var mock_state2: MockedState
+var mock_state1: State
+var mock_state2: State
 var state_machine: StateMachine
 
 
-func create_mock_state(mock_name: String) -> MockedState:
-	var mock_state = auto_free(MockedState.new(mock_name))
-	return spy(mock_state)
+func create_mock_state(mock_name: String) -> State:
+	var mock_state = mock(State)
+	mock_state.name = mock_name
+	return mock_state
 
 
 # Setup test data here
@@ -112,10 +113,3 @@ func test_update_calls_update_only_on_current_state() -> void:
 	# Verify that update was called on the current state
 	verify(mock_state1).update(delta_time)
 	verify_no_interactions(mock_state2).update(any_float())
-
-
-class MockedState:
-	extends State
-
-	func _init(state_name: String):
-		name = state_name
