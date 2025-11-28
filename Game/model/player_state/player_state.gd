@@ -26,15 +26,8 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## 0.0 and 1.0. Affects the speed at which buildings run.
 @export var energy_satisfaction: float
 
-# ## Contains a list of the positions ofeach building for this player.
-# var buildings_list: Array[BuildingEntity]
-
 ## Contains a list of all cells where heat is located.
 var heat_data_list: Array[HeatData]
-
-# TODO: move this to BuildingModel
-## Next number to use for the id of new buildings
-var _next_building_unique_id: int = 0
 
 ## Model for all item information and accessing.
 @onready var items: ItemModel = %ItemModel
@@ -66,7 +59,6 @@ func add_building(tile_position: Vector2i, building_id: String) -> void:
 	assert(multiplayer.is_server())
 	var building = buildings.add_building(tile_position, building_id)
 	ComponentManager.init_components_building(building)
-	# buildings_list.append(building)
 
 
 ## Remove a building from the buildings list.

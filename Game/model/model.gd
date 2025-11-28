@@ -292,7 +292,6 @@ func set_building_at(player_id: int, grid_position: Vector2i, building_id: Strin
 	if can_build_at_location(building_id, player_id, grid_position):
 		var player_state := player_states.get_state(player_id)
 		player_state.add_building(grid_position, building_id)
-		# buildings_updated.emit()
 
 
 ## Remove the building at the given position for all players.
@@ -301,17 +300,12 @@ func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
 	print("doing remove building for %d" % multiplayer.get_unique_id())
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.remove_building(tile_position)
-	# if did_remove_building:
-	# 	buildings_updated.emit()
 
 
 ## Retrieves a list of buildings for the specified player.
 func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	if player_state != null:
-		return player_state.buildings.get_all()
-	else:
-		return []
+	return player_state.buildings.get_all()
 
 
 ## Sets the energy satisfaction to the new value.
