@@ -43,7 +43,11 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/resource_list/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/resource_list/plugin.cfg")
+
+[gdunit4]
+
+settings/test/test_timeout_seconds=5
 
 [input]
 
