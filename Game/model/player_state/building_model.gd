@@ -16,17 +16,49 @@ var _buildings_shadow: Array[BuildingEntity]
 ## Next number to use for the id of new buildings.
 var _next_building_unique_id: int = 0
 
+# TODO: remove this
+## The player_id these buildings are associated with
+@onready var _player_id = get_parent().id
+
+
+## Return the building at the given position, if it exists.
+func get_building_at_pos(grid_position: Vector2i) -> BuildingEntity:
+	var index: int = buildings.find_custom(
+		func(elem): return elem.position == grid_position
+	)
+	if index != -1:
+		return buildings[index]
+	else:
+		return null
+
+
+## Return the building with the given unique id, if it exists.
+func get_building(unique_id: int) -> BuildingEntity:
+	var index: int = buildings.find_custom(
+		func(elem): return elem.unique_id == unique_id
+	)
+	if index != -1:
+		return buildings[index]
+	else:
+		return null
+
+
+## Return a list of all buildings.
+func get_all() -> Array[BuildingEntity]:
+	return buildings
+
 
 ## Add a building to the model.
-func add_building(grid_position: Vector2i, building_id: String) -> void:
+func add_building(grid_position: Vector2i, building_id: String) -> BuildingEntity:
 	var building: BuildingEntity = BuildingEntity.new(
 		_next_building_unique_id,
-		0,
+		_player_id,
 		grid_position,
 		building_id
 	)
 	_next_building_unique_id += 1
 	_buildings_shadow.append(building)
+	return building
 
 
 ## Remove a building from the model.

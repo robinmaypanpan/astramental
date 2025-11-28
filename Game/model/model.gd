@@ -281,38 +281,35 @@ func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 ## Returns the building at the given position
 func get_building_at(player_id: int, grid_position: Vector2i) -> BuildingEntity:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	for building_entity: BuildingEntity in player_state.buildings_list:
-		if building_entity.position == grid_position:
-			return building_entity
-	return null
+	return player_state.buildings.get_building_at_pos(grid_position)
 
 
 ## Set the building at the given position to the given building type for all players.
-@rpc("any_peer", "call_local", "reliable")
 func set_building_at(player_id: int, grid_position: Vector2i, building_id: String) -> void:
+	assert(multiplayer.is_server())
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("doing set building for %d" % caller_id)
 	if can_build_at_location(building_id, player_id, grid_position):
 		var player_state := player_states.get_state(player_id)
 		player_state.add_building(grid_position, building_id)
-		buildings_updated.emit()
+		# buildings_updated.emit()
 
 
 ## Remove the building at the given position for all players.
-@rpc("any_peer", "call_local", "reliable")
 func remove_building_at(player_id: int, tile_position: Vector2i) -> void:
+	assert(multiplayer.is_server())
 	print("doing remove building for %d" % multiplayer.get_unique_id())
 	var player_state: PlayerState = player_states.get_state(player_id)
-	var did_remove_building = player_state.remove_building(tile_position)
-	if did_remove_building:
-		buildings_updated.emit()
+	player_state.remove_building(tile_position)
+	# if did_remove_building:
+	# 	buildings_updated.emit()
 
 
 ## Retrieves a list of buildings for the specified player.
 func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	if player_state != null:
-		return player_state.buildings_list
+		return player_state.buildings.get_all()
 	else:
 		return []
 

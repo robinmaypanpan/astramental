@@ -26,8 +26,8 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## 0.0 and 1.0. Affects the speed at which buildings run.
 @export var energy_satisfaction: float
 
-## Contains a list of the positions of each building for this player.
-var buildings_list: Array[BuildingEntity]
+# ## Contains a list of the positions ofeach building for this player.
+# var buildings_list: Array[BuildingEntity]
 
 ## Contains a list of all cells where heat is located.
 var heat_data_list: Array[HeatData]
@@ -63,45 +63,23 @@ func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
 ## Add a building to the buildings list.
 ## Also adds all corresponding components to ComponentManager.
 func add_building(tile_position: Vector2i, building_id: String) -> void:
-	var building: BuildingEntity = BuildingEntity.new(
-		_next_building_unique_id, id, tile_position, building_id
-	)
-	_next_building_unique_id += 1
+	assert(multiplayer.is_server())
+	var building = buildings.add_building(tile_position, building_id)
 	ComponentManager.init_components_building(building)
-	if multiplayer.is_server():
-		buildings.add_building(tile_position, building_id)
-	buildings_list.append(building)
+	# buildings_list.append(building)
 
 
 ## Remove a building from the buildings list.
 ## Also removes all corresponding components from ComponentManager.
 func remove_building(tile_position: Vector2i) -> bool:
-	var index_to_remove := -1
-	var building_entity: BuildingEntity = null
-	for i in buildings_list.size():
-		var placed_building: BuildingEntity = buildings_list[i]
-		if placed_building.position == tile_position:
-			index_to_remove = i
-			building_entity = placed_building
-			break
-	if index_to_remove != -1:
-		ComponentManager.remove_components_building(building_entity)
-		buildings_list.remove_at(index_to_remove)
-		if multiplayer.is_server():
-			buildings.remove_building(building_entity.unique_id)
+	assert(multiplayer.is_server())
+	var building_at_pos = buildings.get_building_at_pos(tile_position)
+	if building_at_pos:
+		buildings.remove_building(building_at_pos.unique_id)
+		ComponentManager.remove_components_building(building_at_pos)
 		return true
 	else:
 		return false
-
-
-
-## Find a building by its unique id.
-func get_building_by_unique_id(unique_id: int) -> BuildingEntity:
-	var buildings_index = buildings_list.find_custom(func(elem): return elem.unique_id == unique_id)
-	if buildings_index == -1:
-		return null
-	else:
-		return buildings_list[buildings_index]
 
 
 # TODO: remove this by rewriting how UI updates
@@ -112,6 +90,7 @@ func fire_all_changed_signals() -> void:
 		item_consumption_changed.emit(id, item, items.consumption.get_for(item))
 		item_production_changed.emit(id, item, items.production.get_for(item))
 		storage_cap_changed.emit(id, item, items.storage_caps.get_for(item))
+	Model.buildings_updated.emit()
 
 
 ## Sync all properties of this state to the network.
@@ -125,5 +104,7 @@ func _on_multiplayer_synchronizer_synchronized() -> void:
 	# This acts kinda weird. Hooking off synchronize calls this like 8 times a tick, and hooking
 	# off delta_synchronize makes it call like 1-2 times a tick.
 	print("received synchronize as %d" % [multiplayer.get_unique_id()])
+	# TODO: implement a method to diff between received network data and current data in
+	# deserialization
 	buildings.deserialize_buildings()
 	fire_all_changed_signals()

@@ -189,7 +189,7 @@ func process_place_building(grid_position: Vector2i, building: String) -> void:
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("processing place building from %d" % caller_id)
 	if Model.can_build_at_location(building, caller_id, grid_position):
-		Model.set_building_at.rpc(caller_id, grid_position, building)
+		Model.set_building_at(caller_id, grid_position, building)
 		Model.deduct_costs(caller_id, building)
 
 
@@ -209,7 +209,7 @@ func process_remove_building(grid_position: Vector2i) -> void:
 	print("processing remove building from %d" % caller_id)
 	if Model.can_remove_building(caller_id, grid_position):
 		var building_removed: BuildingEntity = Model.get_building_at(caller_id, grid_position)
-		Model.remove_building_at.rpc(caller_id, grid_position)
+		Model.remove_building_at(caller_id, grid_position)
 		Model.refund_costs(caller_id, building_removed.building_id)
 
 
