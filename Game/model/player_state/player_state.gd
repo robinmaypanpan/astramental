@@ -38,6 +38,9 @@ var heat_data_list: Array[HeatData]
 ## Model for all building information.
 @onready var buildings: BuildingModel = %BuildingModel
 
+## The Building entity-component system.
+@onready var building_ecs: BuildingEcs = %BuildingEcs
+
 
 ## Used by the server to set the energy satisfaction
 func update_energy_satisfaction(new_energy_satisfaction: float) -> void:
@@ -59,6 +62,7 @@ func add_building(tile_position: Vector2i, building_id: String) -> void:
 	assert(multiplayer.is_server())
 	var building = buildings.add_building(tile_position, building_id)
 	ComponentManager.init_components_building(building)
+	building_ecs.component_manager.add_components_building(building)
 
 
 ## Remove a building from the buildings list.
@@ -69,6 +73,7 @@ func remove_building(tile_position: Vector2i) -> bool:
 	if building_at_pos:
 		buildings.remove_building(building_at_pos.unique_id)
 		ComponentManager.remove_components_building(building_at_pos)
+		building_ecs.component_manager.remove_components_building(building_at_pos)
 		return true
 	else:
 		return false
