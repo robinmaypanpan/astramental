@@ -1,5 +1,5 @@
 class_name NewComponentManager
-extends Object
+extends Node
 ## Contains convenient list of all components for all buildings, sorted by component type.
 ## PlayerState calls init/remove_components_building() to handle components.
 ## Systems call get_components_by_type() when they want a list of all components of one type.

@@ -4,10 +4,10 @@ extends Node
 ## relationships, and systems. Only initialized and defined on the server.
 
 ## All the building components and building-component relationships.
-var component_manager: NewComponentManager
+@onready var component_manager: NewComponentManager = %ComponentManager
 
 ## All building component systems.
-@onready var systems: Array[Node] = get_children()
+@onready var systems: Array[Node] = %Systems.get_children()
 
 ## Reference to the player state this ECS is responsible for.
 @onready var player_state: PlayerState = get_parent()
