@@ -7,6 +7,7 @@ extends Node
 ## Array of buildings turned into primitives that is synchronized with MultiplayerSynchronizer.
 @export var buildings_serialized: Array[Dictionary]
 
+# TODO: rewrite to have buildings be either the shadow server copy or the client copy
 ## Array of buildings, stored internally.
 var buildings: Array[BuildingEntity]
 
@@ -23,11 +24,18 @@ var _next_building_unique_id: int = 0
 
 ## Return the building at the given position, if it exists.
 func get_building_at_pos(grid_position: Vector2i) -> BuildingEntity:
-	var index: int = buildings.find_custom(
+	# TODO: rewrite this
+	var buildings_to_use: Array[BuildingEntity]
+	if multiplayer.is_server():
+		buildings_to_use = _buildings_shadow
+	else:
+		buildings_to_use = buildings
+
+	var index: int = buildings_to_use.find_custom(
 		func(elem): return elem.position == grid_position
 	)
 	if index != -1:
-		return buildings[index]
+		return buildings_to_use[index]
 	else:
 		return null
 
@@ -50,6 +58,7 @@ func get_all() -> Array[BuildingEntity]:
 
 ## Add a building to the model.
 func add_building(grid_position: Vector2i, building_id: String) -> BuildingEntity:
+	print_debug("adding building id %d" % _next_building_unique_id)
 	var building: BuildingEntity = BuildingEntity.new(
 		_next_building_unique_id,
 		_player_id,
@@ -63,6 +72,7 @@ func add_building(grid_position: Vector2i, building_id: String) -> BuildingEntit
 
 ## Remove a building from the model.
 func remove_building(unique_id: int) -> void:
+	print_debug("removing building id %d" % unique_id)
 	var index_to_remove = _buildings_shadow.find_custom(
 		func(elem): return elem.unique_id == unique_id
 	)
