@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b47vu2y258g5v"]
+[gd_scene load_steps=10 format=3 uid="uid://b47vu2y258g5v"]
 
 [ext_resource type="Script" uid="uid://bhb47oq4pvkq8" path="res://Game/model/player_state/player_state.gd" id="1_f77f7"]
 [ext_resource type="Script" uid="uid://4wh2gi5ydyre" path="res://Game/model/player_state/item_property.gd" id="2_f77f7"]
@@ -6,11 +6,8 @@
 [ext_resource type="Script" uid="uid://bh2vsaywv750x" path="res://Game/model/player_state/ore_model.gd" id="4_kvvmd"]
 [ext_resource type="Script" uid="uid://dpx2k8by1fc0s" path="res://Game/model/player_state/building_model.gd" id="5_dg143"]
 [ext_resource type="Script" uid="uid://b1jsyuqgvgctx" path="res://Game/model/player_state/building_ecs/building_ecs.gd" id="6_njjyn"]
-[ext_resource type="Script" uid="uid://qxnxug305fjm" path="res://Game/data/building_systems/storage_system.gd" id="7_3nm42"]
 [ext_resource type="Script" uid="uid://tsmfm5fs6yn1" path="res://Game/model/player_state/building_ecs/new_component_manager.gd" id="7_ut4we"]
-[ext_resource type="Script" uid="uid://chjqf2hbd3gmx" path="res://Game/data/building_systems/energy_system.gd" id="8_ut4we"]
-[ext_resource type="Script" uid="uid://bbsghvtoin0bs" path="res://Game/data/building_systems/miner_system.gd" id="9_3k6uv"]
-[ext_resource type="Script" uid="uid://6r5nbp5cnpms" path="res://Game/data/building_systems/heat_system/heat_system.gd" id="10_qqbho"]
+[ext_resource type="Script" uid="uid://c0awhvn2cwsxe" path="res://Game/model/player_state/building_ecs/systems/new_ore_storage_system.gd" id="8_38nfo"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_iq7yb"]
 properties/0/path = NodePath("ItemModel/ItemCounts:value_dict")
@@ -86,20 +83,8 @@ metadata/_custom_type_script = "uid://tsmfm5fs6yn1"
 [node name="Systems" type="Node" parent="BuildingEcs"]
 unique_name_in_owner = true
 
-[node name="OreStorageSystem" type="Node" parent="BuildingEcs/Systems"]
-script = ExtResource("7_3nm42")
-metadata/_custom_type_script = "uid://qxnxug305fjm"
-
-[node name="EnergySystem" type="Node" parent="BuildingEcs/Systems"]
-script = ExtResource("8_ut4we")
-metadata/_custom_type_script = "uid://chjqf2hbd3gmx"
-
-[node name="MinerSystem" type="Node" parent="BuildingEcs/Systems"]
-script = ExtResource("9_3k6uv")
-metadata/_custom_type_script = "uid://bbsghvtoin0bs"
-
-[node name="HeatSystem" type="Node" parent="BuildingEcs/Systems"]
-script = ExtResource("10_qqbho")
-metadata/_custom_type_script = "uid://6r5nbp5cnpms"
+[node name="NewOreStorageSystem" type="Node" parent="BuildingEcs/Systems"]
+script = ExtResource("8_38nfo")
+metadata/_custom_type_script = "uid://c0awhvn2cwsxe"
 
 [connection signal="delta_synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]

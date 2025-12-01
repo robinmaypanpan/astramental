@@ -36,6 +36,13 @@ func set_for(item: Types.Item, value: float) -> void:
 	_value_dict_shadow[item] = value
 
 
+## Set the shadow value of this property for all the given items.
+## Should only be called by the server.
+func set_all(new_value_dict: Dictionary[Types.Item, float]) -> void:
+	assert(multiplayer.is_server())
+	_value_dict_shadow = new_value_dict.duplicate()
+
+
 ## Increase the shadow value of this property for the given item.
 ## Should only be called by the server.
 func increase_for(item: Types.Item, amount: float) -> void:
