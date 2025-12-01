@@ -115,4 +115,3 @@ func get_by_id(component_unique_id: int) -> BuildingComponent:
 		return _components_list[component_unique_id]
 	else:
 		return null
-
