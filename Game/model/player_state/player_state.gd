@@ -67,6 +67,7 @@ func remove_building(tile_position: Vector2i) -> bool:
 	assert(multiplayer.is_server())
 	var building_at_pos = buildings.get_building_at_pos(tile_position)
 	if building_at_pos:
+		buildings.remove_building(building_at_pos.unique_id)
 		ComponentManager.remove_components_building(building_at_pos)
 		return true
 	else:
