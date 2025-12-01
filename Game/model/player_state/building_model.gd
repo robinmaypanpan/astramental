@@ -7,7 +7,9 @@ extends Node
 ## Array of buildings turned into primitives that is synchronized with MultiplayerSynchronizer.
 @export var buildings_serialized: Array[Dictionary]
 
-# TODO: rewrite to have buildings be either the shadow server copy or the client copy
+# TODO: rewrite this so that there is a client state and server state. The server writes to the
+# client state and publishes to the server state. Clients read from the server state to get their
+# client state. Everything reads from the client state.
 ## Array of buildings, stored internally.
 var buildings: Array[BuildingEntity]
 
@@ -17,14 +19,16 @@ var _buildings_shadow: Array[BuildingEntity] = []
 ## Next number to use for the id of new buildings.
 var _next_building_unique_id: int = 0
 
-# TODO: remove this
+# TODO: remove this at the same time we remove player id from BuildingEntity
 ## The player_id these buildings are associated with
 @onready var _player_id = get_parent().id
 
 
 ## Return the building at the given position, if it exists.
 func get_building_at_pos(grid_position: Vector2i) -> BuildingEntity:
-	# TODO: rewrite this
+	# TODO: rewrite this so that there is a client state and server state. The server writes to the
+	# client state and publishes to the server state. Clients read from the server state to get their
+	# client state. Everything reads from the client state.
 	var buildings_to_use: Array[BuildingEntity]
 	if multiplayer.is_server():
 		buildings_to_use = _buildings_shadow
