@@ -11,3 +11,19 @@ extends Node
 
 ## Reference to the player state this ECS is responsible for.
 @onready var player_state: PlayerState = get_parent()
+
+
+## Update all systems that are a child of the Systems node. The order of the update is the order of
+## the children.
+func update() -> void:
+    for system: Node in systems:
+        system.update(component_manager, player_state)
+
+
+## Get the system with the given name.
+func get_system(system_name: StringName) -> Node:
+    for system: Node in systems:
+        if system.get_script().get_global_name() == system_name:
+            return system
+    # else, nothing was found
+    return null
