@@ -22,6 +22,12 @@ extends Resource
 ## Describe the building to the user
 @export var description: String
 
+## Used to determine the static refund value of this building.
+@export_range(0.0, 1.0, 0.05, "or_greater") var refund_value: float = 1.0
+
+## When true, the amount of heat reduces the value of the refund when
+## selling this building
+@export var heat_reduces_value: bool = true
 
 ## Returns the associated component
 func get_component_data(component_type: String) -> BuildingComponentData:
