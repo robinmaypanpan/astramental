@@ -23,7 +23,6 @@ name = "Solar Panel"
 id = "solar_panel"
 icon = ExtResource("1_atdat")
 item_costs = Array[ExtResource("1_r87ev")]([SubResource("Resource_atdat")])
-placement_destination = 0
 building_components = Array[ExtResource("1_8q4hs")]([SubResource("Resource_bwyve")])
 description = "Provides energy to meet demand"
 metadata/_custom_type_script = "uid://dmnwciefckrau"

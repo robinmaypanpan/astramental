@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ds5rf8iw3y62d" path="res://Assets/sprites/buildings/battery.tres" id="1_omend"]
 [ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_osgy5"]
-[ext_resource type="Script" path="res://Game/data/building_components/storage_component_data.gd" id="2_npclv"]
+[ext_resource type="Script" uid="uid://wswpjy4cr2yb" path="res://Game/data/building_components/storage_component_data.gd" id="2_npclv"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="2_omend"]
 [ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="5_npclv"]
 
@@ -31,6 +31,5 @@ name = "Battery"
 id = "battery"
 icon = ExtResource("1_omend")
 item_costs = Array[ExtResource("2_omend")]([SubResource("Resource_osgy5"), SubResource("Resource_npclv")])
-placement_destination = 0
 building_components = Array[ExtResource("1_osgy5")]([SubResource("Resource_8kehj")])
 description = "Increases the energy storage limit so that excess energy can be used during times where power levels are in excess of demand"
