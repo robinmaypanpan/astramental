@@ -7,6 +7,9 @@ extends Node
 ## Array of buildings turned into primitives that is synchronized with MultiplayerSynchronizer.
 @export var buildings_serialized: Array[Dictionary]
 
+# TODO: rewrite this so that there is a client state and server state. The server writes to the
+# client state and publishes to the server state. Clients read from the server state to get their
+# client state. Everything reads from the client state.
 ## Array of buildings, stored internally.
 var buildings: Array[BuildingEntity]
 
@@ -16,18 +19,27 @@ var _buildings_shadow: Array[BuildingEntity] = []
 ## Next number to use for the id of new buildings.
 var _next_building_unique_id: int = 0
 
-# TODO: remove this
+# TODO: remove this at the same time we remove player id from BuildingEntity
 ## The player_id these buildings are associated with
 @onready var _player_id = get_parent().id
 
 
 ## Return the building at the given position, if it exists.
 func get_building_at_pos(grid_position: Vector2i) -> BuildingEntity:
-	var index: int = buildings.find_custom(
+	# TODO: rewrite this so that there is a client state and server state. The server writes to the
+	# client state and publishes to the server state. Clients read from the server state to get their
+	# client state. Everything reads from the client state.
+	var buildings_to_use: Array[BuildingEntity]
+	if multiplayer.is_server():
+		buildings_to_use = _buildings_shadow
+	else:
+		buildings_to_use = buildings
+
+	var index: int = buildings_to_use.find_custom(
 		func(elem): return elem.position == grid_position
 	)
 	if index != -1:
-		return buildings[index]
+		return buildings_to_use[index]
 	else:
 		return null
 
@@ -50,6 +62,7 @@ func get_all() -> Array[BuildingEntity]:
 
 ## Add a building to the model.
 func add_building(grid_position: Vector2i, building_id: String) -> BuildingEntity:
+	print_debug("adding building id %d" % _next_building_unique_id)
 	var building: BuildingEntity = BuildingEntity.new(
 		_next_building_unique_id,
 		_player_id,
@@ -63,6 +76,7 @@ func add_building(grid_position: Vector2i, building_id: String) -> BuildingEntit
 
 ## Remove a building from the model.
 func remove_building(unique_id: int) -> void:
+	print_debug("removing building id %d" % unique_id)
 	var index_to_remove = _buildings_shadow.find_custom(
 		func(elem): return elem.unique_id == unique_id
 	)

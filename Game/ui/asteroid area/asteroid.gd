@@ -186,6 +186,7 @@ func request_place_building(grid_position: Vector2i, building: String) -> void:
 ## If it should, actually place the building for both players.
 @rpc("any_peer", "call_local", "reliable")
 func process_place_building(grid_position: Vector2i, building: String) -> void:
+	assert(multiplayer.is_server())
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("processing place building from %d" % caller_id)
 	if Model.can_build_at_location(building, caller_id, grid_position):
@@ -205,6 +206,7 @@ func request_remove_building(grid_position: Vector2i) -> void:
 ## If it should, actually remove the building for both players.
 @rpc("any_peer", "call_local", "reliable")
 func process_remove_building(grid_position: Vector2i) -> void:
+	assert(multiplayer.is_server())
 	var caller_id := multiplayer.get_remote_sender_id()
 	print("processing remove building from %d" % caller_id)
 	if Model.can_remove_building(caller_id, grid_position):
