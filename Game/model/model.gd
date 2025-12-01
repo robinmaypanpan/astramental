@@ -231,7 +231,7 @@ func refund_costs(player_id: int, building: BuildingEntity) -> void:
 		if heat_component != null and building_resource.heat_reduces_value:
 			var heat_level: float = heat_component.heat
 			var heat_capacity: float = heat_component.heat_capacity
-			var heat_percentage: float = heat_level / heat_capacity
+			var heat_fraction: float = heat_level / heat_capacity
 			actual_quantity *= (1.0 - heat_percentage)
 
 		# Apply the refund
