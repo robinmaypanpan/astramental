@@ -231,8 +231,8 @@ func refund_costs(player_id: int, building: BuildingEntity) -> void:
 		if heat_component != null and building_resource.heat_reduces_value:
 			var heat_level: float = heat_component.heat
 			var heat_capacity: float = heat_component.heat_capacity
-			var heat_fraction: float = heat_level / heat_capacity
-			actual_quantity *= (1.0 - heat_percentage)
+			var heat_fraction: float = heat_level / heat_capacity if heat_capacity > 0.0 else 0.0
+			actual_quantity *= (1.0 - heat_fraction)
 
 		# Apply the refund
 		if Globals.settings.enable_storage_caps_for_building_sales:
