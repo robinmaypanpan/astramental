@@ -11,16 +11,15 @@ extends Node
 ## The client copies the server value down to this to use as its current value.
 var value_client: Variant
 
+
 ## Serialize the client value so that it can be transferred across the network.
-## Default behavior is to copy the value and return that, effectively not changing it.
-## Can be re-implemented by subclasses.
+## Default behavior is to use var_to_bytes(). Can be re-implemented by subclasses.
 func serialize(value: Variant) -> PackedByteArray:
 	return var_to_bytes(value)
 
 
 ## Deserialize the server value so that it can be turned into a usable client value.
-## Default behavior is to copy the value and return that, effectively not changing it.
-## Can be re-implemented by subclasses.
+## Default behavior is to use bytes_to_var(). Can be re-implemented by subclasses.
 func deserialize(bytes: PackedByteArray) -> Variant:
 	return bytes_to_var(bytes)
 
