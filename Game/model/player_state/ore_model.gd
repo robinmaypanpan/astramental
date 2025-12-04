@@ -21,7 +21,6 @@ func _ready() -> void:
 	# resize ores to appropriate size
 	value_client = [] as Array[Types.Ore]
 	value_client.resize(ores_size)
-	value_server = serialize(value_client)
 
 
 ## Get the ore at the given position.
@@ -36,6 +35,24 @@ func set_ore(grid_position: Vector2i, new_ore: Types.Ore) -> void:
 	# assert(multiplayer.is_server())
 	var index = _get_index_into_ores(grid_position)
 	value_client[index] = new_ore
+
+
+func serialize(value: Variant) -> PackedByteArray:
+	var bytes = PackedByteArray()
+	var ores_size: int = value.size()
+	bytes.resize(ores_size)
+	for i in range(ores_size):
+		bytes.encode_u8(i, value[i])
+	return bytes
+
+
+func deserialize(bytes: PackedByteArray) -> Variant:
+	var new_value: Variant = [] as Array[Types.Ore]
+	var ores_size: int = bytes.size()
+	new_value.resize(ores_size)
+	for i in range(ores_size):
+		new_value[i] = bytes.decode_u8(i)
+	return new_value
 
 
 ## Given the 2D grid position of the ore, get the actual index into the 1D array.

@@ -21,8 +21,8 @@ func serialize(value: Variant) -> PackedByteArray:
 ## Deserialize the server value so that it can be turned into a usable client value.
 ## Default behavior is to copy the value and return that, effectively not changing it.
 ## Can be re-implemented by subclasses.
-func deserialize(value: PackedByteArray) -> Variant:
-	return bytes_to_var(value)
+func deserialize(bytes: PackedByteArray) -> Variant:
+	return bytes_to_var(bytes)
 
 
 ## Publish the value to the network by copying the client value to the server value.
