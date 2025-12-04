@@ -1,8 +1,6 @@
 class_name ItemModel
 extends Node
-## Model for items. Getters read from real copy i.e. last frame's data, and setters set to the
-## shadow copy. Values are synced between players by calling publish(), which copies from shadow to
-## real copy.
+## Model for items.
 
 ## Item counts for each item.
 @onready var counts: ItemProperty = %ItemCounts

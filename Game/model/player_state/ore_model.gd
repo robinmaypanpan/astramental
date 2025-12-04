@@ -1,8 +1,6 @@
 class_name OreModel
 extends SyncProperty
-## Model for Ores. Getters read from real copy i.e. last frame's data, and setters set to the
-## shadow copy. Values are synced between players by calling sync(), which copies from shadow to
-## real copy.
+## Model for Ores.
 
 ## Cached layer thickness: number of rows in each layer.
 var _layer_thickness: int
