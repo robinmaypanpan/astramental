@@ -454,7 +454,7 @@ func set_starting_item_counts_and_storage_caps() -> void:
 			var cap: float = get_starting_storage_cap(type)
 			set_storage_cap(player_id, type, cap)
 		# TODO: fix this hack
-		player_states.get_state(player_id).items.sync()
+		player_states.get_state(player_id).items.publish()
 
 
 ## TODO: this code causes flickering of production numbers. This will be fixed in the Model rework.

@@ -1,7 +1,7 @@
 class_name ItemModel
 extends Node
 ## Model for items. Getters read from real copy i.e. last frame's data, and setters set to the
-## shadow copy. Values are synced between players by calling sync(), which copies from shadow to
+## shadow copy. Values are synced between players by calling publish(), which copies from shadow to
 ## real copy.
 
 ## Item counts for each item.
@@ -17,7 +17,15 @@ extends Node
 @onready var storage_caps: ItemProperty = %StorageCaps
 
 
-## Sync all properties of this model across the network.
+## Publish all properties of this model across the network.
+func publish() -> void:
+	counts.publish()
+	production.publish()
+	consumption.publish()
+	storage_caps.publish()
+
+
+## Sync all properties of this model from the network.
 func sync() -> void:
 	counts.sync()
 	production.sync()
@@ -30,7 +38,7 @@ func sync() -> void:
 func increase_item_count_apply_cap(item: Types.Item, amount: float) -> float:
 	assert(multiplayer.is_server())
 	var storage_cap: float = storage_caps.get_for(item)
-	var current_item_count: float = counts.get_shadow_for(item)
+	var current_item_count: float = counts.get_for(item)
 
 	var available_capacity: float = max(0.0, storage_cap - current_item_count)
 
