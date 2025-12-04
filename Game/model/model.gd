@@ -480,7 +480,7 @@ func _on_update_timer_timeout() -> void:
 	# TODO: remove this hack by rewriting UI code
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
-		player_state.sync()
+		player_state.publish()
 	player_states.get_state().fire_all_changed_signals()
 
 	_broadcast_tick_done.rpc()

@@ -86,9 +86,9 @@ func fire_all_changed_signals() -> void:
 
 
 ## Sync all properties of this state to the network.
-func sync() -> void:
+func publish() -> void:
 	items.sync()
-	ores.sync()
+	ores.publish()
 	buildings.sync()
 
 
@@ -98,5 +98,6 @@ func _on_multiplayer_synchronizer_synchronized() -> void:
 	print("received synchronize as %d" % [multiplayer.get_unique_id()])
 	# TODO: implement a method to diff between received network data and current data in
 	# deserialization
+	ores.sync()
 	buildings.deserialize_buildings()
 	fire_all_changed_signals()
