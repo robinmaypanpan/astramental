@@ -1,14 +1,6 @@
 class_name OreModel
-extends Node
-## Model for Ores. Getters read from real copy i.e. last frame's data, and setters set to the
-## shadow copy. Values are synced between players by calling sync(), which copies from shadow to
-## real copy.
-
-## Array of ores, stored as a 1D array.
-@export var ores: Array[Types.Ore]
-
-## Shadow copy of ores, stored as a 1D array.
-var _ores_shadow: Array[Types.Ore]
+extends SyncProperty
+## Model for Ores.
 
 ## Cached layer thickness: number of rows in each layer.
 var _layer_thickness: int
@@ -25,21 +17,14 @@ func _ready() -> void:
 	var layer_size: int = _layer_thickness * _layer_width
 	var ores_size: int = num_layers * layer_size
 	# resize ores to appropriate size
-	ores.resize(ores_size)
-	_ores_shadow.resize(ores_size)
+	value_client = [] as Array[Types.Ore]
+	value_client.resize(ores_size)
 
 
 ## Get the ore at the given position.
 func get_ore(grid_position: Vector2i) -> Types.Ore:
 	var index = _get_index_into_ores(grid_position)
-	return ores[index]
-
-
-## Get the ore at the given position from the shadow array.
-func get_ore_shadow(grid_position: Vector2i) -> Types.Ore:
-	assert(multiplayer.is_server())
-	var index = _get_index_into_ores(grid_position)
-	return _ores_shadow[index]
+	return value_client[index]
 
 
 ## Set the ore at the given position to the given value.
@@ -47,12 +32,25 @@ func set_ore(grid_position: Vector2i, new_ore: Types.Ore) -> void:
 	# TODO: do all ore generation server side, and not client side
 	# assert(multiplayer.is_server())
 	var index = _get_index_into_ores(grid_position)
-	_ores_shadow[index] = new_ore
+	value_client[index] = new_ore
 
 
-## Sync all properties of this model across the network.
-func sync() -> void:
-	ores = _ores_shadow.duplicate()
+func serialize(value: Variant) -> PackedByteArray:
+	var bytes = PackedByteArray()
+	var ores_size: int = value.size()
+	bytes.resize(ores_size)
+	for i in range(ores_size):
+		bytes.encode_u8(i, value[i])
+	return bytes
+
+
+func deserialize(bytes: PackedByteArray) -> Variant:
+	var new_value: Variant = [] as Array[Types.Ore]
+	var ores_size: int = bytes.size()
+	new_value.resize(ores_size)
+	for i in range(ores_size):
+		new_value[i] = bytes.decode_u8(i) as Types.Ore
+	return new_value
 
 
 ## Given the 2D grid position of the ore, get the actual index into the 1D array.

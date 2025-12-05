@@ -90,10 +90,17 @@ func fire_all_changed_signals() -> void:
 	Model.buildings_updated.emit()
 
 
-## Sync all properties of this state to the network.
+## Publish all properties of this state to the network.
+func publish() -> void:
+	items.publish()
+	ores.publish()
+	buildings.publish()
+
+
+## Sync all properties of this state from the network.
 func sync() -> void:
-	items.sync()
 	ores.sync()
+	items.sync()
 	buildings.sync()
 
 
@@ -103,5 +110,5 @@ func _on_multiplayer_synchronizer_synchronized() -> void:
 	print("received synchronize as %d" % [multiplayer.get_unique_id()])
 	# TODO: implement a method to diff between received network data and current data in
 	# deserialization
-	buildings.deserialize_buildings()
+	sync()
 	fire_all_changed_signals()

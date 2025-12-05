@@ -1,103 +1,86 @@
 class_name BuildingModel
-extends Node
-## Model for buildings. Getters read from real copy i.e. last frame's data, and setters set to the
-## shadow copy. Values are synced between players by calling sync(), which copies from shadow to
-## real copy and serializes it across the network, which clients then deserialize.
-
-## Array of buildings turned into primitives that is synchronized with MultiplayerSynchronizer.
-@export var buildings_serialized: Array[Dictionary]
-
-# TODO: rewrite to have buildings be either the shadow server copy or the client copy
-## Array of buildings, stored internally.
-var buildings: Array[BuildingEntity]
-
-## Shadow copy of buildings.
-var _buildings_shadow: Array[BuildingEntity] = []
+extends SyncProperty
+## Model for buildings.
 
 ## Next number to use for the id of new buildings.
 var _next_building_unique_id: int = 0
 
-# TODO: remove this
+# TODO: remove this at the same time we remove player id from BuildingEntity
 ## The player_id these buildings are associated with
 @onready var _player_id = get_parent().id
 
 
+func _ready() -> void:
+	value_client = [] as Array[BuildingEntity]
+
+
 ## Return the building at the given position, if it exists.
 func get_building_at_pos(grid_position: Vector2i) -> BuildingEntity:
-	# TODO: rewrite this
-	var buildings_to_use: Array[BuildingEntity]
-	if multiplayer.is_server():
-		buildings_to_use = _buildings_shadow
-	else:
-		buildings_to_use = buildings
-
-	var index: int = buildings_to_use.find_custom(
-		func(elem): return elem.position == grid_position
-	)
+	var index: int = value_client.find_custom(func(elem): return elem.position == grid_position)
 	if index != -1:
-		return buildings_to_use[index]
+		return value_client[index]
 	else:
 		return null
 
 
 ## Return the building with the given unique id, if it exists.
 func get_building(unique_id: int) -> BuildingEntity:
-	var index: int = buildings.find_custom(
-		func(elem): return elem.unique_id == unique_id
-	)
+	var index: int = value_client.find_custom(func(elem): return elem.unique_id == unique_id)
 	if index != -1:
-		return buildings[index]
+		return value_client[index]
 	else:
 		return null
 
 
 ## Return a list of all buildings.
 func get_all() -> Array[BuildingEntity]:
-	return buildings
+	return value_client
 
 
 ## Add a building to the model.
 func add_building(grid_position: Vector2i, building_id: String) -> BuildingEntity:
 	print_debug("adding building id %d" % _next_building_unique_id)
 	var building: BuildingEntity = BuildingEntity.new(
-		_next_building_unique_id,
-		_player_id,
-		grid_position,
-		building_id
+		_next_building_unique_id, _player_id, grid_position, building_id
 	)
 	_next_building_unique_id += 1
-	_buildings_shadow.append(building)
+	value_client.append(building)
 	return building
 
 
 ## Remove a building from the model.
 func remove_building(unique_id: int) -> void:
 	print_debug("removing building id %d" % unique_id)
-	var index_to_remove = _buildings_shadow.find_custom(
-		func(elem): return elem.unique_id == unique_id
-	)
+	var index_to_remove = value_client.find_custom(func(elem): return elem.unique_id == unique_id)
 	if index_to_remove != -1:
-		_buildings_shadow.remove_at(index_to_remove)
+		value_client.remove_at(index_to_remove)
 
 
-## Synchronize buildings across network by updating actual buildings, then serializing them to
-## synchronize across network.
-func sync() -> void:
-	buildings = _buildings_shadow.duplicate()
-	serialize_buildings()
+func serialize(value: Variant) -> PackedByteArray:
+	var bytes: PackedByteArray = PackedByteArray()
+	for building: BuildingEntity in value:
+		# encode each building as
+		# size of encoded building: 1 byte (this implies encoded buildings are <= 255 bytes in size)
+		# encoded building: X bytes
+		var building_dict: Dictionary = building.serialize()
+		var building_bytes: PackedByteArray = var_to_bytes(building_dict)
+		var building_bytes_size: int = building_bytes.size()
+		bytes.append(building_bytes_size)
+		bytes.append_array(building_bytes)
+	return bytes
 
 
-## Set `buildings_serialized` by serializing `buildings`.
-func serialize_buildings() -> void:
-	var new_buildings_serialized: Array[Dictionary] = []
-	for building: BuildingEntity in buildings:
-		new_buildings_serialized.append(building.serialize())
-	buildings_serialized = new_buildings_serialized
-
-
-## Set `buildings` by deserializing received `buildings_serialized` data.
-func deserialize_buildings() -> void:
-	var new_buildings: Array[BuildingEntity] = []
-	for building_serialized: Dictionary in buildings_serialized:
-		new_buildings.append(BuildingEntity.from_serialized(building_serialized))
-	buildings = new_buildings
+func deserialize(bytes: PackedByteArray) -> Variant:
+	var new_value: Array[BuildingEntity] = []
+	var curr_offset: int = 0
+	var bytes_size: int = bytes.size()
+	while curr_offset < bytes_size:
+		var building_bytes_size = bytes.decode_u8(curr_offset)
+		curr_offset += 1
+		var building_dict = bytes_to_var(
+			bytes.slice(curr_offset, curr_offset + building_bytes_size)
+		)
+		curr_offset += building_bytes_size
+		var building_entity = BuildingEntity.from_serialized(building_dict)
+		new_value.append(building_entity)
+	return new_value
