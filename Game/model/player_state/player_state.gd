@@ -89,7 +89,7 @@ func fire_all_changed_signals() -> void:
 func publish() -> void:
 	items.publish()
 	ores.publish()
-	buildings.sync()
+	buildings.publish()
 
 
 func _on_multiplayer_synchronizer_synchronized() -> void:
@@ -100,5 +100,5 @@ func _on_multiplayer_synchronizer_synchronized() -> void:
 	# deserialization
 	ores.sync()
 	items.sync()
-	buildings.deserialize_buildings()
+	buildings.sync()
 	fire_all_changed_signals()

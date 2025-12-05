@@ -7,22 +7,22 @@
 [ext_resource type="Script" uid="uid://dpx2k8by1fc0s" path="res://Game/model/player_state/building_model.gd" id="5_dg143"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_iq7yb"]
-properties/0/path = NodePath("BuildingModel:buildings_serialized")
+properties/0/path = NodePath("OreModel:value_server")
 properties/0/spawn = true
 properties/0/replication_mode = 2
-properties/1/path = NodePath("OreModel:value_server")
+properties/1/path = NodePath("ItemModel/ItemCounts:value_server")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("ItemModel/ItemCounts:value_server")
+properties/2/path = NodePath("ItemModel/ItemProduction:value_server")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath("ItemModel/ItemProduction:value_server")
+properties/3/path = NodePath("ItemModel/ItemConsumption:value_server")
 properties/3/spawn = true
 properties/3/replication_mode = 2
-properties/4/path = NodePath("ItemModel/ItemConsumption:value_server")
+properties/4/path = NodePath("ItemModel/StorageCaps:value_server")
 properties/4/spawn = true
 properties/4/replication_mode = 2
-properties/5/path = NodePath("ItemModel/StorageCaps:value_server")
+properties/5/path = NodePath("BuildingModel:value_server")
 properties/5/spawn = true
 properties/5/replication_mode = 2
 
