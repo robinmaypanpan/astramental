@@ -49,7 +49,7 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 	var ores_size: int = bytes.size()
 	new_value.resize(ores_size)
 	for i in range(ores_size):
-		new_value[i] = bytes.decode_u8(i)
+		new_value[i] = bytes.decode_u8(i) as Types.Ore
 	return new_value
 
 

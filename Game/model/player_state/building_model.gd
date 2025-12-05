@@ -59,6 +59,9 @@ func remove_building(unique_id: int) -> void:
 func serialize(value: Variant) -> PackedByteArray:
 	var bytes: PackedByteArray = PackedByteArray()
 	for building: BuildingEntity in value:
+		# encode each building as
+		# size of encoded building: 1 byte (this implies encoded buildings are <= 255 bytes in size)
+		# encoded building: X bytes
 		var building_dict: Dictionary = building.serialize()
 		var building_bytes: PackedByteArray = var_to_bytes(building_dict)
 		var building_bytes_size: int = building_bytes.size()
