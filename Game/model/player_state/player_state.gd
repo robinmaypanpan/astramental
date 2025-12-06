@@ -24,7 +24,17 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## The current energy satisfaction of all buildings, which defines how much of the current
 ## energy demand is satisfied by current energy production. Stored as a decimal between
 ## 0.0 and 1.0. Affects the speed at which buildings run.
-@export var energy_satisfaction: float
+@export var energy_satisfaction: float:
+	get:
+		# TODO: fix so we don't constantly have to check for null.
+		# Currently game crashes if you don't do this.
+		var value: Variant = _energy_satisfaction.value_client
+		if value != null:
+			return value
+		else:
+			return 0.0
+	set(new_value):
+		_energy_satisfaction.value_client = new_value
 
 ## Contains a list of all cells where heat is located.
 var heat_data_list: Array[HeatData]
@@ -41,19 +51,12 @@ var heat_data_list: Array[HeatData]
 ## The Building entity-component system.
 @onready var building_ecs: BuildingEcs = %BuildingEcs
 
-
-## Used by the server to set the energy satisfaction
-func update_energy_satisfaction(new_energy_satisfaction: float) -> void:
-	assert(multiplayer.is_server())
-	if energy_satisfaction != new_energy_satisfaction:
-		sync_energy_satisfaction.rpc(new_energy_satisfaction)
+## Internal energy satisfaction property.
+@onready var _energy_satisfaction: SyncProperty = %EnergySatisfaction
 
 
-## Set energy satisfaction for both players and fire energy_satisfaction_changed signal.
-@rpc("any_peer", "call_local", "reliable")
-func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
-	energy_satisfaction = new_energy_satisfaction
-	energy_satisfaction_changed.emit(id, new_energy_satisfaction)
+func _ready() -> void:
+	energy_satisfaction = 0.0
 
 
 ## Add a building to the buildings list.
@@ -87,7 +90,9 @@ func fire_all_changed_signals() -> void:
 		item_consumption_changed.emit(id, item, items.consumption.get_for(item))
 		item_production_changed.emit(id, item, items.production.get_for(item))
 		storage_cap_changed.emit(id, item, items.storage_caps.get_for(item))
+
 	Model.buildings_updated.emit()
+	energy_satisfaction_changed.emit(id, energy_satisfaction)
 
 
 ## Publish all properties of this state to the network.
@@ -95,6 +100,7 @@ func publish() -> void:
 	items.publish()
 	ores.publish()
 	buildings.publish()
+	_energy_satisfaction.publish()
 
 
 ## Sync all properties of this state from the network.
@@ -102,6 +108,7 @@ func sync() -> void:
 	ores.sync()
 	items.sync()
 	buildings.sync()
+	_energy_satisfaction.sync()
 
 
 func _on_multiplayer_synchronizer_synchronized() -> void:

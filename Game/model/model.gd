@@ -311,7 +311,7 @@ func get_buildings(player_id: int) -> Array[BuildingEntity]:
 ## Sets the energy satisfaction to the new value.
 func set_energy_satisfaction(player_id: int, new_es: float) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.update_energy_satisfaction(new_es)
+	player_state.energy_satisfaction = new_es
 
 
 ## Gets energy satisfaction.
