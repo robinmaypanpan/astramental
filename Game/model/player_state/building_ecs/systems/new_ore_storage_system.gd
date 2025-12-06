@@ -1,12 +1,11 @@
 class_name NewOreStorageSystem
-extends Node
+extends BuildingComponentSystem
 ## System responsible for calculating and updating storage caps.
 
 ## For each item, get its storage cap.
 var _storage_caps: Dictionary[Types.Item, float]
 
 
-## Set the storage caps for all players back to the defaults.
 func _reset_numbers() -> void:
 	# get_storage_caps() does .duplicate(), so it's fine to assign it like this
 	_storage_caps = Globals.settings.get_storage_caps()

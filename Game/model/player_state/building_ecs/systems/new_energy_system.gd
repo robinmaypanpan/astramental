@@ -1,5 +1,5 @@
 class_name NewEnergySystem
-extends Node
+extends BuildingComponentSystem
 ## System responsible for calculating and updating energy reserves and energy satisfaction.
 
 ## For each player, how much of the energy demand is being met by energy production,
@@ -13,7 +13,6 @@ var _energy_production: float
 var _energy_consumption: float
 
 
-## Reset the production/consumption numbers back to 0 for this upcoming tick of production.
 func _reset_numbers() -> void:
 	_energy_production = 0.0
 	_energy_consumption = 0.0
@@ -22,7 +21,7 @@ func _reset_numbers() -> void:
 
 ## Calculate energy production/consumption/satisfaction and adjust the amount of energy
 ## each player has correspondingly. Also publish energy satisfaction.
-func update(component_manager: NewComponentManager, player_state: PlayerState):
+func update(component_manager: NewComponentManager, player_state: PlayerState) -> void:
 	# First, reset our numbers we had from last tick
 	_reset_numbers()
 
