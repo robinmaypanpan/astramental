@@ -40,7 +40,10 @@ func update(component_manager: NewComponentManager, player_state: PlayerState) -
 	items.increase_item_count_apply_cap(Types.Item.ENERGY, energy_change_this_tick)
 
 	# Set energy satisfaction directly, as it can be done in one step.
-	player_state.energy_satisfaction = min(1.0, _energy_production / _energy_consumption)
+	if not is_zero_approx(items.counts.get_for(Types.Item.ENERGY)):
+		player_state.energy_satisfaction = 1.0
+	else:
+		player_state.energy_satisfaction = min(1.0, _energy_production / _energy_consumption)
 
 	items.production.increase_for(Types.Item.ENERGY, _energy_production)
 	items.consumption.increase_for(Types.Item.ENERGY, _energy_consumption)
