@@ -17,7 +17,7 @@ func update(component_manager: NewComponentManager, player_state: PlayerState) -
 	_reset_numbers()
 
 	# Iterate through StorageComponents and calculate caps
-	var storage_components: Array = component_manager.get_components("StorageComponent")
+	var storage_components: Array = component_manager.get_components_by_type("StorageComponent")
 	for storage_component: StorageComponent in storage_components:
 		var storage_cap_changes: Dictionary[Types.Item, float] = storage_component.storage_cap_changes
 		for item: Types.Item in storage_cap_changes.keys():

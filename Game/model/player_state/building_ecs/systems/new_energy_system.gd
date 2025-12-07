@@ -20,7 +20,7 @@ func update(component_manager: NewComponentManager, player_state: PlayerState) -
 	_reset_numbers()
 
 	# Iterate through EnergyComponents and calculate consumption/production
-	var energy_components: Array = component_manager.get_components("EnergyComponent")
+	var energy_components: Array = component_manager.get_components_by_type("EnergyComponent")
 	for component: EnergyComponent in energy_components:
 		var energy_drain: float = component.energy_drain
 		if energy_drain > 0:
