@@ -471,8 +471,8 @@ func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
 	_reset_production_consumption()
-	_storage_system.update()
-	_energy_system.update()
+	# _storage_system.update()
+	# _energy_system.update()
 	_heat_system.update()
 	_miner_system.update()
 	TradeSystem.update()
@@ -480,6 +480,7 @@ func _on_update_timer_timeout() -> void:
 	# TODO: remove this hack by rewriting UI code
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
+		player_state.update_systems()
 		player_state.publish()
 	player_states.get_state().fire_all_changed_signals()
 

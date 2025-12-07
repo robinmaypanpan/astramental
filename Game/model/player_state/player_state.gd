@@ -95,6 +95,13 @@ func fire_all_changed_signals() -> void:
 	energy_satisfaction_changed.emit(id, energy_satisfaction)
 
 
+## Update all systems for the building ECS. Only callable by server.
+func update_systems() -> void:
+	assert(multiplayer.is_server())
+	if building_ecs != null:
+		building_ecs.update()
+
+
 ## Publish all properties of this state to the network.
 func publish() -> void:
 	items.publish()
