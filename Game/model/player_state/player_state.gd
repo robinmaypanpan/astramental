@@ -48,6 +48,9 @@ var heat_data_list: Array[HeatData]
 ## Model for all building information.
 @onready var buildings: BuildingModel = %BuildingModel
 
+## Model for all building heat information.
+@onready var building_heat: BuildingHeatModel = %BuildingHeatModel
+
 ## The Building entity-component system.
 @onready var building_ecs: BuildingEcs = %BuildingEcs
 
@@ -92,6 +95,7 @@ func fire_all_changed_signals() -> void:
 		storage_cap_changed.emit(id, item, items.storage_caps.get_for(item))
 
 	Model.buildings_updated.emit()
+	Model.heat_data_updated.emit()
 	energy_satisfaction_changed.emit(id, energy_satisfaction)
 
 
@@ -107,6 +111,7 @@ func publish() -> void:
 	items.publish()
 	ores.publish()
 	buildings.publish()
+	building_heat.publish()
 	_energy_satisfaction.publish()
 
 
@@ -115,6 +120,7 @@ func sync() -> void:
 	ores.sync()
 	items.sync()
 	buildings.sync()
+	building_heat.sync()
 	_energy_satisfaction.sync()
 
 
