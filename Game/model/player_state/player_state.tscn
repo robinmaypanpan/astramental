@@ -31,6 +31,12 @@ properties/4/replication_mode = 2
 properties/5/path = NodePath("BuildingModel:value_server")
 properties/5/spawn = true
 properties/5/replication_mode = 2
+properties/6/path = NodePath("BuildingHeatModel:value_server")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath("EnergySatisfaction:value_server")
+properties/7/spawn = true
+properties/7/replication_mode = 2
 
 [node name="PlayerState" type="Control"]
 layout_mode = 3
