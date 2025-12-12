@@ -349,76 +349,76 @@ func add_heat_data_at(
 	heat_capacity: float,
 	heat_state: Types.HeatState
 ) -> void:
-	add_heat_data_for_all_players.rpc(player_id, grid_position, heat, heat_capacity, heat_state)
+	var player_state: PlayerState = player_states.get_state(player_id)
+	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity, heat_state)
+	player_state.building_heat.add(heat_data)
 
 
 ## Set the heat data for the given player to the data given for all players. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func add_heat_data_for_all_players(
-	player_id: int,
-	grid_position: Vector2i,
-	heat: float,
-	heat_capacity: float,
-	heat_state: Types.HeatState
-) -> void:
-	# start function
-	var player_state: PlayerState = player_states.get_state(player_id)
-	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity, heat_state)
-	player_state.heat_data_list.append(heat_data)
-	heat_data_updated.emit()
+# @rpc("any_peer", "call_local", "reliable")
+# func add_heat_data_for_all_players(
+# 	player_id: int,
+# 	grid_position: Vector2i,
+# 	heat: float,
+# 	heat_capacity: float,
+# 	heat_state: Types.HeatState
+# ) -> void:
+# 	# start function
+# 	var player_state: PlayerState = player_states.get_state(player_id)
+# 	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity, heat_state)
+# 	player_state.heat_data_list.append(heat_data)
+# 	heat_data_updated.emit()
 
 
 ## Delete the heat data for the given player at the given position.
 func remove_heat_data_at(player_id: int, grid_position: Vector2i) -> void:
-	remove_heat_data_for_all_players.rpc(player_id, grid_position)
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.building_heat.remove_at_pos(grid_position)
 
 
 ## Delete the heat data for the given player at the given position for all players. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func remove_heat_data_for_all_players(player_id: int, grid_position: Vector2i) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
+# @rpc("any_peer", "call_local", "reliable")
+# func remove_heat_data_for_all_players(player_id: int, grid_position: Vector2i) -> void:
+# 	var player_state: PlayerState = player_states.get_state(player_id)
 
-	var heat_data_list: Array[HeatData] = player_state.heat_data_list
-	var index_to_remove: int = heat_data_list.find_custom(
-		func(elem): return elem.position == grid_position
-	)
+# 	var heat_data_list: Array[HeatData] = player_state.heat_data_list
+# 	var index_to_remove: int = heat_data_list.find_custom(
+# 		func(elem): return elem.position == grid_position
+# 	)
 
-	if index_to_remove != -1:
-		heat_data_list.remove_at(index_to_remove)
-		heat_data_updated.emit()
+# 	if index_to_remove != -1:
+# 		heat_data_list.remove_at(index_to_remove)
+# 		heat_data_updated.emit()
 
 
-# TODO: Make this set heat for all cells at once
 ## Set the heat data heat value at the given position to the given value.
 func set_heat_to(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
-	set_heat_for_all_players.rpc(player_id, grid_position, new_heat)
+	var player_state: PlayerState = player_states.get_state(player_id)
+	player_state.building_heat.set_heat(grid_position, new_heat)
 
 
-# TODO: Make this set heat for all cells at once
 ## Set the heat data heat value at the given position to the given value for all players. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func set_heat_for_all_players(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	for heat_data: HeatData in player_state.heat_data_list:
-		if heat_data.position == grid_position:
-			heat_data.heat = new_heat
-			heat_data_updated.emit()
+# @rpc("any_peer", "call_local", "reliable")
+# func set_heat_for_all_players(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
+# 	var player_state: PlayerState = player_states.get_state(player_id)
+# 	for heat_data: HeatData in player_state.heat_data_list:
+# 		if heat_data.position == grid_position:
+# 			heat_data.heat = new_heat
+# 			heat_data_updated.emit()
 
 
-## Set the heat data heat value at the given position to the given value. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func set_heat_state_to(player_id: int, position: Vector2i, new_heat_state: Types.HeatState) -> void:
+## Set the heat data heat value at the given position to the given value.
+func set_heat_state_to(
+	player_id: int, grid_position: Vector2i, new_heat_state: Types.HeatState
+) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	for heat_data: HeatData in player_state.heat_data_list:
-		if heat_data.position == position:
-			heat_data.heat_state = new_heat_state
-			heat_data_updated.emit()
+	player_state.building_heat.set_heat_state(grid_position, new_heat_state)
 
 
 ## Get the heat data list for the given player.
 func get_heat_data(player_id: int) -> Array[HeatData]:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	return player_state.heat_data_list
+	return player_state.building_heat.get_all()
 
 
 # PRIVATE METHODS
