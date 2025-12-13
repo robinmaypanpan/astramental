@@ -37,6 +37,7 @@ var storage_cap: float = 0.0
 @onready var change_rate_label: Label = %ChangeRate
 @onready var storage_bar: ProgressBar = %StorageBar
 @onready var change_rate_indicator: TextureRect = %ChangeRateIndicator
+@onready var sell_button: Button = %SellButton
 
 
 func _ready() -> void:
@@ -93,6 +94,10 @@ func update_view() -> void:
 	# truncates when doing float -> %d, which is the desired behavior
 	item_count_label.text = "%d" % [item_count]
 	change_rate_label.text = "(%.1f/s)" % [abs(change)]
+
+	var item_resource: ItemResource = Items.get_info(item_type)
+	sell_button.disabled = is_zero_approx(item_resource.sell_value)
+	sell_button.visible = not is_zero_approx(item_resource.sell_value)
 
 	if not is_zero_approx(change) and item_count >= storage_cap and storage_cap > 0.0:
 		change_rate_indicator.texture = storage_full_indicator
