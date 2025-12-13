@@ -37,7 +37,7 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 		_energy_satisfaction.value_client = new_value
 
 ## Contains a list of all cells where heat is located.
-var heat_data_list: Array[HeatData]
+# var heat_data_list: Array[HeatData]
 
 ## Model for all item information and accessing.
 @onready var items: ItemModel = %ItemModel
