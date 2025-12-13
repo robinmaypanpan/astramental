@@ -40,6 +40,7 @@ func get_component(component_type: String) -> BuildingComponent:
 	return null
 
 
+# TODO: rewrite serialization to return PackedByteArray instead of Dictionary
 ## Return a primitive object that can be synchronized across the network with
 ## MultiplayerSynchronizer.
 func serialize() -> Dictionary:
