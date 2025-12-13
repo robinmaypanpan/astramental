@@ -5,7 +5,7 @@ extends Resource
 ## Whether the resource can be traded or not.
 @export var can_trade: bool = true
 ## The money you get for selling one unit of the resource.
-@export var sell_value: int = 0
+@export var sell_value: float = 0
 ## A user facing name for this item
 @export var display_name: String = "Unnamed Resource"
 ## A user facing description to display on the tooltip

@@ -7,6 +7,6 @@
 script = ExtResource("1_xp5rh")
 icon = ExtResource("1_u7pc4")
 can_trade = false
-sell_value = 0
+sell_value = 1.0
 display_name = "Money"
 description = "While it may be true that \"Money makes the world go round,\" the same can be said for making the asteroid go round. This is the ultimate goal of every mining corporation heading out here to deep space."

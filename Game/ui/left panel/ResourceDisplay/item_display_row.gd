@@ -54,6 +54,11 @@ func _on_mouse_exited() -> void:
 	Globals.clear_tooltip_target(self)
 
 
+func _on_sell_button_pressed() -> void:
+	var player_id: int = multiplayer.get_unique_id()
+	Model.sell_item(player_id, item_type, 1.0)
+
+
 ## Returns the item type that this particular resource display row represents
 func get_item_type() -> Types.Item:
 	return item_type

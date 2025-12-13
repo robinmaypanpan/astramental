@@ -6,7 +6,6 @@
 [resource]
 script = ExtResource("1_6gdk5")
 icon = ExtResource("1_60rip")
-can_trade = true
-sell_value = 1
+sell_value = 0.1
 display_name = "Rock"
 description = "It's not the most useful substance, but it's plentiful and what uses it has are quite... useful."
