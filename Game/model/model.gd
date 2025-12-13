@@ -27,7 +27,6 @@ var num_players_ready := 0
 @onready var _energy_system: EnergySystem = %EnergySystem
 @onready var _miner_system: MinerSystem = %MinerSystem
 @onready var _storage_system: OreStorageSystem = %StorageSystem
-@onready var _heat_system: HeatSystem = %HeatSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -444,7 +443,7 @@ func _on_update_timer_timeout() -> void:
 	_reset_production_consumption()
 	# _storage_system.update()
 	# _energy_system.update()
-	_heat_system.update()
+	# _heat_system.update()
 	_miner_system.update()
 	TradeSystem.update()
 
