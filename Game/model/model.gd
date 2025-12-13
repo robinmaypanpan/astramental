@@ -219,14 +219,26 @@ func deduct_costs(player_id: int, building_id: String) -> void:
 
 
 ## Refund the item cost of a building when deleting it.
-func refund_costs(player_id: int, building_id: String) -> void:
-	var building: BuildingResource = Buildings.get_by_id(building_id)
-	var costs: Array[ItemCost] = building.item_costs
+func refund_costs(player_id: int, building: BuildingEntity) -> void:
+	var building_resource: BuildingResource = Buildings.get_by_id(building.building_id)
+	var costs: Array[ItemCost] = building_resource.item_costs
 	for cost: ItemCost in costs:
+		# Calculate the refund amount
+		var actual_quantity: float = cost.quantity * building_resource.refund_value
+
+		var heat_component: HeatComponent = building.get_component("HeatComponent")
+
+		if heat_component != null and building_resource.heat_reduces_value:
+			var heat_level: float = heat_component.heat
+			var heat_capacity: float = heat_component.heat_capacity
+			var heat_fraction: float = heat_level / heat_capacity if heat_capacity > 0.0 else 0.0
+			actual_quantity *= (1.0 - heat_fraction)
+
+		# Apply the refund
 		if Globals.settings.enable_storage_caps_for_building_sales:
-			increase_item_count_apply_cap(player_id, cost.item_id, cost.quantity)
+			increase_item_count_apply_cap(player_id, cost.item_id, actual_quantity)
 		else:
-			increase_item_count(player_id, cost.item_id, cost.quantity)
+			increase_item_count(player_id, cost.item_id, actual_quantity)
 
 
 ## Returns true if we can build the building indicated at the location specified

@@ -8,7 +8,6 @@
 
 [sub_resource type="Resource" id="Resource_gj1yi"]
 script = ExtResource("2_ild5j")
-heat_production = 0.0
 heat_passive_cool_off = 2.0
 heat_capacity = 2.0
 metadata/_custom_type_script = "uid://bbbve6wxi0v56"
@@ -32,3 +31,4 @@ item_costs = Array[ExtResource("2_xyamt")]([SubResource("Resource_trd6w")])
 placement_destination = 1
 building_components = Array[ExtResource("1_ti63p")]([SubResource("Resource_gj1yi")])
 description = "Takes heat from the surrounding tiles and dissipates it to the vacuum of space."
+heat_reduces_value = false

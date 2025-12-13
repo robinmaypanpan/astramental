@@ -8,8 +8,6 @@
 
 [sub_resource type="Resource" id="Resource_wn0e5"]
 script = ExtResource("2_eejp2")
-heat_production = 0.0
-heat_passive_cool_off = 0.0
 heat_capacity = 150.0
 metadata/_custom_type_script = "uid://bbbve6wxi0v56"
 
@@ -32,3 +30,5 @@ item_costs = Array[ExtResource("2_p7frg")]([SubResource("Resource_nbipk")])
 placement_destination = 1
 building_components = Array[ExtResource("1_wlhns")]([SubResource("Resource_wn0e5")])
 description = "Pulls in and stores heat from buildings that produce it. Cannot cool itself off, and must be destroyed when overheated."
+refund_value = 0.0
+heat_reduces_value = false
