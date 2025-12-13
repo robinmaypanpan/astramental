@@ -22,7 +22,6 @@ var heat_flow_graphs_dirty: Dictionary[int, bool]
 ## weight from sink -> omni-sink: consumed heat flow from sources
 var steady_state_flows: Dictionary[int, HeatFlowGraph]
 
-
 func _ready() -> void:
 	ComponentManager.component_added.connect(on_component_added)
 	ComponentManager.component_removed.connect(on_component_removed)
@@ -107,19 +106,19 @@ func print_flow_rates() -> void:
 	var heat_components: Array = ComponentManager.get_components("HeatComponent")
 	for heat_component: HeatComponent in heat_components:
 		if heat_component.is_source:
-			var heat_production: float = heat_component.heat_production
+			var heat_production: float = heat_component.heat_production * Globals.settings.update_interval
 			var position: Vector2i = heat_component.building_entity.position
 			var player_id: int = heat_component.building_entity.player_id
 			var heat_graph: DirectedWeightedGraph = steady_state_flows[player_id].graph
 			var heat_consumed: float = heat_graph.get_weight(position, HeatFlowGraph.SOURCE)
-			print("heat component at %s: %d/%d" % [position, heat_consumed, heat_production])
+			print("heat component at %s: %f/%f" % [position, heat_consumed, heat_production])
 		elif heat_component.is_sink:
-			var heat_passive_cool_off: float = heat_component.heat_passive_cool_off
+			var heat_passive_cool_off: float = heat_component.heat_passive_cool_off * Globals.settings.update_interval
 			var position: Vector2i = heat_component.building_entity.position
 			var player_id: int = heat_component.building_entity.player_id
 			var heat_graph: DirectedWeightedGraph = steady_state_flows[player_id].graph
 			var heat_consumed: float = heat_graph.get_weight(HeatFlowGraph.SINK, position)
-			print("heat component at %s: %d/%d" % [position, heat_consumed, heat_passive_cool_off])
+			print("heat component at %s: %f/%f" % [position, heat_consumed, heat_passive_cool_off])
 
 
 ## Set the heat in the component and in the model to the specified heat.
