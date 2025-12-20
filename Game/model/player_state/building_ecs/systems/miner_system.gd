@@ -1,4 +1,4 @@
-class_name NewMinerSystem
+class_name MinerSystem
 extends BuildingComponentSystem
 ## System responsible for determining how much ore is being mined.
 

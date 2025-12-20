@@ -6,7 +6,7 @@ extends Node
 @export var player_state: PlayerState
 
 ## The component manager for this player state.
-@onready var component_manager: NewComponentManager = %ComponentManager
+@onready var component_manager: ComponentManager = %ComponentManager
 
 
 ## Reset the numbers used for calculations for this tick.

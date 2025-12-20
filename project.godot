@@ -26,7 +26,7 @@ WorldGenModel="*res://Game/model/world_gen_model.tscn"
 AsteroidViewModel="*res://Game/ui/asteroid area/asteroid_view_model.gd"
 Model="*res://Game/model/model.tscn"
 Buildings="*res://Game/buildings.tscn"
-TradeSystem="*res://Game/data/other_systems/trade_system.gd"
+TradeSystem="*res://Game/model/other_systems/trade_system.gd"
 
 [display]
 

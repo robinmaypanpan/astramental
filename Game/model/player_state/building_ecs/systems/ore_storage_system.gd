@@ -1,4 +1,4 @@
-class_name NewOreStorageSystem
+class_name OreStorageSystem
 extends BuildingComponentSystem
 ## System responsible for calculating and updating storage caps.
 

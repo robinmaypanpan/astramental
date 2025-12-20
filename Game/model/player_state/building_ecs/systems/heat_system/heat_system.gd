@@ -1,4 +1,4 @@
-class_name NewHeatSystem
+class_name HeatSystem
 extends BuildingComponentSystem
 ## Maintains and updates the heat of all buildings.
 

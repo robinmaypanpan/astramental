@@ -1,4 +1,4 @@
-class_name NewComponentManager
+class_name ComponentManager
 extends Node
 ## Contains convenient list of all components for all buildings, sorted by component type.
 ## PlayerState calls init/remove_components_building() to handle components.
