@@ -86,6 +86,11 @@ metadata/_custom_type_script = "uid://dpx2k8by1fc0s"
 unique_name_in_owner = true
 script = ExtResource("6_ut4we")
 
+[node name="EnergySatisfaction" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_4kqx3")
+metadata/_custom_type_script = "uid://dovfbk47epm05"
+
 [node name="BuildingEcs" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("6_njjyn")
@@ -117,10 +122,5 @@ metadata/_custom_type_script = "uid://bqcbdehv2yk3l"
 script = ExtResource("12_qqbho")
 player_state = NodePath("../../..")
 metadata/_custom_type_script = "uid://csdbovwrfpfm0"
-
-[node name="EnergySatisfaction" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("9_4kqx3")
-metadata/_custom_type_script = "uid://dovfbk47epm05"
 
 [connection signal="delta_synchronized" from="MultiplayerSynchronizer" to="." method="_on_multiplayer_synchronizer_synchronized"]
