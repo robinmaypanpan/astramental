@@ -64,18 +64,16 @@ func _ready() -> void:
 func add_building(tile_position: Vector2i, building_id: String) -> void:
 	assert(multiplayer.is_server())
 	var building = buildings.add_building(tile_position, building_id)
-	ComponentManager.init_components_building(building)
 	building_ecs.component_manager.add_components_building(building)
 
 
 ## Remove a building from the buildings list.
-## Also removes all corresponding components from ComponentManager.
+## Also removes all corresponding components from NewComponentManager.
 func remove_building(tile_position: Vector2i) -> bool:
 	assert(multiplayer.is_server())
 	var building_at_pos = buildings.get_building_at_pos(tile_position)
 	if building_at_pos:
 		buildings.remove_building(building_at_pos.unique_id)
-		ComponentManager.remove_components_building(building_at_pos)
 		building_ecs.component_manager.remove_components_building(building_at_pos)
 		return true
 	else:

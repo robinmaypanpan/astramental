@@ -99,7 +99,7 @@ func get_spare_cooling_at(position: Vector2i) -> float:
 
 ## Debug function for printing the flow rates for all sources and sinks.
 func print_flow_rates() -> void:
-	var heat_components: Array = ComponentManager.get_components("HeatComponent")
+	var heat_components: Array = component_manager.get_components_by_type("HeatComponent")
 	for heat_component: HeatComponent in heat_components:
 		if heat_component.is_source:
 			var heat_production: float = (

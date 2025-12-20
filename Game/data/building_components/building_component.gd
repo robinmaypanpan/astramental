@@ -3,7 +3,7 @@ extends Object
 ## Instantiated component base class generated from corresponding BuildingComponentData.
 ## Contains runtime data for implementing the functionality of the component beyond
 ## just the data needed to describe the behavior.
-## Used in BuildingEntity as well as ComponentManager.
+## Used in BuildingEntity as well as NewComponentManager.
 
 ## Unique id for this component
 var unique_id: int
