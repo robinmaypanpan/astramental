@@ -2,9 +2,6 @@ class_name NewHeatSystem
 extends BuildingComponentSystem
 ## Maintains and updates the heat of all buildings.
 
-## The player state this system is associated with.
-@export var player_state: PlayerState
-
 ## Represents the heat flow relationships between the heat buildings.
 ## Is the starting point for the Ford-Fulkerson algorithm.
 var heat_flow_graph: HeatFlowGraph
@@ -24,9 +21,6 @@ var heat_flow_graph_dirty: bool
 ## weight from omni-sink -> sink: unused cooling from building
 ## weight from sink -> omni-sink: consumed heat flow from sources
 var steady_state_flow: HeatFlowGraph
-
-## The component manager from the Building ECS in this player state.
-@onready var component_manager: NewComponentManager = %ComponentManager
 
 
 func _ready() -> void:
@@ -188,7 +182,7 @@ func cool_off_hottest_building(buildings: Array[HeatComponent], spare_cooling: f
 
 
 ## Update all heat buildings based on the steady state flow of heat.
-func update(_component_manager: NewComponentManager, _player_state: PlayerState) -> void:
+func update() -> void:
 	# was this updated this frame? if so, update our heat flow graph to the current one
 	if heat_flow_graph_dirty:
 		heat_flow_graph = heat_flow_graph_current.duplicate_graph()

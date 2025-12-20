@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://bh2vsaywv750x" path="res://Game/model/player_state/ore_model.gd" id="4_kvvmd"]
 [ext_resource type="Script" uid="uid://dpx2k8by1fc0s" path="res://Game/model/player_state/building_model.gd" id="5_dg143"]
 [ext_resource type="Script" uid="uid://b1jsyuqgvgctx" path="res://Game/model/player_state/building_ecs/building_ecs.gd" id="6_njjyn"]
-[ext_resource type="Script" path="res://Game/model/player_state/building_heat_model.gd" id="6_ut4we"]
+[ext_resource type="Script" uid="uid://bodimx8wifhr1" path="res://Game/model/player_state/building_heat_model.gd" id="6_ut4we"]
 [ext_resource type="Script" uid="uid://tsmfm5fs6yn1" path="res://Game/model/player_state/building_ecs/new_component_manager.gd" id="7_ut4we"]
 [ext_resource type="Script" uid="uid://c0awhvn2cwsxe" path="res://Game/model/player_state/building_ecs/systems/new_ore_storage_system.gd" id="8_38nfo"]
 [ext_resource type="Script" uid="uid://ca60dnhjglhvi" path="res://Game/model/player_state/building_ecs/systems/new_energy_system.gd" id="9_3nm42"]
@@ -98,12 +98,14 @@ metadata/_custom_type_script = "uid://tsmfm5fs6yn1"
 [node name="Systems" type="Node" parent="BuildingEcs"]
 unique_name_in_owner = true
 
-[node name="NewOreStorageSystem" type="Node" parent="BuildingEcs/Systems"]
+[node name="NewOreStorageSystem" type="Node" parent="BuildingEcs/Systems" node_paths=PackedStringArray("player_state")]
 script = ExtResource("8_38nfo")
+player_state = NodePath("../../..")
 metadata/_custom_type_script = "uid://c0awhvn2cwsxe"
 
-[node name="NewEnergySystem" type="Node" parent="BuildingEcs/Systems"]
+[node name="NewEnergySystem" type="Node" parent="BuildingEcs/Systems" node_paths=PackedStringArray("player_state")]
 script = ExtResource("9_3nm42")
+player_state = NodePath("../../..")
 metadata/_custom_type_script = "uid://ca60dnhjglhvi"
 
 [node name="NewHeatSystem" type="Node" parent="BuildingEcs/Systems" node_paths=PackedStringArray("player_state")]
@@ -111,8 +113,9 @@ script = ExtResource("11_3k6uv")
 player_state = NodePath("../../..")
 metadata/_custom_type_script = "uid://bqcbdehv2yk3l"
 
-[node name="NewMinerSystem" type="Node" parent="BuildingEcs/Systems"]
+[node name="NewMinerSystem" type="Node" parent="BuildingEcs/Systems" node_paths=PackedStringArray("player_state")]
 script = ExtResource("12_qqbho")
+player_state = NodePath("../../..")
 metadata/_custom_type_script = "uid://csdbovwrfpfm0"
 
 [node name="EnergySatisfaction" type="Node" parent="."]

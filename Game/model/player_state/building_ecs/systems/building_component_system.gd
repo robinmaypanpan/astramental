@@ -2,6 +2,12 @@ class_name BuildingComponentSystem
 extends Node
 ## The base class for all building component systems.
 
+## The player state this system is associated with.
+@export var player_state: PlayerState
+
+## The component manager for this player state.
+@onready var component_manager: NewComponentManager = %ComponentManager
+
 
 ## Reset the numbers used for calculations for this tick.
 func _reset_numbers() -> void:
@@ -9,5 +15,5 @@ func _reset_numbers() -> void:
 
 
 ## Update the player state based on the components this system uses.
-func update(_component_manager: NewComponentManager, _player_state: PlayerState) -> void:
+func update() -> void:
 	assert(false, "derived class of BuildingComponentSystem doesn't define update")

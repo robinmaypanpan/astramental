@@ -15,7 +15,7 @@ func _reset_numbers() -> void:
 
 
 ## Calculate energy production/consumption/satisfaction, and adjust our energy accordingly.
-func update(component_manager: NewComponentManager, player_state: PlayerState) -> void:
+func update() -> void:
 	# First, reset our numbers we had from last tick
 	_reset_numbers()
 

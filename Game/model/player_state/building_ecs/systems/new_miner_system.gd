@@ -14,7 +14,7 @@ var desired_ore_production: Dictionary[Types.Item, float]
 
 ## Calculate ore production for this upcoming tick of production.
 ## Dependent on EnergySystem for energy satisfaction numbers.
-func update(component_manager: NewComponentManager, player_state: PlayerState) -> void:
+func update() -> void:
 	# First, reset our numbers we had from last tick
 	_reset_numbers()
 
@@ -22,16 +22,16 @@ func update(component_manager: NewComponentManager, player_state: PlayerState) -
 	var miner_components: Array = component_manager.get_components_by_type("MinerComponent")
 	# Now calculate actual ore production based on reductions from other impacts
 	for miner_component: MinerComponent in miner_components:
-		update_ore_production(player_state, miner_component)
+		update_ore_production(miner_component)
 
 	# Finally, make the changes and updates
 	for ore: int in Types.Ore.values():
-		restrict_ore_production(player_state, ore)
-		apply_ore_production(player_state, ore)
+		restrict_ore_production(ore)
+		apply_ore_production(ore)
 
 
 # PRIVATE METHODS
-func apply_ore_production(player_state: PlayerState, ore: Types.Ore) -> void:
+func apply_ore_production(ore: Types.Ore) -> void:
 	var final_actual_production: float = actual_ore_production[ore]
 
 	# figure out what new ore count should be
@@ -45,7 +45,7 @@ func apply_ore_production(player_state: PlayerState, ore: Types.Ore) -> void:
 
 
 # Limit ore production based on energy satisfaction and storage capacity
-func restrict_ore_production(player_state: PlayerState, ore: Types.Ore) -> void:
+func restrict_ore_production(ore: Types.Ore) -> void:
 	# Get the pre-restriction actual production of this ore
 	var actual_production: float = actual_ore_production[ore]
 
@@ -75,7 +75,7 @@ func restrict_ore_production(player_state: PlayerState, ore: Types.Ore) -> void:
 
 
 ## Calculate the ore production based on this miner component and update the appropriate tables
-func update_ore_production(player_state: PlayerState, miner_component: MinerComponent) -> void:
+func update_ore_production(miner_component: MinerComponent) -> void:
 	var building_entity: BuildingEntity = miner_component.building_entity
 	var ore: Types.Ore = miner_component.ore_under_miner
 	var mining_speed: float = miner_component.mining_speed

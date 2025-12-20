@@ -16,14 +16,14 @@ extends Node
 ## Update all systems that are a child of the Systems node. The order of the update is the order of
 ## the children.
 func update() -> void:
-    for system: Node in systems:
-        system.update(component_manager, player_state)
+	for system: Node in systems:
+		system.update()
 
 
 ## Get the system with the given name.
 func get_system(system_name: StringName) -> Node:
-    for system: Node in systems:
-        if system.get_script().get_global_name() == system_name:
-            return system
-    # else, nothing was found
-    return null
+	for system: Node in systems:
+		if system.get_script().get_global_name() == system_name:
+			return system
+	# else, nothing was found
+	return null
