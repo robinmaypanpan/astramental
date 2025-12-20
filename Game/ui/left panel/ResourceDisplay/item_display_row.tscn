@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://fcbjc5acubwe"]
+[gd_scene load_steps=11 format=3 uid="uid://fcbjc5acubwe"]
 
 [ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="1_6jci1"]
 [ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/ui/left panel/ResourceDisplay/item_display_row.gd" id="1_82p7q"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://chqwre6a15sxe" path="res://Assets/sprites/ui/not_changing.tres" id="4_5fff3"]
 [ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Assets/sprites/storage_bar_base.tres" id="4_bcn7r"]
 [ext_resource type="Texture2D" uid="uid://dw0qpw8l0ft87" path="res://Assets/sprites/ui/increasing_arrow.tres" id="5_dl36m"]
+[ext_resource type="Texture2D" uid="uid://bw5ycbe2w04gs" path="res://Assets/sprites/items/money.tres" id="8_4r8am"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
 atlas = ExtResource("1_6jci1")
@@ -85,5 +86,13 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("5_dl36m")
 
+[node name="SellButton" type="Button" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+icon = ExtResource("8_4r8am")
+icon_alignment = 1
+
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/SellButton" to="." method="_on_sell_button_pressed"]

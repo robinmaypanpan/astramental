@@ -196,6 +196,25 @@ func increase_item_production(player_id: int, item: Types.Item, increase_amount:
 	items.production.increase_for(item, increase_amount)
 
 
+## Sells some amount of the specified item
+func sell_item(player_id: int, item: Types.Item, amount: float) -> void:
+	assert(multiplayer.is_server())
+	var player_state: PlayerState = player_states.get_state(player_id)
+	var items: ItemModel = player_state.items
+
+	# We can't sell more than we have.
+	var current_amount: float = items.counts.get_for(item)
+	var amount_we_actually_sell: float = min(current_amount, amount)
+
+	# Now cause the amounts to change
+	set_item_count(player_id, item, current_amount - amount_we_actually_sell)
+
+	# And get PAID!
+	var item_resource: ItemResource = Items.get_info(item)
+	var money_earned: float = amount_we_actually_sell * item_resource.sell_value
+	increase_item_count(player_id, Types.Item.MONEY, money_earned)
+
+
 ## Returns true if the given player_id (default is ourself) has the resources necessary
 ## to build this building
 func can_afford(building_id: String, player_id: int = multiplayer.get_unique_id()) -> bool:
