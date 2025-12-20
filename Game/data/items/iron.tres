@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("1_op4dg")
 icon = ExtResource("1_7e4gh")
+can_trade = true
 sell_value = 2.0
 display_name = "Iron"
 description = "The most important raw material of them all, used to create miners and other equipment needed to head out onto the barren landscape."
