@@ -6,6 +6,7 @@
 [resource]
 script = ExtResource("1_g858q")
 icon = ExtResource("1_wond6")
+can_trade = true
 sell_value = 1.0
 display_name = "Ice"
 description = "Ice is a rare resource that currently doesn't have any use. One might say that ice is a useless thing that has no place in a civil society, even."

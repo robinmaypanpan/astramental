@@ -59,22 +59,6 @@ func add_components_building(building: BuildingEntity) -> void:
 		print_debug("component type length is now %d" % _components_by_type[component.type].size())
 
 
-## Internal function to remove an existing component by its unique ID from the component manager.
-func _remove_component(unique_id: int) -> void:
-	if unique_id >= _components_list.size():
-		return
-
-	var removed_component = get_by_id(unique_id)
-	_components_list[unique_id] = null
-	_components_by_type[removed_component.type].erase(unique_id)
-	# removing component from _components_for_building is done by remove_components_building
-	_vacant_indices.append(unique_id)
-
-	component_removed.emit(removed_component)
-	print_debug("removed component of type %s, component id %d" % [removed_component.type, unique_id])
-	print_debug("component type length is now %d" % _components_by_type[removed_component.type].size())
-
-
 ## Remove all components of the given building.
 func remove_components_building(building: BuildingEntity) -> void:
 	var building_unique_id = building.unique_id
@@ -115,3 +99,19 @@ func get_by_id(component_unique_id: int) -> BuildingComponent:
 		return _components_list[component_unique_id]
 	else:
 		return null
+
+
+## Internal function to remove an existing component by its unique ID from the component manager.
+func _remove_component(unique_id: int) -> void:
+	if unique_id >= _components_list.size():
+		return
+
+	var removed_component = get_by_id(unique_id)
+	_components_list[unique_id] = null
+	_components_by_type[removed_component.type].erase(unique_id)
+	# removing component from _components_for_building is done by remove_components_building
+	_vacant_indices.append(unique_id)
+
+	component_removed.emit(removed_component)
+	print_debug("removed component of type %s, component id %d" % [removed_component.type, unique_id])
+	print_debug("component type length is now %d" % _components_by_type[removed_component.type].size())
