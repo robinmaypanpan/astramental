@@ -24,9 +24,6 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
-@onready var _energy_system: EnergySystem = %EnergySystem
-@onready var _miner_system: MinerSystem = %MinerSystem
-@onready var _storage_system: OreStorageSystem = %StorageSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -427,7 +424,6 @@ func set_starting_item_counts_and_storage_caps() -> void:
 		player_states.get_state(player_id).items.publish()
 
 
-## TODO: this code causes flickering of production numbers. This will be fixed in the Model rework.
 ## Reset the item production and consumption numbers for the update loop.
 func _reset_production_consumption() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
@@ -441,13 +437,8 @@ func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
 	_reset_production_consumption()
-	# _storage_system.update()
-	# _energy_system.update()
-	# _heat_system.update()
-	# _miner_system.update()
 	TradeSystem.update()
 
-	# TODO: remove this hack by rewriting UI code
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
 		player_state.update_systems()
