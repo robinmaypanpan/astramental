@@ -37,6 +37,7 @@ var storage_cap: float = 0.0
 @onready var change_rate_label: Label = %ChangeRate
 @onready var storage_bar: ProgressBar = %StorageBar
 @onready var change_rate_indicator: TextureRect = %ChangeRateIndicator
+@onready var sell_button: Button = %SellButton
 
 
 func _ready() -> void:
@@ -52,6 +53,11 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	Globals.clear_tooltip_target(self)
+
+
+func _on_sell_button_pressed() -> void:
+	var player_id: int = multiplayer.get_unique_id()
+	Model.sell_item(player_id, item_type, 1.0)
 
 
 ## Returns the item type that this particular resource display row represents
@@ -88,6 +94,10 @@ func update_view() -> void:
 	# truncates when doing float -> %d, which is the desired behavior
 	item_count_label.text = "%d" % [item_count]
 	change_rate_label.text = "(%.1f/s)" % [abs(change)]
+
+	var item_resource: ItemResource = Items.get_info(item_type)
+	sell_button.disabled = is_zero_approx(item_resource.sell_value)
+	sell_button.visible = not is_zero_approx(item_resource.sell_value)
 
 	if not is_zero_approx(change) and item_count >= storage_cap and storage_cap > 0.0:
 		change_rate_indicator.texture = storage_full_indicator

@@ -6,7 +6,6 @@
 [resource]
 script = ExtResource("1_hrofy")
 icon = ExtResource("1_aioyr")
-can_trade = true
-sell_value = 2
+sell_value = 2.0
 display_name = "Copper"
 description = "Copper is useful in a variety of applications, especially ones where the conduction of heat is of the utmost importance."
