@@ -4,7 +4,7 @@ extends Node
 ## relationships, and systems. Only initialized and defined on the server.
 
 ## All the building components and building-component relationships.
-@onready var component_manager: NewComponentManager = %ComponentManager
+@onready var component_manager: ComponentManager = %ComponentManager
 
 ## All building component systems.
 @onready var systems: Array[Node] = %Systems.get_children()

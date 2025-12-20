@@ -68,7 +68,7 @@ func add_building(tile_position: Vector2i, building_id: String) -> void:
 
 
 ## Remove a building from the buildings list.
-## Also removes all corresponding components from NewComponentManager.
+## Also removes all corresponding components from ComponentManager.
 func remove_building(tile_position: Vector2i) -> bool:
 	assert(multiplayer.is_server())
 	var building_at_pos = buildings.get_building_at_pos(tile_position)

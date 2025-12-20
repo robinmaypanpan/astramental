@@ -1,4 +1,4 @@
-class_name NewEnergySystem
+class_name EnergySystem
 extends BuildingComponentSystem
 ## System responsible for calculating and updating energy reserves and energy satisfaction.
 
