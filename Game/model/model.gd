@@ -444,7 +444,7 @@ func _on_update_timer_timeout() -> void:
 	# _storage_system.update()
 	# _energy_system.update()
 	# _heat_system.update()
-	_miner_system.update()
+	# _miner_system.update()
 	TradeSystem.update()
 
 	# TODO: remove this hack by rewriting UI code
