@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=9 format=3 uid="uid://b1f87jarst80f"]
 
-[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_eukut"]
+[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/model/player_state/building_ecs/building_component_data.gd" id="1_eukut"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="1_ldte1"]
 [ext_resource type="Texture2D" uid="uid://b0a58q4ps5c4f" path="res://Assets/sprites/buildings/ore_silo.tres" id="1_ucscj"]
-[ext_resource type="Script" path="res://Game/data/building_components/storage_component_data.gd" id="2_26dyq"]
+[ext_resource type="Script" uid="uid://wswpjy4cr2yb" path="res://Game/model/player_state/building_ecs/component_data/storage_component_data.gd" id="2_26dyq"]
 [ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="4_eukut"]
 
 [sub_resource type="Resource" id="Resource_keodd"]

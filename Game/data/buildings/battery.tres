@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=9 format=3 uid="uid://bu5c247ke1rkw"]
 
 [ext_resource type="Texture2D" uid="uid://ds5rf8iw3y62d" path="res://Assets/sprites/buildings/battery.tres" id="1_omend"]
-[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_osgy5"]
-[ext_resource type="Script" uid="uid://wswpjy4cr2yb" path="res://Game/data/building_components/storage_component_data.gd" id="2_npclv"]
+[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/model/player_state/building_ecs/building_component_data.gd" id="1_osgy5"]
+[ext_resource type="Script" uid="uid://wswpjy4cr2yb" path="res://Game/model/player_state/building_ecs/component_data/storage_component_data.gd" id="2_npclv"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="2_omend"]
 [ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="5_npclv"]
 

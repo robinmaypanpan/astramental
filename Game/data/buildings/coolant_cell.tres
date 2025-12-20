@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BuildingResource" load_steps=9 format=3 uid="uid://bv0gfudimf2de"]
 
-[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/data/building_components/building_component_data.gd" id="1_wlhns"]
-[ext_resource type="Script" uid="uid://bbbve6wxi0v56" path="res://Game/data/building_components/heat_component_data.gd" id="2_eejp2"]
+[ext_resource type="Script" uid="uid://chh86lk62nal7" path="res://Game/model/player_state/building_ecs/building_component_data.gd" id="1_wlhns"]
+[ext_resource type="Script" uid="uid://bbbve6wxi0v56" path="res://Game/model/player_state/building_ecs/component_data/heat_component_data.gd" id="2_eejp2"]
 [ext_resource type="Script" uid="uid://b5xgpi0hflqa" path="res://Game/data/scripts/item_cost.gd" id="2_p7frg"]
 [ext_resource type="Texture2D" uid="uid://cxpjlqfl6itme" path="res://Assets/sprites/buildings/buildings.png" id="3_e2sjq"]
 [ext_resource type="Script" uid="uid://dmnwciefckrau" path="res://Game/data/scripts/building_resource.gd" id="3_eejp2"]

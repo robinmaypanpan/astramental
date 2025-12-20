@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/model/game_state.gd" id="2_ahubk"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/model/player_states.gd" id="3_6exh1"]
-[ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/data/other_systems/trade_system.gd" id="8_ellki"]
+[ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/model/other_systems/trade_system.gd" id="8_ellki"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_e5nin"]
 properties/0/path = NodePath("GameState:example_int")
