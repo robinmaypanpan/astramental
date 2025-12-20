@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3 uid="uid://ku84ynij2g3a"]
+
+[ext_resource type="Texture2D" uid="uid://ble0rduml2axy" path="res://Assets/sprites/star.png" id="1_gq43e"]
+
+[sub_resource type="Curve" id="Curve_al4f4"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.14569536, 0.42416102), 0.0, 0.0, 0, 0, Vector2(0.307947, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.39798653), 0.0, 0.0, 0, 0, Vector2(0.678808, 0), 0.0, 0.0, 0, 0, Vector2(0.8278146, 0.40671134), 0.0, 0.0, 0, 0, Vector2(1, 0.0013477802), 0.0, 0.0, 0, 0]
+point_count = 7
+
+[sub_resource type="CurveTexture" id="CurveTexture_txqan"]
+curve = SubResource("Curve_al4f4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_txqan"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(200, 200, 1)
+angular_velocity_min = -50.000015
+angular_velocity_max = 49.99998
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_txqan")
+hue_variation_min = -1.0
+hue_variation_max = 0.99999994
+
+[node name="Starfield" type="Node2D"]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 100
+texture = ExtResource("1_gq43e")
+lifetime = 36.0
+preprocess = 24.0
+process_material = SubResource("ParticleProcessMaterial_txqan")
