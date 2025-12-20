@@ -283,7 +283,7 @@ func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
 func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.ores.set_ore(Vector2i(x, y), ore)
-	Model.ores_layout_updated.emit()
+	ores_layout_updated.emit()
 
 
 ## Returns the building at the given position
@@ -316,18 +316,6 @@ func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	return player_state.buildings.get_all()
 
 
-## Sets the energy satisfaction to the new value.
-func set_energy_satisfaction(player_id: int, new_es: float) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.energy_satisfaction = new_es
-
-
-## Gets energy satisfaction.
-func get_energy_satisfaction(player_id: int) -> float:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	return player_state.energy_satisfaction
-
-
 ## Set the storage limit for a given type
 func set_storage_cap(player_id: int, item: Types.Item, new_cap: float) -> void:
 	assert(multiplayer.is_server())
@@ -347,39 +335,6 @@ func get_storage_cap(player_id: int, item: Types.Item) -> float:
 		return items.storage_caps.get_for(item)
 	else:
 		return 0.0
-
-
-## Set the heat data for the given player to the data given.
-func add_heat_data_at(
-	player_id: int,
-	grid_position: Vector2i,
-	heat: float,
-	heat_capacity: float,
-	heat_state: Types.HeatState
-) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity, heat_state)
-	player_state.building_heat.add(heat_data)
-
-
-## Delete the heat data for the given player at the given position.
-func remove_heat_data_at(player_id: int, grid_position: Vector2i) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.building_heat.remove_at_pos(grid_position)
-
-
-## Set the heat data heat value at the given position to the given value.
-func set_heat_to(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.building_heat.set_heat(grid_position, new_heat)
-
-
-## Set the heat data heat value at the given position to the given value.
-func set_heat_state_to(
-	player_id: int, grid_position: Vector2i, new_heat_state: Types.HeatState
-) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.building_heat.set_heat_state(grid_position, new_heat_state)
 
 
 ## Get the heat data list for the given player.
