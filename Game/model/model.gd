@@ -24,10 +24,6 @@ var num_players_ready := 0
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
 @onready var _update_timer := %UpdateTimer
-@onready var _energy_system: EnergySystem = %EnergySystem
-@onready var _miner_system: MinerSystem = %MinerSystem
-@onready var _storage_system: OreStorageSystem = %StorageSystem
-@onready var _heat_system: HeatSystem = %HeatSystem
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
@@ -306,7 +302,7 @@ func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
 func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.ores.set_ore(Vector2i(x, y), ore)
-	Model.ores_layout_updated.emit()
+	ores_layout_updated.emit()
 
 
 ## Returns the building at the given position
@@ -339,18 +335,6 @@ func get_buildings(player_id: int) -> Array[BuildingEntity]:
 	return player_state.buildings.get_all()
 
 
-## Sets the energy satisfaction to the new value.
-func set_energy_satisfaction(player_id: int, new_es: float) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	player_state.update_energy_satisfaction(new_es)
-
-
-## Gets energy satisfaction.
-func get_energy_satisfaction(player_id: int) -> float:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	return player_state.energy_satisfaction
-
-
 ## Set the storage limit for a given type
 func set_storage_cap(player_id: int, item: Types.Item, new_cap: float) -> void:
 	assert(multiplayer.is_server())
@@ -372,84 +356,10 @@ func get_storage_cap(player_id: int, item: Types.Item) -> float:
 		return 0.0
 
 
-## Set the heat data for the given player to the data given.
-func add_heat_data_at(
-	player_id: int,
-	grid_position: Vector2i,
-	heat: float,
-	heat_capacity: float,
-	heat_state: Types.HeatState
-) -> void:
-	add_heat_data_for_all_players.rpc(player_id, grid_position, heat, heat_capacity, heat_state)
-
-
-## Set the heat data for the given player to the data given for all players. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func add_heat_data_for_all_players(
-	player_id: int,
-	grid_position: Vector2i,
-	heat: float,
-	heat_capacity: float,
-	heat_state: Types.HeatState
-) -> void:
-	# start function
-	var player_state: PlayerState = player_states.get_state(player_id)
-	var heat_data: HeatData = HeatData.new(grid_position, heat, heat_capacity, heat_state)
-	player_state.heat_data_list.append(heat_data)
-	heat_data_updated.emit()
-
-
-## Delete the heat data for the given player at the given position.
-func remove_heat_data_at(player_id: int, grid_position: Vector2i) -> void:
-	remove_heat_data_for_all_players.rpc(player_id, grid_position)
-
-
-## Delete the heat data for the given player at the given position for all players. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func remove_heat_data_for_all_players(player_id: int, grid_position: Vector2i) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-
-	var heat_data_list: Array[HeatData] = player_state.heat_data_list
-	var index_to_remove: int = heat_data_list.find_custom(
-		func(elem): return elem.position == grid_position
-	)
-
-	if index_to_remove != -1:
-		heat_data_list.remove_at(index_to_remove)
-		heat_data_updated.emit()
-
-
-# TODO: Make this set heat for all cells at once
-## Set the heat data heat value at the given position to the given value.
-func set_heat_to(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
-	set_heat_for_all_players.rpc(player_id, grid_position, new_heat)
-
-
-# TODO: Make this set heat for all cells at once
-## Set the heat data heat value at the given position to the given value for all players. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func set_heat_for_all_players(player_id: int, grid_position: Vector2i, new_heat: float) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	for heat_data: HeatData in player_state.heat_data_list:
-		if heat_data.position == grid_position:
-			heat_data.heat = new_heat
-			heat_data_updated.emit()
-
-
-## Set the heat data heat value at the given position to the given value. Is an RPC.
-@rpc("any_peer", "call_local", "reliable")
-func set_heat_state_to(player_id: int, position: Vector2i, new_heat_state: Types.HeatState) -> void:
-	var player_state: PlayerState = player_states.get_state(player_id)
-	for heat_data: HeatData in player_state.heat_data_list:
-		if heat_data.position == position:
-			heat_data.heat_state = new_heat_state
-			heat_data_updated.emit()
-
-
 ## Get the heat data list for the given player.
 func get_heat_data(player_id: int) -> Array[HeatData]:
 	var player_state: PlayerState = player_states.get_state(player_id)
-	return player_state.heat_data_list
+	return player_state.building_heat.get_all()
 
 
 # PRIVATE METHODS
@@ -488,7 +398,6 @@ func set_starting_item_counts_and_storage_caps() -> void:
 		player_states.get_state(player_id).items.publish()
 
 
-## TODO: this code causes flickering of production numbers. This will be fixed in the Model rework.
 ## Reset the item production and consumption numbers for the update loop.
 func _reset_production_consumption() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
@@ -502,17 +411,13 @@ func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
 	_reset_production_consumption()
-	_storage_system.update()
-	_energy_system.update()
-	_heat_system.update()
-	_miner_system.update()
 	TradeSystem.update()
 
-	# TODO: remove this hack by rewriting UI code
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
+		player_state.update_systems()
+		player_state.fire_all_changed_signals()
 		player_state.publish()
-	player_states.get_state().fire_all_changed_signals()
 
 	_broadcast_tick_done.rpc()
 

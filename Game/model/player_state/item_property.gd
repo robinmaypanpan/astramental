@@ -19,6 +19,12 @@ func set_for(item: Types.Item, value: float) -> void:
 	value_client[item] = value
 
 
+## Set the value of this property for all items at once.
+func set_all(value: Dictionary[Types.Item, float]) -> void:
+	assert(multiplayer.is_server())
+	value_client = value.duplicate()
+
+
 ## Increase the value of this property for the given item. Should only be called by the server.
 func increase_for(item: Types.Item, amount: float) -> void:
 	assert(multiplayer.is_server())

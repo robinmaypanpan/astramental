@@ -24,10 +24,17 @@ signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 ## The current energy satisfaction of all buildings, which defines how much of the current
 ## energy demand is satisfied by current energy production. Stored as a decimal between
 ## 0.0 and 1.0. Affects the speed at which buildings run.
-@export var energy_satisfaction: float
-
-## Contains a list of all cells where heat is located.
-var heat_data_list: Array[HeatData]
+@export var energy_satisfaction: float:
+	get:
+		# TODO: fix so we don't constantly have to check for null.
+		# Currently game crashes if you don't do this.
+		var value: Variant = _energy_satisfaction.value_client
+		if value != null:
+			return value
+		else:
+			return 0.0
+	set(new_value):
+		_energy_satisfaction.value_client = new_value
 
 ## Model for all item information and accessing.
 @onready var items: ItemModel = %ItemModel
@@ -38,19 +45,18 @@ var heat_data_list: Array[HeatData]
 ## Model for all building information.
 @onready var buildings: BuildingModel = %BuildingModel
 
+## Model for all building heat information.
+@onready var building_heat: BuildingHeatModel = %BuildingHeatModel
 
-## Used by the server to set the energy satisfaction
-func update_energy_satisfaction(new_energy_satisfaction: float) -> void:
-	assert(multiplayer.is_server())
-	if energy_satisfaction != new_energy_satisfaction:
-		sync_energy_satisfaction.rpc(new_energy_satisfaction)
+## The Building entity-component system.
+@onready var building_ecs: BuildingEcs = %BuildingEcs
+
+## Internal energy satisfaction property.
+@onready var _energy_satisfaction: SyncProperty = %EnergySatisfaction
 
 
-## Set energy satisfaction for both players and fire energy_satisfaction_changed signal.
-@rpc("any_peer", "call_local", "reliable")
-func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
-	energy_satisfaction = new_energy_satisfaction
-	energy_satisfaction_changed.emit(id, new_energy_satisfaction)
+func _ready() -> void:
+	energy_satisfaction = 0.0
 
 
 ## Add a building to the buildings list.
@@ -58,17 +64,17 @@ func sync_energy_satisfaction(new_energy_satisfaction: float) -> void:
 func add_building(tile_position: Vector2i, building_id: String) -> void:
 	assert(multiplayer.is_server())
 	var building = buildings.add_building(tile_position, building_id)
-	ComponentManager.init_components_building(building)
+	building_ecs.component_manager.add_components_building(building)
 
 
 ## Remove a building from the buildings list.
-## Also removes all corresponding components from ComponentManager.
+## Also removes all corresponding components from NewComponentManager.
 func remove_building(tile_position: Vector2i) -> bool:
 	assert(multiplayer.is_server())
 	var building_at_pos = buildings.get_building_at_pos(tile_position)
 	if building_at_pos:
 		buildings.remove_building(building_at_pos.unique_id)
-		ComponentManager.remove_components_building(building_at_pos)
+		building_ecs.component_manager.remove_components_building(building_at_pos)
 		return true
 	else:
 		return false
@@ -82,7 +88,17 @@ func fire_all_changed_signals() -> void:
 		item_consumption_changed.emit(id, item, items.consumption.get_for(item))
 		item_production_changed.emit(id, item, items.production.get_for(item))
 		storage_cap_changed.emit(id, item, items.storage_caps.get_for(item))
+
 	Model.buildings_updated.emit()
+	Model.heat_data_updated.emit()
+	energy_satisfaction_changed.emit(id, energy_satisfaction)
+
+
+## Update all systems for the building ECS. Only callable by server.
+func update_systems() -> void:
+	assert(multiplayer.is_server())
+	if building_ecs != null:
+		building_ecs.update()
 
 
 ## Publish all properties of this state to the network.
@@ -90,6 +106,8 @@ func publish() -> void:
 	items.publish()
 	ores.publish()
 	buildings.publish()
+	building_heat.publish()
+	_energy_satisfaction.publish()
 
 
 ## Sync all properties of this state from the network.
@@ -97,6 +115,8 @@ func sync() -> void:
 	ores.sync()
 	items.sync()
 	buildings.sync()
+	building_heat.sync()
+	_energy_satisfaction.sync()
 
 
 func _on_multiplayer_synchronizer_synchronized() -> void:
