@@ -18,4 +18,5 @@ storage_caps = Dictionary[int, float]({
 6: 100.0
 })
 update_interval = 0.1
+enable_storage_caps_for_building_sales = false
 metadata/_custom_type_script = "uid://b2p2kbckpx0pd"
