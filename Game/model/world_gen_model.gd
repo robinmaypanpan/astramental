@@ -18,9 +18,6 @@ class OreCircle:
 # Number of rows in each layer of player board.
 @export var num_rows_layer: int = 7
 
-# Number of factory layers in player board.
-@export var num_factory_layers: int = 1
-
 # TODO: move to player board logic
 @export var sky_height: int = 300
 @export var tile_map_scale: int = 2
@@ -41,35 +38,32 @@ var num_layers: int
 # Total number of rows in player board.
 var num_rows: int
 
+
 func _ready() -> void:
 	num_mine_layers = ores_generation.size()
-	num_layers = num_factory_layers + num_mine_layers
+	num_layers = 1 + num_mine_layers
 	num_rows = num_rows_layer * num_layers
+
 
 ## Given the layer number, return the resource generation information for
 ## that layer. Layer 0 is the factory/topmost layer, layer 1 is the 1st mine
 ## layer, and so on.
 func get_layer_generation_data(layer_num: int) -> LayerGenerationResource:
 	if layer_num > 0:
-		return ores_generation[layer_num - num_factory_layers]
+		return ores_generation[layer_num - 1]
 	else:
 		return null
 
 
 ## Get the y-level where the mine layers start.
 func get_mine_layer_start_y() -> int:
-	return num_rows_layer * num_factory_layers
+	return num_rows_layer
 
 
 ## Get the y-level where all layers end. For use in range(), this y-level
 ## is 1 beyond the bounds of the actual array.
 func get_all_layers_end_y() -> int:
 	return num_rows_layer * num_layers
-
-
-## Get the layer number of the first mine layer.
-func get_first_mine_layer_num() -> int:
-	return num_factory_layers
 
 
 ## Get the layer number associated with the y-coordinate. Index 0 is
@@ -93,7 +87,7 @@ func generate_all_ores() -> void:
 	seed(world_seed)
 
 	# layer 0 is factory layer. layer 1 is 1st mine layer
-	for layer_num in range(get_first_mine_layer_num(), num_layers):
+	for layer_num in range(1, num_layers):
 		var layer_gen_data: LayerGenerationResource = get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
 		var ores_for_each_player := _init_ores_for_each_player()
