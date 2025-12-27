@@ -1,17 +1,6 @@
 extends Node
 ## Contains the logic for generating the world
 
-## Defines a circle filled with the specified ore.
-class OreCircle:
-	var ore: Types.Ore
-	var center: Vector2
-	var radius: float
-
-	func _init(o, c, r) -> void:
-		ore = o
-		center = c
-		radius = r
-
 # Number of columns in a player board.
 @export var num_cols: int = 10
 
@@ -89,8 +78,8 @@ func generate_all_ores() -> void:
 	# layer 0 is factory layer. layer 1 is 1st mine layer
 	for layer_num in range(1, num_layers):
 		var layer_gen_data: LayerGenerationResource = get_layer_generation_data(layer_num)
-		var background_rock := layer_gen_data.background_rock
-		var ores_for_each_player := _init_ores_for_each_player()
+		var background_rock: Types.Ore = layer_gen_data.background_rock
+		var ores_for_each_player: Dictionary[int, Array] = _init_ores_for_each_player()
 		var players_not_chosen_yet: Array[int] = ConnectionSystem.get_player_id_list().duplicate()
 
 		# for each ore generation data in this layer
@@ -131,7 +120,7 @@ func generate_layer_ores(
 		var radius := ore_gen_data.size
 
 		var random_center := Vector2(
-			randf_range(0, WorldGenModel.num_cols),
+			randf_range(0, num_cols),
 			randf_range(layer_start_y, layer_end_y),
 		)
 		var random_radius := randfn(radius, 0.3)
@@ -139,28 +128,84 @@ func generate_layer_ores(
 
 	var ores = player_state.ores
 	# then, for each tile in the tilemap
-	for x in range(WorldGenModel.num_cols):
-		for y in range(layer_start_y, layer_end_y):
-			var center_of_tile := Vector2(x + 0.5, y + 0.5)
-			# if no ore is found, write the background rock
-			var closest_ore := background_rock
-			var closest_distance := 9999.0
+	for grid_position: Vector2i in layer_grid_positions(layer_num):
+		var center_of_tile := Vector2(grid_position) + Vector2(0.5, 0.5)
+		# if no ore is found, write the background rock
+		var closest_ore := background_rock
+		var closest_distance := 9999.0
 
-			# find the ore circle that is closest to the tile that is within the radius of the ore circle
-			for ore_circle in ore_circles:
-				var dist_to_center := center_of_tile.distance_to(ore_circle.center)
-				if dist_to_center < ore_circle.radius and dist_to_center < closest_distance:
-					closest_ore = ore_circle.ore
-					closest_distance = dist_to_center
+		# find the ore circle that is closest to the tile that is within the radius of the ore circle
+		for ore_circle in ore_circles:
+			var dist_to_center := center_of_tile.distance_to(ore_circle.center)
+			if dist_to_center < ore_circle.radius and dist_to_center < closest_distance:
+				closest_ore = ore_circle.ore
+				closest_distance = dist_to_center
 
-			# set the tile to whatever we did or didn't find
-			ores.set_ore(Vector2i(x, y), closest_ore)
+		# set the tile to whatever we did or didn't find
+		ores.set_ore(grid_position, closest_ore)
 
+
+func layer_grid_positions(layer_num: int):
+	return LayerGridPositionIterator.new(self, layer_num)
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
 func _init_ores_for_each_player() -> Dictionary[int, Array]:
 	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
 	var ores_for_each_player: Dictionary[int, Array]
 	for player_id in ConnectionSystem.get_player_id_list():
-		ores_for_each_player[player_id] = []
+		ores_for_each_player[player_id] = [] as Array[OreGenerationResource]
 	return ores_for_each_player
+
+
+## Defines a circle filled with the specified ore.
+class OreCircle:
+	var ore: Types.Ore
+	var center: Vector2
+	var radius: float
+
+	func _init(o, c, r) -> void:
+		ore = o
+		center = c
+		radius = r
+
+
+# Iterate through all grid positions in the given layer, left to right, top to bottom.
+class LayerGridPositionIterator:
+	# The specific layer number to iterate through.
+	var layer_num: int
+
+	# The current grid position of the iterator.
+	var grid_position: Vector2i
+
+	# Number of rows in each layer.
+	var _num_rows_layer: int
+
+	# Number of columns.
+	var _num_cols: int
+
+	# The last grid position that the iterator should end at.
+	var _ending_grid_position: Vector2i
+
+	func _init(world_gen_model: Node, new_layer_num: int) -> void:
+		layer_num = new_layer_num
+		_num_rows_layer = world_gen_model.num_rows_layer
+		_num_cols = world_gen_model.num_cols
+		_ending_grid_position = Vector2i(0, (new_layer_num + 1) * _num_rows_layer)
+
+	# return whether the iterator should continue.
+	func should_continue() -> bool:
+		return grid_position != _ending_grid_position
+
+	func _iter_init(_iter: Array) -> bool:
+		grid_position = Vector2i(0, layer_num * _num_rows_layer)
+		return should_continue()
+
+	func _iter_next(_iter: Array) -> bool:
+		grid_position.x += 1
+		if grid_position.x == _num_cols:
+			grid_position.x = 0
+			grid_position.y += 1
+		return should_continue()
+
+	func _iter_get(_iter: Variant) -> Variant:
+		return grid_position
