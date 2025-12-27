@@ -20,12 +20,15 @@ func _ready() -> void:
 
 
 func _on_game_ready() -> void:
+	if multiplayer.is_server():
+		WorldGenModel.generate_all_ores()
 	asteroid.generate_player_boards()
 	# TODO: remove this hack
 	for player_id: int in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = Model.player_states.get_state(player_id)
 		if multiplayer.is_server():
 			player_state.ores.publish()
+
 
 
 ## Set the UI to the building mode and show the building cursor

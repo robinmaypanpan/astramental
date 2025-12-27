@@ -49,42 +49,6 @@ func generate_player_boards() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
 		add_player_board(player_id)
 
-	_generate_all_ores()
-
-
-## Generate the mine layers for all players by instantiating and adding
-## individual mine layer scenes to each player board.
-func _generate_all_ores() -> void:
-	seed(Model.world_seed)
-
-	# layer 0 is factory layer. layer 1 is 1st mine layer
-	for layer_num in range(1, WorldGenModel.get_num_mine_layers() + 1):
-		var layer_gen_data := WorldGenModel.get_layer_generation_data(layer_num)
-		var background_rock := layer_gen_data.background_rock
-		var ores_for_each_player := _init_ores_for_each_player()
-		var players_not_chosen_yet: Array[int] = ConnectionSystem.get_player_id_list().duplicate()
-
-		# for each ore generation data in this layer
-		for ore_gen_data in layer_gen_data.ores:
-			if ore_gen_data.generate_for_all_players:
-				# if it's for all players, add it for all players
-				for player_id in ConnectionSystem.get_player_id_list():
-					ores_for_each_player[player_id].append(ore_gen_data)
-			else:
-				# otherwise, assign it to a player that hasn't gotten a random ore yet
-				players_not_chosen_yet.shuffle()
-				var random_player: int = players_not_chosen_yet.pop_back()
-				ores_for_each_player[random_player].append(ore_gen_data)
-				# if we've assigned a random ore to each player at least once, do it again
-				if players_not_chosen_yet.size() == 0:
-					players_not_chosen_yet = ConnectionSystem.get_player_id_list().duplicate()
-
-		# actually fill in the ore for each player
-		for player_id in ConnectionSystem.get_player_id_list():
-			var player_board := get_player_board(player_id)
-			var player_ore_gen_data := ores_for_each_player[player_id]
-			player_board.generate_ores(background_rock, player_ore_gen_data, layer_num)
-
 
 func _register_player_board(player_id: int, player_board: Node) -> void:
 	_player_boards[player_id] = player_board
@@ -94,15 +58,6 @@ func get_player_board(player_id: int) -> Node:
 	if _player_boards.has(player_id):
 		return _player_boards[player_id]
 	return null
-
-
-## Set up the dictionary to associate an empty array to each player id in the game.
-func _init_ores_for_each_player() -> Dictionary[int, Array]:
-	# note: nested types are disallowed, so must be Array instead of Array[OreGenerationResource]
-	var ores_for_each_player: Dictionary[int, Array]
-	for player_id in ConnectionSystem.get_player_id_list():
-		ores_for_each_player[player_id] = []
-	return ores_for_each_player
 
 
 ## Returns the grid coordinates the mouse is over
