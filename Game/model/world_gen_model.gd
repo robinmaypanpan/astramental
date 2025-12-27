@@ -67,8 +67,8 @@ func get_layer_type(y: int) -> Types.Layer:
 		return Types.Layer.FACTORY
 
 
-## Generate the mine layers for all players by instantiating and adding
-## individual mine layer scenes to each player board.
+## Generate the ores for all players by setting the appropriate ores for each layer in the ore
+## model.
 func generate_all_ores() -> void:
 	seed(world_seed)
 
@@ -100,9 +100,16 @@ func generate_all_ores() -> void:
 			var player_state: PlayerState = Model.player_states.get_state(player_id)
 			generate_layer_ores(player_state, background_rock, player_ore_gen_data, layer_num)
 
+	# TODO: currently, this publish must be done before the normal publish every frame. fix it so
+	# we don't have to do this.
+	# Publish the changes for all the ores to the network.
+	for player_id in ConnectionSystem.get_player_id_list():
+		var player_state: PlayerState = Model.player_states.get_state(player_id)
+		player_state.ores.publish()
+
 
 ## Given ore generation data, generate the ores for the given player state and layer number by
-## filling out the tile map layer with the appropriate ores.
+## filling out the ore model with the appropriate ores.
 func generate_layer_ores(
 	player_state: PlayerState, background_rock: Types.Ore, generation_data: Array, layer_num: int
 ) -> void:
