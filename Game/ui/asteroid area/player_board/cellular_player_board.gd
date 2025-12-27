@@ -33,14 +33,15 @@ func _ready() -> void:
 
 	player_name_label.text = "%s\n(%s)" % [player.name, player.index]
 
+	var world_gen_model: WorldGenModel = Model.world_gen_model
 	game_grid.generate_grid(
-		WorldGenModel.num_cols,
-		WorldGenModel.num_rows
+		world_gen_model.num_cols,
+		world_gen_model.num_rows
 	)
 
 	# Set up factory tiles to be all white tiles
-	for x in range(WorldGenModel.num_cols):
-		for y in range(WorldGenModel.num_rows_layer):
+	for x in range(world_gen_model.num_cols):
+		for y in range(world_gen_model.num_rows_layer):
 			game_grid.get_cell(x, y).set_background(factory_resource.icon)
 
 

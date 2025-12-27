@@ -10,10 +10,11 @@ var _layer_width: int
 
 
 func _ready() -> void:
-	_layer_thickness = WorldGenModel.num_rows_layer
-	_layer_width = WorldGenModel.num_cols
+	var world_gen_model: WorldGenModel = Model.world_gen_model
+	_layer_thickness = world_gen_model.num_rows_layer
+	_layer_width = world_gen_model.num_cols
 
-	var num_layers: int = WorldGenModel.num_mine_layers
+	var num_layers: int = world_gen_model.num_mine_layers
 	var layer_size: int = _layer_thickness * _layer_width
 	var ores_size: int = num_layers * layer_size
 	# resize ores to appropriate size
@@ -56,7 +57,7 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 ## Given the 2D grid position of the ore, get the actual index into the 1D array.
 func _get_index_into_ores(grid_position: Vector2i) -> int:
 	# TODO: rewrite this so no subtraction is required.
-	if WorldGenModel.get_layer_num(grid_position.y) > 0:
+	if Model.world_gen_model.get_layer_num(grid_position.y) > 0:
 		grid_position.y -= _layer_thickness
 		return grid_position.y * _layer_width + grid_position.x
 	else:

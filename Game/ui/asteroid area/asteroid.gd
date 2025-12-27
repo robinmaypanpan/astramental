@@ -121,9 +121,10 @@ func _input(_event: InputEvent) -> void:
 func _on_update_ore_tilemaps() -> void:
 	for player_board in _player_boards.values():
 		var player_id: int = player_board.get_owning_player_id()
-		var start_y := WorldGenModel.get_mine_layer_start_y()
-		var end_y := WorldGenModel.get_all_layers_end_y()
-		for x in range(WorldGenModel.num_cols):
+		var world_gen_model: WorldGenModel = Model.world_gen_model
+		var start_y := world_gen_model.get_mine_layer_start_y()
+		var end_y := world_gen_model.get_all_layers_end_y()
+		for x in range(world_gen_model.num_cols):
 			for y in range(start_y, end_y):
 				var ore: Types.Ore = Model.get_ore_at(player_id, x, y)
 				player_board.set_ore_at(x, y, ore)

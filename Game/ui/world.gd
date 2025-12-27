@@ -21,7 +21,7 @@ func _ready() -> void:
 
 func _on_game_ready() -> void:
 	if multiplayer.is_server():
-		WorldGenModel.generate_all_ores()
+		Model.world_gen_model.generate_all_ores()
 	asteroid.generate_player_boards()
 	# TODO: remove this hack
 	for player_id: int in ConnectionSystem.get_player_id_list():

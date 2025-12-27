@@ -1,3 +1,4 @@
+class_name WorldGenModel
 extends Node
 ## Contains the logic for generating the world
 

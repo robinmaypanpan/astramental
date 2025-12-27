@@ -1,14 +1,48 @@
-[gd_scene load_steps=6 format=3 uid="uid://doi2igdy4h0gh"]
+[gd_scene load_steps=14 format=3 uid="uid://doi2igdy4h0gh"]
 
 [ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
 [ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/model/game_state.gd" id="2_ahubk"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/model/player_states.gd" id="3_6exh1"]
+[ext_resource type="Script" uid="uid://d13o6g1uuh65x" path="res://Game/model/world_gen_model.gd" id="3_e5nin"]
+[ext_resource type="Script" uid="uid://bm22xfid7upsy" path="res://Game/data/scripts/layer_generation_resource.gd" id="4_gdd1g"]
+[ext_resource type="Script" uid="uid://c5q3whbjic2df" path="res://Game/data/scripts/ore_generation_resource.gd" id="5_ellki"]
 [ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/model/other_systems/trade_system.gd" id="8_ellki"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_e5nin"]
 properties/0/path = NodePath("GameState:example_int")
 properties/0/spawn = true
 properties/0/replication_mode = 1
+
+[sub_resource type="Resource" id="Resource_gdd1g"]
+script = ExtResource("5_ellki")
+ore = 1
+generate_for_all_players = true
+size = 3.0
+metadata/_custom_type_script = "uid://c5q3whbjic2df"
+
+[sub_resource type="Resource" id="Resource_ellki"]
+script = ExtResource("5_ellki")
+ore = 4
+generate_for_all_players = true
+size = 3.0
+metadata/_custom_type_script = "uid://c5q3whbjic2df"
+
+[sub_resource type="Resource" id="Resource_k8d3c"]
+script = ExtResource("5_ellki")
+ore = 2
+size = 1.5
+metadata/_custom_type_script = "uid://c5q3whbjic2df"
+
+[sub_resource type="Resource" id="Resource_jnrho"]
+script = ExtResource("5_ellki")
+ore = 3
+size = 1.5
+metadata/_custom_type_script = "uid://c5q3whbjic2df"
+
+[sub_resource type="Resource" id="Resource_0sn5c"]
+script = ExtResource("4_gdd1g")
+ores = Array[ExtResource("5_ellki")]([SubResource("Resource_gdd1g"), SubResource("Resource_ellki"), SubResource("Resource_k8d3c"), SubResource("Resource_jnrho")])
+metadata/_custom_type_script = "uid://bm22xfid7upsy"
 
 [node name="Model" type="Node"]
 script = ExtResource("1_xc5wf")
@@ -38,5 +72,11 @@ wait_time = 0.1
 unique_name_in_owner = true
 script = ExtResource("8_ellki")
 metadata/_custom_type_script = "uid://bwwepc5firs0n"
+
+[node name="WorldGenModel" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_e5nin")
+ores_generation = Array[ExtResource("4_gdd1g")]([SubResource("Resource_0sn5c")])
+metadata/_custom_type_script = "uid://d13o6g1uuh65x"
 
 [connection signal="timeout" from="UpdateTimer" to="." method="_on_update_timer_timeout"]
