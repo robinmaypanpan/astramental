@@ -7,10 +7,6 @@ extends Node
 # Number of rows in each layer of player board.
 @export var num_rows_layer: int = 7
 
-# TODO: move to player board logic
-@export var sky_height: int = 300
-@export var tile_map_scale: int = 2
-
 ## Resource generation information stored as an array.
 ## Index 0 corresponds to 1st mine layer, index 1 is 2nd mine layer, and so on.
 @export var ores_generation: Array[LayerGenerationResource]
@@ -147,6 +143,7 @@ func generate_layer_ores(
 
 func layer_grid_positions(layer_num: int):
 	return LayerGridPositionIterator.new(self, layer_num)
+
 
 ## Set up the dictionary to associate an empty array to each player id in the game.
 func _init_ores_for_each_player() -> Dictionary[int, Array]:
