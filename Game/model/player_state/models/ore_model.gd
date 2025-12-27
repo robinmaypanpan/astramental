@@ -10,7 +10,7 @@ var _layer_width: int
 
 
 func _ready() -> void:
-	_layer_thickness = WorldGenModel.layer_thickness
+	_layer_thickness = WorldGenModel.num_rows_layer
 	_layer_width = WorldGenModel.num_cols
 
 	var num_layers: int = WorldGenModel.get_num_mine_layers()

@@ -35,12 +35,12 @@ func _ready() -> void:
 
 	game_grid.generate_grid(
 		WorldGenModel.num_cols,
-		WorldGenModel.layer_thickness * (WorldGenModel.get_num_mine_layers() + 1)
+		WorldGenModel.num_rows_layer * (WorldGenModel.get_num_mine_layers() + 1)
 	)
 
 	# Set up factory tiles to be all white tiles
 	for x in range(WorldGenModel.num_cols):
-		for y in range(WorldGenModel.layer_thickness):
+		for y in range(WorldGenModel.num_rows_layer):
 			game_grid.get_cell(x, y).set_background(factory_resource.icon)
 
 

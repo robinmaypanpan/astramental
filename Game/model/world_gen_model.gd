@@ -12,54 +12,70 @@ class OreCircle:
 		center = c
 		radius = r
 
-# game board properties
+# Number of columns in a player board.
 @export var num_cols: int = 10
-@export var layer_thickness: int = 7
+
+# Number of rows in each layer of player board.
+@export var num_rows_layer: int = 7
+
+# Number of factory layers in player board.
+@export var num_factory_layers: int = 1
+
+# TODO: move to player board logic
 @export var sky_height: int = 300
 @export var tile_map_scale: int = 2
+
 ## Resource generation information stored as an array.
 ## Index 0 corresponds to 1st mine layer, index 1 is 2nd mine layer, and so on.
 @export var ores_generation: Array[LayerGenerationResource]
 
-## The random number seed used for this game
+## The random number seed used for this game.
 var world_seed: int
 
+# Number of mine layers in player board.
+var num_mine_layers: int
+
+# Total number of layers (factory + mine) in player board.
+var num_layers: int
+
+# Total number of rows in player board.
+var num_rows: int
+
+func _ready() -> void:
+	num_mine_layers = ores_generation.size()
+	num_layers = num_factory_layers + num_mine_layers
+	num_rows = num_rows_layer * num_layers
 
 ## Given the layer number, return the resource generation information for
 ## that layer. Layer 0 is the factory/topmost layer, layer 1 is the 1st mine
 ## layer, and so on.
 func get_layer_generation_data(layer_num: int) -> LayerGenerationResource:
 	if layer_num > 0:
-		return ores_generation[layer_num - 1]
+		return ores_generation[layer_num - num_factory_layers]
 	else:
 		return null
 
 
-## Return the number of layers that are being generated for the mines.
-func get_num_mine_layers() -> int:
-	return ores_generation.size()
-
-
-## Return the total number of layers being generated, which is 1 factory layer + all mine layers.
-func get_total_num_layers() -> int:
-	return get_num_mine_layers() + 1
-
-
 ## Get the y-level where the mine layers start.
 func get_mine_layer_start_y() -> int:
-	return layer_thickness
+	return num_rows_layer * num_factory_layers
 
 
 ## Get the y-level where all layers end. For use in range(), this y-level
 ## is 1 beyond the bounds of the actual array.
 func get_all_layers_end_y() -> int:
-	return layer_thickness * get_total_num_layers()
+	return num_rows_layer * num_layers
+
+
+## Get the layer number of the first mine layer.
+func get_first_mine_layer_num() -> int:
+	return num_factory_layers
 
 
 ## Get the layer number associated with the y-coordinate. Index 0 is
 ## top/factory layer, index 1 is 1st mine layer, etc.
 func get_layer_num(y: int) -> int:
-	@warning_ignore("integer_division") return y / layer_thickness
+	@warning_ignore("integer_division") return y / num_rows_layer
 
 
 ## Get the layer type (mine layer or factory layer) associated with the
@@ -77,7 +93,7 @@ func generate_all_ores() -> void:
 	seed(world_seed)
 
 	# layer 0 is factory layer. layer 1 is 1st mine layer
-	for layer_num in range(1, get_num_mine_layers() + 1):
+	for layer_num in range(get_first_mine_layer_num(), num_layers):
 		var layer_gen_data: LayerGenerationResource = get_layer_generation_data(layer_num)
 		var background_rock := layer_gen_data.background_rock
 		var ores_for_each_player := _init_ores_for_each_player()
@@ -114,8 +130,8 @@ func generate_layer_ores(
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
 
-	var layer_start_y := layer_num * layer_thickness
-	var layer_end_y := layer_start_y + layer_thickness
+	var layer_start_y := layer_num * num_rows_layer
+	var layer_end_y := layer_start_y + num_rows_layer
 	for ore_gen_data: OreGenerationResource in generation_data:
 		var ore := ore_gen_data.ore
 		var radius := ore_gen_data.size
