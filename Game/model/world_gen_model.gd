@@ -83,7 +83,7 @@ func generate_all_ores() -> void:
 		var players_not_chosen_yet: Array[int] = ConnectionSystem.get_player_id_list().duplicate()
 
 		# for each ore generation data in this layer
-		for ore_gen_data in layer_gen_data.ores:
+		for ore_gen_data: OreGenerationResource in layer_gen_data.ores:
 			if ore_gen_data.generate_for_all_players:
 				# if it's for all players, add it for all players
 				for player_id in ConnectionSystem.get_player_id_list():
@@ -99,7 +99,7 @@ func generate_all_ores() -> void:
 
 		# actually fill in the ore for each player
 		for player_id in ConnectionSystem.get_player_id_list():
-			var player_ore_gen_data := ores_for_each_player[player_id]
+			var player_ore_gen_data: Array = ores_for_each_player[player_id]
 			var player_state: PlayerState = Model.player_states.get_state(player_id)
 			generate_layer_ores(player_state, background_rock, player_ore_gen_data, layer_num)
 
@@ -113,30 +113,30 @@ func generate_layer_ores(
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
 
-	var layer_start_y := layer_num * num_rows_layer
-	var layer_end_y := layer_start_y + num_rows_layer
+	var layer_start_y: int = layer_num * num_rows_layer
+	var layer_end_y: int = layer_start_y + num_rows_layer
 	for ore_gen_data: OreGenerationResource in generation_data:
-		var ore := ore_gen_data.ore
-		var radius := ore_gen_data.size
+		var ore: Types.Ore = ore_gen_data.ore
+		var radius: float = ore_gen_data.size
 
-		var random_center := Vector2(
+		var random_center: Vector2 = Vector2(
 			randf_range(0, num_cols),
 			randf_range(layer_start_y, layer_end_y),
 		)
-		var random_radius := randfn(radius, 0.3)
+		var random_radius: float = randfn(radius, 0.3)
 		ore_circles.append(OreCircle.new(ore, random_center, random_radius))
 
-	var ores = player_state.ores
+	var ores: OreModel = player_state.ores
 	# then, for each tile in the tilemap
 	for grid_position: Vector2i in layer_grid_positions(layer_num):
-		var center_of_tile := Vector2(grid_position) + Vector2(0.5, 0.5)
+		var center_of_tile: Vector2 = Vector2(grid_position) + Vector2(0.5, 0.5)
 		# if no ore is found, write the background rock
-		var closest_ore := background_rock
-		var closest_distance := 9999.0
+		var closest_ore: Types.Ore = background_rock
+		var closest_distance: float = 9999.0
 
 		# find the ore circle that is closest to the tile that is within the radius of the ore circle
-		for ore_circle in ore_circles:
-			var dist_to_center := center_of_tile.distance_to(ore_circle.center)
+		for ore_circle: OreCircle in ore_circles:
+			var dist_to_center: float = center_of_tile.distance_to(ore_circle.center)
 			if dist_to_center < ore_circle.radius and dist_to_center < closest_distance:
 				closest_ore = ore_circle.ore
 				closest_distance = dist_to_center
