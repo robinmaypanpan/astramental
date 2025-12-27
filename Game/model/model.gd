@@ -14,9 +14,6 @@ signal heat_data_updated
 ## Emitted for both players when the update tick is done.
 signal tick_done
 
-## The random number seed used for this game
-var world_seed: int
-
 ## The number of players seen as ready. Used to determine when it is okay to start the game
 var num_players_ready := 0
 
@@ -28,7 +25,7 @@ var num_players_ready := 0
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
 func initialize_clients(server_world_seed: int) -> void:
-	world_seed = server_world_seed
+	WorldGenModel.world_seed = server_world_seed
 
 	player_states.generate_player_states()
 

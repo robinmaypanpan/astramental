@@ -12,7 +12,6 @@ class OreCircle:
 		center = c
 		radius = r
 
-
 # game board properties
 @export var num_cols: int = 10
 @export var layer_thickness: int = 7
@@ -21,6 +20,9 @@ class OreCircle:
 ## Resource generation information stored as an array.
 ## Index 0 corresponds to 1st mine layer, index 1 is 2nd mine layer, and so on.
 @export var ores_generation: Array[LayerGenerationResource]
+
+## The random number seed used for this game
+var world_seed: int
 
 
 ## Given the layer number, return the resource generation information for
@@ -72,7 +74,7 @@ func get_layer_type(y: int) -> Types.Layer:
 ## Generate the mine layers for all players by instantiating and adding
 ## individual mine layer scenes to each player board.
 func generate_all_ores() -> void:
-	seed(Model.world_seed)
+	seed(world_seed)
 
 	# layer 0 is factory layer. layer 1 is 1st mine layer
 	for layer_num in range(1, get_num_mine_layers() + 1):
