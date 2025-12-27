@@ -23,8 +23,8 @@ var num_layers: int
 # Total number of rows in player board.
 var num_rows: int
 
-
 func _ready() -> void:
+	# Set up internal variables.
 	num_mine_layers = ores_generation.size()
 	num_layers = 1 + num_mine_layers
 	num_rows = num_rows_layer * num_layers
@@ -100,15 +100,13 @@ func generate_all_ores() -> void:
 			generate_layer_ores(player_state, background_rock, player_ore_gen_data, layer_num)
 
 
-## Given ore generation data, generate the ores for the given layer number by filling
-## out the tile map layer with the appropriate ores.
+## Given ore generation data, generate the ores for the given player state and layer number by
+## filling out the tile map layer with the appropriate ores.
 func generate_layer_ores(
 	player_state: PlayerState, background_rock: Types.Ore, generation_data: Array, layer_num: int
 ) -> void:
-	# TODO: RPG: This should be in the model, not the UI
 	# first, make a random circle for each ore
 	var ore_circles: Array[OreCircle]
-
 	var layer_start_y: int = layer_num * num_rows_layer
 	var layer_end_y: int = layer_start_y + num_rows_layer
 	for ore_gen_data: OreGenerationResource in generation_data:
@@ -141,6 +139,7 @@ func generate_layer_ores(
 		ores.set_ore(grid_position, closest_ore)
 
 
+# Given the layer number, return an iterator that goes through every grid position in that layer.
 func layer_grid_positions(layer_num: int):
 	return LayerGridPositionIterator.new(self, layer_num)
 
@@ -189,7 +188,7 @@ class LayerGridPositionIterator:
 		_num_cols = world_gen_model.num_cols
 		_ending_grid_position = Vector2i(0, (new_layer_num + 1) * _num_rows_layer)
 
-	# return whether the iterator should continue.
+	# Return whether the iterator should continue.
 	func should_continue() -> bool:
 		return grid_position != _ending_grid_position
 
