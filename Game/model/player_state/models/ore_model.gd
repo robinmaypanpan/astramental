@@ -13,7 +13,7 @@ func _ready() -> void:
 	_layer_thickness = WorldGenModel.num_rows_layer
 	_layer_width = WorldGenModel.num_cols
 
-	var num_layers: int = WorldGenModel.get_num_mine_layers()
+	var num_layers: int = WorldGenModel.num_mine_layers
 	var layer_size: int = _layer_thickness * _layer_width
 	var ores_size: int = num_layers * layer_size
 	# resize ores to appropriate size
