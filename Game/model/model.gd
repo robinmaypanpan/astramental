@@ -14,21 +14,19 @@ signal heat_data_updated
 ## Emitted for both players when the update tick is done.
 signal tick_done
 
-## The random number seed used for this game
-var world_seed: int
-
 ## The number of players seen as ready. Used to determine when it is okay to start the game
 var num_players_ready := 0
 
 @onready var player_states: PlayerStates = %PlayerStates
 @onready var player_spawner := %PlayerSpawner
 @onready var game_state := %GameState
+@onready var world_gen_model: WorldGenModel = %WorldGenModel
 @onready var _update_timer := %UpdateTimer
 
 ## Take the world seed from the server and initalize it and the world for all players.
 @rpc("call_local", "reliable")
 func initialize_clients(server_world_seed: int) -> void:
-	world_seed = server_world_seed
+	world_gen_model.world_seed = server_world_seed
 
 	player_states.generate_player_states()
 
@@ -258,7 +256,7 @@ func refund_costs(player_id: int, building: BuildingEntity) -> void:
 
 ## Returns true if we can build the building indicated at the location specified
 func can_build_at_location(building_id: String, player_id: int, grid_position: Vector2i) -> bool:
-	if grid_position.x < 0 or grid_position.x >= WorldGenModel.num_cols:
+	if grid_position.x < 0 or grid_position.x >= world_gen_model.num_cols:
 		# Out of bounds
 		return false
 
@@ -275,7 +273,7 @@ func can_build_at_location(building_id: String, player_id: int, grid_position: V
 	# Make sure that the building fits into this part of the grid
 	var building: BuildingResource = Buildings.get_by_id(building_id)
 
-	if building.placement_destination != WorldGenModel.get_layer_type(grid_position.y):
+	if building.placement_destination != world_gen_model.get_layer_type(grid_position.y):
 		# Can't place this building in this layer
 		return false
 

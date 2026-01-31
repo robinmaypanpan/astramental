@@ -33,14 +33,15 @@ func _ready() -> void:
 
 	player_name_label.text = "%s\n(%s)" % [player.name, player.index]
 
+	var world_gen_model: WorldGenModel = Model.world_gen_model
 	game_grid.generate_grid(
-		WorldGenModel.num_cols,
-		WorldGenModel.layer_thickness * (WorldGenModel.get_num_mine_layers() + 1)
+		world_gen_model.num_cols,
+		world_gen_model.num_rows
 	)
 
 	# Set up factory tiles to be all white tiles
-	for x in range(WorldGenModel.num_cols):
-		for y in range(WorldGenModel.layer_thickness):
+	for x in range(world_gen_model.num_cols):
+		for y in range(world_gen_model.num_rows_layer):
 			game_grid.get_cell(x, y).set_background(factory_resource.icon)
 
 
@@ -108,59 +109,3 @@ func is_mouse_over_factory_or_mine() -> bool:
 func get_mouse_grid_position() -> Vector2i:
 	var mouse_position := game_grid.get_local_mouse_position()
 	return game_grid.get_cell_coordinates_at_local_point(mouse_position)
-
-
-## Given ore generation data, generate the ores for the given layer number by filling
-## out the tile map layer with the appropriate ores.
-func generate_ores(background_rock: Types.Ore, generation_data: Array, layer_num: int) -> void:
-	# TODO: RPG: This should be in the model, not the UI
-	# first, make a random circle for each ore
-	var ore_circles: Array[OreCircle]
-
-	var layer_start_y := layer_num * WorldGenModel.layer_thickness
-	var layer_end_y := layer_start_y + WorldGenModel.layer_thickness
-	for ore_gen_data: OreGenerationResource in generation_data:
-		var ore := ore_gen_data.ore
-		var radius := ore_gen_data.size
-
-		var random_center := Vector2(
-			randf_range(0, WorldGenModel.num_cols),
-			randf_range(layer_start_y, layer_end_y),
-		)
-		var random_radius := randfn(radius, 0.3)
-		ore_circles.append(OreCircle.new(ore, random_center, random_radius))
-
-	# then, for each tile in the tilemap
-	for x in range(WorldGenModel.num_cols):
-		for y in range(layer_start_y, layer_end_y):
-			var center_of_tile := Vector2(x + 0.5, y + 0.5)
-			# if no ore is found, write the background rock
-			var closest_ore := background_rock
-			var closest_distance := 9999.0
-
-			# find the ore circle that is closest to the tile that is within the radius of the ore circle
-			for ore_circle in ore_circles:
-				var dist_to_center := center_of_tile.distance_to(ore_circle.center)
-				if dist_to_center < ore_circle.radius and dist_to_center < closest_distance:
-					closest_ore = ore_circle.ore
-					closest_distance = dist_to_center
-
-			# set the tile to whatever we did or didn't find
-			_set_ore_tile(x, y, closest_ore)
-
-
-## Set a tile in the model to the specified ore.
-func _set_ore_tile(x: int, y: int, ore: Types.Ore) -> void:
-	Model.set_ore_at(owner_id, x, y, ore)
-
-
-## Defines a circle filled with the specified ore.
-class OreCircle:
-	var ore: Types.Ore
-	var center: Vector2
-	var radius: float
-
-	func _init(o, c, r) -> void:
-		ore = o
-		center = c
-		radius = r

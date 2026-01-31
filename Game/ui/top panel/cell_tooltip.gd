@@ -38,7 +38,7 @@ func set_tooltip_source(node: Control) -> void:
 
 	var player_id: int = cell.get_owning_player_id()
 
-	var layer_type: Types.Layer = WorldGenModel.get_layer_type(cell_position.y)
+	var layer_type: Types.Layer = Model.world_gen_model.get_layer_type(cell_position.y)
 
 	match layer_type:
 		Types.Layer.MINE:
