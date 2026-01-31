@@ -31,8 +31,7 @@ func get_ore(grid_position: Vector2i) -> Types.Ore:
 
 ## Set the ore at the given position to the given value.
 func set_ore(grid_position: Vector2i, new_ore: Types.Ore) -> void:
-	# TODO: do all ore generation server side, and not client side
-	# assert(multiplayer.is_server())
+	assert(multiplayer.is_server())
 	var index = _get_index_into_ores(grid_position)
 	value_client[index] = new_ore
 
