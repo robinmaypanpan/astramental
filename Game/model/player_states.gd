@@ -2,15 +2,6 @@ class_name PlayerStates
 extends Node
 ## Primary container for all player states
 
-## When an item quantity is changed, this signal fires
-signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
-
-## When an item production rate changes, this signal fires
-signal item_production_changed(player_id: int, type: Types.Item, new_production_rate: float)
-
-## When an item consumption rate changes, this signal fires
-signal item_consumption_changed(player_id: int, type: Types.Item, new_consumption_rate: float)
-
 ## When an energy satisfaction level changes, this signal fires
 signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
 
@@ -46,9 +37,6 @@ func spawn_player_state(player_id: int) -> Node:
 
 	_player_states_dict[player_id] = player_state
 
-	player_state.item_count_changed.connect(on_item_count_changed)
-	player_state.item_production_changed.connect(on_item_production_changed)
-	player_state.item_consumption_changed.connect(on_item_consumption_changed)
 	player_state.energy_satisfaction_changed.connect(on_energy_satisfaction_changed)
 
 	return player_state
@@ -68,23 +56,6 @@ func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
 
 
 # PRIVATE METHODS
-
-
-func on_item_count_changed(player_id: int, type: Types.Item, new_count: float) -> void:
-	item_count_changed.emit(player_id, type, new_count)
-
-
-func on_item_production_changed(
-	player_id: int, type: Types.Item, new_production_rate: float
-) -> void:
-	item_production_changed.emit(player_id, type, new_production_rate)
-
-
-func on_item_consumption_changed(
-	player_id: int, type: Types.Item, new_consumption_rate: float
-) -> void:
-	item_consumption_changed.emit(player_id, type, new_consumption_rate)
-
 
 func on_energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float) -> void:
 	energy_satisfaction_changed.emit(player_id, new_energy_satisfaction)
