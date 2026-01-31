@@ -20,6 +20,7 @@ func _ready() -> void:
 	# resize ores to appropriate size
 	value_client = [] as Array[Types.Ore]
 	value_client.resize(ores_size)
+	value_client.fill(Types.Ore.ROCK)
 
 
 ## Get the ore at the given position.
