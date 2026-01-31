@@ -1,6 +1,10 @@
 class_name SyncProperty
 extends Node
 
+## Whether the new server value differs from the current client value, meaning we need to trigger
+## a UI update.
+signal changed
+
 ## Value reduced to PackedByteArray that can be sent across the network by MultiplayerSynchronizer.
 ## Clients read this value to get the value they need.
 ## The server writes to this value to publish properties across the network.
@@ -24,6 +28,12 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 	return bytes_to_var(bytes)
 
 
+## Determine if the old client value and new client value are not equal.
+## Default behavior is !=. Can be re-implemented by subclasses.
+func not_equal(value1: Variant, value2: Variant) -> bool:
+	return value1 != value2
+
+
 ## Publish the value to the network by copying the client value to the server value.
 func publish() -> void:
 	assert(multiplayer.is_server())
@@ -33,4 +43,7 @@ func publish() -> void:
 ## Sync the value from the network to the client by copying the server value to the client value.
 func sync() -> void:
 	assert(not multiplayer.is_server())
-	value_client = deserialize(value_server)
+	var new_value_client: Variant = deserialize(value_server)
+	if not_equal(value_client, new_value_client):
+		changed.emit()
+		value_client = new_value_client
