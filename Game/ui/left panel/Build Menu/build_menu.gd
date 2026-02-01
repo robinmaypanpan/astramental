@@ -41,12 +41,12 @@ func on_game_ready() -> void:
 	# whether we can build a building is entirely dependent on our item counts
 	var player_id: int = multiplayer.get_unique_id()
 	var player_state: PlayerState = Model.player_states.get_state(player_id)
-	player_state.item_count_changed.connect(_on_item_count_changed)
+	player_state.items.counts.changed.connect(_on_item_count_changed)
 
 	_disable_unaffordable_buildings()
 
 
-func _on_item_count_changed(_player_id: int, _type: Types.Item, _new_count: float) -> void:
+func _on_item_count_changed() -> void:
 	_disable_unaffordable_buildings()
 
 
