@@ -37,7 +37,10 @@ func not_equal(value1: Variant, value2: Variant) -> bool:
 ## Publish the value to the network by copying the client value to the server value.
 func publish() -> void:
 	assert(multiplayer.is_server())
-	value_server = serialize(value_client)
+	var old_value_client = deserialize(value_server)
+	if not_equal(old_value_client, value_client):
+		value_server = serialize(value_client)
+		changed.emit()
 
 
 ## Sync the value from the network to the client by copying the server value to the client value.
@@ -45,5 +48,5 @@ func sync() -> void:
 	assert(not multiplayer.is_server())
 	var new_value_client: Variant = deserialize(value_server)
 	if not_equal(value_client, new_value_client):
-		changed.emit()
 		value_client = new_value_client
+		changed.emit()
