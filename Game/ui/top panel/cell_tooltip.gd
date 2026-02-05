@@ -72,14 +72,14 @@ func set_tooltip_source(node: Control) -> void:
 		building_icon.texture = building_resource.icon
 
 		# Show energy usage info if applicable
-		var energy_component: EnergyComponent = (
-			building_entity.get_component("EnergyComponent") as EnergyComponent
+		var energy_component_data: EnergyComponentData = (
+			building_entity.get_resource().get_component_data("EnergyComponentData")
 		)
 
-		if energy_component == null || energy_component.energy_drain == 0.0:
+		if energy_component_data == null || energy_component_data.energy_drain == 0.0:
 			energy_usage_container.hide()
 		else:
-			var energy_usage: float = energy_component.energy_drain
+			var energy_usage: float = energy_component_data.energy_drain
 			if energy_usage > 0:
 				energy_direction_label.text = "Consumes"
 				energy_quantity_label.text = "%0.2f" % energy_usage
