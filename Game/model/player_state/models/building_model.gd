@@ -85,6 +85,7 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 		new_value.append(building_entity)
 	return new_value
 
+
 func not_equal(value1: Variant, value2: Variant) -> bool:
 	if value1.size() != value2.size():
 		return true
