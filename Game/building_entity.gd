@@ -58,3 +58,12 @@ static func from_serialized(serialized_building_entity: Dictionary) -> BuildingE
 	)
 
 	return new_building_entity
+
+
+static func not_equal(building_entity_1: BuildingEntity, building_entity_2: BuildingEntity) -> bool:
+	return (
+		building_entity_1.unique_id != building_entity_2.unique_id
+		or building_entity_1.player_id != building_entity_2.player_id
+		or building_entity_1.position != building_entity_2.position
+		or building_entity_1.building_id != building_entity_2.building_id
+	)

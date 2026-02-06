@@ -84,3 +84,15 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 		var building_entity = BuildingEntity.from_serialized(building_dict)
 		new_value.append(building_entity)
 	return new_value
+
+func not_equal(value1: Variant, value2: Variant) -> bool:
+	if value1.size() != value2.size():
+		return true
+
+	for i in range(value1.size()):
+		var building_entity_1 = value1[i]
+		var building_entity_2 = value2[i]
+		if BuildingEntity.not_equal(building_entity_1, building_entity_2):
+			return true
+
+	return false
