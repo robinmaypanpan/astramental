@@ -7,8 +7,6 @@ extends Node
 signal game_ready
 ## Emitted when ores_layout in PlayerStates is updated.
 signal ores_layout_updated
-## Emitted when buildings_list in PlayerStates is updated.
-signal buildings_updated
 ## Emitted when heat_data_list in PlayerStates is updated.
 signal heat_data_updated
 ## Emitted for both players when the update tick is done.

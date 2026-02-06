@@ -83,7 +83,6 @@ func remove_building(tile_position: Vector2i) -> bool:
 # TODO: remove this by rewriting how UI updates
 ## Temporary code to fire all changed signals based on the new item model counts.
 func fire_all_changed_signals() -> void:
-	Model.buildings_updated.emit()
 	Model.heat_data_updated.emit()
 	Model.ores_layout_updated.emit()
 	energy_satisfaction_changed.emit(id, energy_satisfaction)
