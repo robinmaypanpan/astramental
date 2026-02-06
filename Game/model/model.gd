@@ -5,8 +5,6 @@ extends Node
 
 ## Emitted when the game is finished setting up and is ready to start playing
 signal game_ready
-## Emitted when ores_layout in PlayerStates is updated.
-signal ores_layout_updated
 ## Emitted when heat_data_list in PlayerStates is updated.
 signal heat_data_updated
 ## Emitted for both players when the update tick is done.
@@ -294,11 +292,9 @@ func get_ore_at(player_id: int, x: int, y: int) -> Types.Ore:
 
 
 ## Set the ore at the given x/y coordinates for the given player id.
-## Emits the ores_layout_updated signal.
 func set_ore_at(player_id: int, x: int, y: int, ore: Types.Ore) -> void:
 	var player_state: PlayerState = player_states.get_state(player_id)
 	player_state.ores.set_ore(Vector2i(x, y), ore)
-	ores_layout_updated.emit()
 
 
 ## Returns the building at the given position

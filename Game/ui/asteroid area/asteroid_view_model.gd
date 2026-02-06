@@ -41,7 +41,6 @@ var heat_dirty: bool = false
 func _ready():
 	Model.game_ready.connect(_on_game_ready)
 
-	Model.ores_layout_updated.connect(_on_ores_layout_updated)
 	Model.heat_data_updated.connect(_on_heat_data_updated)
 
 
@@ -75,3 +74,4 @@ func _on_game_ready():
 	for player_id in player_ids:
 		var player_state: PlayerState = Model.player_states.get_state(player_id)
 		player_state.buildings.changed.connect(_on_buildings_updated)
+		player_state.ores.changed.connect(_on_ores_layout_updated)
