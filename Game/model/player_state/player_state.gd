@@ -9,9 +9,6 @@ signal item_production_changed(player_id: int, type: Types.Item, new_production:
 ## When an item consumption rate changes, this signal fires
 signal item_consumption_changed(player_id: int, type: Types.Item, new_consumption: float)
 
-## When energy satisfaction changes, this signal fires
-signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
-
 ## When storage cap changes, this signal fires
 signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
 
@@ -84,7 +81,6 @@ func remove_building(tile_position: Vector2i) -> bool:
 ## Temporary code to fire all changed signals based on the new item model counts.
 func fire_all_changed_signals() -> void:
 	Model.heat_data_updated.emit()
-	energy_satisfaction_changed.emit(id, energy_satisfaction)
 
 
 ## Update all systems for the building ECS. Only callable by server.

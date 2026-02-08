@@ -2,9 +2,6 @@ class_name PlayerStates
 extends Node
 ## Primary container for all player states
 
-## When an energy satisfaction level changes, this signal fires
-signal energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float)
-
 ## Scene of player state object to instantiate when making a new player state.
 var player_state_scene: PackedScene = preload("res://Game/model/player_state/player_state.tscn")
 
@@ -37,8 +34,6 @@ func spawn_player_state(player_id: int) -> Node:
 
 	_player_states_dict[player_id] = player_state
 
-	player_state.energy_satisfaction_changed.connect(on_energy_satisfaction_changed)
-
 	return player_state
 
 
@@ -53,9 +48,3 @@ func get_state(player_id: int = multiplayer.get_unique_id()) -> PlayerState:
 		return _player_states_dict[player_id]
 	else:
 		return null
-
-
-# PRIVATE METHODS
-
-func on_energy_satisfaction_changed(player_id: int, new_energy_satisfaction: float) -> void:
-	energy_satisfaction_changed.emit(player_id, new_energy_satisfaction)
