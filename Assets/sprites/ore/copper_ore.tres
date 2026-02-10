@@ -1,7 +1,11 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://da14n2nn5fosg"]
+[gd_resource type="AtlasTexture" load_steps=3 format=3 uid="uid://da14n2nn5fosg"]
 
-[ext_resource type="Texture2D" uid="uid://b7qeol2jqiq0x" path="res://Assets/sprites/ore atlases/copper_atlas.tres" id="1_2xo5c"]
+[ext_resource type="Texture2D" uid="uid://dg0iet321nodi" path="res://Assets/sprites/main_spritesheet.png" id="1_2xo5c"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57mja"]
+atlas = ExtResource("1_2xo5c")
+region = Rect2(0, 0, 128, 160)
 
 [resource]
-atlas = ExtResource("1_2xo5c")
-region = Rect2(96, 0, 32, 32)
+atlas = SubResource("AtlasTexture_57mja")
+region = Rect2(0, 0, 128, 160)

@@ -14,6 +14,7 @@ var default_modulate: Color = Color(1, 1, 1, 1)
 
 # Stores the number of rotations to cause if told to rotate the background image
 var rotation_index: int = -1
+var tile_index: int = -1
 
 
 func _ready() -> void:
@@ -45,16 +46,17 @@ func set_icon(texture: Texture):
 
 
 ## Set the background texture for this cell
-func set_background(texture: Texture, choose_random_rotation: bool = false):
+func set_background(texture: Texture):
 	background.texture = texture
-	background.pivot_offset = background.texture.get_size() / 2
 
+## Specialty function used when setting ore backgrounds
+func select_randomized_ore_background(ore_resource: OreResource) -> void:
 	if rotation_index == -1:
-		if choose_random_rotation:
-			rotation_index = randi_range(0, 3)
-		else:
-			rotation_index = 0
+		rotation_index = randi_range(0, 3)
+		tile_index = randi_range(0, 3)
 
+	background.texture = ore_resource.get_icon_for_level(5, tile_index)
+	background.pivot_offset = background.texture.get_size() / 2
 	background.rotation_degrees = rotation_index * 90.0
 
 

@@ -1,7 +1,11 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://bl6t4oh6maial"]
+[gd_resource type="AtlasTexture" load_steps=3 format=3 uid="uid://bl6t4oh6maial"]
 
-[ext_resource type="Texture2D" uid="uid://b8x27pw8ps0t7" path="res://Assets/sprites/ore atlases/iron_atlas.tres" id="1_lf7px"]
+[ext_resource type="Texture2D" uid="uid://dg0iet321nodi" path="res://Assets/sprites/main_spritesheet.png" id="1_lf7px"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2a43k"]
+atlas = ExtResource("1_lf7px")
+region = Rect2(256, 0, 128, 160)
 
 [resource]
-atlas = ExtResource("1_lf7px")
-region = Rect2(64, 0, 32, 32)
+atlas = SubResource("AtlasTexture_2a43k")
+region = Rect2(0, 0, 128, 160)
