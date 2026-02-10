@@ -1,7 +1,7 @@
 [gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://dfcdlqbffteq0"]
 
-[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="1_185gg"]
+[ext_resource type="Texture2D" uid="uid://04eftmyl2ntw" path="res://Assets/sprites/ore-new/silicon_atlas.tres" id="1_e2egf"]
 
 [resource]
-atlas = ExtResource("1_185gg")
-region = Rect2(64, 0, 16, 16)
+atlas = ExtResource("1_e2egf")
+region = Rect2(32, 96, 32, 32)

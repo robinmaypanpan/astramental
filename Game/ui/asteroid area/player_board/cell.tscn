@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://bxthbnkw8muop" path="res://Game/ui/asteroid area/player_board/cell.gd" id="1_bh4gc"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_byno8"]
-[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="2_bh4gc"]
+[ext_resource type="Texture2D" uid="uid://dweec08kuybly" path="res://Assets/sprites/ore-new/rock_atlas.tres" id="2_4o3oy"]
 [ext_resource type="Texture2D" uid="uid://cmc5jexlbrfso" path="res://Assets/sprites/buildings/solar_panel.tres" id="3_iy3cy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jere3"]
-atlas = ExtResource("2_bh4gc")
-region = Rect2(0, 0, 16, 16)
+atlas = ExtResource("2_4o3oy")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_byno8"]
 bg_color = Color(0.773271, 0, 0.0401725, 1)
@@ -60,7 +60,7 @@ texture = ExtResource("3_iy3cy")
 
 [node name="HeatLevel" type="ProgressBar" parent="."]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 27.0
 offset_top = 31.0
 offset_right = 56.0
