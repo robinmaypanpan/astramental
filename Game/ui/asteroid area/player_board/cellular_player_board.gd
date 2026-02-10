@@ -42,13 +42,16 @@ func _ready() -> void:
 	# Set up factory tiles to be all white tiles
 	for x in range(world_gen_model.num_cols):
 		for y in range(world_gen_model.num_rows_layer):
-			game_grid.get_cell(x, y).set_background(factory_resource.icon)
+			game_grid.get_cell(x, y).set_background(factory_resource.icon, false)
 
 
 ## Publicly sets the ore at the indicated location
 func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
-	game_grid.get_cell(x, y).set_background(ore_resource.icon)
+	var cell: Cell = game_grid.get_cell(x, y)
+	cell.set_background(ore_resource.icon, true)
+	
+
 
 
 ## Hide all buildings on the grid
