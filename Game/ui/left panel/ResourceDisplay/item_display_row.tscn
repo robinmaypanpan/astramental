@@ -1,17 +1,17 @@
 [gd_scene load_steps=11 format=3 uid="uid://fcbjc5acubwe"]
 
-[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="1_6jci1"]
 [ext_resource type="Script" uid="uid://b7bmuw8hyxjmr" path="res://Game/ui/left panel/ResourceDisplay/item_display_row.gd" id="1_82p7q"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_aqlvk"]
 [ext_resource type="Texture2D" uid="uid://f0oc2vm1mayc" path="res://Assets/sprites/ui/decreasing_arrow.tres" id="3_prlt1"]
 [ext_resource type="Texture2D" uid="uid://chqwre6a15sxe" path="res://Assets/sprites/ui/not_changing.tres" id="4_5fff3"]
 [ext_resource type="StyleBox" uid="uid://11skq2rodxck" path="res://Assets/sprites/storage_bar_base.tres" id="4_bcn7r"]
+[ext_resource type="Texture2D" uid="uid://bl6t4oh6maial" path="res://Assets/sprites/ore/iron_ore.tres" id="5_4r8am"]
 [ext_resource type="Texture2D" uid="uid://dw0qpw8l0ft87" path="res://Assets/sprites/ui/increasing_arrow.tres" id="5_dl36m"]
 [ext_resource type="Texture2D" uid="uid://bw5ycbe2w04gs" path="res://Assets/sprites/items/money.tres" id="8_4r8am"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ncwh"]
-atlas = ExtResource("1_6jci1")
-region = Rect2(32, 0, 16, 16)
+atlas = ExtResource("5_4r8am")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kyjvg"]
 border_width_left = 1

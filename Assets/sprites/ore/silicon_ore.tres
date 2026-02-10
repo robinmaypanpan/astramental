@@ -1,6 +1,6 @@
 [gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://dfcdlqbffteq0"]
 
-[ext_resource type="Texture2D" uid="uid://04eftmyl2ntw" path="res://Assets/sprites/ore-new/silicon_atlas.tres" id="1_e2egf"]
+[ext_resource type="Texture2D" uid="uid://04eftmyl2ntw" path="res://Assets/sprites/ore atlases/silicon_atlas.tres" id="1_e2egf"]
 
 [resource]
 atlas = ExtResource("1_e2egf")
