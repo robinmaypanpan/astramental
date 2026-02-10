@@ -1,7 +1,7 @@
 [gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://dwktqtvfm2fg5"]
 
-[ext_resource type="Texture2D" uid="uid://b05xviclivy3a" path="res://Assets/sprites/ore/ores.png" id="1_0gruy"]
+[ext_resource type="Texture2D" uid="uid://btqrm4tvssga3" path="res://Assets/sprites/ore-new/ice_atlas.tres" id="1_3ahhw"]
 
 [resource]
-atlas = ExtResource("1_0gruy")
-region = Rect2(80, 0, 16, 16)
+atlas = ExtResource("1_3ahhw")
+region = Rect2(64, 128, 32, 32)
