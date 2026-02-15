@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="OreResource" load_steps=3 format=3 uid="uid://d2elxt3db652r"]
 
-[ext_resource type="Texture2D" uid="uid://dwktqtvfm2fg5" path="res://Assets/sprites/ore/ice_ore.tres" id="1_am66n"]
+[ext_resource type="Texture2D" uid="uid://btqrm4tvssga3" path="res://Assets/sprites/ore atlases/ice_atlas.tres" id="1_am66n"]
 [ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/scripts/ore_resource.gd" id="1_gxl26"]
 
 [resource]
