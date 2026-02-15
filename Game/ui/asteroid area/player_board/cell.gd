@@ -54,7 +54,7 @@ func select_randomized_ore_background(ore_resource: OreResource) -> void:
 	if rotation_index == -1:
 		rotation_index = randi_range(0, 3)
 		var num_variations_per_level: int = ore_resource.get_num_variations_per_level()
-		variation = randi_range(0, num_variations_per_level)
+		variation = randi_range(0, num_variations_per_level - 1)
 
 	## TODO: make this work for multiple ore levels, as it is hardcoded to 1.
 	background.texture = ore_resource.get_icon_for_level(1, variation)
