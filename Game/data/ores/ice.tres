@@ -5,8 +5,7 @@
 
 [resource]
 script = ExtResource("1_gxl26")
-icon = ExtResource("1_am66n")
-atlas_coordinates = Vector2i(5, 0)
+atlas = ExtResource("1_am66n")
 item_yield = 5
 display_name = "Ice"
 description = "After travelling out to the stars, explorers were excited to discover that water, in the form of ice, was a common feature of many asteroids."

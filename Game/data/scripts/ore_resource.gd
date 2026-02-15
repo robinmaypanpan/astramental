@@ -2,7 +2,7 @@ class_name OreResource
 extends Resource
 
 ## User facing atlas texture from which to extract tiles
-@export var icon: AtlasTexture = null
+@export var atlas: AtlasTexture = null
 ## The item that the ore should yield when mined.
 @export var item_yield: Types.Item
 ## Display name of this ore
@@ -10,23 +10,23 @@ extends Resource
 ## Description of this ore
 @export var description: String
 
-var _iconCache: Array[AtlasTexture] = []
+var _icon_cache: Array[AtlasTexture] = []
 
 ## Returns a tile
-func get_icon_for_level(level: int, index: int) -> AtlasTexture:
-	if _iconCache.is_empty():
+func get_icon_for_level(level: int, variation: int) -> AtlasTexture:
+	if _icon_cache.is_empty():
 		_load_icon_cache()
-	var num_tiles_per_level: int = floor(icon.get_size().x / 32.0)
-	var tile_idx: int = ((level - 1) * num_tiles_per_level + index)
-	return _iconCache[tile_idx]
+	var num_variations_per_level: int = floor(atlas.get_size().x / 32.0)
+	var variation_idx: int = ((level - 1) * num_variations_per_level + variation)
+	return _icon_cache[variation_idx]
 
-## Loads the icon cache
+## Loads the atlas cache
 func _load_icon_cache():
-	var num_tiles_per_level: int = floor(icon.get_size().x / 32.0)
-	var num_levels: int = floor(icon.get_size().y / 32.0)
+	var num_variations_per_level: int = floor(atlas.get_size().x / 32.0)
+	var num_levels: int = floor(atlas.get_size().y / 32.0)
 	for level in range(num_levels):
-		for tile_idx in range(num_tiles_per_level):
+		for variation_idx in range(num_variations_per_level):
 			var tile_texture: AtlasTexture = AtlasTexture.new()
-			tile_texture.atlas = icon
-			tile_texture.region = Rect2(Vector2i(tile_idx, level) * 32, Vector2i(32, 32))
-			_iconCache.append(tile_texture)
+			tile_texture.atlas = atlas
+			tile_texture.region = Rect2(Vector2i(variation_idx, level) * 32, Vector2i(32, 32))
+			_icon_cache.append(tile_texture)

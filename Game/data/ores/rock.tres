@@ -5,8 +5,7 @@
 
 [resource]
 script = ExtResource("1_hyud4")
-icon = ExtResource("1_hc8wv")
-atlas_coordinates = Vector2i(1, 0)
+atlas = ExtResource("1_hc8wv")
 item_yield = 2
 display_name = "Rock"
 description = "The primary component of most asteroids is rock. Not the most useful ore out there, but when needed, it is found in ample quantities."

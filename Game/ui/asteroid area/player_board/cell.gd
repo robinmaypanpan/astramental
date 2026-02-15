@@ -55,6 +55,7 @@ func select_randomized_ore_background(ore_resource: OreResource) -> void:
 		rotation_index = randi_range(0, 3)
 		tile_index = randi_range(0, 3)
 
+	## TODO: make this work for multiple ore levels, as it is hardcoded to 1.
 	background.texture = ore_resource.get_icon_for_level(1, tile_index)
 	background.pivot_offset = background.texture.get_size() / 2
 	background.rotation_degrees = rotation_index * 90.0

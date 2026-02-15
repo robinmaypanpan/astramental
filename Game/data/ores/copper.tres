@@ -5,8 +5,7 @@
 
 [resource]
 script = ExtResource("1_lngge")
-icon = ExtResource("1_j4xjs")
-atlas_coordinates = Vector2i(3, 0)
+atlas = ExtResource("1_j4xjs")
 item_yield = 4
 display_name = "Copper Ore"
 description = "Copper is a conductive metal that is used in the production of many electronic components. It is also a good conductor of heat."

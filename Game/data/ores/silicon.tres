@@ -5,8 +5,7 @@
 
 [resource]
 script = ExtResource("1_mmxq8")
-icon = ExtResource("1_ngn2q")
-atlas_coordinates = Vector2i(4, 0)
+atlas = ExtResource("1_ngn2q")
 item_yield = 6
 display_name = "Silicon ore"
 description = "A rare metal that is used in the production of computers and other delicate parts."
