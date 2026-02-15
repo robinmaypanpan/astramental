@@ -12,17 +12,20 @@ extends Resource
 
 var _icon_cache: Array[AtlasTexture] = []
 
+func get_num_variations_per_level() -> int:
+	return floor(atlas.get_size().x / 32.0)
+
 ## Returns a tile
 func get_icon_for_level(level: int, variation: int) -> AtlasTexture:
 	if _icon_cache.is_empty():
 		_load_icon_cache()
-	var num_variations_per_level: int = floor(atlas.get_size().x / 32.0)
+	var num_variations_per_level: int = get_num_variations_per_level()
 	var variation_idx: int = ((level - 1) * num_variations_per_level + variation)
 	return _icon_cache[variation_idx]
 
 ## Loads the atlas cache
 func _load_icon_cache():
-	var num_variations_per_level: int = floor(atlas.get_size().x / 32.0)
+	var num_variations_per_level: int = get_num_variations_per_level()
 	var num_levels: int = floor(atlas.get_size().y / 32.0)
 	for level in range(num_levels):
 		for variation_idx in range(num_variations_per_level):
