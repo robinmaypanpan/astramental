@@ -1,6 +1,5 @@
 extends Node
 
-@export var ores_tileset: TileSet
 ## Stores mapping from ore type -> ore resource data
 @export var ores_dict: Dictionary[Types.Ore, OreResource]
 
