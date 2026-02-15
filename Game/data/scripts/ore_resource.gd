@@ -3,8 +3,6 @@ extends Resource
 
 ## User facing atlas texture from which to extract tiles
 @export var icon: AtlasTexture = null
-## Deprecated: DO NOT USE
-@export var atlas_coordinates: Vector2i
 ## The item that the ore should yield when mined.
 @export var item_yield: Types.Item
 ## Display name of this ore
