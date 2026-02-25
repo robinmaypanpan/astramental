@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bxthbnkw8muop" path="res://Game/ui/asteroid area/player_board/cell.gd" id="1_bh4gc"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="1_byno8"]
-[ext_resource type="Texture2D" uid="uid://dweec08kuybly" path="res://Assets/sprites/ore-new/rock_atlas.tres" id="2_4o3oy"]
+[ext_resource type="Texture2D" uid="uid://dweec08kuybly" path="res://Assets/sprites/ore atlases/rock_atlas.tres" id="2_4o3oy"]
 [ext_resource type="Texture2D" uid="uid://cmc5jexlbrfso" path="res://Assets/sprites/buildings/solar_panel.tres" id="3_iy3cy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jere3"]

@@ -1,7 +1,0 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://dwktqtvfm2fg5"]
-
-[ext_resource type="Texture2D" uid="uid://btqrm4tvssga3" path="res://Assets/sprites/ore-new/ice_atlas.tres" id="1_3ahhw"]
-
-[resource]
-atlas = ExtResource("1_3ahhw")
-region = Rect2(64, 0, 32, 32)

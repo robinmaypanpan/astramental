@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://bk1vb8w75hf3y"]
 
 [ext_resource type="Script" uid="uid://bqwe7oxpbs8nf" path="res://Game/ui/top panel/cell_tooltip.gd" id="1_582xq"]
-[ext_resource type="Texture2D" uid="uid://bl6t4oh6maial" path="res://Assets/sprites/ore/iron_ore.tres" id="2_4ojyi"]
 [ext_resource type="Texture2D" uid="uid://c35t5rka5ekb2" path="res://Assets/sprites/buildings/drill.tres" id="3_dwmh3"]
 [ext_resource type="Theme" uid="uid://k1wwefkpb70t" path="res://Game/ui/game_theme.tres" id="3_wiutq"]
 [ext_resource type="Texture2D" uid="uid://10375ojdnctl" path="res://Assets/sprites/items/energy.tres" id="4_qa420"]
-[ext_resource type="Theme" uid="uid://de1q5xgojhw72" path="res://Game/ui/top panel/tooltip_theme.tres" id="5_jlvlg"]
+[ext_resource type="Theme" path="res://Game/ui/top panel/tooltip_theme.tres" id="5_jlvlg"]
+[ext_resource type="Texture2D" uid="uid://b8x27pw8ps0t7" path="res://Assets/sprites/ore atlases/iron_atlas.tres" id="6_jlvlg"]
 
 [node name="CellTooltip" type="PanelContainer"]
 anchors_preset = 15
@@ -152,7 +152,7 @@ theme_override_constants/margin_bottom = 4
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("2_4ojyi")
+texture = ExtResource("6_jlvlg")
 expand_mode = 3
 
 [node name="CellName" type="Label" parent="HBoxContainer/OreInfo/VBoxContainer/HFlowContainer"]

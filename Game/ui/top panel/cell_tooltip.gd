@@ -46,7 +46,12 @@ func set_tooltip_source(node: Control) -> void:
 			var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
 			cell_name_label.text = ore_resource.display_name
 			cell_description_label.text = ore_resource.description
-			cell_icon.texture = ore_resource.icon
+
+			cell_icon.texture = node.background.texture
+
+			# TODO FIX ME: This rotation isn't working for some reason.
+			cell_icon.pivot_offset = node.background.pivot_offset
+			cell_icon.rotation_degrees = node.background.rotation_degrees	
 
 			var ore_yield: Types.Item = Ores.get_yield(ore_type)
 			var yield_item_resource: ItemResource = Items.get_info(ore_yield)

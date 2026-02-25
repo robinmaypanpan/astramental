@@ -12,6 +12,10 @@ var grid_position: Vector2i = Vector2i.ZERO
 @export var overheated_modulate: Color
 var default_modulate: Color = Color(1, 1, 1, 1)
 
+# Stores the number of rotations to cause if told to rotate the background image
+var rotation_index: int = -1
+var variation: int = -1
+
 
 func _ready() -> void:
 	icon.texture = null
@@ -44,6 +48,18 @@ func set_icon(texture: Texture):
 ## Set the background texture for this cell
 func set_background(texture: Texture):
 	background.texture = texture
+
+## Specialty function used when setting ore backgrounds
+func select_randomized_ore_background(ore_resource: OreResource) -> void:
+	if rotation_index == -1:
+		rotation_index = randi_range(0, 3)
+		var num_variations_per_level: int = ore_resource.get_num_variations_per_level()
+		variation = randi_range(0, num_variations_per_level - 1)
+
+	## TODO: make this work for multiple ore levels, as it is hardcoded to 1.
+	background.texture = ore_resource.get_icon_for_level(1, variation)
+	background.pivot_offset = background.texture.get_size() / 2
+	background.rotation_degrees = rotation_index * 90.0
 
 
 ## Set the heat bar for this cell
