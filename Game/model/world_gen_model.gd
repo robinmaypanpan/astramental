@@ -100,13 +100,6 @@ func generate_all_ores() -> void:
 			var player_state: PlayerState = Model.player_states.get_state(player_id)
 			generate_layer_ores(player_state, background_rock, player_ore_gen_data, layer_num)
 
-	# TODO: currently, this publish must be done before the normal publish every frame. fix it so
-	# we don't have to do this.
-	# Publish the changes for all the ores to the network.
-	for player_id in ConnectionSystem.get_player_id_list():
-		var player_state: PlayerState = Model.player_states.get_state(player_id)
-		player_state.ores.publish()
-
 
 ## Given ore generation data, generate the ores for the given player state and layer number by
 ## filling out the ore model with the appropriate ores.
