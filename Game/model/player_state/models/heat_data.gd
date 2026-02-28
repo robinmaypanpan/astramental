@@ -27,6 +27,8 @@ func _init(
 	heat_state = new_heat_state
 
 
+## Given two HeatData's, determine whether they are not equal.
+## Used in BuildingHeatModel.not_equal() for UI updates.
 static func not_equal(value1: HeatData, value2: HeatData) -> bool:
 	return (
 		value1.position != value2.position

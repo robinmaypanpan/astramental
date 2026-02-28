@@ -60,6 +60,8 @@ static func from_serialized(serialized_building_entity: Dictionary) -> BuildingE
 	return new_building_entity
 
 
+## Given two BuildingEntities, determine whether they are not equal.
+## Used in BuildingModel.not_equal() for UI updates.
 static func not_equal(building_entity_1: BuildingEntity, building_entity_2: BuildingEntity) -> bool:
 	return (
 		building_entity_1.unique_id != building_entity_2.unique_id

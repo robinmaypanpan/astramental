@@ -17,8 +17,7 @@ const STORAGE_LIMIT_HARD_CAP: float = 1_000_000_000
 @export var enable_storage_caps_for_building_sales: bool = false
 
 
-## Get the storage limits for all items. Return the storage limit hard cap if storage_caps
-## doesn't include that item.
+## Get the storage limits for all items.
 func get_storage_caps() -> Array[float]:
 	var new_storage_caps: Array[float] = []
 	new_storage_caps.resize(Types.Item.size())
@@ -28,5 +27,6 @@ func get_storage_caps() -> Array[float]:
 
 
 ## Get the storage limit for the specified item.
+## Return the storage limit hard cap if it is not in storage_caps.
 func get_storage_cap_item(item: Types.Item) -> float:
 	return storage_caps.get(item, STORAGE_LIMIT_HARD_CAP)

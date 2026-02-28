@@ -86,6 +86,8 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 	return new_value
 
 
+## Overrides SyncProperty.not_equal() to more precisely define inequality between the building
+## entities in the building model.
 func not_equal(value1: Variant, value2: Variant) -> bool:
 	if value1.size() != value2.size():
 		return true

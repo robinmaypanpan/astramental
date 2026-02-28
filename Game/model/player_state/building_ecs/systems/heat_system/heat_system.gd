@@ -65,10 +65,7 @@ func on_game_ready() -> void:
 	steady_state_flow = HeatFlowGraph.new()
 	heat_flow_graph_dirty = false
 
-	var player_states: PlayerStates = Model.player_states
-	for player_id in ConnectionSystem.get_player_id_list():
-		var player_state = player_states.get_state(player_id)
-		player_state._energy_satisfaction.changed.connect(on_energy_satisfaction_changed)
+	player_state.energy_satisfaction_changed.connect(on_energy_satisfaction_changed)
 
 
 ## When energy satisfaction is changed, set heat flow graphs to dirty to recalc with new energy

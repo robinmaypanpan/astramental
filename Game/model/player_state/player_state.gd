@@ -1,5 +1,8 @@
 class_name PlayerState extends Node
 
+## Emitted when energy satisfaction changes
+signal energy_satisfaction_changed
+
 ## The player id, assigned by the multiplayer controller.
 @export var id: int
 
@@ -42,6 +45,7 @@ class_name PlayerState extends Node
 
 func _ready() -> void:
 	energy_satisfaction = 0.0
+	_energy_satisfaction.changed.connect(func (): energy_satisfaction_changed.emit())
 
 
 ## Add a building to the buildings list.

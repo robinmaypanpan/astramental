@@ -6,6 +6,8 @@ class_name ResourceDisplay extends Control
 ## Mapping from item type -> instantiated item display row.
 var item_type_to_row_dict: Dictionary[Types.Item, ItemDisplayRow]
 
+## The player's item model from the player state.
+## Stores count, storage caps, consumption/production.
 var player_items: ItemModel
 
 @onready var _item_display_list := %ItemDisplayList
@@ -25,7 +27,7 @@ func clear_item_display_list():
 		child.queue_free()
 
 
-## Updates the number of items located currently
+## Updates the number of items in the item display row.
 func _update_item_counts() -> void:
 	for item in Types.Item.values():
 		var new_count: float = player_items.counts.get_for(item)
@@ -33,7 +35,7 @@ func _update_item_counts() -> void:
 			get_or_create_item_row(item).update_count(new_count)
 
 
-## Updates the change rate of items located currently
+## Updates the consumption rate of items in the item display row.
 func _update_item_productions() -> void:
 	for item in Types.Item.values():
 		var new_production_rate: float = player_items.production.get_for(item)
@@ -42,7 +44,7 @@ func _update_item_productions() -> void:
 			get_or_create_item_row(item).update_change_rate(new_change_rate)
 
 
-## Updates the change rate of items located currently
+## Updates the production rate of items in the item display row.
 func _update_item_consumptions() -> void:
 	for item in Types.Item.values():
 		var new_consumption_rate: float = player_items.consumption.get_for(item)
@@ -51,7 +53,7 @@ func _update_item_consumptions() -> void:
 			get_or_create_item_row(item).update_change_rate(new_change_rate)
 
 
-## Updates item storage bar based on new storage cap
+## Updates item storage bar based on new storage cap.
 func _update_storage_caps() -> void:
 	for item in Types.Item.values():
 		var new_cap = player_items.storage_caps.get_for(item)
