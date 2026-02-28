@@ -15,9 +15,6 @@ var position: Vector2i
 ## What building is here.
 var building_id: String
 
-## List of components keeping track of behavior.
-var components: Array[BuildingComponent]
-
 
 func _init(in_unique_id: int, in_player_id: int, in_position: Vector2i, in_building_id: String):
 	unique_id = in_unique_id
@@ -30,14 +27,6 @@ func _init(in_unique_id: int, in_player_id: int, in_position: Vector2i, in_build
 ## Returns the building resource associated with this building
 func get_resource() -> BuildingResource:
 	return Buildings.get_by_id(building_id)
-
-
-## Returns the component of the given type, or null if not found.
-func get_component(component_type: String) -> BuildingComponent:
-	for component in components:
-		if component.type == component_type:
-			return component
-	return null
 
 
 # TODO: rewrite serialization to return PackedByteArray instead of Dictionary
@@ -69,3 +58,14 @@ static func from_serialized(serialized_building_entity: Dictionary) -> BuildingE
 	)
 
 	return new_building_entity
+
+
+## Given two BuildingEntities, determine whether they are not equal.
+## Used in BuildingModel.not_equal() for UI updates.
+static func not_equal(building_entity_1: BuildingEntity, building_entity_2: BuildingEntity) -> bool:
+	return (
+		building_entity_1.unique_id != building_entity_2.unique_id
+		or building_entity_1.player_id != building_entity_2.player_id
+		or building_entity_1.position != building_entity_2.position
+		or building_entity_1.building_id != building_entity_2.building_id
+	)

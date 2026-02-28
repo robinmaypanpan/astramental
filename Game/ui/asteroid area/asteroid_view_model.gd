@@ -37,10 +37,9 @@ var buildings_dirty: bool = false
 ## Whether the heat on buildings in Model was updated this frame.
 var heat_dirty: bool = false
 
+
 func _ready():
-	Model.ores_layout_updated.connect(_on_ores_layout_updated)
-	Model.buildings_updated.connect(_on_buildings_updated)
-	Model.heat_data_updated.connect(_on_heat_data_updated)
+	Model.game_ready.connect(_on_game_ready)
 
 
 # since this is UI updating, use _process instead of _physics_process
@@ -66,3 +65,12 @@ func _on_buildings_updated():
 
 func _on_heat_data_updated():
 	heat_dirty = true
+
+
+func _on_game_ready():
+	var player_ids = ConnectionSystem.get_player_id_list()
+	for player_id in player_ids:
+		var player_state: PlayerState = Model.player_states.get_state(player_id)
+		player_state.buildings.changed.connect(_on_buildings_updated)
+		player_state.ores.changed.connect(_on_ores_layout_updated)
+		player_state.building_heat.changed.connect(_on_heat_data_updated)

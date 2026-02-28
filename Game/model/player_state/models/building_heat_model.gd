@@ -80,6 +80,21 @@ func deserialize(bytes: PackedByteArray) -> Variant:
 	return heat_data_array
 
 
+## Overrides SyncProperty.not_equal() to more precisely define inequality between the heat data
+## objects in the heat model.
+func not_equal(value1: Variant, value2: Variant) -> bool:
+	if value1.size() != value2.size():
+		return true
+
+	for i in range(value1.size()):
+		var heat_data_1: HeatData = value1[i]
+		var heat_data_2: HeatData = value2[i]
+		if HeatData.not_equal(heat_data_1, heat_data_2):
+			return true
+
+	return false
+
+
 ## Take a HeatData object and encode it into the PackedByteArray at the given offset.
 func _encode_heat_data(bytes: PackedByteArray, offset: int, heat_data: HeatData) -> void:
 	# layout: (11 bytes)

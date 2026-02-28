@@ -20,7 +20,7 @@ func set_for(item: Types.Item, value: float) -> void:
 
 
 ## Set the value of this property for all items at once.
-func set_all(value: Dictionary[Types.Item, float]) -> void:
+func set_all(value: Array[float]) -> void:
 	assert(multiplayer.is_server())
 	value_client = value.duplicate()
 

@@ -3,7 +3,7 @@ extends BuildingComponentSystem
 ## System responsible for calculating and updating storage caps.
 
 ## For each item, get its storage cap.
-var _storage_caps: Dictionary[Types.Item, float]
+var _storage_caps: Array[float]
 
 
 func _reset_numbers() -> void:
