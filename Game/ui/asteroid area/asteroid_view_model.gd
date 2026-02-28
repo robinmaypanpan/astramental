@@ -41,8 +41,6 @@ var heat_dirty: bool = false
 func _ready():
 	Model.game_ready.connect(_on_game_ready)
 
-	Model.heat_data_updated.connect(_on_heat_data_updated)
-
 
 # since this is UI updating, use _process instead of _physics_process
 func _process(_delta: float) -> void:
@@ -75,3 +73,4 @@ func _on_game_ready():
 		var player_state: PlayerState = Model.player_states.get_state(player_id)
 		player_state.buildings.changed.connect(_on_buildings_updated)
 		player_state.ores.changed.connect(_on_ores_layout_updated)
+		player_state.building_heat.changed.connect(_on_heat_data_updated)

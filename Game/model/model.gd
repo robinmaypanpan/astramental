@@ -5,8 +5,6 @@ extends Node
 
 ## Emitted when the game is finished setting up and is ready to start playing
 signal game_ready
-## Emitted when heat_data_list in PlayerStates is updated.
-signal heat_data_updated
 ## Emitted for both players when the update tick is done.
 signal tick_done
 

@@ -80,7 +80,7 @@ func remove_building(tile_position: Vector2i) -> bool:
 # TODO: remove this by rewriting how UI updates
 ## Temporary code to fire all changed signals based on the new item model counts.
 func fire_all_changed_signals() -> void:
-	Model.heat_data_updated.emit()
+	pass
 
 
 ## Update all systems for the building ECS. Only callable by server.
