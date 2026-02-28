@@ -233,11 +233,12 @@ func refund_costs(player_id: int, building: BuildingEntity) -> void:
 		# Calculate the refund amount
 		var actual_quantity: float = cost.quantity * building_resource.refund_value
 
-		var heat_component: HeatComponent = building.get_component("HeatComponent")
+		var building_heat: BuildingHeatModel = player_states.get_state(player_id).building_heat
+		var heat_data: HeatData = building_heat.get_at_pos(building.position)
 
-		if heat_component != null and building_resource.heat_reduces_value:
-			var heat_level: float = heat_component.heat
-			var heat_capacity: float = heat_component.heat_capacity
+		if heat_data != null and building_resource.heat_reduces_value:
+			var heat_level: float = heat_data.heat
+			var heat_capacity: float = heat_data.heat_capacity
 			var heat_fraction: float = heat_level / heat_capacity if heat_capacity > 0.0 else 0.0
 			actual_quantity *= (1.0 - heat_fraction)
 
