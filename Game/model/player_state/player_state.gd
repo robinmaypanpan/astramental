@@ -1,17 +1,5 @@
 class_name PlayerState extends Node
 
-## When an item quantity is changed, this signal fires
-signal item_count_changed(player_id: int, type: Types.Item, new_count: float)
-
-## When an item production rate changes, this signal fires
-signal item_production_changed(player_id: int, type: Types.Item, new_production: float)
-
-## When an item consumption rate changes, this signal fires
-signal item_consumption_changed(player_id: int, type: Types.Item, new_consumption: float)
-
-## When storage cap changes, this signal fires
-signal storage_cap_changed(player_id: int, type: Types.Item, new_cap: float)
-
 ## The player id, assigned by the multiplayer controller.
 @export var id: int
 
@@ -77,12 +65,6 @@ func remove_building(tile_position: Vector2i) -> bool:
 		return false
 
 
-# TODO: remove this by rewriting how UI updates
-## Temporary code to fire all changed signals based on the new item model counts.
-func fire_all_changed_signals() -> void:
-	pass
-
-
 ## Update all systems for the building ECS. Only callable by server.
 func update_systems() -> void:
 	assert(multiplayer.is_server())
@@ -115,4 +97,3 @@ func _on_multiplayer_synchronizer_synchronized() -> void:
 	# TODO: implement a method to diff between received network data and current data in
 	# deserialization
 	sync()
-	fire_all_changed_signals()
