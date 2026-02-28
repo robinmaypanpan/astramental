@@ -406,7 +406,6 @@ func _on_update_timer_timeout() -> void:
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
 		player_state.update_systems()
-		player_state.fire_all_changed_signals()
 		player_state.publish()
 
 	_broadcast_tick_done.rpc()
