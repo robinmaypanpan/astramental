@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bojfmhchk3e48"
-path="res://.godot/imported/earthy-1x_palette.png-89266a67055efdc729c973807bd10dbe.ctex"
+uid="uid://dg0iet321nodi"
+path="res://.godot/imported/main_spritesheet.png-16d564f3bdef80755e833b0db30b0180.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/sprites/earthy-1x_palette.png"
-dest_files=["res://.godot/imported/earthy-1x_palette.png-89266a67055efdc729c973807bd10dbe.ctex"]
+source_file="res://Assets/sprites/main_spritesheet.png"
+dest_files=["res://.godot/imported/main_spritesheet.png-16d564f3bdef80755e833b0db30b0180.ctex"]
 
 [params]
 

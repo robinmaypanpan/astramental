@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://f10pt5hkn0lf"]
+[gd_scene load_steps=8 format=3 uid="uid://f10pt5hkn0lf"]
 
 [ext_resource type="Script" uid="uid://ct1fu05qamaeo" path="res://Game/ores.gd" id="1_8d5xj"]
-[ext_resource type="TileSet" uid="uid://dqmifr1my7c4r" path="res://Assets/sprites/ore/ores_tileset.tres" id="2_vpk4w"]
 [ext_resource type="Script" uid="uid://vkrp2p2gvhjj" path="res://Game/data/scripts/ore_resource.gd" id="3_i2qth"]
 [ext_resource type="Resource" uid="uid://frqhevb6e22v" path="res://Game/data/ores/rock.tres" id="4_xrb0o"]
 [ext_resource type="Resource" uid="uid://34vesocfe87i" path="res://Game/data/ores/iron.tres" id="5_2wguw"]
@@ -11,7 +10,6 @@
 
 [node name="Ores" type="Node"]
 script = ExtResource("1_8d5xj")
-ores_tileset = ExtResource("2_vpk4w")
 ores_dict = Dictionary[int, ExtResource("3_i2qth")]({
 0: ExtResource("4_xrb0o"),
 1: ExtResource("5_2wguw"),

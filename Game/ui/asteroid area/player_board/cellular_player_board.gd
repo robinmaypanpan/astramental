@@ -48,7 +48,8 @@ func _ready() -> void:
 ## Publicly sets the ore at the indicated location
 func set_ore_at(x: int, y: int, ore_type: Types.Ore) -> void:
 	var ore_resource: OreResource = Ores.get_ore_resource(ore_type)
-	game_grid.get_cell(x, y).set_background(ore_resource.icon)
+	var cell: Cell = game_grid.get_cell(x, y)
+	cell.select_randomized_ore_background(ore_resource)
 
 
 ## Hide all buildings on the grid
