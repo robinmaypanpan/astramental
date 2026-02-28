@@ -25,3 +25,12 @@ func _init(
 	heat = new_heat
 	heat_capacity = new_heat_capacity
 	heat_state = new_heat_state
+
+
+static func not_equal(value1: HeatData, value2: HeatData) -> bool:
+	return (
+		value1.position != value2.position
+		or not is_equal_approx(value1.heat, value2.heat)
+		or not is_equal_approx(value1.heat_capacity, value2.heat_capacity)
+		or value1.heat_state != value2.heat_state
+	)
