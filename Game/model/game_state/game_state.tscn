@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://vy14pm8mt3f7"]
+[gd_scene load_steps=4 format=3 uid="uid://vy14pm8mt3f7"]
 
 [ext_resource type="Script" uid="uid://djcsxefnjt5g" path="res://Game/model/game_state/game_state.gd" id="1_al4dc"]
 [ext_resource type="Script" uid="uid://bxaojamp8aipr" path="res://Game/model/game_state/models/trade_model.gd" id="2_3q7q7"]
+[ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/model/game_state/systems/trade_system.gd" id="3_3q7q7"]
 
 [node name="GameState" type="Node"]
 script = ExtResource("1_al4dc")
@@ -10,3 +11,8 @@ script = ExtResource("1_al4dc")
 unique_name_in_owner = true
 script = ExtResource("2_3q7q7")
 metadata/_custom_type_script = "uid://bxaojamp8aipr"
+
+[node name="TradeSystem" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_3q7q7")
+metadata/_custom_type_script = "uid://bwwepc5firs0n"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://doi2igdy4h0gh"]
+[gd_scene load_steps=13 format=3 uid="uid://doi2igdy4h0gh"]
 
 [ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
 [ext_resource type="PackedScene" uid="uid://vy14pm8mt3f7" path="res://Game/model/game_state/game_state.tscn" id="2_gdd1g"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://d13o6g1uuh65x" path="res://Game/model/world_gen_model.gd" id="3_e5nin"]
 [ext_resource type="Script" uid="uid://bm22xfid7upsy" path="res://Game/data/scripts/layer_generation_resource.gd" id="4_gdd1g"]
 [ext_resource type="Script" uid="uid://c5q3whbjic2df" path="res://Game/data/scripts/ore_generation_resource.gd" id="5_ellki"]
-[ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/model/game_state/systems/trade_system.gd" id="8_ellki"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_e5nin"]
 properties/0/path = NodePath("GameState:example_int")
@@ -66,11 +65,6 @@ spawn_limit = 3
 unique_name_in_owner = true
 process_callback = 0
 wait_time = 0.1
-
-[node name="TradeSystem" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("8_ellki")
-metadata/_custom_type_script = "uid://bwwepc5firs0n"
 
 [node name="WorldGenModel" type="Node" parent="."]
 unique_name_in_owner = true

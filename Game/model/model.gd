@@ -401,7 +401,7 @@ func _on_update_timer_timeout() -> void:
 	assert(multiplayer.is_server())
 	# TODO: only update systems when it is necessary
 	_reset_production_consumption()
-	TradeSystem.update()
+	#TradeSystem.update()
 
 	for player_id in ConnectionSystem.get_player_id_list():
 		var player_state: PlayerState = player_states.get_state(player_id)
