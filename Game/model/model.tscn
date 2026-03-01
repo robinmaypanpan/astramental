@@ -1,12 +1,12 @@
 [gd_scene load_steps=14 format=3 uid="uid://doi2igdy4h0gh"]
 
 [ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
-[ext_resource type="Script" uid="uid://b27jsrdl1j57m" path="res://Game/model/game_state.gd" id="2_ahubk"]
+[ext_resource type="Script" path="res://Game/model/game_state.gd" id="2_ahubk"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/model/player_states.gd" id="3_6exh1"]
 [ext_resource type="Script" uid="uid://d13o6g1uuh65x" path="res://Game/model/world_gen_model.gd" id="3_e5nin"]
 [ext_resource type="Script" uid="uid://bm22xfid7upsy" path="res://Game/data/scripts/layer_generation_resource.gd" id="4_gdd1g"]
 [ext_resource type="Script" uid="uid://c5q3whbjic2df" path="res://Game/data/scripts/ore_generation_resource.gd" id="5_ellki"]
-[ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/model/other_systems/trade_system.gd" id="8_ellki"]
+[ext_resource type="Script" uid="uid://bwwepc5firs0n" path="res://Game/model/game_state/systems/trade_system.gd" id="8_ellki"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_e5nin"]
 properties/0/path = NodePath("GameState:example_int")

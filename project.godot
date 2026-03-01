@@ -25,7 +25,7 @@ Ores="*res://Game/ores.tscn"
 AsteroidViewModel="*res://Game/ui/asteroid area/asteroid_view_model.gd"
 Model="*res://Game/model/model.tscn"
 Buildings="*res://Game/buildings.tscn"
-TradeSystem="*res://Game/model/other_systems/trade_system.gd"
+TradeSystem="*res://Game/model/game_state/systems/trade_system.gd"
 
 [display]
 
