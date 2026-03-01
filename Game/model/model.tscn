@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://doi2igdy4h0gh"]
 
 [ext_resource type="Script" uid="uid://cy5ofkim5y7ka" path="res://Game/model/model.gd" id="1_xc5wf"]
-[ext_resource type="Script" path="res://Game/model/game_state.gd" id="2_ahubk"]
+[ext_resource type="PackedScene" uid="uid://vy14pm8mt3f7" path="res://Game/model/game_state/game_state.tscn" id="2_gdd1g"]
 [ext_resource type="Script" uid="uid://dhc518iykwv14" path="res://Game/model/player_states.gd" id="3_6exh1"]
 [ext_resource type="Script" uid="uid://d13o6g1uuh65x" path="res://Game/model/world_gen_model.gd" id="3_e5nin"]
 [ext_resource type="Script" uid="uid://bm22xfid7upsy" path="res://Game/data/scripts/layer_generation_resource.gd" id="4_gdd1g"]
@@ -47,9 +47,8 @@ metadata/_custom_type_script = "uid://bm22xfid7upsy"
 [node name="Model" type="Node"]
 script = ExtResource("1_xc5wf")
 
-[node name="GameState" type="Node" parent="."]
+[node name="GameState" parent="." instance=ExtResource("2_gdd1g")]
 unique_name_in_owner = true
-script = ExtResource("2_ahubk")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_e5nin")

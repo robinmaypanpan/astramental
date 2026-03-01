@@ -26,3 +26,13 @@ func _init(
 	receiving_player_id = new_receiving_id
 	item = new_item
 	amount = new_amount
+
+
+static func not_equal(value1: TradeRoute, value2: TradeRoute) -> bool:
+	return (
+		value1.id != value2.id
+		or value1.sending_player_id != value2.sending_id
+		or value1.receiving_player_id != value2.receiving_id
+		or value1.item != value2.item
+		or value1.amount != value2.amount
+	)
